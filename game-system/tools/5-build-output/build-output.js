@@ -199,8 +199,10 @@ function buildCottageGameData() {
 
   const jsText =
     `const gameData = ${JSON.stringify(gameData, null, 2)};\n\n` +
+    `const cottageGameAbbrByName = ${JSON.stringify(abbrByName, null, 2)};\n\n` +
     `if (typeof window !== "undefined") {\n` +
     `  window.gameData = gameData;\n` +
+    `  window.COTTAGE_GAME_ABBR_BY_NAME = cottageGameAbbrByName;\n` +
     `}\n`;
 
   fs.writeFileSync(COTTAGE_GAMES_DATA_JS_PATH, jsText, "utf-8");

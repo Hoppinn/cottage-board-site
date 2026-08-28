@@ -699,7 +699,7 @@ const gameData = {
       "ratingEnabled": true,
       "boardId": "구두룡저택의살인-미스터리파티시리즈"
     },
-    "abbr": "구두"
+    "abbr": "구두룡"
   },
   "내마음의주파수": {
     "id": "내마음의주파수",
@@ -1238,7 +1238,7 @@ const gameData = {
       "ratingEnabled": true,
       "boardId": "노터치크라켄"
     },
-    "abbr": "노터"
+    "abbr": "노터치"
   },
   "놉놉테이블": {
     "id": "놉놉테이블",
@@ -3116,7 +3116,7 @@ const gameData = {
       "ratingEnabled": true,
       "boardId": "리코셰로봇"
     },
-    "abbr": "리코"
+    "abbr": "리코셰"
   },
   "마헤": {
     "id": "마헤",
@@ -3507,7 +3507,7 @@ const gameData = {
       "ratingEnabled": true,
       "boardId": "뱀파이어퀸"
     },
-    "abbr": "뱀파"
+    "abbr": "뱀파퀸"
   },
   "뱅": {
     "id": "뱅",
@@ -4278,7 +4278,7 @@ const gameData = {
       "ratingEnabled": true,
       "boardId": "블러드바운드"
     },
-    "abbr": "블러"
+    "abbr": "블바"
   },
   "사보타지": {
     "id": "사보타지",
@@ -5388,7 +5388,7 @@ const gameData = {
       "ratingEnabled": true,
       "boardId": "시계탑에흐른피"
     },
-    "abbr": "시계"
+    "abbr": "시계탑"
   },
   "시타델": {
     "id": "시타델",
@@ -8726,7 +8726,7 @@ const gameData = {
       "ratingEnabled": true,
       "boardId": "타코캣고트치즈피자"
     },
-    "abbr": "타코"
+    "abbr": "타코캣"
   },
   "탑텐티비": {
     "id": "탑텐티비",
@@ -9279,7 +9279,7 @@ const gameData = {
       "ratingEnabled": true,
       "boardId": "투카나여행길"
     },
-    "abbr": "투카"
+    "abbr": "투카나"
   },
   "포가튼워터스": {
     "id": "포가튼워터스",
@@ -9666,7 +9666,7 @@ const gameData = {
       "ratingEnabled": true,
       "boardId": "몇번이고푸른달에불을붙였다"
     },
-    "abbr": "몇번"
+    "abbr": "푸른달"
   },
   "플립7": {
     "id": "플립7",
@@ -11201,7 +11201,7 @@ const gameData = {
       "ratingEnabled": true,
       "boardId": "다잉메시지-공범만화가-확장"
     },
-    "abbr": "다잉"
+    "abbr": "다빈치"
   },
   "다크호스": {
     "id": "다크호스",
@@ -13140,7 +13140,7 @@ const gameData = {
       "ratingEnabled": true,
       "boardId": "나의최애명대사"
     },
-    "abbr": "나의"
+    "abbr": "명대사"
   },
   "모노폴리-딜럭스": {
     "id": "모노폴리-딜럭스",
@@ -15605,7 +15605,7 @@ const gameData = {
       "ratingEnabled": true,
       "boardId": "시퀀스-해리포터"
     },
-    "abbr": "시퀀"
+    "abbr": "시퀀스"
   },
   "아임더보스": {
     "id": "아임더보스",
@@ -17727,7 +17727,7 @@ const gameData = {
       "ratingEnabled": true,
       "boardId": "잠만보다이스"
     },
-    "abbr": "잠만"
+    "abbr": "잠만보"
   },
   "젬블로": {
     "id": "젬블로",
@@ -17984,7 +17984,7 @@ const gameData = {
       "ratingEnabled": true,
       "boardId": "차가운그녀가눈을뜨기전에"
     },
-    "abbr": "차가"
+    "abbr": "차그녀"
   },
   "크로스클루": {
     "id": "크로스클루",
@@ -19493,7 +19493,7 @@ const gameData = {
       "ratingEnabled": true,
       "boardId": "플래시포인트-영"
     },
-    "abbr": "플래"
+    "abbr": "플래시"
   },
   "하베스트": {
     "id": "하베스트",
@@ -21170,7 +21170,7 @@ const gameData = {
       "ratingEnabled": true,
       "boardId": "가이아프로젝트"
     },
-    "abbr": "가이"
+    "abbr": "가이아"
   },
   "개구리벌주기": {
     "id": "개구리벌주기",
@@ -22313,7 +22313,7 @@ const gameData = {
       "ratingEnabled": true,
       "boardId": "고질라도쿄클래시"
     },
-    "abbr": "고질"
+    "abbr": "고질라"
   },
   "골드": {
     "id": "골드",
@@ -22937,7 +22937,7 @@ const gameData = {
       "ratingEnabled": true,
       "boardId": "그랜드오스트리아호텔"
     },
-    "abbr": "그랜"
+    "abbr": "그오호"
   },
   "그레이트웨스턴트레일": {
     "id": "그레이트웨스턴트레일",
@@ -23340,7 +23340,7 @@ const gameData = {
       "ratingEnabled": true,
       "boardId": "글래스로드"
     },
-    "abbr": "글래"
+    "abbr": "글래스"
   },
   "글룸헤이븐": {
     "id": "글룸헤이븐",
@@ -23671,7 +23671,7 @@ const gameData = {
       "ratingEnabled": true,
       "boardId": "기도하고일하라"
     },
-    "abbr": "기도"
+    "abbr": "기도일"
   },
   "기즈모": {
     "id": "기즈모",
@@ -24802,7 +24802,7 @@ const gameData = {
       "ratingEnabled": true,
       "boardId": "남티그리스의학자들"
     },
-    "abbr": "남티"
+    "abbr": "남티학"
   },
   "냥냥집사": {
     "id": "냥냥집사",
@@ -26428,7 +26428,7 @@ const gameData = {
       "ratingEnabled": true,
       "boardId": "대만차연대기"
     },
-    "abbr": "대만"
+    "abbr": "대만차"
   },
   "더게임": {
     "id": "더게임",
@@ -26836,7 +26836,7 @@ const gameData = {
       "ratingEnabled": true,
       "boardId": "더리치앤더굿"
     },
-    "abbr": "더리"
+    "abbr": "더리치"
   },
   "더마인드": {
     "id": "더마인드",
@@ -29091,7 +29091,7 @@ const gameData = {
       "ratingEnabled": true,
       "boardId": "독수리눈치싸움"
     },
-    "abbr": "독수"
+    "abbr": "독수리"
   },
   "동물왕와일드사파리": {
     "id": "동물왕와일드사파리",
@@ -29722,7 +29722,7 @@ const gameData = {
       "ratingEnabled": true,
       "boardId": "뒤집어줘캡틴"
     },
-    "abbr": "뒤집"
+    "abbr": "뒤캡"
   },
   "듄임페리움": {
     "id": "듄임페리움",
@@ -30102,7 +30102,7 @@ const gameData = {
       "ratingEnabled": true,
       "boardId": "드랍잇-독"
     },
-    "abbr": "드랍"
+    "abbr": "드랍잇"
   },
   "드림홈": {
     "id": "드림홈",
@@ -33011,7 +33011,7 @@ const gameData = {
       "ratingEnabled": true,
       "boardId": "레이스포더갤럭시-첫번째아크-확장"
     },
-    "abbr": "레이"
+    "abbr": "레포갤"
   },
   "레인보우세븐": {
     "id": "레인보우세븐",
@@ -33857,7 +33857,7 @@ const gameData = {
       "ratingEnabled": true,
       "boardId": "로빈슨크루소"
     },
-    "abbr": "로빈"
+    "abbr": "로빈슨"
   },
   "로스트시티": {
     "id": "로스트시티",
@@ -34160,7 +34160,7 @@ const gameData = {
       "ratingEnabled": true,
       "boardId": "롤포더갤럭시"
     },
-    "abbr": "롤포"
+    "abbr": "롤포갤"
   },
   "루미큐브": {
     "id": "루미큐브",
@@ -36163,7 +36163,7 @@ const gameData = {
       "ratingEnabled": true,
       "boardId": "마르코폴로2"
     },
-    "abbr": "마르"
+    "abbr": "마폴2"
   },
   "마법사의물약독": {
     "id": "마법사의물약독",
@@ -37210,7 +37210,7 @@ const gameData = {
       "ratingEnabled": true,
       "boardId": "메나라"
     },
-    "abbr": "메나"
+    "abbr": "메나라"
   },
   "메도우-하류-확장": {
     "id": "메도우-하류-확장",
@@ -37350,7 +37350,7 @@ const gameData = {
       "ratingEnabled": true,
       "boardId": "메도우-하류-확장"
     },
-    "abbr": "메도"
+    "abbr": "메도우"
   },
   "메르브실크로드의심장": {
     "id": "메르브실크로드의심장",
@@ -37491,7 +37491,7 @@ const gameData = {
       "ratingEnabled": true,
       "boardId": "메르브실크로드의심장"
     },
-    "abbr": "메르"
+    "abbr": "메르브"
   },
   "메모리아일랜드": {
     "id": "메모리아일랜드",
@@ -37607,7 +37607,7 @@ const gameData = {
       "ratingEnabled": true,
       "boardId": "메모리아일랜드"
     },
-    "abbr": "메모"
+    "abbr": "메모리"
   },
   "메시나1347": {
     "id": "메시나1347",
@@ -37743,7 +37743,7 @@ const gameData = {
       "ratingEnabled": true,
       "boardId": "메시나1347"
     },
-    "abbr": "메시"
+    "abbr": "메시나"
   },
   "메이지나이트-얼티밋-에디션": {
     "id": "메이지나이트-얼티밋-에디션",
@@ -38875,7 +38875,7 @@ const gameData = {
       "ratingEnabled": true,
       "boardId": "문명의시대"
     },
-    "abbr": "문명"
+    "abbr": "문시"
   },
   "뮤제": {
     "id": "뮤제",
@@ -39172,7 +39172,7 @@ const gameData = {
       "ratingEnabled": true,
       "boardId": "미드가르드의챔피언"
     },
-    "abbr": "미드"
+    "abbr": "미가챔"
   },
   "밀레니엄블레이즈": {
     "id": "밀레니엄블레이즈",
@@ -39322,7 +39322,7 @@ const gameData = {
       "ratingEnabled": true,
       "boardId": "밀레니엄블레이즈"
     },
-    "abbr": "밀레"
+    "abbr": "밀블"
   },
   "바람의부족": {
     "id": "바람의부족",
@@ -39586,7 +39586,7 @@ const gameData = {
       "ratingEnabled": true,
       "boardId": "바르셀로나-영"
     },
-    "abbr": "바르"
+    "abbr": "바르셀"
   },
   "반디도": {
     "id": "반디도",
@@ -40877,7 +40877,7 @@ const gameData = {
       "ratingEnabled": true,
       "boardId": "버건디의성-20주년"
     },
-    "abbr": "버건"
+    "abbr": "버건디"
   },
   "버라지-레이흐바터르-나일강-확장": {
     "id": "버라지-레이흐바터르-나일강-확장",
@@ -41017,7 +41017,7 @@ const gameData = {
       "ratingEnabled": true,
       "boardId": "버라지-레이흐바터르-나일강-확장"
     },
-    "abbr": "버라"
+    "abbr": "버라지"
   },
   "번레이트": {
     "id": "번레이트",
@@ -41377,7 +41377,7 @@ const gameData = {
       "ratingEnabled": true,
       "boardId": "베일오브이터니티"
     },
-    "abbr": "베일"
+    "abbr": "베오이"
   },
   "벨에포크파리": {
     "id": "벨에포크파리",
@@ -41644,7 +41644,7 @@ const gameData = {
       "ratingEnabled": true,
       "boardId": "보랏못리라이트-머더미스터리미니"
     },
-    "abbr": "보랏"
+    "abbr": "보랏빛"
   },
   "보타닉가든": {
     "id": "보타닉가든",
@@ -42546,7 +42546,7 @@ const gameData = {
       "ratingEnabled": true,
       "boardId": "북쪽숲을-위하여"
     },
-    "abbr": "북쪽"
+    "abbr": "북쪽숲"
   },
   "분레이크": {
     "id": "분레이크",
@@ -43496,7 +43496,7 @@ const gameData = {
       "ratingEnabled": true,
       "boardId": "브뤼셀1897"
     },
-    "abbr": "브뤼"
+    "abbr": "브뤼셀"
   },
   "블랙소나타": {
     "id": "블랙소나타",
@@ -47833,7 +47833,7 @@ const gameData = {
       "ratingEnabled": true,
       "boardId": "수목원-영"
     },
-    "abbr": "수목"
+    "abbr": "수목원"
   },
   "슈뢰딩거의고양이": {
     "id": "슈뢰딩거의고양이",
@@ -50701,7 +50701,7 @@ const gameData = {
       "ratingEnabled": true,
       "boardId": "시냅스챌린지2"
     },
-    "abbr": "시냅"
+    "abbr": "시냅스"
   },
   "시볼루션": {
     "id": "시볼루션",
@@ -50992,7 +50992,7 @@ const gameData = {
       "ratingEnabled": true,
       "boardId": "시즌스-마법에걸린왕국-운명의길-확장"
     },
-    "abbr": "시즌"
+    "abbr": "시즌스"
   },
   "시체와온천-머더미스터리미니": {
     "id": "시체와온천-머더미스터리미니",
@@ -52320,7 +52320,7 @@ const gameData = {
       "ratingEnabled": true,
       "boardId": "아발론-클래식"
     },
-    "abbr": "아발"
+    "abbr": "아발론"
   },
   "아브라카왓": {
     "id": "아브라카왓",
@@ -52900,7 +52900,7 @@ const gameData = {
       "ratingEnabled": true,
       "boardId": "아컴호러카드게임-던위치-확장"
     },
-    "abbr": "아컴"
+    "abbr": "아딱"
   },
   "아쿠아티카": {
     "id": "아쿠아티카",
@@ -53865,7 +53865,7 @@ const gameData = {
       "ratingEnabled": true,
       "boardId": "알케미스트-왕의골렘-합본"
     },
-    "abbr": "알케"
+    "abbr": "알케미"
   },
   "암스테르담": {
     "id": "암스테르담",
@@ -56613,7 +56613,7 @@ const gameData = {
       "ratingEnabled": true,
       "boardId": "얼티밋레일로드"
     },
-    "abbr": "얼티"
+    "abbr": "얼레"
   },
   "에버델": {
     "id": "에버델",
@@ -57031,7 +57031,7 @@ const gameData = {
       "ratingEnabled": true,
       "boardId": "에에스오브스페이드"
     },
-    "abbr": "에에"
+    "abbr": "에오스"
   },
   "에이다": {
     "id": "에이다",
@@ -57290,7 +57290,7 @@ const gameData = {
       "ratingEnabled": true,
       "boardId": "에이언즈-엔드"
     },
-    "abbr": "에언"
+    "abbr": "에엔"
   },
   "에이전트애비뉴": {
     "id": "에이전트애비뉴",
@@ -57561,7 +57561,7 @@ const gameData = {
       "ratingEnabled": true,
       "boardId": "에즈라와-느헤미아"
     },
-    "abbr": "에즈"
+    "abbr": "에즈라"
   },
   "엑시트-버려진오두막": {
     "id": "엑시트-버려진오두막",
@@ -58981,7 +58981,7 @@ const gameData = {
       "ratingEnabled": true,
       "boardId": "엘리베이터앞에서"
     },
-    "abbr": "엘리"
+    "abbr": "엘리베"
   },
   "영리한여우": {
     "id": "영리한여우",
@@ -59671,7 +59671,7 @@ const gameData = {
       "ratingEnabled": true,
       "boardId": "오라파마인"
     },
-    "abbr": "오라"
+    "abbr": "오라파"
   },
   "오를레앙확장2": {
     "id": "오를레앙확장2",
@@ -60763,7 +60763,7 @@ const gameData = {
       "ratingEnabled": true,
       "boardId": "왕국의수도-프라하"
     },
-    "abbr": "왕국"
+    "abbr": "프라하"
   },
   "요람에서무덤까지": {
     "id": "요람에서무덤까지",
@@ -63158,7 +63158,7 @@ const gameData = {
       "ratingEnabled": true,
       "boardId": "위대한로렌초"
     },
-    "abbr": "위대"
+    "abbr": "로렌초"
   },
   "위치스톤": {
     "id": "위치스톤",
@@ -63544,7 +63544,7 @@ const gameData = {
       "ratingEnabled": true,
       "boardId": "윙스팬-아시아-오세아니아"
     },
-    "abbr": "윙스"
+    "abbr": "윙스팬"
   },
   "육식동물짓이야": {
     "id": "육식동물짓이야",
@@ -63808,7 +63808,7 @@ const gameData = {
       "ratingEnabled": true,
       "boardId": "이베큐에이션"
     },
-    "abbr": "이베"
+    "abbr": "이베큐"
   },
   "이봐그건내물고기야영": {
     "id": "이봐그건내물고기야영",
@@ -64049,7 +64049,7 @@ const gameData = {
       "ratingEnabled": true,
       "boardId": "이스탄불-주사위게임"
     },
-    "abbr": "이스"
+    "abbr": "이탄주"
   },
   "이지컴이지고": {
     "id": "이지컴이지고",
@@ -64177,7 +64177,7 @@ const gameData = {
       "ratingEnabled": true,
       "boardId": "이지컴이지고"
     },
-    "abbr": "이지"
+    "abbr": "이지컴"
   },
   "익스플로딩키튼": {
     "id": "익스플로딩키튼",
@@ -65433,7 +65433,7 @@ const gameData = {
       "ratingEnabled": true,
       "boardId": "자금성-디럭스"
     },
-    "abbr": "자금"
+    "abbr": "자금성"
   },
   "자반도르의셉터": {
     "id": "자반도르의셉터",
@@ -66301,7 +66301,7 @@ const gameData = {
       "ratingEnabled": true,
       "boardId": "정령섬-가지와발톱-확장"
     },
-    "abbr": "정령"
+    "abbr": "정령섬"
   },
   "제왕의깃발": {
     "id": "제왕의깃발",
@@ -67780,7 +67780,7 @@ const gameData = {
       "ratingEnabled": true,
       "boardId": "첫번째화성인"
     },
-    "abbr": "첫번"
+    "abbr": "화성인"
   },
   "체스": {
     "id": "체스",
@@ -70001,7 +70001,7 @@ const gameData = {
       "ratingEnabled": true,
       "boardId": "캐스캐디아"
     },
-    "abbr": "캐스"
+    "abbr": "캐캐"
   },
   "캐슬콤보": {
     "id": "캐슬콤보",
@@ -71308,7 +71308,7 @@ const gameData = {
       "ratingEnabled": true,
       "boardId": "코티지가든"
     },
-    "abbr": "코티"
+    "abbr": "코티지"
   },
   "콩코르디아-비너스-확장": {
     "id": "콩코르디아-비너스-확장",
@@ -72014,7 +72014,7 @@ const gameData = {
       "ratingEnabled": true,
       "boardId": "쿠트나호라"
     },
-    "abbr": "쿠트"
+    "abbr": "쿠트나"
   },
   "쿼리도": {
     "id": "쿼리도",
@@ -73070,7 +73070,7 @@ const gameData = {
       "ratingEnabled": true,
       "boardId": "크리스탈팰리스"
     },
-    "abbr": "크리"
+    "abbr": "크팰"
   },
   "크베들린부르크의돌팔이약장수": {
     "id": "크베들린부르크의돌팔이약장수",
@@ -73215,7 +73215,7 @@ const gameData = {
       "ratingEnabled": true,
       "boardId": "크베들린부르크의돌팔이약장수"
     },
-    "abbr": "크베"
+    "abbr": "돌팔이"
   },
   "클라스크": {
     "id": "클라스크",
@@ -73467,7 +73467,7 @@ const gameData = {
       "ratingEnabled": true,
       "boardId": "클랜오브칼레도니아"
     },
-    "abbr": "클랜"
+    "abbr": "클오칼"
   },
   "클랭크": {
     "id": "클랭크",
@@ -74015,7 +74015,7 @@ const gameData = {
       "ratingEnabled": true,
       "boardId": "클레임1클레임2"
     },
-    "abbr": "클레"
+    "abbr": "클레임"
   },
   "클리닉": {
     "id": "클리닉",
@@ -76278,7 +76278,7 @@ const gameData = {
       "ratingEnabled": true,
       "boardId": "테오티우아칸"
     },
-    "abbr": "테오"
+    "abbr": "테티칸"
   },
   "테케누": {
     "id": "테케누",
@@ -76671,7 +76671,7 @@ const gameData = {
       "ratingEnabled": true,
       "boardId": "트라야누스"
     },
-    "abbr": "트라"
+    "abbr": "트라야"
   },
   "트루아-영": {
     "id": "트루아-영",
@@ -76825,7 +76825,7 @@ const gameData = {
       "ratingEnabled": true,
       "boardId": "트루아-영"
     },
-    "abbr": "트루"
+    "abbr": "트루아"
   },
   "트릭케리언": {
     "id": "트릭케리언",
@@ -77512,7 +77512,7 @@ const gameData = {
       "ratingEnabled": true,
       "boardId": "티켓투라이드-유럽-15주년-기념판"
     },
-    "abbr": "티켓"
+    "abbr": "티투라"
   },
   "티키토플": {
     "id": "티키토플",
@@ -78941,7 +78941,7 @@ const gameData = {
       "ratingEnabled": true,
       "boardId": "팬데믹-벼랑끝에서-확장"
     },
-    "abbr": "팬데"
+    "abbr": "팬데믹"
   },
   "팬암영": {
     "id": "팬암영",
@@ -81411,7 +81411,7 @@ const gameData = {
       "ratingEnabled": true,
       "boardId": "푸에르토리코-2014"
     },
-    "abbr": "푸에"
+    "abbr": "푸코"
   },
   "프라이머-각성": {
     "id": "프라이머-각성",
@@ -83376,7 +83376,7 @@ const gameData = {
       "ratingEnabled": true,
       "boardId": "하트오브크라운페어리-확장2"
     },
-    "abbr": "하트"
+    "abbr": "하오크"
   },
   "한자토이토니카-빅박스": {
     "id": "한자토이토니카-빅박스",
@@ -83509,7 +83509,7 @@ const gameData = {
       "ratingEnabled": true,
       "boardId": "한자토이토니카-빅박스"
     },
-    "abbr": "한자"
+    "abbr": "한토토"
   },
   "할러타우": {
     "id": "할러타우",
@@ -84668,7 +84668,7 @@ const gameData = {
       "ratingEnabled": true,
       "boardId": "행성x를찾아서"
     },
-    "abbr": "행성"
+    "abbr": "행성X"
   },
   "허즐방탈출-Hex-it": {
     "id": "허즐방탈출-Hex-it",
@@ -85018,7 +85018,7 @@ const gameData = {
       "ratingEnabled": true,
       "boardId": "혁신의시대"
     },
-    "abbr": "혁신"
+    "abbr": "혁시"
   },
   "황금의강영": {
     "id": "황금의강영",
@@ -87076,10 +87076,24 @@ const gameData = {
       "ratingEnabled": true,
       "boardId": "아르낙의잊혀진유적"
     },
-    "abbr": "아르"
+    "abbr": "아르낙"
   }
+};
+
+const cottageGameAbbrByName = {
+  "라이": "라이",
+  "라이노교수가아는다가오는죽음": "라이노",
+  "레지사이드 레거시": "레지사",
+  "에이다": "에이다",
+  "탁상탐정단1": "탁상1",
+  "탁상탐정단2": "탁상2",
+  "탁상탐정단3": "탁상3",
+  "탁상탐정단4": "탁상4",
+  "포켓몬사다리게임": "사다리",
+  "도미넌트스피시즈": "도스피"
 };
 
 if (typeof window !== "undefined") {
   window.gameData = gameData;
+  window.COTTAGE_GAME_ABBR_BY_NAME = cottageGameAbbrByName;
 }

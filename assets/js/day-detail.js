@@ -1011,6 +1011,12 @@
   }
   window._bindDdGameHitClicks = _bindDdGameHitClicks;
 
+  // 보유 게임 밖에서 직접 입력한 이름도 수동 약칭 정본을 먼저 쓴다.
+  function _resolveNameAbbr(name) {
+    const pureName = String(name || '').replace(/^#/, '').trim();
+    return window.COTTAGE_GAME_ABBR_BY_NAME?.[pureName] || pureName.slice(0, 2);
+  }
+
   /** 룰렛 후보 목록: want 게임 중복 제거 + 약칭 해석 → [{key, name, abbr}] */
   function _buildRouletteGames(voteGames) {
     const wantGameMap = new Map();
@@ -1020,7 +1026,7 @@
       if (!wantGameMap.has(key)) {
         const name = resolveGameName(g);
         const pureName = name.replace(/^#/, '');
-        let abbr = pureName.slice(0, 2);
+        let abbr = _resolveNameAbbr(pureName);
         if (g.game_id && window.COTTAGE_GAMES) {
           const cg = window.COTTAGE_GAMES.find(c => String(c.bggId) === String(g.game_id));
           if (cg) abbr = cg.abbr || (cg.titleKo || cg.display || pureName).slice(0, 2);
@@ -1153,7 +1159,7 @@
         if (!name) return;
         const cg = (window.COTTAGE_GAMES || []).find(g => g.display === name);
         const key  = cg ? `id:${cg.bggId}` : `custom:${name}`;
-        const abbr = cg ? (cg.abbr || (cg.titleKo || cg.display || name).slice(0, 2)) : name.slice(0, 2);
+        const abbr = cg ? (cg.abbr || (cg.titleKo || cg.display || name).slice(0, 2)) : _resolveNameAbbr(name);
         const dup = state.findIndex(g => g.key === key);
         if (dup >= 0) {
           const chip = chipsEl.querySelector(`[data-key="${esc(state[dup].key)}"]`);
@@ -1384,7 +1390,7 @@
         const found = window.COTTAGE_GAMES.find(c => c.id === g.custom_name.slice(1));
         if (found) return found.abbr || (found.titleKo || found.display || rawName).slice(0, 2);
       }
-      return rawName.slice(0, 2);
+      return _resolveNameAbbr(rawName);
     }
 
     function participantGamesHtml(voteDate, userId) {

@@ -550,12 +550,19 @@ game-system/
       1-bgg/csv/                  ← BGG 랭킹 CSV
       2-cottage-manual/           ← cottage-owned-games.xlsx
       3-abbr/game-abbr.json       ← BGG ID → 약칭 매핑 (수동 관리)
-      3-abbr/game-abbr-byname.json ← ownedName → 약칭 매핑 (bggId 없는 게임 전용)
-                                    조회 순서: abbrMap[bggId] → abbrByName[ownedName] → titleKo 앞 2글자 폴백
+      3-abbr/game-abbr-byname.json ← 게임명 → 약칭 매핑 (bggId 없는 보유 게임 + 직접입력 게임)
+                                    보유 게임: abbrMap[bggId] → abbrByName[ownedName] → titleKo 앞 2글자 폴백
+                                    직접입력: abbrByName[custom_name] → 게임명 앞 2글자 폴백
     staging/                      ← 자동 생성 중간물 (재생성 가능)
     library/                      ← 최종 정제물 (사이트가 읽는 데이터)
   tools/                          ← 빌드/관리 스크립트
 ```
+
+약칭 운영 원칙:
+
+- 사람이 확정한 수동 약칭은 자동 앞 2글자보다 우선하는 durable 데이터다. 약칭 소스를 통합할 때 기존 정본에 값이 없으면 누락 없이 이관하고, 서로 충돌하면 최신 정본을 보존하되 사용자가 명시한 값으로만 덮는다.
+- 서로 다른 게임의 약칭은 겹치지 않게 한다. 같은 본판·확장·언어판처럼 의도적으로 한 게임군으로 묶는 경우의 수동 중복은 허용하며, `build-output.js` 린트는 fallback이 포함된 충돌만 실패 후보로 알린다.
+- 약칭 수정 정본은 `game-abbr.json`과 `game-abbr-byname.json` 두 파일뿐이다. 구 `assets/data/game-short-names.js`는 런타임에서 더 이상 로드하지 않는 레거시 자료이므로 새 값을 추가하지 않는다.
 
 ---
 
