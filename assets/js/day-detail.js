@@ -833,6 +833,7 @@
       const openParticipant = e => {
         if (e.type === 'keydown' && !['Enter', ' '].includes(e.key)) return;
         if (e.type === 'keydown' && e.target !== card) return;
+        if (e.target.closest('button, a, input, select, textarea, .dd-game-hit')) return;
         e.preventDefault();
         e.stopPropagation();
         window.CottageDB?.trackEvent('meeting_planner_bar_click', { date: card.dataset.date, user_id: card.dataset.uid });
@@ -850,12 +851,14 @@
     // 내 막대 ✎ 수정 → 플래너 편집(그 날) / ✕ → 참여 취소. 변경 후 onChange로 모임보드 갱신.
     el.querySelectorAll('.sched-bar-edit-btn').forEach(btn =>
       btn.addEventListener('click', e => {
+        e.preventDefault();
         e.stopPropagation();
         close();
         window.openPlannerModal?.({ weekOffset: 0, edit: dateStr, onDirtyClose: onChange });
       }));
     el.querySelectorAll('.sched-bar-del-btn').forEach(btn =>
       btn.addEventListener('click', async e => {
+        e.preventDefault();
         e.stopPropagation();
         if (!myVote) return;
         if (!confirm(`${dateLabel} 참여를 취소할까요?`)) return;

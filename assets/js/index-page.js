@@ -1853,6 +1853,7 @@ window.addEventListener('cottage-meeting-changed', () => { _meetingReload?.(); }
       const openParticipant = e => {
         if (e.type === 'keydown' && !['Enter', ' '].includes(e.key)) return;
         if (e.type === 'keydown' && e.target !== card) return;
+        if (e.target.closest('button, a, input, select, textarea, .dd-game-hit')) return;
         e.preventDefault();
         e.stopPropagation();
         const uid  = card.dataset.uid;
@@ -1866,8 +1867,9 @@ window.addEventListener('cottage-meeting-changed', () => { _meetingReload?.(); }
 
     previewEl.querySelectorAll('.sched-bar-edit-btn').forEach(btn => {
       btn.addEventListener('click', e => {
+        e.preventDefault();
         e.stopPropagation();
-        const ds = btn.closest('.sched-bar-item')?.querySelector('.sched-bar-track')?.dataset.date;
+        const ds = btn.closest('.sched-bar-item')?.dataset.date;
         if (!ds) return;
         window.__openPlannerFor?.(ds, true);
       });
@@ -1875,8 +1877,9 @@ window.addEventListener('cottage-meeting-changed', () => { _meetingReload?.(); }
 
     previewEl.querySelectorAll('.sched-bar-del-btn').forEach(btn => {
       btn.addEventListener('click', async e => {
+        e.preventDefault();
         e.stopPropagation();
-        const ds = btn.closest('.sched-bar-item')?.querySelector('.sched-bar-track')?.dataset.date;
+        const ds = btn.closest('.sched-bar-item')?.dataset.date;
         if (!ds) return;
         if (!confirm('참여를 취소할까요?')) return;
         const me = window.getKakaoUser?.();

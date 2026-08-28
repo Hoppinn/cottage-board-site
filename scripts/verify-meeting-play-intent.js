@@ -70,6 +70,10 @@ check('내부 수정·삭제·게임 액션 전파 차단', [plannerHtml, indexS
     && source.includes("querySelectorAll('.sched-bar-del-btn')"))
   && detailSrc.includes("hit.addEventListener('click', e => {")
   && detailSrc.includes('e.stopPropagation();'));
+check('카드 전체 클릭이 내부 액션을 명시적으로 제외', [plannerHtml, indexSrc, detailSrc]
+  .every(source => source.includes("e.target.closest('button, a, input, select, textarea, .dd-game-hit')")));
+check('수정·삭제가 카드 날짜를 직접 사용', plannerHtml.includes("btn.closest('.sched-bar-item')?.dataset.date")
+  && indexSrc.includes("btn.closest('.sched-bar-item')?.dataset.date"));
 check('게임 유형 표시 문구', plannerHtml.includes('게임 유형 <span class="sm-intent-required">필수</span>')
   && plannerHtml.includes("any:'게임 유형 무관'") && detailSrc.includes("any:'게임 유형 무관'"));
 

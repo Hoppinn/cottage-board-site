@@ -2736,6 +2736,7 @@
         const openParticipant = e => {
           if (e.type === 'keydown' && !['Enter', ' '].includes(e.key)) return;
           if (e.type === 'keydown' && e.target !== card) return;
+          if (e.target.closest('button, a, input, select, textarea, .dd-game-hit')) return;
           e.preventDefault();
           e.stopPropagation();
           window.CottageDB?.trackEvent('meeting_planner_bar_click');
@@ -2781,16 +2782,20 @@
       // ✏ 수정 (내 막대 행) → 멀티스텝 시트 열기
       el.querySelectorAll('.sched-bar-edit-btn').forEach(btn => {
         btn.addEventListener('click', e => {
+          e.preventDefault();
           e.stopPropagation();
-          _openMultiSheet?.({ startStep: 2, dates: [btn.closest('.sched-wday-card').dataset.date] });
+          const ds = btn.closest('.sched-bar-item')?.dataset.date;
+          if (ds) _openMultiSheet?.({ startStep: 2, dates: [ds] });
         });
       });
 
       // ✕ 참여 취소 (내 막대 행)
       el.querySelectorAll('.sched-bar-del-btn').forEach(btn => {
         btn.addEventListener('click', e => {
+          e.preventDefault();
           e.stopPropagation();
-          removeVoteForDate(btn.closest('.sched-wday-card').dataset.date);
+          const ds = btn.closest('.sched-bar-item')?.dataset.date;
+          if (ds) removeVoteForDate(ds);
         });
       });
 

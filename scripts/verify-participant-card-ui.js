@@ -57,11 +57,15 @@ async function verifyViewport(browser, width, height) {
   await actualCard.press('Enter');
   check(`${width}px: 참여자 카드 Enter 키로 개인 상세 진입`, await page.evaluate(() => !!window.__participantOpenCall));
   await page.evaluate(() => { window.__participantOpenCall = null; });
-  page.once('dialog', dialog => dialog.dismiss());
+  let plannerDeletePrompt = false;
+  page.once('dialog', dialog => { plannerDeletePrompt = true; dialog.dismiss(); });
   await actualCard.locator('.sched-bar-del-btn').click();
-  check(`${width}px: 삭제 액션은 개인 상세를 함께 열지 않음`, await page.evaluate(() => window.__participantOpenCall === null));
+  check(`${width}px: 본 플래너 삭제 액션 독립 동작`, plannerDeletePrompt
+    && await page.evaluate(() => window.__participantOpenCall === null));
   await actualCard.locator('.sched-bar-edit-btn').click();
-  check(`${width}px: 수정 액션은 개인 상세를 함께 열지 않음`, await page.evaluate(() => window.__participantOpenCall === null));
+  check(`${width}px: 본 플래너 수정 UI 정상 진입`, await page.locator('#schedMultiOverlay').isVisible());
+  check(`${width}px: 본 플래너 수정 액션이 개인 상세를 함께 열지 않음`, await page.evaluate(() => window.__participantOpenCall === null));
+  await page.locator('#smClose').click();
 
   const fixture = await page.evaluate(() => {
     const date = '2099-08-29';
@@ -131,6 +135,89 @@ async function verifyViewport(browser, width, height) {
   const shot = path.join(os.tmpdir(), `cottage-participant-cards-${width}.png`);
   await page.screenshot({path:shot, fullPage:true});
   console.log(`  SCREENSHOT ${shot}`);
+
+  // 실제 홈 미리보기 이벤트 경로: 운영 DB 쓰기는 계속 차단하고 GET 응답만 고정한다.
+  const now = new Date();
+  const fixtureDate = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+  const homeVote = {
+    vote_date:fixtureDate, user_id:'__ui_only_cards__', nickname:'UI검증', time_start:10, time_end:18,
+    guest_count:0, game_style:'any', game_depth:'medium', play_traits:[], recruitment_message:'수정 버튼 검증',
+  };
+  await page.route('**/rest/v1/meeting_votes*', route => route.fulfill({status:200, contentType:'application/json', body:JSON.stringify([homeVote])}));
+  await page.route('**/rest/v1/meeting_vote_games*', route => route.fulfill({status:200, contentType:'application/json', body:'[]'}));
+  await page.goto('http://127.0.0.1:8767/index.html', {waitUntil:'networkidle'});
+  await page.waitForFunction(() => typeof window.getKakaoUser === 'function');
+  await page.evaluate(vote => {
+    const partySize = rows => (rows || []).reduce((sum, row) => sum + 1 + Math.max(0, Math.floor(Number(row.guest_count) || 0)), 0);
+    window.CottageDB = window.CottageDB || {};
+    window.CottageDB.getMeetingVotes = async () => [vote];
+    window.CottageDB.getMeetingVoteGames = async () => [];
+    window.CottageDB.sumPartySize = partySize;
+    window.CottageDB.sumWeeklyPartySize = partySize;
+    window.CottageDB.trackEvent = () => {};
+    window.dispatchEvent(new CustomEvent('cottage-meeting-changed'));
+  }, homeVote);
+  const homeEdit = page.locator('#meetingPreview .sched-bar-edit-btn');
+  await homeEdit.waitFor();
+  await homeEdit.scrollIntoViewIfNeeded();
+  const hit = await homeEdit.evaluate(btn => {
+    const r = btn.getBoundingClientRect();
+    const top = document.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2);
+    return {tag:top?.tagName, cls:top?.className, pointerEvents:getComputedStyle(btn).pointerEvents, width:r.width, height:r.height};
+  });
+  check(`${width}px: 홈 수정 버튼 hit-test 대상이 버튼`, hit.tag === 'BUTTON' && String(hit.cls).includes('sched-bar-edit-btn'), JSON.stringify(hit));
+  await page.evaluate(() => {
+    window.__homeEditCall = null;
+    window.__homePersonalCall = null;
+    window.__openPlannerFor = (date, isEdit) => { window.__homeEditCall = {date, isEdit}; };
+    window.openDateScheduleModal = () => { window.__homePersonalCall = true; };
+  });
+  await homeEdit.click();
+  check(`${width}px: 홈 수정 버튼이 수정 진입 실행`, await page.evaluate(
+    date => window.__homeEditCall?.date === date && window.__homeEditCall?.isEdit === true, fixtureDate));
+  check(`${width}px: 홈 수정 버튼이 개인 상세를 함께 열지 않음`, await page.evaluate(() => window.__homePersonalCall === null));
+  let homeDeletePrompt = false;
+  page.once('dialog', dialog => { homeDeletePrompt = true; dialog.dismiss(); });
+  await page.locator('#meetingPreview .sched-bar-del-btn').click();
+  check(`${width}px: 홈 삭제 버튼 독립 동작`, homeDeletePrompt
+    && await page.evaluate(() => window.__homePersonalCall === null));
+  const homeCard = page.locator('#meetingPreview .sched-bar-item').first();
+  await homeCard.click({position:{x:12, y:Math.max(12, (await homeCard.boundingBox()).height - 12)}});
+  check(`${width}px: 홈 카드 본문이 개인 상세 실행`, await page.evaluate(() => window.__homePersonalCall === true));
+
+  // 실제 하루치 미리보기 공개 함수로 같은 세 동작을 각각 새 모달에서 확인한다.
+  await page.evaluate(({date, vote}) => {
+    window.__dayEditCall = null;
+    window.__dayPersonalCall = null;
+    window.openPlannerModal = opts => { window.__dayEditCall = opts; };
+    window.openDateScheduleModal = (uid, ds) => { window.__dayPersonalCall = {uid, date:ds}; };
+    window.openDatePreviewModal(date, [vote], [], vote, () => {});
+  }, {date:fixtureDate, vote:homeVote});
+  await page.locator('#__ddModal .sched-bar-edit-btn').click();
+  check(`${width}px: 하루치 미리보기 수정 UI 정상 진입`, await page.evaluate(
+    date => window.__dayEditCall?.edit === date, fixtureDate));
+  check(`${width}px: 하루치 수정 버튼이 개인 상세를 함께 열지 않음`, await page.evaluate(() => window.__dayPersonalCall === null));
+
+  await page.evaluate(({date, vote}) => {
+    window.__dayPersonalCall = null;
+    window.openDatePreviewModal(date, [vote], [], vote, () => {});
+  }, {date:fixtureDate, vote:homeVote});
+  let dayDeletePrompt = false;
+  page.once('dialog', dialog => { dayDeletePrompt = true; dialog.dismiss(); });
+  await page.locator('#__ddModal .sched-bar-del-btn').click();
+  check(`${width}px: 하루치 미리보기 삭제 버튼 독립 동작`, dayDeletePrompt
+    && await page.evaluate(() => window.__dayPersonalCall === null));
+
+  await page.evaluate(({date, vote}) => {
+    window.__dayPersonalCall = null;
+    window.openDatePreviewModal(date, [vote], [], vote, () => {});
+  }, {date:fixtureDate, vote:homeVote});
+  const dayCard = page.locator('#__ddModal .sched-bar-item').first();
+  await dayCard.click({position:{x:12, y:Math.max(12, (await dayCard.boundingBox()).height - 12)}});
+  check(`${width}px: 하루치 카드 본문이 개인 상세 실행`, await page.evaluate(
+    ({uid, date}) => window.__dayPersonalCall?.uid === uid && window.__dayPersonalCall?.date === date,
+    {uid:homeVote.user_id, date:fixtureDate}));
+
   await context.close();
   return shot;
 }
