@@ -29,6 +29,11 @@ function createServer() {
 
 async function verifyViewport(browser, width, height) {
   const context = await browser.newContext({viewport:{width, height}});
+  await context.addInitScript(() => {
+    localStorage.setItem('kakao_user', JSON.stringify({
+      id:'__ui_only_cards__', nickname:'UI검증', kakaoNickname:'UI검증', profileImage:'', kakaoProfileImage:'',
+    }));
+  });
   const page = await context.newPage();
   await page.route('**/*', route => {
     const request = route.request();
@@ -36,7 +41,28 @@ async function verifyViewport(browser, width, height) {
     if (host.endsWith('.supabase.co') && !['GET','HEAD','OPTIONS'].includes(request.method())) route.abort('blockedbyclient');
     else route.continue();
   });
-  await page.goto(PAGE_URL, {waitUntil:'networkidle'});
+  await page.goto(`${PAGE_URL}?dev=3`, {waitUntil:'networkidle'});
+  await page.waitForSelector('.sched-bar-item[data-date][data-uid]');
+  await page.evaluate(() => {
+    window.__participantOpenCall = null;
+    window.openDateScheduleModal = (uid, date) => { window.__participantOpenCall = {uid, date}; };
+  });
+  const actualCard = page.locator('.sched-bar-item[data-uid="__ui_only_cards__"]').first();
+  const actualTarget = await actualCard.evaluate(card => ({uid:card.dataset.uid, date:card.dataset.date}));
+  await actualCard.click({position:{x:12, y:Math.max(12, (await actualCard.boundingBox()).height - 12)}});
+  check(`${width}px: 본 플래너 카드 여백 클릭으로 개인 상세 진입`, await page.evaluate(
+    target => window.__participantOpenCall?.uid === target.uid && window.__participantOpenCall?.date === target.date, actualTarget));
+  await page.evaluate(() => { window.__participantOpenCall = null; });
+  await actualCard.focus();
+  await actualCard.press('Enter');
+  check(`${width}px: 참여자 카드 Enter 키로 개인 상세 진입`, await page.evaluate(() => !!window.__participantOpenCall));
+  await page.evaluate(() => { window.__participantOpenCall = null; });
+  page.once('dialog', dialog => dialog.dismiss());
+  await actualCard.locator('.sched-bar-del-btn').click();
+  check(`${width}px: 삭제 액션은 개인 상세를 함께 열지 않음`, await page.evaluate(() => window.__participantOpenCall === null));
+  await actualCard.locator('.sched-bar-edit-btn').click();
+  check(`${width}px: 수정 액션은 개인 상세를 함께 열지 않음`, await page.evaluate(() => window.__participantOpenCall === null));
+
   const fixture = await page.evaluate(() => {
     const date = '2099-08-29';
     const games = (window.COTTAGE_GAMES || []).slice(0, 12);

@@ -59,6 +59,19 @@ check('성격·깊이·성향·모집 문구 소비', ['v.game_style', 'v.game_d
 check('want/learn 게임이 참여자 카드에 귀속', detailSrc.includes("groupHtml('want', '하고 싶음')")
   && detailSrc.includes("groupHtml('learn', '배우고 싶음')"));
 check('시간 막대 안에 텍스트 없음', !detailSrc.includes('class="sched-bar-time"'));
+check('공용 카드에 개인 상세 진입 데이터·키보드 역할', detailSrc.includes('class="sched-bar-item" data-date=')
+  && detailSrc.includes('role="button" tabindex="0"'));
+check('세 화면 모두 카드 전체를 상세 진입점으로 사용', [plannerHtml, indexSrc, detailSrc]
+  .every(source => source.includes("querySelectorAll('.sched-bar-item[data-date][data-uid]')")));
+check('시간 막대 전용 클릭 바인딩 제거', !plannerHtml.includes("querySelectorAll('.sched-bar-track[data-date]')")
+  && !indexSrc.includes("querySelectorAll('.sched-bar-track')"));
+check('내부 수정·삭제·게임 액션 전파 차단', [plannerHtml, indexSrc, detailSrc]
+  .every(source => source.includes("querySelectorAll('.sched-bar-edit-btn')")
+    && source.includes("querySelectorAll('.sched-bar-del-btn')"))
+  && detailSrc.includes("hit.addEventListener('click', e => {")
+  && detailSrc.includes('e.stopPropagation();'));
+check('게임 유형 표시 문구', plannerHtml.includes('게임 유형 <span class="sm-intent-required">필수</span>')
+  && plannerHtml.includes("any:'게임 유형 무관'") && detailSrc.includes("any:'게임 유형 무관'"));
 
 check('home selected-day preview has no duplicate date header', !indexSrc.includes('class="mpc-date"'));
 check('home day tabs reuse party-size helper', indexSrc.includes('const cnt = partyCount(byDate[ds]);'));

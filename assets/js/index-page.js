@@ -1849,23 +1849,19 @@ window.addEventListener('cottage-meeting-changed', () => { _meetingReload?.(); }
       });
     });
 
-    previewEl.querySelectorAll('.sched-bar-track').forEach(track => {
-      track.addEventListener('click', e => {
+    previewEl.querySelectorAll('.sched-bar-item[data-date][data-uid]').forEach(card => {
+      const openParticipant = e => {
+        if (e.type === 'keydown' && !['Enter', ' '].includes(e.key)) return;
+        if (e.type === 'keydown' && e.target !== card) return;
+        e.preventDefault();
         e.stopPropagation();
-        const uid  = track.dataset.uid;
-        const date = track.dataset.date;
+        const uid  = card.dataset.uid;
+        const date = card.dataset.date;
         window.CottageDB?.trackEvent('meeting_planner_bar_click', { date, user_id: uid });
         window.openDateScheduleModal?.(uid, date, { onDirtyClosed: () => _meetingReload?.() });
-      });
-    });
-
-    previewEl.querySelectorAll('.sched-bar-name[data-uid]').forEach(nameEl => {
-      nameEl.addEventListener('click', e => {
-        e.stopPropagation();
-        const uid = nameEl.dataset.uid;
-        window.CottageDB?.trackEvent('meeting_profile_click', { user_id: uid });
-        window.openOtherMeetingSheet?.(uid);
-      });
+      };
+      card.addEventListener('click', openParticipant);
+      card.addEventListener('keydown', openParticipant);
     });
 
     previewEl.querySelectorAll('.sched-bar-edit-btn').forEach(btn => {

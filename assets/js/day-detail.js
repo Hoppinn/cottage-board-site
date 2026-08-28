@@ -181,7 +181,11 @@
       border: 1px solid var(--line, #e5ddd2);
       border-radius: 9px;
       background: var(--paper, #fffaf0);
+      cursor: pointer;
+      transition: background .15s, border-color .15s;
     }
+    .sched-bar-item:hover { background: #fff7e9; border-color: #cfbda9; }
+    .sched-bar-item:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
     .sched-bar-item:last-of-type { margin-bottom: 0; }
     .sched-bar-left {
       display: flex; align-items: center; gap: 5px;
@@ -823,12 +827,20 @@
     const close = () => { _popDdViewToken(); el.remove(); };
     el.querySelector('.dd-x-btn').addEventListener('click', close);
     el.addEventListener('click', e => { if (e.target === el) close(); });
-    // 참여자 이름 클릭 → 해당 유저 모임 보드 (홈 미리보기와 동일)
-    // 이 모달은 자신을 연 보드보다 위(z 9200 > --z-profile 9100)라서, 새로 열리는 남의 보드도
-    // 같은 9100이라 안 닫으면 이 모달에 가려 안 보인다(먼저 닫아야 클릭 1번에 보드로 넘어간다).
-    // openDateScheduleModal의 .dd-nick-link는 반대로 자기가 더 아래(9050)라 닫지 않는 게 맞는 설계 — 그쪽은 그대로 둔다.
-    el.querySelectorAll('.sched-bar-name').forEach(n =>
-      n.addEventListener('click', () => { close(); window.openOtherMeetingSheet?.(n.dataset.uid, backTo ? { backTo } : {}); }));
+    // 참여자 카드 전체 → 해당 참여자의 일정 상세. 내부 수정·삭제·게임 액션은 각 핸들러가
+    // stopPropagation하여 이 진입과 겹치지 않는다.
+    el.querySelectorAll('.sched-bar-item[data-date][data-uid]').forEach(card => {
+      const openParticipant = e => {
+        if (e.type === 'keydown' && !['Enter', ' '].includes(e.key)) return;
+        if (e.type === 'keydown' && e.target !== card) return;
+        e.preventDefault();
+        e.stopPropagation();
+        window.CottageDB?.trackEvent('meeting_planner_bar_click', { date: card.dataset.date, user_id: card.dataset.uid });
+        window.openDateScheduleModal?.(card.dataset.uid, card.dataset.date, { onDirtyClosed: onChange });
+      };
+      card.addEventListener('click', openParticipant);
+      card.addEventListener('keydown', openParticipant);
+    });
     // +N명 더보기 토글 (막대가 접힘 구조일 때)
     el.querySelectorAll('.sched-card-more-btn').forEach(btn =>
       btn.addEventListener('click', () => {
@@ -1434,7 +1446,7 @@
       const width    = ((v.time_end - v.time_start) / range * 100).toFixed(1);
       const mine     = myVote && String(v.user_id) === String(myVote.user_id);
       const gamesHtml = participantGamesHtml(v.vote_date, v.user_id);
-      const styleLabels = {party:'파티', strategy:'전략', any:'성격 무관'};
+      const styleLabels = {party:'파티', strategy:'전략', any:'게임 유형 무관'};
       const depthLabels = {light:'가볍게', medium:'적당히', deep:'깊게', any:'깊이 무관'};
       const traitLabels = {beginner_welcome:'초보 환영', new_game_ok:'새 게임 가능'};
       const traits = Array.isArray(v.play_traits) ? v.play_traits.filter(t => traitLabels[t]) : [];
@@ -1458,7 +1470,7 @@
             <button class="sched-bar-del-btn" type="button" aria-label="참여 취소">✕</button>
           </div>`
         : '';
-      return `<div class="sched-bar-item">
+      return `<div class="sched-bar-item" data-date="${esc(v.vote_date)}" data-uid="${esc(v.user_id)}" role="button" tabindex="0">
         <div class="sched-bar-left">
           <span class="sched-bar-name" data-uid="${esc(v.user_id)}">${esc(v.nickname)}</span>
           ${guestN > 0 ? `<span class="sched-bar-guest" title="동반 인원 ${guestN}명">+${guestN}</span>` : ''}
