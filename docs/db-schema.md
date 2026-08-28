@@ -1,6 +1,6 @@
 # DB 스키마 — 코티지보드
 
-최종 갱신: 2026-08-28 (023 회원 자기소개 구조화 설문 + 최초 1회 `intro_complete` 음료교환권 지급 RPC 추가, 운영 DB 실행 대기) / 2026-08-10 (021 `game_overrides.rule_sections` 추가 + 020 "미실행" 낡은 기재 실측 정정 — 헤더 타임스탬프가 실제 내용보다 3주 넘게 낡아 있던 것도 같이 바로잡음) / 2026-08-10 2차 (021도 실은 실행 완료 상태였음을 anon REST 직접 조회로 재확인·정정 + `rule_sections` 텍스트 칸의 `## ` 소제목 표기 규칙 추가) / 2026-08-10 3차 (022 `game_overrides.organizer_note` 추가 — 정리 방법을 사진과 글 병행 지원) / 2026-08-11 (022도 실은 실행 완료 상태였음을 anon REST 직접 조회로 재확인·정정 — 012·020·021과 같은 패턴 4번째 재발. "미실행" 낡은 기재가 게임 안내 콘텐츠 입력 작업 착수를 막을 뻔했다)
+최종 갱신: 2026-08-28 (023 회원 자기소개 구조화 설문 + 최초 1회 `intro_complete` 음료교환권 지급 RPC의 운영 반영을 읽기 전용으로 확인: 컬럼 SELECT 200, 존재하지 않는 프로필의 유효 RPC 호출은 `profile_not_found`로 롤백되고 행을 만들지 않음. 실제 계정 최초/수정 화면 확인은 별도 대기) / 2026-08-10 (021 `game_overrides.rule_sections` 추가 + 020 "미실행" 낡은 기재 실측 정정 — 헤더 타임스탬프가 실제 내용보다 3주 넘게 낡아 있던 것도 같이 바로잡음) / 2026-08-10 2차 (021도 실은 실행 완료 상태였음을 anon REST 직접 조회로 재확인·정정 + `rule_sections` 텍스트 칸의 `## ` 소제목 표기 규칙 추가) / 2026-08-10 3차 (022 `game_overrides.organizer_note` 추가 — 정리 방법을 사진과 글 병행 지원) / 2026-08-11 (022도 실은 실행 완료 상태였음을 anon REST 직접 조회로 재확인·정정 — 012·020·021과 같은 패턴 4번째 재발. "미실행" 낡은 기재가 게임 안내 콘텐츠 입력 작업 착수를 막을 뻔했다)
 
 ---
 
@@ -24,7 +24,7 @@
 | 020 `game_overrides.error_note` 컬럼 (에러로그) | ✅ **실행 완료 + 검증 (2026-08-09 재확인)** — anon SELECT로 `error_note` 포함 3행 정상 응답(에러 없음). ⚠️ 이 칸이 오래 "미실행"으로 남아 PROJECT_STATE의 "2026-08-02 종결" 기록과 충돌하고 있었다 — DB에 직접 물어서 해소(같은 패턴 012 사건 참조) |
 | 021 `game_overrides.rule_sections` 컬럼 (jsonb, 게임 방법 구조화) | ✅ **실행 완료 + 검증 (2026-08-10 실측 정정)** — anon REST로 패치워크-크리스마스에디션 행을 직접 조회해 `{goal, setup, play, end}` 4키 전부 실데이터로 채워진 것 확인. ⚠️ 이 칸이 오래 "미실행"으로 남아 PROJECT_STATE의 "룰 허브 모달 실화면 미확인" 기재와 충돌 중이었다 — 012·020과 같은 패턴, DB에 직접 물어서 해소. **각 텍스트 칸 안에서 문단 맨 앞에 `## `를 붙이면 그 문단만 렌더링 시 살짝 굵게 표시된다**(진행 단계 소제목 표기, `_ruleHubParagraphsHtml`/game-sheet.js SSOT — DB 구조 추가 없이 순수 텍스트 관례) |
 | 022 `game_overrides.organizer_note` 컬럼 (text, 정리 방법 글) | ✅ **실행 완료 + 검증 (2026-08-11 실측 정정)** — anon REST로 `game_overrides?select=game_key,organizer_note`가 HTTP 200 정상 응답(3행, 컬럼 존재 확인). 정리 방법이 사진(`organizer_photo_urls`)만 지원하던 걸 글도 병행 가능하게(사용자 요청, 2026-08-10). error_note와 동일한 단일 텍스트 컬럼 패턴. ⚠️ 이 칸이 하루 남짓 "미실행"으로 남아 PROJECT_STATE의 「열린 마이그레이션 1건」 기재와 충돌하고 있었다 — 012·020·021과 같은 패턴 4번째 재발, DB에 직접 물어서 해소 |
-| 023 자기소개 구조화 설문 + `submit_member_intro` RPC + `intro_complete` 교환권 | ⚠️ **운영 DB 실행 대기 (2026-08-28 신규)** — 과거 `member_intros` 행은 NULL 그대로 보존하고, 새 전체 제출만 필수 검증한다. RPC가 소개 저장·`profiles.avoid_tags` 갱신·교환권 지급을 한 트랜잭션으로 처리하며 partial unique index가 사용자당 1회 지급을 보장한다. **코드 배포 전에 실행해야 함.** |
+| 023 자기소개 구조화 설문 + `submit_member_intro` RPC + `intro_complete` 교환권 | ✅ **운영 DB 반영 확인 (2026-08-28 읽기 전용)** — `member_intros`의 023 컬럼 SELECT가 HTTP 200. 존재하지 않는 확인용 user_id에 유효한 RPC 입력을 보냈을 때 `P0001 profile_not_found`가 반환되고 호출 전후 profiles 행이 0개라, **실제 RPC가 profile 검증 지점까지 실행되고 쓰기 전 롤백됨**을 확인했다. 과거 행은 NULL 그대로 보존하고, 새 전체 제출만 필수 검증한다. RPC가 소개 저장·`profiles.avoid_tags` 갱신·교환권 지급을 한 트랜잭션으로 처리하며 partial unique index가 사용자당 1회 지급을 보장한다. anon 읽기만으로 index 메타데이터는 열람할 수 없으므로, **실계정 최초 제출 1회·재수정 무중복 지급 확인이 남아 있다.** |
 
 ### ⚙️ PostgREST `max-rows` = 50000 (2026-07-18 변경, 마이그레이션 아님)
 
