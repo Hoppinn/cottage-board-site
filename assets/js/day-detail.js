@@ -250,14 +250,21 @@
       min-width: 0; margin-top: 5px;
       font-size: 9px; line-height: 1.35; color: var(--muted);
     }
-    .sched-bar-intent-main { color: var(--green); font-weight: 700; }
+    .sched-bar-intent-main {
+      color: var(--text); font-size: 9.5px; font-weight: 800;
+    }
     .sched-bar-intent-trait {
       padding: 1px 5px; border-radius: 8px;
       background: #f5ede3; color: #7a4828; white-space: nowrap;
     }
     .sched-bar-intent-message {
+      display: flex; align-items: flex-start; gap: 3px;
       flex-basis: 100%; min-width: 0;
       color: var(--text); overflow-wrap: anywhere;
+    }
+    .sched-bar-intent-message::before {
+      content: '💬'; flex-shrink: 0;
+      font-size: 8px; line-height: 1.35;
     }
     .sched-bar-games {
       display: flex; flex-direction: column; gap: 3px;
@@ -401,6 +408,7 @@
       .sched-bar-track { height: 9px; }
       .sched-bar-guest { font-size: 11px; }
       .sched-bar-intent { font-size: 10px; gap: 3px 7px; }
+      .sched-bar-intent-main { font-size: 10.5px; }
       .sched-bar-game-label, .sched-bar-game-chip { font-size: 10px; }
     }
   `;

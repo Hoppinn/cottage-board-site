@@ -7,7 +7,7 @@ const path = require('path');
 
 const EDGE = 'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe';
 const ROOT = path.join(__dirname, '..');
-const PAGE_URL = 'http://127.0.0.1:8766/pages/club/club-schedule.html';
+const PAGE_URL = 'http://127.0.0.1:8767/pages/club/club-schedule.html';
 let failures = 0;
 const check = (label, condition, detail = '') => {
   console.log(`  ${condition ? 'PASS' : 'FAIL'} ${label}${detail ? ` — ${detail}` : ''}`);
@@ -103,7 +103,7 @@ async function verifyViewport(browser, width, height) {
 
 (async () => {
   const server = createServer();
-  await new Promise((resolve, reject) => server.listen(8766, '127.0.0.1', error => error ? reject(error) : resolve()));
+  await new Promise((resolve, reject) => server.listen(8767, '127.0.0.1', error => error ? reject(error) : resolve()));
   const browser = await chromium.launch({headless:true, executablePath:EDGE});
   try {
     await verifyViewport(browser, 360, 740);
