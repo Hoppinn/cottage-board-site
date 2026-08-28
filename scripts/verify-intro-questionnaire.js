@@ -27,6 +27,9 @@ check(html.includes('id="introWizardProgress"'), 'Wizard progress missing');
 check(html.includes('validateStep(wizardStep)'), 'Wizard step validation missing');
 check(html.includes('openWizard({ edit: !!r.questionnaire_completed_at })'), 'Wizard edit entry missing');
 check(html.includes("document.getElementById('introWizardReward').hidden = !result.voucherGranted"), 'Voucher completion branch missing');
+const cardBody = html.match(/<div class="intro-card-news-body">([\s\S]*?)<\/div>\n\s*\$\{clickable/g)?.[0] || '';
+check(!cardBody.includes('r._bio') && !cardBody.includes('r.companion_types') && !cardBody.includes('r.clocktower_preference'), 'Profile card includes non-core survey fields');
+check(html.includes("myRow?.questionnaire_completed_at ? '모임원 프로필 수정하기' : '모임원 프로필 작성하기'"), 'Existing profile start label missing');
 
 // 브라우저가 없어도 인라인 스크립트의 파싱 오류는 잡는다.
 for (const [file, source] of [['club-intro.html', html], ['requests-admin.html', adminHtml]]) {

@@ -35,7 +35,7 @@
         <!-- 작성 시작점 (로그인 시에만 노출) -->
         <div class="intro-form-card" id="introFormCard" style="display:none">
           <button class="intro-form-toggle" id="introWizardOpenBtn" type="button">
-            모임원 프로필 작성하기 <span class="intro-form-toggle-arrow">›</span>
+            <span id="introWizardOpenLabel">모임원 프로필 작성하기</span><span class="intro-form-toggle-arrow">›</span>
           </button>
         </div>
 
@@ -351,6 +351,7 @@
       }
       currentIntroRow = null;
       if (!data?.length) {
+        document.getElementById('introWizardOpenLabel').textContent = '모임원 프로필 작성하기';
         const currentUser = getCurrentUser();
         if (!didPrefill && currentUser?.nickname) {
           didPrefill = true;
@@ -375,6 +376,7 @@
       const currentUser = getCurrentUser();
       const myRow = currentUser ? data.find(r => String(r.user_id) === String(currentUser.id)) : null;
       currentIntroRow = myRow || null;
+      document.getElementById('introWizardOpenLabel').textContent = myRow?.questionnaire_completed_at ? '모임원 프로필 수정하기' : '모임원 프로필 작성하기';
       if (!didPrefill) {
         didPrefill = true;
         if (myRow) {
@@ -398,15 +400,10 @@
             <div class="intro-card-news-date">${formatDate(r.created_at)}</div>
           </div>
           <div class="intro-card-news-body">
-            ${r._bio ? `<div class="intro-card-news-row"><span class="intro-card-news-label">📝</span><span class="intro-card-news-val">${escHtml(r._bio)}</span></div>` : ''}
-            ${r.companion_types?.length ? `<div class="intro-card-news-row"><span class="intro-card-news-label">👥</span><span class="intro-card-news-val">${escHtml(labelList(r.companion_types, COMPANION_LABELS))}</span></div>` : ''}
             ${r.average_play_frequency != null ? `<div class="intro-card-news-row"><span class="intro-card-news-label">🎲</span><span class="intro-card-news-val">평균 ${escHtml(FREQUENCY_LABELS[r.average_play_frequency])}</span></div>` : (r.favorite_games ? `<div class="intro-card-news-row"><span class="intro-card-news-label">🎲</span><span class="intro-card-news-val">${escHtml(r.favorite_games)}</span></div>` : '')}
             ${r.available_days?.length ? `<div class="intro-card-news-row"><span class="intro-card-news-label">📅</span><span class="intro-card-news-val">${escHtml(labelList(r.available_days, DAY_LABELS))} · ${escHtml(labelList(r.available_times, TIME_LABELS))}</span></div>` : (r.available ? `<div class="intro-card-news-row"><span class="intro-card-news-label">📅</span><span class="intro-card-news-val">${escHtml(r.available)}</span></div>` : '')}
             ${r.preferred_game_types?.length ? `<div class="intro-card-news-row"><span class="intro-card-news-label">❤️</span><span class="intro-card-news-val">${escHtml(labelList(r.preferred_game_types, GAME_TYPE_LABELS))}</span></div>` : ''}
-            ${r.clocktower_preference ? `<div class="intro-card-news-row"><span class="intro-card-news-label">🕰️</span><span class="intro-card-news-val">${escHtml(CLOCKTOWER_LABELS[r.clocktower_preference])}</span></div>` : ''}
-            ${r.expectation ? `<div class="intro-card-news-row"><span class="intro-card-news-label">💬</span><span class="intro-card-news-val">${escHtml(r.expectation.length > 70 ? `${r.expectation.slice(0, 70)}…` : r.expectation)}</span></div>` : ''}
-            ${r.location ? `<div class="intro-card-news-row"><span class="intro-card-news-label">📍</span><span class="intro-card-news-val">${escHtml(r.location)}</span></div>` : ''}
-            ${r.travel_range ? `<div class="intro-card-news-row"><span class="intro-card-news-label">🚗</span><span class="intro-card-news-val">${escHtml(r.travel_range)}</span></div>` : ''}
+            ${r.expectation ? `<div class="intro-card-news-row"><span class="intro-card-news-label">💬</span><span class="intro-card-news-val">${escHtml(r.expectation.length > 52 ? `${r.expectation.slice(0, 52)}…` : r.expectation)}</span></div>` : ''}
           </div>
           ${clickable ? '<div class="intro-card-news-cta">모임 보드 보기 ›</div>' : ''}
         </div>`;
