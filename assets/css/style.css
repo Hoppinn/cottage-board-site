@@ -2546,6 +2546,10 @@ html:has(body.embed-mode) { scroll-padding-top: 0; }
   text-align:center;
   text-shadow:0 2px 14px rgba(60,35,10,0.75);
 }
+.page-mini-hero .about-hero-sub{
+  position:relative;
+  z-index:1;
+}
 .page-mini-hero--reviews::before{
   content:"";
   position:absolute;
