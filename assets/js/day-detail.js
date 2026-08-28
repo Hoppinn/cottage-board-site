@@ -171,22 +171,23 @@
       justify-content: space-between;
       font-size: 10px;
       color: var(--muted);
-      margin-bottom: 6px;
-      padding-left: 60px;
+      margin: 0 2px 5px;
     }
     .sched-bar-item {
-      display: grid;
-      grid-template-columns: 40px 1fr;
-      gap: 6px;
-      margin-bottom: 8px;
+      display: block;
+      min-width: 0;
+      margin-bottom: 7px;
+      padding: 7px 8px;
+      border: 1px solid var(--line, #e5ddd2);
+      border-radius: 9px;
+      background: var(--paper, #fffaf0);
     }
-    .sched-card-bars .sched-bar-axis { padding-left: 46px; }
+    .sched-bar-item:last-of-type { margin-bottom: 0; }
     .sched-bar-left {
-      display: flex; flex-direction: column;
-      align-items: flex-end; justify-content: space-between;
-      padding: 3px 0;
+      display: flex; align-items: center; gap: 5px;
+      min-width: 0; margin-bottom: 5px;
     }
-    .sched-bar-actions { display: flex; gap: 0; }
+    .sched-bar-actions { display: flex; gap: 0; margin-left: 1px; }
     .sched-bar-edit-btn,
     .sched-bar-del-btn {
       width: 18px; height: 18px;
@@ -201,11 +202,9 @@
     .sched-bar-del-btn:hover,
     .sched-bar-del-btn:active { background: #fdecea; color: #d94f4f; }
     .sched-bar-name {
-      font-size: 11px;
+      min-width: 0; max-width: 42%;
+      font-size: 11px; font-weight: 700;
       color: var(--text);
-      width: 52px;
-      flex-shrink: 0;
-      text-align: right;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
@@ -225,48 +224,67 @@
       line-height: 15px;
       flex-shrink: 0;
     }
-    .sched-bar-track {
-      flex: 1;
-      min-height: 24px;
-      background: #ede8e0;
-      border-radius: 5px;
-      position: relative;
+    .sched-bar-time-text {
+      margin-left: auto; flex-shrink: 0;
+      font-size: 10.5px; font-weight: 700; color: var(--green);
+      white-space: nowrap;
     }
-    .sched-bar-track.has-games { min-height: 40px; }
+    .sched-bar-track {
+      width: 100%; height: 8px;
+      background: #ede8e0;
+      border-radius: 999px;
+      position: relative;
+      overflow: hidden;
+    }
     .sched-bar-fill {
       position: absolute;
       top: 0; bottom: 0;
       background: var(--green);
-      border-radius: 5px;
+      border-radius: 999px;
       opacity: 0.72;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: stretch;
-      padding: 2px 6px;
-      min-width: 32px;
-      overflow: hidden;
+      min-width: 3px;
     }
     .sched-bar-fill.is-mine { background: #c0843a; opacity: 0.9; }
-    .sched-bar-time {
-      font-size: 10px;
-      color: white;
-      font-weight: 700;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      text-align: center;
-      line-height: 1.4;
+    .sched-bar-intent {
+      display: flex; flex-wrap: wrap; align-items: center; gap: 3px 6px;
+      min-width: 0; margin-top: 5px;
+      font-size: 9px; line-height: 1.35; color: var(--muted);
     }
-    .sched-bar-game-line {
-      font-size: 9px;
-      color: rgba(255,255,255,0.88);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      text-align: center;
-      line-height: 1.4;
+    .sched-bar-intent-main { color: var(--green); font-weight: 700; }
+    .sched-bar-intent-trait {
+      padding: 1px 5px; border-radius: 8px;
+      background: #f5ede3; color: #7a4828; white-space: nowrap;
     }
+    .sched-bar-intent-message {
+      flex-basis: 100%; min-width: 0;
+      color: var(--text); overflow-wrap: anywhere;
+    }
+    .sched-bar-games {
+      display: flex; flex-direction: column; gap: 3px;
+      min-width: 0; margin-top: 5px; padding-top: 5px;
+      border-top: 1px solid var(--line, #e5ddd2);
+    }
+    .sched-bar-game-group {
+      display: grid; grid-template-columns: auto minmax(0, 1fr);
+      align-items: start; gap: 4px;
+    }
+    .sched-bar-game-label {
+      padding-top: 1px; font-size: 9px; font-weight: 700;
+      color: var(--muted); white-space: nowrap;
+    }
+    .sched-bar-game-list { display: flex; flex-wrap: wrap; gap: 3px; min-width: 0; }
+    .sched-bar-game-chip {
+      display: inline-flex; align-items: center; min-width: 0;
+      padding: 1px 5px; border-radius: 8px;
+      font-size: 9px; line-height: 1.45; white-space: nowrap;
+    }
+    .sched-bar-game-chip--want { background: var(--bg-soft); color: var(--green); }
+    .sched-bar-game-chip--learn { background: var(--line); color: var(--muted); }
+    .sched-bar-game-thumb {
+      width: 9px; height: 9px; margin-right: 2px;
+      border-radius: 2px; object-fit: cover; flex-shrink: 0;
+    }
+    .sched-bar-game-chip .dd-game-hit { padding: 1px; margin: -1px; }
     .sched-card-bars {
       margin-top: 8px;
       padding-top: 8px;
@@ -299,32 +317,6 @@
       text-align: center;
     }
     .sched-card-detail-btn:hover { color: var(--green); background: #f0ece6; }
-    .sched-game-tags {
-      margin-top: 8px;
-      padding-top: 6px;
-      border-top: 1px solid var(--border);
-    }
-    .sched-tag-group { margin-top: 4px; }
-    .sched-tag-group:first-child { margin-top: 0; }
-    .sched-tag-group-label { font-size: 9.5px; font-weight: 600; color: var(--muted, #9e8e7e); }
-    .sched-game-empty { font-size: 10.5px; color: var(--muted, #9e8e7e); }
-    .sched-tag-row { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 2px; }
-    .sched-game-tag {
-      display: inline-flex;
-      align-items: center;
-      font-size: 10px;
-      padding: 2px 7px;
-      border-radius: 10px;
-      line-height: 1.5;
-      white-space: nowrap;
-    }
-    .sched-game-tag-thumb { width: 10px; height: 10px; border-radius: 2px; object-fit: cover; margin-right: 2px; flex-shrink: 0; vertical-align: middle; }
-    /* 클릭 대상(.dd-game-hit)은 이 안의 썸네일만 — 히트박스 확장용 padding/margin이 팁 밖으로
-       튀지 않게 pill 안에서만 눌러쓴다(2026-07-27). */
-    .sched-game-tag .dd-game-hit { padding: 2px; margin: -2px; }
-    .sched-game-tag--want { background: var(--bg-soft); color: var(--green); }
-    .sched-game-tag--learn { background: var(--line); color: var(--muted); }
-
     /* ── 룰렛 패널 ── */
     .dd-roulette-open-btn {
       display: block; width: 100%; margin: 8px 0 4px;
@@ -400,21 +392,16 @@
     }
     .dd-roulette-back-btn:active { background: #f5f0eb; }
 
-    /* PC — 이 막대(.sched-bar-*)는 홈 「이번주 모임」 미리보기와 「하루치 플래너 미리보기」
-       센터모달이 공유한다. 두 컨테이너는 이미 PC에서 넓어졌는데(624e47ea, 410ef7e0) 내용
-       크기는 모바일 값 그대로라 헐렁해 보인다(2026-07-27 사용자 지적). 폰트·칩만 키운다 —
-       레이아웃 구조(grid-template-columns 등)는 건드리지 않는다. */
+    /* PC도 모바일과 같은 참여자 카드 구조를 쓰고 글자·막대만 소폭 키운다. */
     @media (min-width: 720px) {
-      .sched-bar-axis { font-size: 12px; padding-left: 76px; }
-      .sched-card-bars .sched-bar-axis { padding-left: 62px; }
-      .sched-bar-item { grid-template-columns: 56px 1fr; }
-      .sched-bar-name { font-size: 13px; width: 68px; }
-      .sched-bar-track { min-height: 30px; }
-      .sched-bar-track.has-games { min-height: 48px; }
-      .sched-bar-fill { padding: 3px 8px; }
-      .sched-bar-time { font-size: 12px; }
-      .sched-bar-game-line { font-size: 10.5px; }
+      .sched-bar-axis { font-size: 11px; }
+      .sched-bar-item { padding: 8px 10px; }
+      .sched-bar-name { font-size: 12px; }
+      .sched-bar-time-text { font-size: 11.5px; }
+      .sched-bar-track { height: 9px; }
       .sched-bar-guest { font-size: 11px; }
+      .sched-bar-intent { font-size: 10px; gap: 3px 7px; }
+      .sched-bar-game-label, .sched-bar-game-chip { font-size: 10px; }
     }
   `;
   document.head.appendChild(s);
@@ -1005,7 +992,7 @@
   }
 
   // .dd-game-hit(게임 썸네일) 클릭 → 게임시트. openDateMeetingModal·openDateScheduleModal·
-  // buildGameTags(.sched-game-tag 안, 홈 미리보기·플래너 막대바 모달·플래너 페이지 주간뷰가 공유)
+  // 참여자 카드 안 게임 칩(.sched-bar-game-chip, 홈 미리보기·하루치 미리보기·플래너 주간뷰 공유)
   // 전부 이걸로 통일(2026-07-27) — 예전엔 셋 중 일부만 뚫려 있었다.
   // 게임시트(--z-sheet 9500)가 겹쳐 뜨므로 모달/카드를 안 닫는다(닫으면 아래로 복귀).
   // ⚠️ meeting_vote_games.game_id는 BGG ID인데 openGameSheet는 gameData 슬러그 키를 받는다 —
@@ -1400,27 +1387,52 @@
       return rawName.slice(0, 2);
     }
 
-    function gameAbbrs(voteDate, userId, durationH) {
+    function participantGamesHtml(voteDate, userId) {
       const games = voteGames.filter(g =>
         g.vote_date === voteDate && String(g.user_id) === String(userId)
       );
       if (!games.length) return '';
-      const sorted = [...games].sort((a, b) => {
-        const ta = a.is_priority ? 0 : (a.list_type === 'want' ? 1 : 2);
-        const tb = b.is_priority ? 0 : (b.list_type === 'want' ? 1 : 2);
-        return ta - tb;
-      });
-      const abbrs = sorted.map(g => (g.is_priority ? '⭐' : '') + esc(resolveGameAbbr(g)));
-      const maxShow = durationH >= 6 ? 4 : durationH >= 4 ? 3 : 2;
-      if (abbrs.length <= maxShow) return abbrs.join(' · ');
-      return abbrs.slice(0, maxShow).join(' · ') + ` +${abbrs.length - maxShow}`;
+      const groupHtml = (type, label) => {
+        const items = games.filter(g => g.list_type === type)
+          .sort((a, b) => Number(!!b.is_priority) - Number(!!a.is_priority));
+        if (!items.length) return '';
+        const chips = items.map(g => {
+          const gameId = g.game_id ? String(g.game_id) : null;
+          const thumb = gameId ? dbThumbHtml(gameId, 'sched-bar-game-thumb') : '';
+          const hit = gameId && thumb
+            ? `<span class="dd-game-hit" data-game-id="${esc(gameId)}">${thumb}</span>`
+            : '';
+          const abbr = `${g.is_priority ? '⭐' : ''}${resolveGameAbbr(g)}`;
+          return `<span class="sched-bar-game-chip sched-bar-game-chip--${type}">${hit}${esc(abbr)}</span>`;
+        }).join('');
+        return `<div class="sched-bar-game-group">
+          <span class="sched-bar-game-label">${label}</span>
+          <div class="sched-bar-game-list">${chips}</div>
+        </div>`;
+      };
+      return `<div class="sched-bar-games">
+        ${groupHtml('want', '하고 싶음')}${groupHtml('learn', '배우고 싶음')}
+      </div>`;
     }
 
     function barRow(v) {
       const left     = ((v.time_start - MIN_H) / range * 100).toFixed(1);
       const width    = ((v.time_end - v.time_start) / range * 100).toFixed(1);
       const mine     = myVote && String(v.user_id) === String(myVote.user_id);
-      const gameLine = gameAbbrs(v.vote_date, v.user_id, v.time_end - v.time_start);
+      const gamesHtml = participantGamesHtml(v.vote_date, v.user_id);
+      const styleLabels = {party:'파티', strategy:'전략', any:'성격 무관'};
+      const depthLabels = {light:'가볍게', medium:'적당히', deep:'깊게', any:'깊이 무관'};
+      const traitLabels = {beginner_welcome:'초보 환영', new_game_ok:'새 게임 가능'};
+      const traits = Array.isArray(v.play_traits) ? v.play_traits.filter(t => traitLabels[t]) : [];
+      const mainIntent = [styleLabels[v.game_style], depthLabels[v.game_depth]].filter(Boolean).join(' · ');
+      const message = String(v.recruitment_message || '').trim();
+      const intentLine = (mainIntent || traits.length || message)
+        ? `<div class="sched-bar-intent">
+            ${mainIntent ? `<span class="sched-bar-intent-main">${esc(mainIntent)}</span>` : ''}
+            ${traits.map(t => `<span class="sched-bar-intent-trait">${esc(traitLabels[t])}</span>`).join('')}
+            ${message ? `<span class="sched-bar-intent-message" title="${esc(message)}">${esc(message)}</span>` : ''}
+          </div>`
+        : '';
       // 이름은 등록자 1명뿐이지만 인원은 동반 포함이라 다르다 → 막대에 「+N」으로 드러낸다
       const guestN   = partyCount([v]) - 1;
       // 지난 날짜엔 수정·취소를 렌더하지 않는다 — 등록 경로(cottage-edit/register)가
@@ -1436,73 +1448,22 @@
         <div class="sched-bar-left">
           <span class="sched-bar-name" data-uid="${esc(v.user_id)}">${esc(v.nickname)}</span>
           ${guestN > 0 ? `<span class="sched-bar-guest" title="동반 인원 ${guestN}명">+${guestN}</span>` : ''}
+          <span class="sched-bar-time-text">${window.formatVoteHour(v.time_start)}~${window.formatVoteHour(v.time_end)}</span>
           ${actions}
         </div>
-        <div class="sched-bar-track${gameLine ? ' has-games' : ''}" data-date="${esc(v.vote_date)}" data-uid="${esc(v.user_id)}" style="cursor:pointer">
-          <div class="sched-bar-fill${mine ? ' is-mine' : ''}" style="left:${left}%;width:${width}%">
-            <span class="sched-bar-time">${window.formatVoteHour(v.time_start, {compact:true})}~${window.formatVoteHour(v.time_end, {compact:true})}</span>
-            ${gameLine ? `<span class="sched-bar-game-line">${gameLine}</span>` : ''}
-          </div>
+        <div class="sched-bar-track" data-date="${esc(v.vote_date)}" data-uid="${esc(v.user_id)}" style="cursor:pointer">
+          <div class="sched-bar-fill${mine ? ' is-mine' : ''}" style="left:${left}%;width:${width}%"></div>
         </div>
+        ${intentLine}
+        ${gamesHtml}
       </div>`;
     }
-
-    function buildGameTags(voteDate) {
-      const dateGames = voteGames.filter(g => g.vote_date === voteDate);
-      if (!dateGames.length) {
-        // 참여자는 있으나(막대는 렌더됨) 아무도 게임을 안 고른 날 — 게임 영역이 통째로
-        // 사라지는 대신 넛지로 등록을 유도한다. 지난 날짜는 등록이 무의미하므로 숨긴다.
-        return voteDate >= today
-          ? '<div class="sched-game-tags"><div class="sched-game-empty">🎲 아직 하고 싶은 게임이 없어요</div></div>'
-          : '';
-      }
-
-      const nameMap = {}, wantCnt = {}, learnCnt = {}, priorityCnt = {};
-      dateGames.forEach(g => {
-        const name = g.game_id
-          ? (window.COTTAGE_GAMES?.find(c => c.bggId === String(g.game_id))?.display || g.custom_name || `#${g.game_id}`)
-          : (g.custom_name || '?');
-        const key = g.game_id ? `id:${g.game_id}` : `n:${g.custom_name}`;
-        if (!nameMap[key]) nameMap[key] = name;
-        if (g.list_type === 'want')  wantCnt[key]  = (wantCnt[key]  || 0) + 1;
-        if (g.list_type === 'learn') learnCnt[key] = (learnCnt[key] || 0) + 1;
-        if (g.list_type === 'want' && g.is_priority) priorityCnt[key] = (priorityCnt[key] || 0) + 1;
-      });
-
-      // 개별 태그에 🎲/📖를 붙이지 않고 하고싶은/배우고싶은 그룹 헤더로 분리(집계 칩과 동일 구성).
-      // 한 게임이 want·learn 둘 다면 양쪽 그룹에 각각 표시(카운트 기준).
-      const _tag = (key, cnt, tone) => {
-        const suffix = cnt > 1 ? ` ·${cnt}` : '';
-        const gameId = key.startsWith('id:') ? key.slice(3) : null;
-        const thumb = dbThumbHtml(gameId, 'sched-game-tag-thumb');
-        const name = esc(nameMap[key]);
-        // 클릭 대상은 썸네일만(2026-07-27 통일 — .dd-game-hit 재사용, 다른 두 목록과 같은 규칙·같은
-        // 바인딩). 썸네일이 없으면 이름이 대신 클릭 대상. 직접입력(game_id 없음)은 클릭 불가.
-        const hitTarget = thumb || name;
-        const rest = thumb ? name : '';
-        const hit = gameId
-          ? `<span class="dd-game-hit" data-game-id="${esc(String(gameId))}">${hitTarget}</span>${rest}`
-          : `${thumb}${name}`;
-        return `<span class="sched-game-tag sched-game-tag--${tone}">${hit}${suffix}</span>`;
-      };
-      const wantKeys = Object.keys(wantCnt).sort((a, b) =>
-        ((wantCnt[b] || 0) - (wantCnt[a] || 0)) || ((priorityCnt[b] || 0) - (priorityCnt[a] || 0)));
-      const learnKeys = Object.keys(learnCnt).sort((a, b) => (learnCnt[b] || 0) - (learnCnt[a] || 0));
-      const _group = (label, keys, cntObj, tone) => keys.length
-        ? `<div class="sched-tag-group"><span class="sched-tag-group-label">${label}</span><div class="sched-tag-row">${keys.map(k => _tag(k, cntObj[k], tone)).join('')}</div></div>`
-        : '';
-
-      return `<div class="sched-game-tags">${_group('🎲 하고 싶은 게임', wantKeys, wantCnt, 'want')}${_group('📖 배우고 싶은 게임', learnKeys, learnCnt, 'learn')}</div>`;
-    }
-
-    const voteDate = dayVotes[0].vote_date;
 
     return `<div class="sched-card-bars">
       <div class="sched-bar-axis">
         <span>${MIN_H}시</span><span>${window.formatVoteHour((MIN_H + MAX_H) / 2)}</span><span>${MAX_H}시</span>
       </div>
       ${dayVotes.map(barRow).join('')}
-      ${buildGameTags(voteDate)}
     </div>`;
   };
 })();

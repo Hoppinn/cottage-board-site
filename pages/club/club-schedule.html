@@ -476,6 +476,36 @@
       transition: border-color .15s, background .15s, color .15s;
     }
     .sm-tab.is-active { border-color: var(--green); background: var(--green); color: white; }
+    /* Step 4: 오늘 원하는 판 */
+    .sm-intent-section { margin-bottom: 18px; }
+    .sm-intent-section:last-child { margin-bottom: 0; }
+    .sm-intent-label {
+      display: block; margin-bottom: 8px;
+      font-size: 13px; font-weight: 700; color: var(--text);
+    }
+    .sm-intent-required { color: #c0843a; font-size: 11px; margin-left: 4px; }
+    .sm-intent-options { display: flex; flex-wrap: wrap; gap: 7px; }
+    .sm-intent-option {
+      position: relative; display: inline-flex; align-items: center;
+      padding: 7px 12px; border: 1.5px solid #d0c8bc; border-radius: 18px;
+      background: white; color: var(--muted); font-size: 13px; cursor: pointer;
+      transition: border-color .15s, background .15s, color .15s;
+    }
+    .sm-intent-option:has(input:checked) {
+      border-color: var(--green); background: var(--green); color: white; font-weight: 600;
+    }
+    .sm-intent-option input { position: absolute; opacity: 0; pointer-events: none; }
+    .sm-intent-message-wrap { position: relative; }
+    .sm-intent-message {
+      width: 100%; box-sizing: border-box; padding: 10px 48px 10px 12px;
+      border: 1.5px solid #d0c8bc; border-radius: 9px;
+      font: inherit; font-size: 14px; color: var(--text); outline: none;
+    }
+    .sm-intent-message:focus { border-color: var(--green); }
+    .sm-intent-count {
+      position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
+      font-size: 11px; color: var(--muted); pointer-events: none;
+    }
     /* Step 2 */
     .sm-prevweek-row { text-align: right; margin-bottom: 4px; }
     .sm-freqtime-row { text-align: right; margin-bottom: 4px; position: relative; }
@@ -1090,6 +1120,7 @@
       let _timeMap     = {};   // { ds: {s, e} }
       let _guestMap    = {};   // { ds: 동반 인원 수 } — 미입력이면 키 없음(=0)
       let _gameMap     = {};   // { ds: {want:[{custom_name,game_id}], learn:[...]} }
+      let _intentMap   = {};   // { ds: {gameStyle,gameDepth,playTraits,recruitmentMessage} }
       let _activeDay   = null;
       let _fromStep1   = false;
       let _pickerCache = {};   // { like:[], curious:[], past:{want,learn} } — lazy fetch
@@ -1128,7 +1159,7 @@
       function close() {
         overlay.style.display = 'none';
         _popPlannerViewToken();
-        _days = []; _timeMap = {}; _gameMap = {}; _activeDay = null; _step = 1; _pickerOpen = null; _gameOpen = {want:true, learn:true};
+        _days = []; _timeMap = {}; _gameMap = {}; _intentMap = {}; _activeDay = null; _step = 1; _pickerOpen = null; _gameOpen = {want:true, learn:true};
         _pastOpen = {want:false, learn:false}; _srcOpen = {want:false, learn:false}; _othersOpen = {want:false, learn:false};
         _modalWeekOffset = 0; _historicalVotes = null;
         _dateChangeMap = {}; _dateChangeWeekOffset = 0;
@@ -1149,6 +1180,7 @@
       $s('smBack').addEventListener('click', () => {
         if (_step === 2) renderStep1();
         else if (_step === 3) renderStep2();
+        else if (_step === 4) { readStep4Form(); renderStep3(); }
       });
 
       // ── 헬퍼 ──────────────────────────────────────────────────
@@ -1318,6 +1350,16 @@
           _gameMap[ds] = {
             want:  uid ? allVoteGames.filter(g => g.vote_date===ds && String(g.user_id)===uid && g.list_type==='want') .map(g=>({game_id:g.game_id, custom_name:g.custom_name, is_priority:g.is_priority??false, player_condition:g.player_condition??'any'})) : [],
             learn: uid ? allVoteGames.filter(g => g.vote_date===ds && String(g.user_id)===uid && g.list_type==='learn').map(g=>({game_id:g.game_id, custom_name:g.custom_name, is_priority:g.is_priority??false, player_condition:g.player_condition??'any'})) : []
+          };
+        }
+        if (!_intentMap[ds]) {
+          const user = window.getKakaoUser?.();
+          const ex = user && allVotes.find(v => v.vote_date === ds && String(v.user_id) === String(user.id));
+          _intentMap[ds] = {
+            gameStyle: ex?.game_style ?? '',
+            gameDepth: ex?.game_depth ?? '',
+            playTraits: Array.isArray(ex?.play_traits) ? [...ex.play_traits] : [],
+            recruitmentMessage: ex?.recruitment_message ?? '',
           };
         }
       }
@@ -1662,6 +1704,7 @@
         _timeMap[newDs] = _timeMap[oldDs]; delete _timeMap[oldDs];
         _guestMap[newDs] = _guestMap[oldDs]; delete _guestMap[oldDs];
         _gameMap[newDs] = _gameMap[oldDs]; delete _gameMap[oldDs];
+        _intentMap[newDs] = _intentMap[oldDs]; delete _intentMap[oldDs];
         // 이 행만 새 날짜로 교체 — 같이 편집 중인 다른 날짜(행)는 그대로 둔다.
         _days = _days.map(d => d === oldDs ? newDs : d).sort();
         if (_activeDay === oldDs) _activeDay = newDs;
@@ -2028,13 +2071,6 @@
           });
         });
 
-        if (_step === 3) {
-          const btn = $s('smSave');
-          if (btn) {
-            const total = _days.reduce((n, ds) => n + (_gameMap[ds]?.want?.length||0) + (_gameMap[ds]?.learn?.length||0), 0);
-            btn.textContent = total > 0 ? '저장' : '건너뛰고 저장';
-          }
-        }
       }
 
       // ── Step 3: 게임 선택 ───────────────────────────────────────
@@ -2050,7 +2086,7 @@
         $s('smBody').innerHTML =
           `${tabsHtml}<p class="sm-hint">선택 사항이에요 — 없으면 건너뛰세요.</p><div id="smGameSections"></div>`;
         $s('smFooter').innerHTML =
-          `<button class="sched-confirm-btn" id="smSave" type="button">건너뛰고 저장</button>`;
+          `<button class="sched-confirm-btn" id="smNext3" type="button">다음 →</button>`;
 
         renderStep2Games();
 
@@ -2065,7 +2101,84 @@
           });
         }
 
-        $s('smSave').addEventListener('click', () => saveAll());
+        $s('smNext3').addEventListener('click', () => renderStep4());
+      }
+
+      const GAME_STYLE_LABELS = { party:'파티', strategy:'전략', any:'상관없음' };
+      const GAME_DEPTH_LABELS = { light:'가볍게', medium:'적당히', deep:'깊게', any:'상관없음' };
+      const PLAY_TRAIT_LABELS = { beginner_welcome:'초보 환영', new_game_ok:'새 게임 가능' };
+
+      function readStep4Form() {
+        if (!_activeDay) return;
+        _intentMap[_activeDay] = {
+          gameStyle: document.querySelector('input[name="smGameStyle"]:checked')?.value || null,
+          gameDepth: document.querySelector('input[name="smGameDepth"]:checked')?.value || null,
+          playTraits: [...document.querySelectorAll('input[name="smPlayTrait"]:checked')].map(el => el.value),
+          recruitmentMessage: ($s('smRecruitmentMessage')?.value || '').trim().slice(0, 30),
+        };
+      }
+
+      function intentOptionsHtml(name, labels, selected, type = 'radio') {
+        return Object.entries(labels).map(([value, label]) =>
+          `<label class="sm-intent-option"><input type="${type}" name="${name}" value="${value}"${selected?.includes?.(value) ? ' checked' : ''}>${label}</label>`
+        ).join('');
+      }
+
+      // ── Step 4: 오늘 원하는 판 ──────────────────────────────────
+      function renderStep4() {
+        _step = 4;
+        if (!_activeDay || !_days.includes(_activeDay)) _activeDay = _days[0];
+        const intent = _intentMap[_activeDay] || {gameStyle:null, gameDepth:null, playTraits:[], recruitmentMessage:''};
+        const tabsHtml = _days.length > 1
+          ? `<div class="sm-tabs" id="smIntentTabs">${buildTabs()}</div>` : '';
+        $s('smTitle').textContent = '오늘 원하는 판';
+        $s('smBack').style.visibility = 'visible';
+        $s('smBack').textContent = '← 게임 수정';
+        $s('smBody').innerHTML = `${tabsHtml}
+          <p class="sm-hint">오늘 함께하고 싶은 판을 알려주세요.</p>
+          <div class="sm-intent-section">
+            <span class="sm-intent-label">게임 성격 <span class="sm-intent-required">필수</span></span>
+            <div class="sm-intent-options">${intentOptionsHtml('smGameStyle', GAME_STYLE_LABELS, [intent.gameStyle])}</div>
+          </div>
+          <div class="sm-intent-section">
+            <span class="sm-intent-label">게임 깊이 <span class="sm-intent-required">필수</span></span>
+            <div class="sm-intent-options">${intentOptionsHtml('smGameDepth', GAME_DEPTH_LABELS, [intent.gameDepth])}</div>
+          </div>
+          <div class="sm-intent-section">
+            <span class="sm-intent-label">이런 판에도 열려 있어요 <span class="sm-intent-required">선택</span></span>
+            <div class="sm-intent-options">${intentOptionsHtml('smPlayTrait', PLAY_TRAIT_LABELS, intent.playTraits || [], 'checkbox')}</div>
+          </div>
+          <div class="sm-intent-section">
+            <label class="sm-intent-label" for="smRecruitmentMessage">한줄 모집 <span class="sm-intent-required">선택 · 최대 30자</span></label>
+            <div class="sm-intent-message-wrap">
+              <input class="sm-intent-message" id="smRecruitmentMessage" type="text" maxlength="30"
+                placeholder="예: 초보도 편하게 같이 해요" value="${esc(intent.recruitmentMessage || '')}">
+              <span class="sm-intent-count" id="smRecruitmentCount">${(intent.recruitmentMessage || '').length}/30</span>
+            </div>
+          </div>`;
+        $s('smFooter').innerHTML = `<button class="sched-confirm-btn" id="smSave" type="button">저장</button>`;
+
+        document.getElementById('smIntentTabs')?.querySelectorAll('.sm-tab').forEach(tab => {
+          tab.addEventListener('click', () => {
+            readStep4Form();
+            _activeDay = tab.dataset.ds;
+            renderStep4();
+          });
+        });
+        $s('smRecruitmentMessage')?.addEventListener('input', e => {
+          $s('smRecruitmentCount').textContent = `${e.target.value.length}/30`;
+        });
+        $s('smSave').addEventListener('click', () => {
+          readStep4Form();
+          const missingDay = _days.find(ds => !_intentMap[ds]?.gameStyle || !_intentMap[ds]?.gameDepth);
+          if (missingDay) {
+            _activeDay = missingDay;
+            renderStep4();
+            showToast(`${formatLabel(missingDay)}의 게임 성격과 깊이를 선택해주세요.`);
+            return;
+          }
+          saveAll();
+        });
       }
 
       // ── 게임 추가 + 역연동 + 다중날짜 전파 ──────────────────────
@@ -2170,7 +2283,10 @@
         try {
           for (const ds of _days) {
             const t = _timeMap[ds] || {s:10, e:22};
-            const result = await window.CottageDB?.upsertMeetingVote(String(user.id), user.nickname||'익명', ds, t.s, t.e, clampGuest(_guestMap[ds]));
+            const intent = _intentMap[ds];
+            const result = await window.CottageDB?.upsertMeetingVote(
+              String(user.id), user.nickname||'익명', ds, t.s, t.e, clampGuest(_guestMap[ds]), intent
+            );
             if (!result?.success) throw new Error(result?.error?.message || '시간 저장 오류');
 
             // 기존 게임 삭제 후 재삽입
@@ -2201,7 +2317,12 @@
 
             // 메모리 갱신
             allVotes = allVotes.filter(v => !(v.vote_date===ds && String(v.user_id)===String(user.id)));
-            allVotes.push({vote_date:ds, user_id:String(user.id), nickname:user.nickname||'익명', time_start:t.s, time_end:t.e, guest_count:clampGuest(_guestMap[ds])});
+            allVotes.push({
+              vote_date:ds, user_id:String(user.id), nickname:user.nickname||'익명',
+              time_start:t.s, time_end:t.e, guest_count:clampGuest(_guestMap[ds]),
+              game_style:intent.gameStyle, game_depth:intent.gameDepth,
+              play_traits:[...(intent.playTraits || [])], recruitment_message:intent.recruitmentMessage || null,
+            });
             allVoteGames = allVoteGames.filter(g => !(g.vote_date===ds && String(g.user_id)===String(user.id)));
             for (const g of dayGames.want) {
               if (g.custom_name || g.game_id) allVoteGames.push({vote_date:ds, user_id:String(user.id), list_type:'want', game_id:g.game_id??null, custom_name:g.custom_name??null, is_priority:g.is_priority??false, player_condition:g.player_condition??'any'});
@@ -2256,7 +2377,7 @@
         _historicalVotes = null;
         _dateChangeMap = {}; _dateChangeWeekOffset = 0;
         _days = [...dates].sort();
-        _timeMap = {}; _gameMap = {}; _activeDay = null; _gameOpen = {want:true, learn:true};
+        _timeMap = {}; _gameMap = {}; _intentMap = {}; _activeDay = null; _gameOpen = {want:true, learn:true};
         _pastOpen = {want:false, learn:false}; _srcOpen = {want:false, learn:false}; _othersOpen = {want:false, learn:false};
         _days.forEach(initDay);
         overlay.style.display = '';
@@ -2401,6 +2522,7 @@
       if (!user) return;
       if (btnSave) btnSave.disabled = true;
       const guest = clampGuest(guestCount);
+      const previousVote = allVotes.find(v => v.vote_date === ds && String(v.user_id) === String(user.id));
 
       const result = await window.CottageDB?.upsertMeetingVote(
         String(user.id), user.nickname || '익명', ds, start, end, guest
@@ -2408,7 +2530,7 @@
       if (result?.success) {
         allVotes = allVotes.filter(v => !(v.vote_date === ds && String(v.user_id) === String(user.id)));
         // 로컬 캐시에도 guest_count를 실어야 재조회 전까지의 렌더가 DB와 같은 숫자를 낸다
-        allVotes.push({ vote_date: ds, user_id: String(user.id), nickname: user.nickname || '익명', time_start: start, time_end: end, guest_count: guest });
+        allVotes.push({ ...previousVote, vote_date: ds, user_id: String(user.id), nickname: user.nickname || '익명', time_start: start, time_end: end, guest_count: guest });
         _notifyParentSaved();
         closeScheduleSheet();
         renderWeekView(weekOffset);

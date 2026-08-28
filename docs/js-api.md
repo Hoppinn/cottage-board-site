@@ -1,6 +1,6 @@
 # JS API 레퍼런스 — 코티지보드
 
-최종 갱신: 2026-08-28 (`submitMemberIntro` 추가 + `getMeetingProfile`에 023 구조화 자기소개 필드 반영) / 2026-08-10 (`upsertGameOverride`/`getGameOverride`에 `ruleSections`(021) 반영 — 헤더 타임스탬프가 실제 내용보다 3주 넘게 낡아 있던 것도 같이 바로잡음)
+최종 갱신: 2026-08-29 (`getMeetingVotes`/`upsertMeetingVote`에 024 날짜별 판 의도 반영) / 2026-08-28 (`submitMemberIntro` 추가 + `getMeetingProfile`에 023 구조화 자기소개 필드 반영) / 2026-08-10 (`upsertGameOverride`/`getGameOverride`에 `ruleSections`(021) 반영 — 헤더 타임스탬프가 실제 내용보다 3주 넘게 낡아 있던 것도 같이 바로잡음)
 
 ---
 
@@ -124,11 +124,11 @@ return data || [];
 | `getCustomPrefSuggestions()` | 취향보드: 두 테이블 전체에서 distinct custom_name 목록 반환 |
 | `updateUserBio(userId, bio)` | profiles.bio 업데이트 — 취향보드/회원 자기소개/모임 보드가 공유하는 한줄소개 SSOT. 한쪽에서 호출하면 나머지 모든 화면에 즉시 반영됨 |
 | `updateUserAvoidTags(userId, tags)` | profiles.avoid_tags (text[]) 업데이트 |
-| `getMeetingVotes(startDate, endDate)` | 모임 플래너: 날짜 범위 내 전체 투표 조회. startDate/endDate: 'YYYY-MM-DD' |
+| `getMeetingVotes(startDate, endDate)` | 모임 플래너: 날짜 범위 내 전체 투표 조회. startDate/endDate: 'YYYY-MM-DD'. 024부터 각 행에 `game_style`, `game_depth`, `play_traits`, `recruitment_message` 포함 |
 | `getPartySize(vote)` | 그 등록 1건의 **방문 인원** = `1 + guest_count`(동반 인원). null·문자열·음수·NaN 전부 1로 방어 |
 | `sumWeeklyPartySize(votes)` | **여러 날짜에 걸친 인원** — 유저별 **최대** 인원을 합산한다(월 3명·수 1명이면 그 사람 몫은 3). `sumPartySize`와 **다른 질문**이다: 저건 "그날 몇 명", 이건 "이 기간에 올 사람이 몇 명". 홈 상태 문구(*"N명이 기다리고 있어요"*)가 유일한 소비처. 동반 0이면 옛 `Set(user_id).size`와 동일 |
 | `sumPartySize(votes)` | votes 배열의 총 방문 인원. `user_id` 기준 dedupe 후 `getPartySize` 합산 — 옛 `Set(user_id).size`의 의미를 보존하면서 지인만 더한다. 🚨 **「N명」을 세는 자리는 전부 이것만 쓴다** — `.length`로 세면 그 화면만 조용히 다른 답을 낸다(#15 `visitorKey` 사건과 동형). 현재 소비처: 플래너 3곳+`calcOverlap`/`calcSummary`, 이날 상세 4곳, 홈 이번주 모임 1곳 |
-| `upsertMeetingVote(userId, nickname, voteDate, timeStart, timeEnd, guestCount=0)` | 모임 플래너: 가능 시간 등록/수정. UNIQUE(vote_date, user_id) upsert. `guestCount`는 동반 인원 — **인자를 생략하면 0으로 덮어쓴다**(수정 경로에서 기존 값을 안 실으면 동반 인원이 사라짐). 음수·NaN·소수는 0/정수로, 99 초과는 99로 접는다(DB CHECK와 같은 값) |
+| `upsertMeetingVote(userId, nickname, voteDate, timeStart, timeEnd, guestCount=0, playIntent?)` | 모임 플래너: 가능 시간/날짜별 판 의도 등록·수정. UNIQUE(vote_date, user_id) upsert. `guestCount`는 동반 인원 — **인자를 생략하면 0으로 덮어쓴다**(수정 경로에서 기존 값을 안 실으면 동반 인원이 사라짐). 음수·NaN·소수는 0/정수로, 99 초과는 99로 접는다(DB CHECK와 같은 값). `playIntent`는 `{gameStyle, gameDepth, playTraits, recruitmentMessage}`; 인자 자체를 생략한 기존 호출은 024 필드를 payload에 넣지 않아 저장된 판 의도를 보존한다 |
 | `deleteMeetingVote(userId, voteDate)` | 모임 플래너: 등록 취소. **cascade**: 같은 user_id+vote_date의 `meeting_vote_games`(하고싶은/배우고싶은 게임)도 함께 삭제 — 참여 취소 시 orphan 게임 방지 |
 | `getMeetingProfile(userId)` | **취향보드·모임보드 공용 단일 소스**. 기존 반환값에 023 구조화 자기소개 `companionTypes, averagePlayFrequency, possibleFrequencyMin/Max, desiredFrequencyMin/Max, availableDays, availableTimes, preferredGameTypes, clocktowerPreference, expectation, questionnaireCompletedAt`을 추가한다. `join_sources`는 관리자 전용이라 공개 프로필 반환값에서 의도적으로 제외. `avoidTags`는 계속 `profiles.avoid_tags` SSOT. ⚠️ 취향/모임 서브시트 데이터를 여기 말고 다시 조회하지 말 것 |
 | `upsertMeetingIntro(userId, fields)` | member_intros upsert (`onConflict:'user_id'`). 유저당 1행 보장. fields에 전달한 키만 갱신 |

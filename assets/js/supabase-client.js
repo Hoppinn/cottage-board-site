@@ -2478,7 +2478,7 @@ window._cottageSess = (function () {
   async function getMeetingVotes(startDate, endDate) {
     try {
       const { data, error } = await db.from('meeting_votes')
-        .select('vote_date, user_id, nickname, time_start, time_end, guest_count')
+        .select('vote_date, user_id, nickname, time_start, time_end, guest_count, game_style, game_depth, play_traits, recruitment_message')
         .gte('vote_date', startDate)
         .lte('vote_date', endDate)
         .order('vote_date');
@@ -2524,18 +2524,28 @@ window._cottageSess = (function () {
     return total;
   }
 
-  async function upsertMeetingVote(userId, nickname, voteDate, timeStart, timeEnd, guestCount = 0) {
+  async function upsertMeetingVote(userId, nickname, voteDate, timeStart, timeEnd, guestCount = 0, playIntent) {
     try {
       const g = Number(guestCount);
       const guest = Number.isFinite(g) && g > 0 ? Math.min(99, Math.floor(g)) : 0;
-      const { error } = await db.from('meeting_votes').upsert({
+      const row = {
         vote_date: voteDate,
         user_id: String(userId),
         nickname,
         time_start: timeStart,
         time_end: timeEnd,
         guest_count: guest,
-      }, { onConflict: 'vote_date,user_id' });
+      };
+      // 기존 호출은 playIntent를 생략한다. 이때 신규 필드를 payload에 넣지 않아
+      // 이미 저장된 오늘의 판 의도를 의도치 않게 NULL/빈 배열로 덮지 않는다.
+      if (playIntent && typeof playIntent === 'object') {
+        row.game_style = playIntent.gameStyle ?? null;
+        row.game_depth = playIntent.gameDepth ?? null;
+        row.play_traits = Array.isArray(playIntent.playTraits) ? playIntent.playTraits : [];
+        const message = String(playIntent.recruitmentMessage ?? '').trim();
+        row.recruitment_message = message || null;
+      }
+      const { error } = await db.from('meeting_votes').upsert(row, { onConflict: 'vote_date,user_id' });
       return error ? { error } : { success: true };
     } catch (e) { return { error: e }; }
   }
