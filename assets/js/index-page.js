@@ -1658,6 +1658,14 @@ window.addEventListener('cottage-meeting-changed', () => { _meetingReload?.(); }
     window.CottageDB?.trackEvent('home_meeting_planner_click');
     _awaitingSheetReveal = true;
     modal.classList.add('is-quick-entry');
+    // 실제 로컬 환경에서 iframe 준비/DB 조회가 늦으면 cottage-sheet-shown 전까지 부모 모달이
+    // 완전히 숨겨져 클릭이 무시된 것처럼 보였다. 클릭 즉시 투명 quick-entry 위에 로더를
+    // 드러내고, 등록 시트가 준비되면 같은 자리에서 교체한다.
+    modal.setAttribute('aria-hidden', 'false');
+    modal.classList.add('is-open');
+    if (loader) loader.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+    _ensureView();
     if (!preloaded) preload();
     const type = isEdit ? 'cottage-edit' : 'cottage-register';
     if (frame.classList.contains('is-ready')) {
@@ -1690,7 +1698,7 @@ window.addEventListener('cottage-meeting-changed', () => { _meetingReload?.(); }
     if (e.source !== frame.contentWindow) return;
     if (e.data?.type === 'cottage-planner-ready') {
       frame.classList.add('is-ready');
-      if (loader) loader.style.display = 'none';
+      if (loader && !_awaitingSheetReveal) loader.style.display = 'none';
       if (_plannerPendingDate) {
         const ds = _plannerPendingDate;
         _plannerPendingDate = null;
@@ -1706,6 +1714,7 @@ window.addEventListener('cottage-meeting-changed', () => { _meetingReload?.(); }
     }
     if (e.data?.type === 'cottage-sheet-shown' && _awaitingSheetReveal) {
       _awaitingSheetReveal = false;
+      if (loader) loader.style.display = 'none';
       modal.setAttribute('aria-hidden', 'false');
       modal.classList.add('is-open');
       document.body.style.overflow = 'hidden';

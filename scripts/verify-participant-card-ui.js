@@ -167,6 +167,7 @@ async function verifyViewport(browser, width, height) {
   });
   check(`${width}px: 홈 수정 버튼 hit-test 대상이 버튼`, hit.tag === 'BUTTON' && String(hit.cls).includes('sched-bar-edit-btn'), JSON.stringify(hit));
   await page.evaluate(() => {
+    window.__realOpenPlannerFor = window.__openPlannerFor;
     window.__homeEditCall = null;
     window.__homePersonalCall = null;
     window.__openPlannerFor = (date, isEdit) => { window.__homeEditCall = {date, isEdit}; };
@@ -184,6 +185,42 @@ async function verifyViewport(browser, width, height) {
   const homeCard = page.locator('#meetingPreview .sched-bar-item').first();
   await homeCard.click({position:{x:12, y:Math.max(12, (await homeCard.boundingBox()).height - 12)}});
   check(`${width}px: 홈 카드 본문이 개인 상세 실행`, await page.evaluate(() => window.__homePersonalCall === true));
+
+  // 홈 빈 날짜의 「+ 플래너에서 등록하기」는 스텀이 아닌 실제 iframe 빠른진입으로 검증한다.
+  await page.evaluate(() => {
+    window.__openPlannerFor = window.__realOpenPlannerFor;
+    window.__plannerQuickTrace = [];
+    document.getElementById('mpeGoPlanner')?.addEventListener('click', () => window.__plannerQuickTrace.push('button-click'), {capture:true});
+    window.addEventListener('message', event => {
+      if (event.source === document.getElementById('plannerSheetFrame')?.contentWindow && event.data?.type) {
+        window.__plannerQuickTrace.push(event.data.type);
+      }
+    });
+    window.CottageDB.getMeetingVotes = async () => [];
+    window.CottageDB.getMeetingVoteGames = async () => [];
+    window.dispatchEvent(new CustomEvent('cottage-meeting-changed'));
+  });
+  const emptyPlannerBtn = page.locator('#mpeGoPlanner');
+  await emptyPlannerBtn.waitFor();
+  await emptyPlannerBtn.click();
+  const plannerFrame = page.frameLocator('#plannerSheetFrame');
+  await page.waitForTimeout(3000);
+  const plannerState = {
+    parent: await page.locator('#plannerSheetModal').evaluate(node => ({className:node.className, ariaHidden:node.getAttribute('aria-hidden')})),
+    frame: await page.locator('#plannerSheetFrame').evaluate(node => ({className:node.className, src:node.getAttribute('src')})),
+    inner: await plannerFrame.locator('body').evaluate(body => ({
+      className:body.className,
+      overlayClass:document.getElementById('schedMultiOverlay')?.className,
+      overlayDisplay:getComputedStyle(document.getElementById('schedMultiOverlay')).display,
+      loggedIn:!!window.getKakaoUser?.(),
+    })),
+    trace:await page.evaluate(() => window.__plannerQuickTrace),
+  };
+  const plannerOpened = await plannerFrame.locator('#schedMultiOverlay').isVisible();
+  check(`${width}px: 홈 빈 날짜 플래너 등록 버튼 실제 진입`, plannerOpened && await page.locator('#plannerSheetModal.is-open').isVisible(), JSON.stringify(plannerState));
+  if (!plannerOpened) throw new Error(`planner quick entry did not open: ${JSON.stringify(plannerState)}`);
+  await plannerFrame.locator('#smClose').click();
+  await page.locator('#plannerSheetModal:not(.is-open)').waitFor();
 
   // 실제 하루치 미리보기 공개 함수로 같은 세 동작을 각각 새 모달에서 확인한다.
   await page.evaluate(({date, vote}) => {
