@@ -75,6 +75,8 @@
 │   │                               #   덮으면 전 쿼리가 죽고 검사기가 0행을 정상처럼 보고한다
 │   ├── verify-profile-board-ia.js  # 028 프로필 깊이·어려웠던 게임·날짜별 학습 의지 DB/API 계약
 │   │                               #   기본 모의 DB(무접속), --live는 격리 행 왕복·삭제. --negctl 먼저
+│   ├── verify-meeting-board-ia.js  # 모임 보드 평소 참조/가까운 미래 범위/날짜별 게임 SSOT 계약
+│   │                               #   DB 무접속. --negctl로 이번 주 경계 퇴행 감지 확인
 │   ├── verify-party-size.js        # 모임 인원(등록 건수 ≠ 방문 인원) — 회귀 불변식 + 엣지 (읽기전용)
 │   │                               #   --negctl 먼저. --live를 줘야 실DB 조회(guest_count 필드 확인)
 │   ├── verify-intro-questionnaire.js # 필수 자기소개 문항·원자적 RPC·교환권 1회 unique 계약 (DB 불필요)
@@ -463,9 +465,11 @@ game-reviews.html — 기록 입력 탭
 
 [프로필·모임 보드 ↔ 회원 자기소개 연동]
   - SSOT: profiles.bio(한줄소개) + member_intros(활동지역/참여시간/이동범위/모임스타일, user_id당 1행)
-    + meeting_game_prefs(이번에 하고싶은 게임/룰 설명 가능한 게임)
+    + meeting_game_prefs(룰 설명 가능한 게임) + meeting_votes/meeting_vote_games(날짜별 상태·게임)
   - 내 보드 > 프로필 보드(kakao-auth.js openProfilePanel('taste'))가 평소 생활 정보를 본격 표시하고,
-    모임 보드(openProfilePanel('meeting'))는 필요한 평소 정보만 참조한다. 회원 자기소개(club-intro.html)와
+    모임 보드(openProfilePanel('meeting'))는 필요한 평소 정보를 짧게 참조하고 편집은 프로필 보드로 보낸다.
+    모임 보드의 일정·하고 싶은/배우고 싶은 게임은 모두 오늘~180일의 같은 가까운 미래 범위로 읽어
+    월~일 경계에서 다음 주 데이터가 빠지지 않는다. 회원 자기소개(club-intro.html)와
     동일 테이블/컬럼을 읽고 써서 한쪽 수정이 다른 쪽에 즉시 반영된다. `taste`는 레거시 내부 키다.
   - 자기소개 작성은 로그인 필수(member_intros.user_id 기준 upsert, 유저당 1행)
   - 회원 자기소개 카드 클릭 → openOtherProfileSheet(userId) → openProfilePanel('taste', {userId, readOnly:true}).

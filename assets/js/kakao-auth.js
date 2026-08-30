@@ -1126,19 +1126,7 @@ function _bindMeetingSubsheet(subBody, ctx) {
 
           _bindActivityTogglesAndMore(subBody); // 최근 모임 참여 "더 보기" (2026-07-30)
 
-          // ── 모임 프로필 (활동지역/참여시간/이동범위/한줄소개/스타일) 편집 ──
-          const displayWrap = subBody.querySelector('.meeting-profile-display');
-          const editWrap = subBody.querySelector('.meeting-profile-edit-wrap');
-
-          subBody.querySelector('.meeting-profile-edit-btn')?.addEventListener('click', () => {
-            displayWrap.style.display = 'none';
-            editWrap.style.display = '';
-          });
-          subBody.querySelector('.meeting-profile-cancel-btn')?.addEventListener('click', () => {
-            displayWrap.style.display = '';
-            editWrap.style.display = 'none';
-          });
-          // 선호(한줄소개)/비선호(피하는 유형) 수정 → 취향보드 열기
+          // 평소 성향은 프로필 보드가 SSOT다. 모임 보드에서는 짧게 참조하고 편집은 프로필로 보낸다.
           subBody.querySelectorAll('.mb-pref-edit').forEach(btn => {
             btn.addEventListener('click', () => {
               const savedScroll = subBody.scrollTop; // 되돌아왔을 때 복원할 위치
@@ -1164,49 +1152,21 @@ function _bindMeetingSubsheet(subBody, ctx) {
             });
           });
 
-          subBody.querySelector('.meeting-profile-save-btn')?.addEventListener('click', async () => {
-            const location = subBody.querySelector('.meeting-edit-location').value.trim();
-            const available = subBody.querySelector('.meeting-edit-available').value.trim();
-            const travelRange = subBody.querySelector('.meeting-edit-travel').value.trim();
-
-            // bio(한줄소개)는 취향보드에서 편집(선호 스타일). 여기선 로지스틱 정보만 저장.
-            await window.CottageDB?.upsertMeetingIntro?.(userId, {
-              // 자기소개 페이지에서 설정한 닉네임(단톡방 닉네임 등 카카오 닉네임과 다를 수 있음)이 있으면 보존
-              nickname: _meeting.nickname || user.nickname || '',
-              location: location || null,
-              available: available || null,
-              travel_range: travelRange || null,
-            });
-
-            displayWrap.innerHTML = `
-              ${_meetingProfileRowHtml('활동 지역', location)}
-              ${_meetingProfileRowHtml('참여 가능 시간', available)}
-              ${_meetingProfileRowHtml('이동 가능 범위', travelRange)}`;
-            displayWrap.style.display = '';
-            editWrap.style.display = 'none';
-          });
-
-          // ── 이번주 하고싶은/배우고싶은 게임 (meeting_vote_games 소스, game_likes 미러 아님) ──
-          // 이번주 플래너 데이터는 _loadMeetingWeek에서 1회 fetch → _weekData로 공유(재조회 없음)
-          let _weekData = { allV: [], allVG: [], myVotes: [], myVoteGames: [], upcomingVotes: [] };
+          // ── 가까운 미래 하고싶은/배우고싶은 게임 (meeting_vote_games SSOT) ──
+          // 일정과 게임을 모두 같은 오늘~+180일 범위로 읽어 일요일→다음 주 일정도 빠지지 않게 한다.
+          let _weekData = { myVotes: [], myVoteGames: [], upcomingVotes: [] };
           const _likedSlugSet = new Set((_meeting.likedGames || []).map(g => g.game_id).filter(Boolean).map(String));
           const _curiousSlugSet = new Set((_meeting.curiousGames || []).map(g => g.game_id).filter(Boolean).map(String));
           const _DOWs = '일월화수목금토';
-          const _fmtLocalD = d => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
           const _mbSlug = rawId => {
             if (rawId == null) return null;
             const clean = String(rawId).startsWith('#') ? String(rawId).slice(1) : String(rawId);
             return _getGameKeyById(clean) || clean;
           };
-          // 이번주 7일 (월~일)
-          const _mbWeek = (() => {
-            const t0 = new Date(); t0.setHours(0,0,0,0);
-            const mon = new Date(t0); mon.setDate(t0.getDate() + (t0.getDay() === 0 ? -6 : 1 - t0.getDay()));
-            return Array.from({ length: 7 }, (_, i) => {
-              const d = new Date(mon); d.setDate(mon.getDate() + i);
-              return { ds: _fmtLocalD(d), label: _DOWs[d.getDay()], md: `${d.getMonth()+1}/${d.getDate()}`, past: d < t0 };
-            });
-          })();
+          const _mbDay = ds => {
+            const d = new Date(`${ds}T00:00:00`);
+            return { ds, label: `${d.getMonth()+1}/${d.getDate()}(${_DOWs[d.getDay()]})`, md: `${d.getMonth()+1}/${d.getDate()}` };
+          };
 
           // 인원조건 옵션 (day-detail.js dd-cond-select와 동일 값 — 서로 다른 파일이라 값만 복제, DB 컬럼이 SSOT)
           const _MB_COND_LABELS = { any: '무관', best: '베스트', recommended: '추천', '2': '2인', '3': '3인', '4': '4인', '5+': '5인+' };
@@ -1226,8 +1186,8 @@ function _bindMeetingSubsheet(subBody, ctx) {
             return [...map.values()].map(e => {
               const gd = e.slug ? window.gameData?.[e.slug] : null;
               const name = gd ? (gd.title?.display || gd.title?.owned || gd.title?.bgg || e.slug) : (e.customName || e.slug || '');
-              const dateList = _mbWeek.map(w => w.ds).filter(ds => e.dates.has(ds));
-              const days = dateList.map(ds => _mbWeek.find(w => w.ds === ds)?.label).filter(Boolean).join('·');
+              const dateList = [...e.dates].sort();
+              const days = dateList.map(ds => _mbDay(ds).label).join(' · ');
               const ruleKey = e.slug ? `id:${e.slug}` : `cn:${e.customName || ''}`;
               const condition = e.condition || 'any';
               const bggId = gd?.bgg?.id ?? null;
@@ -1252,8 +1212,8 @@ function _bindMeetingSubsheet(subBody, ctx) {
             const clickable = it.slug ? ' taste-game-item--clickable' : '';
             const gidAttr = it.slug ? ` data-game-id="${escH(it.slug)}"` : '';
             const cnAttr = it.customName ? ` data-custom-name="${escH(it.customName)}"` : '';
-            // 평소 좋아하는/궁금한 게임은 표시 없음. 취향엔 없는데 이번주에만 하고 싶은 게임에만 예외 표시.
-            const mark = !it.isSource ? `<span class="mb-like-mark mb-like-mark--new" title="평소 목록엔 없지만 이번주에 하고 싶은 게임">✨</span>` : '';
+            // 평소 좋아하는/궁금한 게임은 표시 없음. 프로필 목록엔 없지만 가까운 일정에서 고른 게임만 예외 표시.
+            const mark = !it.isSource ? `<span class="mb-like-mark mb-like-mark--new" title="평소 목록엔 없지만 가까운 일정에서 하고 싶은 게임">✨</span>` : '';
             // 참여일이 하루뿐이면 모든 게임 배지가 같은 요일이라 정보가 없음 → 숨김(여러 날일 때만 표시)
             const _multiDay = new Set((_weekData.myVotes || []).map(v => v.vote_date)).size > 1;
             const badge = (it.days && _multiDay) ? `<span class="mb-week-badge">(${it.days})</span>` : '';
@@ -1265,7 +1225,7 @@ function _bindMeetingSubsheet(subBody, ctx) {
             const condTag = readOnly
               ? (it.condition !== 'any' ? `<span class="mb-week-cond">${escH(curCondLabel)}</span>` : '')
               : `<select class="mb-cond-select" style="width:${selWidth}" aria-label="인원 조건">${it.condOptions.map(o => `<option value="${o.value}"${o.value === it.condition ? ' selected' : ''}>${escH(o.label)}</option>`).join('')}</select>`;
-            return `<div class="taste-game-item mb-week-game${clickable}"${gidAttr}${cnAttr}>${thumb}<span class="taste-game-name">${escH(it.name)}</span>${condTag}${mark}${badge}${_ro(`<button class="mb-rule-btn${ruleOn}" type="button" title="룰 설명 가능">📖</button>`)}${_ro('<button class="mb-kebab-btn" type="button" title="이번주 일정 관리" aria-label="메뉴">⋯</button>')}</div>`;
+            return `<div class="taste-game-item mb-week-game${clickable}"${gidAttr}${cnAttr}>${thumb}<span class="taste-game-name">${escH(it.name)}</span>${condTag}${mark}${badge}${_ro(`<button class="mb-rule-btn${ruleOn}" type="button" title="룰 설명 가능">📖</button>`)}${_ro('<button class="mb-kebab-btn" type="button" title="가까운 일정 관리" aria-label="메뉴">⋯</button>')}</div>`;
           };
 
           const _renderWeekList = (listType) => {
@@ -1278,20 +1238,20 @@ function _bindMeetingSubsheet(subBody, ctx) {
             const items = _groupWeekGames(listType, srcSet);
             listEl.innerHTML = items.length
               ? items.map(it => _buildWeekChipHtml(it)).join('')
-              : (readOnly ? '<p class="taste-game-empty">아직 없어요</p>' : '<p class="taste-game-empty">＋ 버튼으로 이번주 하고 싶은 게임을 추가해보세요</p>');
+              : (readOnly ? '<p class="taste-game-empty">아직 없어요</p>' : '<p class="taste-game-empty">＋ 버튼으로 가까운 일정에서 하고 싶은 게임을 추가해보세요</p>');
             if (countEl) countEl.textContent = `${items.length}개`;
           };
 
           // 요일 선택(참여 등록한 날 내에서, 최소 1개) — 추가/수정 공용
           const _openMbDayPicker = ({ slug, customName, name, listType }, curDates, onDone) => {
-            const partDays = _mbWeek.filter(w => !w.past && _weekData.myVotes.some(v => v.vote_date === w.ds));
+            const partDays = [...new Set(_weekData.myVotes.map(v => v.vote_date))].sort().map(_mbDay);
             const overlay = document.createElement('div');
             overlay.className = 'mb-add-overlay';
             const vgId = slug ? (window.gameData?.[slug]?.bgg?.id ?? null) : null;
             const vgCustom = vgId != null ? null : (customName || name);
             const close = () => overlay.remove();
             if (!partDays.length) {
-              overlay.innerHTML = `<div class="mb-add-box"><div class="mb-add-head"><span class="mb-add-title">🗓️ 요일 선택</span><button aria-label="닫기" class="mb-add-close" type="button">✕</button></div><p class="mb-daypick-empty">먼저 이번주 참여 가능한 날을 등록해주세요.<br>플래너에서 참여 요일을 정하면 그날 하고 싶은 게임을 고를 수 있어요.</p><button class="mb-add-daypick-done" type="button">플래너 열기</button></div>`;
+              overlay.innerHTML = `<div class="mb-add-box"><div class="mb-add-head"><span class="mb-add-title">🗓️ 날짜 선택</span><button aria-label="닫기" class="mb-add-close" type="button">✕</button></div><p class="mb-daypick-empty">먼저 가까운 참여 일정을 등록해주세요.<br>플래너에서 날짜를 정하면 그날 하고 싶은 게임을 고를 수 있어요.</p><button class="mb-add-daypick-done" type="button">플래너 열기</button></div>`;
               document.body.appendChild(overlay);
               overlay.querySelector('.mb-add-close').addEventListener('click', close);
               overlay.addEventListener('click', e => { if (e.target === overlay) close(); });
@@ -1300,8 +1260,8 @@ function _bindMeetingSubsheet(subBody, ctx) {
             }
             const selected = new Set(curDates || []);
             overlay.innerHTML = `<div class="mb-add-box">
-              <div class="mb-add-head"><span class="mb-add-title">🗓️ '${escH(name)}' 이번주 언제 할까요?</span><button aria-label="닫기" class="mb-add-close" type="button">✕</button></div>
-              <div class="mb-add-daypick-days">${partDays.map(w => `<button class="mb-day-chip${selected.has(w.ds) ? ' is-selected' : ''}" data-date="${w.ds}" type="button"><span class="mb-day-dow">${w.label}</span><span class="mb-day-md">${w.md}</span></button>`).join('')}</div>
+              <div class="mb-add-head"><span class="mb-add-title">🗓️ '${escH(name)}' 언제 할까요?</span><button aria-label="닫기" class="mb-add-close" type="button">✕</button></div>
+              <div class="mb-add-daypick-days">${partDays.map(w => `<button class="mb-day-chip${selected.has(w.ds) ? ' is-selected' : ''}" data-date="${w.ds}" type="button"><span class="mb-day-dow">${w.label}</span></button>`).join('')}</div>
               <p class="mb-add-daypick-hint">참여 등록한 날 중에서 골라요 (최소 1개)</p>
               <button class="mb-add-daypick-done" type="button">완료</button>
             </div>`;
@@ -1339,7 +1299,7 @@ function _bindMeetingSubsheet(subBody, ctx) {
             const menu = document.createElement('div');
             menu.id = '__mbKebab';
             menu.className = 'mb-kebab-menu';
-            menu.innerHTML = `<button class="mb-kebab-item" data-act="edit" type="button">🗓️ 이번주 일정 수정</button><button class="mb-kebab-item mb-kebab-item--danger" data-act="remove" type="button">🗑️ 이번주에서 빼기</button>`;
+            menu.innerHTML = `<button class="mb-kebab-item" data-act="edit" type="button">🗓️ 참여 일정 수정</button><button class="mb-kebab-item mb-kebab-item--danger" data-act="remove" type="button">🗑️ 가까운 일정에서 빼기</button>`;
             document.body.appendChild(menu);
             const r = btn.getBoundingClientRect();
             menu.style.top = `${r.bottom + 4}px`;
@@ -1350,7 +1310,7 @@ function _bindMeetingSubsheet(subBody, ctx) {
             menu.querySelector('[data-act="edit"]').addEventListener('click', () => { closeMenu(); _openMbDayPicker(ctx, ctx.dates); });
             menu.querySelector('[data-act="remove"]').addEventListener('click', async () => {
               closeMenu();
-              if (!confirm(`'${ctx.name}'을(를) 이번주 일정에서 뺄까요?`)) return;
+              if (!confirm(`'${ctx.name}'을(를) 가까운 일정에서 뺄까요?`)) return;
               const vgId = ctx.slug ? (window.gameData?.[ctx.slug]?.bgg?.id ?? null) : null;
               const vgCustom = vgId != null ? null : (ctx.customName || ctx.name);
               for (const d of ctx.dates) await window.CottageDB?.removeMeetingVoteGame?.(userId, d, ctx.listType, vgId, vgCustom);
@@ -1374,7 +1334,7 @@ function _bindMeetingSubsheet(subBody, ctx) {
             overlay.id = 'mbAddModal';
             overlay.className = 'mb-add-overlay';
             overlay.innerHTML = `<div class="mb-add-box">
-              <div class="mb-add-head"><span class="mb-add-title">${isWant ? '❤️ 이번주 하고 싶은 게임' : '💡 이번주 배우고 싶은 게임'} 추가</span><button aria-label="닫기" class="mb-add-close" type="button">✕</button></div>
+              <div class="mb-add-head"><span class="mb-add-title">${isWant ? '❤️ 요즘 하고 싶은 게임' : '💡 요즘 배우고 싶은 게임'} 추가</span><button aria-label="닫기" class="mb-add-close" type="button">✕</button></div>
               <input class="mb-add-input" type="text" placeholder="게임 이름 검색 (초성 가능)" autocomplete="off">
               <div class="mb-add-results"></div>
               <div class="mb-add-quick-wrap"><div class="mb-add-quick-label">${isWant ? '❤️' : '👀'} 내 ${srcLabel}</div><div class="mb-add-quick"></div></div>
@@ -1439,7 +1399,7 @@ function _bindMeetingSubsheet(subBody, ctx) {
                 const items = matches.map(([id, g]) => {
                   const nm = escH(g.title?.display || g.title?.owned || g.title?.bgg || String(id));
                   const added = week.has(String(id));
-                  return `<button class="taste-search-item${added ? ' is-added' : ''}" data-game-id="${escH(id)}" type="button">${nm}${added ? ' <span class="taste-search-added-label">이번주 등록됨</span>' : ''}</button>`;
+                  return `<button class="taste-search-item${added ? ' is-added' : ''}" data-game-id="${escH(id)}" type="button">${nm}${added ? ' <span class="taste-search-added-label">가까운 일정에 등록됨</span>' : ''}</button>`;
                 });
                 const direct = `<button class="taste-search-direct" data-custom-name="${escH(q)}" type="button">+ "${escH(q)}" 직접 추가</button>`;
                 resultsEl.innerHTML = [...items, direct].join('');
@@ -1471,7 +1431,7 @@ function _bindMeetingSubsheet(subBody, ctx) {
             });
           };
 
-          // 취향 원천(game_likes/curious) 박스만 센터모달로 보기 — 이번주 리스트와 별개, 평소 취향 전체 (+ 게임 추가 가능)
+          // 프로필 원천(game_likes/curious) 박스 — 가까운 일정 목록과 별개인 평소 취향 전체
           const _openTasteBoxModal = (listType) => {
             const isWant = listType === 'want';
             const table = isWant ? 'game_likes' : 'game_curious';
@@ -1483,7 +1443,7 @@ function _bindMeetingSubsheet(subBody, ctx) {
             overlay.className = 'mb-add-overlay';
             overlay.innerHTML = `<div class="mb-add-box">
               <div class="mb-add-head"><span class="mb-add-title">${title} <span class="taste-count mb-box-count">${games.length}개</span></span><button class="mb-add-close" type="button" aria-label="닫기">✕</button></div>
-              <p class="mb-taste-box-hint">이번주 일정과 별개로, 평소 ${isWant ? '좋아하는' : '해보고 싶은'} 게임 전체예요</p>
+              <p class="mb-taste-box-hint">가까운 일정과 별개로, 평소 ${isWant ? '좋아하는' : '해보고 싶은'} 게임 전체예요</p>
               ${_ro('<button class="taste-add-btn mb-box-add-btn" type="button">＋ 게임 추가</button>')}
               <div class="taste-game-list mb-taste-box-list"></div>
             </div>`;
@@ -1514,7 +1474,7 @@ function _bindMeetingSubsheet(subBody, ctx) {
               return `<div class="taste-game-item${clickable}"${gidAttr}${cnAttr}>${thumb}<span class="taste-game-name">${escH(name)}</span>${ruleBadge}${_ro('<button class="taste-game-del" type="button" title="삭제">✕</button>')}</div>`;
             };
             // 원천에서 삭제 — _openBoxAddSearch onAdd의 역순(DB → 로컬 배열 → srcSet → 전역 통보 → 재렌더).
-            // srcSet.delete를 빼면 이번주 리스트의 ❤️/👀 마커가 남는다(_emitLikesChanged는 이 Set을 안 고침).
+            // srcSet.delete를 빼면 가까운 일정 목록의 ❤️/👀 마커가 남는다(_emitLikesChanged는 이 Set을 안 고침).
             const _removeBoxGame = async (gameId, customName) => {
               await window.CottageDB?.removeGamePref?.(userId, gameId, customName, table);
               const idx = games.findIndex(g => (gameId ? String(g.game_id) === String(gameId) : (!g.game_id && g.custom_name === customName)));
@@ -1529,7 +1489,7 @@ function _bindMeetingSubsheet(subBody, ctx) {
               if (countEl) countEl.textContent = `${games.length}개`;
               // 썸네일만 클릭 → 게임시트. 이 모달은 --z-board-modal(9300) < 게임시트(9500)이라
               // 닫지 않아도 시트가 위에 겹쳐 뜨고, 시트를 닫으면 이 모달로 돌아온다.
-              // (이번주 리스트의 썸네일 핸들러가 서브시트 9200에서 쓰는 것과 같은 방식)
+              // (가까운 일정 목록의 썸네일 핸들러가 서브시트 9200에서 쓰는 것과 같은 방식)
               listEl.querySelectorAll('.taste-game-item--clickable .taste-game-thumb, .taste-game-item--clickable .taste-game-thumb-empty').forEach(th => th.addEventListener('click', () => {
                 const gid = th.closest('.taste-game-item')?.dataset.gameId;
                 if (gid) { window.ensureGameSheet?.(); window.openGameSheet?.(gid); }
@@ -1622,26 +1582,20 @@ function _bindMeetingSubsheet(subBody, ctx) {
           // 다가오는 일정 — mini bar (async, 플래너 편집 후 재호출 가능)
           const _loadMeetingWeek = async () => {
             const weekEl = subBody.querySelector('#mbWeekSection');
-            const [wStart, wEnd] = _thisWeekRange();
             const [uStart, uEnd] = _upcomingRange();
-            // 「다가오는 일정」(오늘~+180일)은 「이번주」(월~일)와 범위가 다른 별도 fetch —
-            // 하고싶은/배우고싶은 게임 리스트는 이번주 fetch(allV/allVG)를 그대로 쓰고,
-            // 미니바만 upcoming fetch로 갈아탄다(2026-08-09, 다음주 참여자가 "이번주 일정 없음"으로
-            // 뜨던 오해 소지를 없애되, 하고싶은/배우고싶은 게임에 다른 주 항목이 섞이지 않게 분리).
-            const [allV, allVG, upcomingAllV, upcomingAllVG] = await Promise.all([
-              window.CottageDB?.getMeetingVotes?.(wStart, wEnd).then(r => r || []).catch(() => []) || Promise.resolve([]),
-              window.CottageDB?.getMeetingVoteGames?.(wStart, wEnd).then(r => r || []).catch(() => []) || Promise.resolve([]),
+            // 일정과 날짜별 게임을 같은 가까운 미래 범위로 읽는다. 월~일 경계로 잘라
+            // 다음 주 일정/게임만 있는 사용자를 빈 상태로 보이게 하지 않는다.
+            const [upcomingAllV, upcomingAllVG] = await Promise.all([
               window.CottageDB?.getMeetingVotes?.(uStart, uEnd).then(r => r || []).catch(() => []) || Promise.resolve([]),
               window.CottageDB?.getMeetingVoteGames?.(uStart, uEnd).then(r => r || []).catch(() => []) || Promise.resolve([]),
             ]);
-            _weekData.allV = allV; _weekData.allVG = allVG;
-            _weekData.myVotes = allV.filter(v => String(v.user_id) === userId);
-            _weekData.myVoteGames = allVG.filter(g => String(g.user_id) === userId);
             _weekData.upcomingVotes = upcomingAllV.filter(v => String(v.user_id) === userId);
-            // 이번주 하고싶은/배우고싶은 게임 리스트 (이번주 fetch 공유 — 재조회 없음)
+            _weekData.myVotes = _weekData.upcomingVotes;
+            _weekData.myVoteGames = upcomingAllVG.filter(g => String(g.user_id) === userId);
+            // 가까운 미래 하고싶은/배우고싶은 게임 목록
             _renderWeekList('want');
             _renderWeekList('learn');
-            // 다가오는 일정 미니바 (이번주에 국한하지 않음)
+            // 다가오는 일정 미니바
             if (weekEl) {
               weekEl.innerHTML = `<div class="taste-section-label">📅 다가오는 일정 ${_ro('<button class="mb-planner-edit" type="button" title="모임 플래너 편집">✎ 편집</button>')}</div>` + _buildMiniBarWeekHtml(_weekData.upcomingVotes, _weekData.myVoteGames, userId, !readOnly);
               weekEl.querySelector('.mb-planner-edit')?.addEventListener('click', () =>
@@ -1659,7 +1613,7 @@ function _bindMeetingSubsheet(subBody, ctx) {
                 const _d = btn.dataset.date;
                 // 읽기전용: 남의 보드 상세는 편집 불가 스케줄 뷰로. 자기 보드는 편집 가능한 프리뷰 모달.
                 // 읽기전용: 남의 보드도 그날 전원 막대 차트로. 편집은 막기 위해 myVote=null(내 막대 하이라이트·✎✕ 없음).
-                // 미니바가 upcoming 범위라 detail도 upcomingAllV/upcomingAllVG를 써야 이번주 밖 날짜도 채워진다.
+                // 상세도 같은 upcomingAllV/upcomingAllVG를 써야 범위가 어긋나지 않는다.
                 if (readOnly) { window.openDatePreviewModal?.(_d, upcomingAllV.filter(v => v.vote_date === _d), upcomingAllVG.filter(g => g.vote_date === _d), null, null, _mbBackTo); return; }
                 window.openDatePreviewModal?.(_d, upcomingAllV.filter(v => v.vote_date === _d), upcomingAllVG.filter(g => g.vote_date === _d), _weekData.upcomingVotes.find(v => v.vote_date === _d) || null, _loadMeetingWeek, _mbBackTo);
               }));
@@ -2874,10 +2828,8 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
     }
   }
 
-  // 모임 보드: 회원 자기소개(member_intros) + profiles.bio(한줄소개, 취향보드와 공유 SSOT) +
-  // meeting_game_prefs(이번에 하고싶은 게임/룰 설명 가능한 게임) 연동. 자기소개 페이지와 동일 데이터 공유.
-  // 선호=bio(한줄소개), 비선호=avoid_tags — 편집은 취향보드에서. meeting_style은 미사용(하위호환 잔존).
-  // 데이터는 _boardData(진입 시 재조회) — 취향보드와 같은 소스를 본다(R10b)
+  // 모임 보드: meeting_votes/meeting_vote_games의 가까운 미래 상태가 본문이고,
+  // member_intros/profiles 평소 데이터는 프로필 보드 SSOT의 짧은 참조로만 표시한다.
   const _relDay = iso => {
     if (!iso) return '';
     const d = new Date(/^\d{4}-\d{2}-\d{2}$/.test(String(iso)) ? iso + 'T00:00:00' : iso);
@@ -2912,30 +2864,10 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
     return min === max ? _INTRO_FREQUENCY_LABELS[min] : `${_INTRO_FREQUENCY_LABELS[min]} ~ ${_INTRO_FREQUENCY_LABELS[max]}`;
   };
 
-  // 진입할 때마다 최신 데이터로 다시 빌드(R10b) — 취향보드와 동일 기법(첫 줄에서 이름 복원)
+  // 진입할 때마다 최신 데이터로 다시 빌드한다.
   function _buildMeetingInnerHtml(d) {
     const _meeting = d;
-    const _bioTags = _bioTagsOf(d);
-    const _avoidTags = d.avoidTags || [];
-    // 선호(취향보드 한줄소개=bio) / 비선호(취향보드 피하는 유형=avoid_tags) 요약 — 읽기전용 칩
-    // 편집은 취향보드에서 (mb-pref-edit 버튼 → openProfilePanel('taste'))
-    const _mbLikeStyleHtml = _bioTags.length
-      ? _bioTags.map(t => `<span class="mb-pref-tag mb-pref-tag--like">${escH(t)}</span>`).join('')
-      : '<span class="mb-pref-empty">미설정</span>';
-    const _mbAvoidHtml = _avoidTags.length
-      ? _avoidTags.map(t => `<span class="mb-pref-tag mb-pref-tag--avoid">${escH(t)}</span>`).join('')
-      : (_meeting.questionnaireCompletedAt ? '<span class="mb-pref-empty">딱히 없음</span>' : '<span class="mb-pref-empty">미설정</span>');
-
-    const _questionnaireHtml = _meeting.questionnaireCompletedAt ? `
-      ${_meetingProfileRowHtml('함께 게임하는 사람', _introLabels(_meeting.companionTypes, _INTRO_COMPANION_LABELS))}
-      ${_meetingProfileRowHtml('평균 플레이 빈도', _INTRO_FREQUENCY_LABELS[_meeting.averagePlayFrequency])}
-      ${_meetingProfileRowHtml('참여 가능 빈도', _introFrequencyRange(_meeting.possibleFrequencyMin, _meeting.possibleFrequencyMax))}
-      ${_meetingProfileRowHtml('참여 희망 빈도', _introFrequencyRange(_meeting.desiredFrequencyMin, _meeting.desiredFrequencyMax))}
-      ${_meetingProfileRowHtml('가능한 요일·시간', `${_introLabels(_meeting.availableDays, _INTRO_DAY_LABELS)} · ${window.CottageDB?.formatMemberIntroTimes?.(_meeting.availableTimes) || _introLabels(_meeting.availableTimes, {})}`)}
-      ${_meetingProfileRowHtml('좋아하는 게임 유형', _introLabels(_meeting.preferredGameTypes, _INTRO_GAME_TYPE_LABELS))}
-      ${_meetingProfileRowHtml('시계탑 선호도', _INTRO_CLOCKTOWER_LABELS[_meeting.clocktowerPreference])}
-      ${_meetingProfileRowHtml('바라는 점 및 각오', _meeting.expectation)}
-    ` : '<p class="taste-game-empty">아직 모임원 프로필을 작성하지 않았어요.</p>';
+    const _usualSummary = _profileSummaryItems(_meeting);
 
     return `
     <div class="taste-game-section" id="mbWeekSection">
@@ -2943,58 +2875,29 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
       <p class="taste-game-empty">불러오는 중…</p>
     </div>
     <div class="taste-game-section">
-      <div class="taste-section-label taste-section-label--mb"><span class="mb-sec-name">❤️ 이번주 하고 싶은 게임</span> <span class="taste-count" id="meetinglikedCount"></span> ${_ro('<button class="taste-add-btn taste-add-btn--inline" id="meetinglikedAddBtn" type="button">＋추가</button>')} <button class="mb-taste-link" id="meetinglikedBoxBtn" type="button">좋아하는 게임</button></div>
+      <div class="taste-section-label taste-section-label--mb"><span class="mb-sec-name">❤️ 요즘 하고 싶은 게임</span> <span class="taste-count" id="meetinglikedCount"></span> ${_ro('<button class="taste-add-btn taste-add-btn--inline" id="meetinglikedAddBtn" type="button">＋추가</button>')} <button class="mb-taste-link" id="meetinglikedBoxBtn" type="button">평소 좋아하는 게임</button></div>
       <div class="taste-game-list" id="meetinglikedList"><p class="taste-game-empty">불러오는 중…</p></div>
     </div>
     <div class="taste-game-section">
-      <div class="taste-section-label taste-section-label--mb"><span class="mb-sec-name">💡 이번주 배우고 싶은 게임</span> <span class="taste-count" id="meetingcuriousCount"></span> ${_ro('<button class="taste-add-btn taste-add-btn--inline" id="meetingcuriousAddBtn" type="button">＋추가</button>')} <button class="mb-taste-link" id="meetingcuriousBoxBtn" type="button">궁금한 게임</button></div>
+      <div class="taste-section-label taste-section-label--mb"><span class="mb-sec-name">💡 요즘 배우고 싶은 게임</span> <span class="taste-count" id="meetingcuriousCount"></span> ${_ro('<button class="taste-add-btn taste-add-btn--inline" id="meetingcuriousAddBtn" type="button">＋추가</button>')} <button class="mb-taste-link" id="meetingcuriousBoxBtn" type="button">평소 궁금한 게임</button></div>
       <div class="taste-game-list" id="meetingcuriousList"><p class="taste-game-empty">불러오는 중…</p></div>
     </div>
-    <div class="taste-game-section mb-pref-summary">
-      <div class="mb-pref-block">
-        <div class="taste-section-label">👍 선호 스타일 ${_ro('<button class="mb-pref-edit" type="button" data-pref="like">프로필 보드에서 수정 →</button>')}</div>
-        <div class="mb-pref-tags" id="mbLikeStyleTags">${_mbLikeStyleHtml}</div>
-      </div>
-      <div class="mb-pref-block">
-        <div class="taste-section-label">👎 비선호 유형 ${_ro('<button class="mb-pref-edit" type="button" data-pref="avoid">프로필 보드에서 수정 →</button>')}</div>
-        <div class="mb-pref-tags">${_mbAvoidHtml}</div>
+    <div class="meeting-profile-section meeting-current-section">
+      <div class="taste-section-label">🙋 현재 참여 상태</div>
+      <div class="meeting-profile-display">
+        ${_meetingProfileRowHtml('참여 가능 빈도', _introFrequencyRange(_meeting.possibleFrequencyMin, _meeting.possibleFrequencyMax))}
+        ${_meetingProfileRowHtml('참여 희망 빈도', _introFrequencyRange(_meeting.desiredFrequencyMin, _meeting.desiredFrequencyMax))}
       </div>
     </div>
-    <div class="meeting-profile-section meeting-questionnaire-section">
-      <div class="taste-section-label">👋 모임원 프로필 ${_ro('<a class="mb-pref-edit" href="/pages/club/club-intro.html">모임원 프로필 수정 →</a>')}</div>
-      <div class="meeting-profile-display">${_questionnaireHtml}</div>
+    <div class="meeting-profile-section meeting-usual-reference">
+      <div class="taste-section-label">👤 평소 참고 ${_ro('<button class="mb-pref-edit" type="button">프로필 보드 보기 →</button>')}</div>
+      ${_usualSummary.length ? `<div class="profile-summary-chips">${_usualSummary.map(item => `<span class="profile-summary-chip">${escH(item)}</span>`).join('')}</div>` : '<p class="taste-game-empty">프로필 보드에 등록된 평소 성향이 없어요.</p>'}
     </div>
     <div class="taste-game-section">
       <div class="taste-section-label">🕐 최근 모임 참여${stats.moimCount ? ` <span class="taste-count">${stats.moimCount}회</span>` : ''}</div>
       ${_recentPlaysHtml}
     </div>
-    <div class="meeting-profile-section">
-      <div class="taste-section-label">📍 모임 프로필</div>
-      <div class="meeting-profile-display">
-        ${_meetingProfileRowHtml('활동 지역', _meeting.location)}
-        ${_meetingProfileRowHtml('참여 가능 시간', _meeting.available)}
-        ${_meetingProfileRowHtml('이동 가능 범위', _meeting.travelRange)}
-      </div>
-      ${_ro(`<button class="meeting-profile-edit-btn taste-bio-edit-btn" type="button" title="수정">✏️ 수정</button>
-      <div class="meeting-profile-edit-wrap" style="display:none">
-        <div class="intro-field">
-          <label class="intro-label">활동 지역</label>
-          <input class="intro-input meeting-edit-location" type="text" placeholder="예: 용인, 수원, 성남, 서울 남부" maxlength="50" value="${escH(_meeting.location)}">
-        </div>
-        <div class="intro-field">
-          <label class="intro-label">참여 가능 시간</label>
-          <input class="intro-input meeting-edit-available" type="text" placeholder="예: 주말 오후, 평일 저녁 가능" maxlength="100" value="${escH(_meeting.available)}">
-        </div>
-        <div class="intro-field">
-          <label class="intro-label">이동 가능 범위</label>
-          <input class="intro-input meeting-edit-travel" type="text" placeholder="예: 차로 30분 이내" maxlength="50" value="${escH(_meeting.travelRange)}">
-        </div>
-        <div class="taste-bio-actions">
-          <button class="meeting-profile-save-btn taste-bio-save-btn" type="button">저장</button>
-          <button class="meeting-profile-cancel-btn taste-bio-cancel-btn" type="button">취소</button>
-        </div>
-      </div>`)}
-    </div>`;
+    `;
   }
 
   body.innerHTML = `
@@ -3366,22 +3269,10 @@ async function openOtherProfileSheet(userId, opts = {}) {
 }
 window.openOtherProfileSheet = openOtherProfileSheet;
 
-// ── 모임보드 이번주 일정 공용 헬퍼 ──────────────────────────────
-function _thisWeekRange() {
-  const today = new Date();
-  const dow = today.getDay();
-  const mon = new Date(today); mon.setDate(today.getDate() + (dow === 0 ? -6 : 1 - dow));
-  const sun = new Date(mon); sun.setDate(mon.getDate() + 6);
-  return [mon.toISOString().slice(0, 10), sun.toISOString().slice(0, 10)];
-}
-
-// 「다가오는 일정」 미니바 전용 범위 — 오늘부터 +180일. _thisWeekRange(월~일)와는 별개다:
-// 하고싶은/배우고싶은 게임 리스트는 여전히 이번주 범위를 쓰고, 이 범위는 일정 미니바에만 쓰인다
-// (2026-08-09, 다음주만 참여 예정인 회원이 "이번주 일정 없음"으로만 보이던 문제).
+// 모임 보드의 일정·하고 싶은/배우고 싶은 게임 공용 범위 — 오늘부터 +180일.
 function _upcomingRange() {
   // toISOString()은 UTC 변환이라 KST(UTC+9)에서 자정을 0시로 맞추면 하루 앞으로 밀린다
-  // (_thisWeekRange는 시각을 안 건드려 우연히 안 드러났지만, 여기선 setHours(0,0,0,0)로
-  // 직접 자정을 만들기 때문에 로컬 Y/M/D를 직접 포맷해야 한다).
+  // 로컬 자정을 기준으로 잡으므로 toISOString 대신 로컬 Y/M/D를 직접 포맷한다.
   const fmt = d => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
   const today = new Date(); today.setHours(0, 0, 0, 0);
   const end = new Date(today); end.setDate(end.getDate() + 180);
