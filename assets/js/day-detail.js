@@ -124,6 +124,26 @@
       font-size: 13px; color: var(--muted, #9e8e7e);
       margin-bottom: 10px;
     }
+    .dd-context-block {
+      margin-bottom: 12px; padding: 10px;
+      border: 1px solid var(--line); border-radius: 10px;
+      background: var(--bg);
+    }
+    .dd-context-block--today { background: var(--paper); }
+    .dd-context-title {
+      margin-bottom: 7px; font-size: 12px; font-weight: 800; color: var(--text);
+    }
+    .dd-context-chips { display: flex; flex-wrap: wrap; gap: 5px; }
+    .dd-context-chip {
+      display: inline-flex; align-items: center; min-height: 24px;
+      padding: 3px 8px; border-radius: 12px;
+      background: var(--line); color: var(--text);
+      font-size: 11px; line-height: 1.35;
+    }
+    .dd-context-block--today .dd-context-chip { color: var(--green); font-weight: 700; }
+    .dd-context-message { margin: 7px 0 0; font-size: 12px; line-height: 1.5; color: var(--text); overflow-wrap: anywhere; }
+    .dd-context-empty { margin: 0; font-size: 11px; color: var(--muted); }
+    .dd-context-block .dd-section:last-child { margin-bottom: 0; }
     .dd-section { margin-bottom: 6px; }
     .dd-section-label {
       font-size: 11px; color: var(--muted, #9e8e7e);
@@ -598,6 +618,43 @@
    * @param {string} voteDate — 'YYYY-MM-DD'
    */
   const COND_LABELS = { any:'무관', best:'베스트', recommended:'추천', '2':'2인', '3':'3인', '4':'4인', '5+':'5인+' };
+  const PROFILE_TYPE_LABELS = { party:'파티·친목', mystery:'추리·미스터리', strategy:'전략·유로', thematic:'테마·몰입', cooperative:'협력', social_deduction:'마피아·블러핑', card_deckbuilding:'카드·덱빌딩', puzzle_abstract:'퍼즐·추상', campaign_legacy:'캠페인·레거시' };
+  const PROFILE_DEPTH_LABELS = { light:'가볍게', medium:'적당히', deep:'깊게' };
+  const TODAY_STYLE_LABELS = { party:'파티', strategy:'전략', any:'게임 유형 무관', other:'기타' };
+  const TODAY_DEPTH_LABELS = { light:'가볍게', medium:'적당히', deep:'깊게', any:'깊이 무관' };
+  const TODAY_TRAIT_LABELS = { beginner_welcome:'초보 환영', new_game_ok:'새 게임 가능', hard_game_learning_ok:'어려운 게임 학습 가능' };
+
+  function _buildUsualContextHtml(profile) {
+    const chips = [];
+    const types = (profile?.preferredGameTypes || []).filter(value => value !== 'any')
+      .map(value => PROFILE_TYPE_LABELS[value] || value);
+    if (types.length) chips.push(types.slice(0, 2).join(' · '));
+    const depths = (profile?.preferredGameDepths || []).map(value => PROFILE_DEPTH_LABELS[value]).filter(Boolean);
+    if (depths.length) chips.push(`깊이 ${depths.join(' · ')}`);
+    const hardest = (profile?.hardestGames || []).slice(0, 2).map(resolveGameName).filter(Boolean);
+    if (hardest.length) chips.push(`경험 ${hardest.join(' · ')}`);
+    return `<div class="dd-context-block dd-context-block--usual">
+      <div class="dd-context-title">평소</div>
+      ${chips.length ? `<div class="dd-context-chips">${chips.map(label => `<span class="dd-context-chip">${esc(label)}</span>`).join('')}</div>` : '<p class="dd-context-empty">등록된 평소 플레이 성향이 없어요.</p>'}
+    </div>`;
+  }
+
+  function _buildTodayContextHtml(vote, gamesHtml, starNoticeHtml) {
+    const customStyle = String(vote.game_style_custom || '').trim();
+    const style = vote.game_style === 'other' ? (customStyle || TODAY_STYLE_LABELS.other) : TODAY_STYLE_LABELS[vote.game_style];
+    const depth = TODAY_DEPTH_LABELS[vote.game_depth];
+    const traits = (Array.isArray(vote.play_traits) ? vote.play_traits : [])
+      .map(value => TODAY_TRAIT_LABELS[value]).filter(Boolean);
+    const chips = [style, depth, ...traits].filter(Boolean);
+    const message = String(vote.recruitment_message || '').trim();
+    return `<div class="dd-context-block dd-context-block--today">
+      <div class="dd-context-title">오늘</div>
+      ${chips.length ? `<div class="dd-context-chips">${chips.map(label => `<span class="dd-context-chip">${esc(label)}</span>`).join('')}</div>` : '<p class="dd-context-empty">등록된 오늘의 플레이 성향이 없어요.</p>'}
+      ${message ? `<p class="dd-context-message">💬 ${esc(message)}</p>` : ''}
+      ${gamesHtml}
+      ${starNoticeHtml}
+    </div>`;
+  }
 
   /** 내 일정 모달 통계 칩 HTML (같은 날 · 나와 시간겹침 · 게임 겹침) */
   function _buildSchedStatsHtml(votes, myVote, myGames, userId, voteGames) {
@@ -761,9 +818,10 @@
     _ensureDdViewToken();
 
     try {
-      const [votes, voteGames] = await Promise.all([
+      const [votes, voteGames, usualProfile] = await Promise.all([
         window.CottageDB?.getMeetingVotes(voteDate, voteDate) ?? [],
         window.CottageDB?.getMeetingVoteGames(voteDate, voteDate) ?? [],
+        (window.CottageDB?.getProfileBoardData?.(String(userId)) || Promise.resolve(null)).catch(() => null),
       ]);
 
       const myVote = votes.find(v => String(v.user_id) === String(userId));
@@ -782,16 +840,16 @@
 
       const wantGameObjs  = myGames.filter(g => g.list_type === 'want');
       const learnGameObjs = myGames.filter(g => g.list_type === 'learn');
+      const gamesHtml = `
+        ${_buildSchedGameSection(wantGameObjs, '🎲', '하고 싶은 게임', isMine)}
+        ${_buildSchedGameSection(learnGameObjs, '📖', '배우고 싶은 게임', isMine)}`;
 
       renderModal(`
         <div class="dd-modal-nick">${esc(myVote.nickname)}</div>
         <div class="dd-date-time">${fmtDate(voteDate)} · ${window.formatVoteHour(myVote.time_start)}~${window.formatVoteHour(myVote.time_end)}</div>
+        ${_buildUsualContextHtml(usualProfile)}
+        ${_buildTodayContextHtml(myVote, gamesHtml, isMine ? '<p class="dd-star-notice" style="display:none"></p>' : '')}
         ${statsHtml}
-        <div class="dd-block">
-          ${_buildSchedGameSection(wantGameObjs, '🎲', '하고 싶은 게임', isMine)}
-          ${_buildSchedGameSection(learnGameObjs, '📖', '배우고 싶은 게임', isMine)}
-          ${isMine ? '<p class="dd-star-notice" style="display:none"></p>' : ''}
-        </div>
       `);
 
       if (isMine) _bindSchedEditors(el, { userId, voteDate, myGames, onDirty: () => { _schedDirty = true; } });
@@ -1502,7 +1560,7 @@
       const gamesHtml = participantGamesHtml(v.vote_date, v.user_id);
       const styleLabels = {party:'파티', strategy:'전략', any:'게임 유형 무관', other:'기타'};
       const depthLabels = {light:'가볍게', medium:'적당히', deep:'깊게', any:'깊이 무관'};
-      const traitLabels = {beginner_welcome:'초보 환영', new_game_ok:'새 게임 가능'};
+      const traitLabels = {beginner_welcome:'초보 환영', new_game_ok:'새 게임 가능', hard_game_learning_ok:'어려운 게임 학습 가능'};
       const traits = Array.isArray(v.play_traits) ? v.play_traits.filter(t => traitLabels[t]) : [];
       const customStyle = String(v.game_style_custom || '').trim();
       const styleLabel = v.game_style === 'other' ? (customStyle || styleLabels.other) : styleLabels[v.game_style];
