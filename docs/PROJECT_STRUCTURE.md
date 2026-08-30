@@ -69,8 +69,8 @@
 │   │                               #    그 줄에서만 🔴이 뜨는 걸 본 뒤에야 「전부 통과」를 믿는다
 │   ├── verify-home-hero.js         # 히어로 미노출 + #recommend 딥링크 회귀 (읽기전용)
 │   ├── probe-home-hero-recent.js   # 「최근 플레이」가 옛 기록을 보이던 원인 실측 (읽기전용)
-│   ├── verify-home-hero-recent.js  # 「최근 플레이」 선택 로직 — supabase-client.js를 실제로
-│   │                               #   eval해 검증 (읽기전용). --negctl 먼저 돌릴 것
+│   ├── verify-home-hero-recent.js  # 「최근 플레이」 선택 로직 — 본문/사후 연결 게임평+사진 후보를
+│   │                               #   supabase-client.js 실코드·합성 표본으로 검증(읽기전용). --negctl 먼저
 │   │                               # ⚠️ setInterval을 스텁하지 말 것 — undici가 .unref()를 부른다.
 │   │                               #   덮으면 전 쿼리가 죽고 검사기가 0행을 정상처럼 보고한다
 │   ├── verify-party-size.js        # 모임 인원(등록 건수 ≠ 방문 인원) — 회귀 불변식 + 엣지 (읽기전용)

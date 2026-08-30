@@ -672,6 +672,7 @@ window._cottageSess = (function () {
         .select("id");
       if (error) return { error };
       if (userId) window.checkAchievements?.('review', String(userId));
+      if (recordId) _emitRecordChanged();
       return { success: true, id: data?.[0]?.id };
     } catch (e) {
       return { error: e };
@@ -681,8 +682,10 @@ window._cottageSess = (function () {
   async function deleteComment(id) {
     if (!id) return { error: "invalid" };
     try {
-      const { error } = await db.from("game_comments").delete().eq("id", id);
-      return error ? { error } : { success: true };
+      const { data, error } = await db.from("game_comments").delete().eq("id", id).select("record_id");
+      if (error) return { error };
+      if (data?.some(row => row.record_id)) _emitRecordChanged();
+      return { success: true };
     } catch (e) {
       return { error: e };
     }
@@ -691,11 +694,14 @@ window._cottageSess = (function () {
   async function updateComment(id, commentText) {
     if (!id || !commentText?.trim()) return { error: "invalid" };
     try {
-      const { error } = await db
+      const { data, error } = await db
         .from("game_comments")
         .update({ comment_text: commentText.trim() })
-        .eq("id", id);
-      return error ? { error } : { success: true };
+        .eq("id", id)
+        .select("record_id");
+      if (error) return { error };
+      if (data?.some(row => row.record_id)) _emitRecordChanged();
+      return { success: true };
     } catch (e) {
       return { error: e };
     }

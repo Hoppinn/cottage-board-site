@@ -60,9 +60,9 @@ return data || [];
 | `getPlayReviewsByGame(gameId, limit)` | game_play_records에서 review_text IS NOT NULL인 기록. `gameId` 배열 지원 |
 | `getGameComments(gameKey)` | 게임 코멘트 조회. select에 `record_id` 포함(014) |
 | `getRecordComments(recordIds)` | (014) 특정 플레이기록들에 매인 게임평 조회. `record_id IN (...)` 배치. `buildSessionBody`가 화면 기록 id로 한 번에 로드해 기록 아래 렌더 |
-| `insertComment(gameKey, text, nickname, userId, recordId?)` | 코멘트 등록. `recordId` 있으면(⋯메뉴로 특정 기록에 게임평 첨부, 014) `game_comments.record_id`에 저장 → 그 기록 아래 표시 |
-| `deleteComment(id)` | 코멘트 삭제 |
-| `updateComment(id, text)` | 코멘트 수정 |
+| `insertComment(gameKey, text, nickname, userId, recordId?)` | 코멘트 등록. `recordId` 있으면(⋯메뉴로 특정 기록에 게임평 첨부, 014) `game_comments.record_id`에 저장 → 그 기록 아래 표시. 연결 게임평 등록 성공 시 `cottage-record-changed`를 보내 홈 최근 플레이도 즉시 다시 고른다 |
+| `deleteComment(id)` | 코멘트 삭제. 삭제 행의 `record_id`를 반환받아 연결 게임평이면 `cottage-record-changed` 전파 |
+| `updateComment(id, text)` | 코멘트 수정. 수정 행의 `record_id`를 반환받아 연결 게임평이면 `cottage-record-changed` 전파 |
 | `getGameLikeCount(gameId)` | 따봉 수 조회 |
 | `toggleGameLike(gameId, userId)` | 따봉 토글 |
 | `hasUserLiked(gameId, userId)` | 따봉 여부 확인 |

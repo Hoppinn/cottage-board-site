@@ -1318,7 +1318,18 @@ async function initRecentPlay() {
       return;
     }
 
-    const r = records.find(rec => rec.review_text?.trim() && rec.photo_url?.trim()) || records[0];
+    // 기록 본문 후기뿐 아니라 나중에 그 기록에 매인 게임평도 후보 판정에 포함한다.
+    // 후보를 고른 뒤 한 건만 조회하면 "사진 기록 → 사후 게임평 첨부" 순서가 누락된다.
+    const allLinkedComments = await window.CottageDB?.getRecordComments?.(records.map(rec => rec.id)) || [];
+    const linkedCommentsByRecord = new Map();
+    for (const comment of allLinkedComments) {
+      if (!comment.record_id || !comment.comment_text?.trim()) continue;
+      const key = String(comment.record_id);
+      if (!linkedCommentsByRecord.has(key)) linkedCommentsByRecord.set(key, []);
+      linkedCommentsByRecord.get(key).push(comment);
+    }
+    const hasReview = rec => !!rec.review_text?.trim() || linkedCommentsByRecord.has(String(rec.id));
+    const r = records.find(rec => hasReview(rec) && rec.photo_url?.trim()) || records[0];
     const name  = rpGameName(r.game_id);
     const thumb = rpThumb(r.game_id);
     const date  = rpDate(r.played_at, r.created_at);
@@ -1327,7 +1338,7 @@ async function initRecentPlay() {
     // (P1) 이 기록에 매인 남의 게임평(game_comments.record_id) — 한 기록에 여러 명이 각자
     // 게임평을 남길 수 있는데, 종전엔 r.review_text(기록 작성자 1인분)만 보여줘서 몇 명이
     // 썼든 항상 1개만 떴다(2026-08-10 버그 리포트). game-reviews.js buildSessionBody와 같은 소스.
-    const linkedComments = await window.CottageDB?.getRecordComments?.(r.id) || [];
+    const linkedComments = linkedCommentsByRecord.get(String(r.id)) || [];
 
     // 참여자 이름 → user_id 해석용 맵 (전체 프로필 기준 + 기록에서 보강).
     // ⚠️ profiles엔 id 컬럼이 없고 kakao 키는 user_id — game-reviews의 p.id 프로필맵은 빈 맵이었음.
