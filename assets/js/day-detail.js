@@ -1500,11 +1500,13 @@
       const width    = ((v.time_end - v.time_start) / range * 100).toFixed(1);
       const mine     = myVote && String(v.user_id) === String(myVote.user_id);
       const gamesHtml = participantGamesHtml(v.vote_date, v.user_id);
-      const styleLabels = {party:'파티', strategy:'전략', any:'게임 유형 무관'};
+      const styleLabels = {party:'파티', strategy:'전략', any:'게임 유형 무관', other:'기타'};
       const depthLabels = {light:'가볍게', medium:'적당히', deep:'깊게', any:'깊이 무관'};
       const traitLabels = {beginner_welcome:'초보 환영', new_game_ok:'새 게임 가능'};
       const traits = Array.isArray(v.play_traits) ? v.play_traits.filter(t => traitLabels[t]) : [];
-      const mainIntent = [styleLabels[v.game_style], depthLabels[v.game_depth]].filter(Boolean).join(' · ');
+      const customStyle = String(v.game_style_custom || '').trim();
+      const styleLabel = v.game_style === 'other' ? (customStyle || styleLabels.other) : styleLabels[v.game_style];
+      const mainIntent = [styleLabel, depthLabels[v.game_depth]].filter(Boolean).join(' · ');
       const message = String(v.recruitment_message || '').trim();
       const intentLine = (mainIntent || traits.length || message)
         ? `<div class="sched-bar-intent">

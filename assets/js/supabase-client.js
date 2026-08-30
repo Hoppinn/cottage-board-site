@@ -2545,7 +2545,7 @@ window._cottageSess = (function () {
   async function getMeetingVotes(startDate, endDate) {
     try {
       const { data, error } = await db.from('meeting_votes')
-        .select('vote_date, user_id, nickname, time_start, time_end, guest_count, game_style, game_depth, play_traits, recruitment_message')
+        .select('vote_date, user_id, nickname, time_start, time_end, guest_count, game_style, game_style_custom, game_depth, play_traits, recruitment_message')
         .gte('vote_date', startDate)
         .lte('vote_date', endDate)
         .order('vote_date');
@@ -2606,7 +2606,13 @@ window._cottageSess = (function () {
       // 기존 호출은 playIntent를 생략한다. 이때 신규 필드를 payload에 넣지 않아
       // 이미 저장된 오늘의 판 의도를 의도치 않게 NULL/빈 배열로 덮지 않는다.
       if (playIntent && typeof playIntent === 'object') {
-        row.game_style = playIntent.gameStyle ?? null;
+        const gameStyle = playIntent.gameStyle ?? null;
+        const gameStyleCustom = String(playIntent.gameStyleCustom ?? '').trim().slice(0, 30);
+        if (gameStyle === 'other' && !gameStyleCustom) {
+          return { error: new Error('기타 게임 유형을 입력해주세요.') };
+        }
+        row.game_style = gameStyle;
+        row.game_style_custom = gameStyle === 'other' ? gameStyleCustom : null;
         row.game_depth = playIntent.gameDepth ?? null;
         row.play_traits = Array.isArray(playIntent.playTraits) ? playIntent.playTraits : [];
         const message = String(playIntent.recruitmentMessage ?? '').trim();

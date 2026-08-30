@@ -13,6 +13,7 @@ const LIVE = process.argv.includes('--live');
 const root = path.join(__dirname, '..');
 const read = rel => fs.readFileSync(path.join(root, rel), 'utf8');
 const sql = read('docs/migrations/024_meeting_vote_play_intent.sql');
+const customStyleSql = read('docs/migrations/027_meeting_vote_custom_game_style.sql');
 const clientSrc = read('assets/js/supabase-client.js');
 const detailSrc = read('assets/js/day-detail.js');
 const indexSrc = read('assets/js/index-page.js');
@@ -26,6 +27,10 @@ function check(label, condition, detail = '') {
 
 console.log('=== 1. migration 계약 ===');
 check('game_style 안정 코드', sql.includes("game_style IN ('party', 'strategy', 'any')"));
+check('기타 유형 안정 코드·문구 분리', customStyleSql.includes("game_style IN ('party', 'strategy', 'any', 'other')")
+  && customStyleSql.includes('game_style_custom TEXT'));
+check('기타 유형 문구 30자·쌍 제약', customStyleSql.includes('BETWEEN 1 AND 30')
+  && customStyleSql.includes("game_style IS DISTINCT FROM 'other' AND game_style_custom IS NULL"));
 check('game_depth 안정 코드', sql.includes("game_depth IN ('light', 'medium', 'deep', 'any')"));
 check('play_traits 허용 코드만 저장', sql.includes("ARRAY['beginner_welcome', 'new_game_ok']::TEXT[]"));
 check('한줄 모집 DB 30자 제한', sql.includes('char_length(recruitment_message) <= 30'));
@@ -39,12 +44,15 @@ const inlineScripts = [...plannerHtml.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\
   .map(match => match[1]).filter(source => source.trim());
 inlineScripts.forEach((source, index) => new vm.Script(source, { filename: `club-schedule:inline-${index + 1}.js` }));
 check('플래너 inline script 파싱', inlineScripts.length > 0, `${inlineScripts.length}개`);
-check('조회 API가 신규 4필드 반환', ['game_style', 'game_depth', 'play_traits', 'recruitment_message']
+check('조회 API가 판 의도 필드를 반환', ['game_style', 'game_style_custom', 'game_depth', 'play_traits', 'recruitment_message']
   .every(field => clientSrc.includes(field)));
 check('기존 호출은 intent 필드 미전송', clientSrc.includes("if (playIntent && typeof playIntent === 'object')"));
 
-console.log('\n=== 3. Step 4 UI·저장 계약 ===');
-check('게임 성격·깊이 필수 검증', plannerHtml.includes('!_intentMap[ds]?.gameStyle || !_intentMap[ds]?.gameDepth'));
+console.log('\n=== 3. Step 3~4 UI·저장 계약 ===');
+check('오늘 원하는 판이 게임 선택보다 먼저', plannerHtml.indexOf("$s('smNext2').addEventListener('click', () => renderStep4())") >= 0
+  && plannerHtml.indexOf("$s('smNext3').addEventListener('click'") >= 0);
+check('게임 유형·깊이·기타 문구 필수 검증', plannerHtml.includes("dayIntent.gameStyle === 'other' && !dayIntent.gameStyleCustom"));
+check('기타 입력 최대 30자', plannerHtml.includes('id="smGameStyleCustom" type="text" maxlength="30"'));
 check('특정 게임은 기존 want 저장 재사용', plannerHtml.includes("addMeetingVoteGame(String(user.id), ds, 'want'"));
 check('한줄 모집 maxlength=30', plannerHtml.includes(NEG ? 'maxlength="31"' : 'maxlength="30"'));
 check('API 저장에 intent 전달', plannerHtml.includes('clampGuest(_guestMap[ds]), intent'));
@@ -54,7 +62,7 @@ check('자동 매칭 구현 없음', !/matchScore|candidateScore|autoMatch|match
 console.log('\n=== 4. 참여자 카드 표시 계약 ===');
 check('본 플래너도 공용 3인자 렌더러 사용', plannerHtml.includes('buildBarsInCard(dayVotes, allVoteGames, myVote)'));
 check('한 참여자당 완결 카드', detailSrc.includes('class="sched-bar-item"') && detailSrc.includes('class="sched-bar-time-text"'));
-check('성격·깊이·성향·모집 문구 소비', ['v.game_style', 'v.game_depth', 'v.play_traits', 'v.recruitment_message']
+check('유형·기타 문구·깊이·성향·모집 문구 소비', ['v.game_style', 'v.game_style_custom', 'v.game_depth', 'v.play_traits', 'v.recruitment_message']
   .every(token => detailSrc.includes(token)));
 check('want/learn 게임이 참여자 카드에 귀속', detailSrc.includes("groupHtml('want', '하고 싶음')")
   && detailSrc.includes("groupHtml('learn', '배우고 싶음')"));
@@ -71,7 +79,7 @@ check('내부 수정·삭제·게임 액션 전파 차단', [plannerHtml, indexS
   && detailSrc.includes("hit.addEventListener('click', e => {")
   && detailSrc.includes('e.stopPropagation();'));
 check('카드 전체 클릭이 내부 액션을 명시적으로 제외', [plannerHtml, indexSrc, detailSrc]
-  .every(source => source.includes("e.target.closest('button, a, input, select, textarea, .dd-game-hit')")));
+  .every(source => source.includes("e.target.closest('button, a, input, select, textarea, .dd-game-hit, .sched-bar-name')")));
 check('수정·삭제가 카드 날짜를 직접 사용', plannerHtml.includes("btn.closest('.sched-bar-item')?.dataset.date")
   && indexSrc.includes("btn.closest('.sched-bar-item')?.dataset.date"));
 check('게임 유형 표시 문구', plannerHtml.includes('게임 유형 <span class="sm-intent-required">필수</span>')
@@ -118,28 +126,32 @@ async function runLiveContract() {
   try {
     const saved = await window.CottageDB.upsertMeetingVote(
       testUid, '024검증', testDate, 10, 22, 2,
-      {gameStyle:'strategy', gameDepth:'medium', playTraits:['beginner_welcome','new_game_ok'], recruitmentMessage:'전략게임 같이 해요'}
+      {gameStyle:'other', gameStyleCustom:'협력게임', gameDepth:'medium', playTraits:['beginner_welcome','new_game_ok'], recruitmentMessage:'협력게임 같이 해요'}
     );
-    check('신규 4필드 저장 성공', saved?.success === true, saved?.error?.message || '');
+    check('기타 유형 포함 판 의도 저장 성공', saved?.success === true, saved?.error?.message || '');
     let rows = await window.CottageDB.getMeetingVotes(testDate, testDate);
     let row = rows.find(item => item.user_id === testUid);
-    check('신규 4필드 되읽기', row?.game_style === 'strategy' && row?.game_depth === 'medium'
-      && row?.play_traits?.length === 2 && row?.recruitment_message === '전략게임 같이 해요', JSON.stringify(row));
+    check('기타 유형 문구 포함 되읽기', row?.game_style === 'other' && row?.game_style_custom === '협력게임'
+      && row?.game_depth === 'medium' && row?.play_traits?.length === 2
+      && row?.recruitment_message === '협력게임 같이 해요', JSON.stringify(row));
 
     const oldCall = await window.CottageDB.upsertMeetingVote(testUid, '024검증', testDate, 11, 23, 1);
     rows = await window.CottageDB.getMeetingVotes(testDate, testDate);
     row = rows.find(item => item.user_id === testUid);
-    check('기존 호출이 intent를 덮지 않음', oldCall?.success === true && row?.game_style === 'strategy'
-      && row?.game_depth === 'medium' && row?.play_traits?.length === 2 && row?.recruitment_message === '전략게임 같이 해요');
+    check('기존 호출이 intent를 덮지 않음', oldCall?.success === true && row?.game_style === 'other'
+      && row?.game_style_custom === '협력게임' && row?.game_depth === 'medium'
+      && row?.play_traits?.length === 2 && row?.recruitment_message === '협력게임 같이 해요');
 
     const invalidStyle = await directDb.from('meeting_votes').update({game_style:'invalid'}).eq('vote_date', testDate).eq('user_id', testUid);
     const invalidDepth = await directDb.from('meeting_votes').update({game_depth:'invalid'}).eq('vote_date', testDate).eq('user_id', testUid);
     const invalidTraits = await directDb.from('meeting_votes').update({play_traits:['not_allowed']}).eq('vote_date', testDate).eq('user_id', testUid);
     const invalidMessage = await directDb.from('meeting_votes').update({recruitment_message:'가'.repeat(31)}).eq('vote_date', testDate).eq('user_id', testUid);
+    const invalidCustom = await directDb.from('meeting_votes').update({game_style_custom:null}).eq('vote_date', testDate).eq('user_id', testUid);
     check('DB CHECK가 잘못된 성격 거부', !!invalidStyle.error);
     check('DB CHECK가 잘못된 깊이 거부', !!invalidDepth.error);
     check('DB CHECK가 잘못된 성향 거부', !!invalidTraits.error);
     check('DB CHECK가 31자 모집 문구 거부', !!invalidMessage.error);
+    check('DB CHECK가 빈 기타 유형 문구 거부', !!invalidCustom.error);
   } finally {
     const cleanup = await directDb.from('meeting_votes').delete().eq('vote_date', testDate).eq('user_id', testUid);
     const confirm = await directDb.from('meeting_votes').select('user_id').eq('vote_date', testDate).eq('user_id', testUid);

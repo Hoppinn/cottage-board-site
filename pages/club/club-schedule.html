@@ -476,7 +476,7 @@
       transition: border-color .15s, background .15s, color .15s;
     }
     .sm-tab.is-active { border-color: var(--green); background: var(--green); color: white; }
-    /* Step 4: 오늘 원하는 판 */
+    /* Step 3: 오늘 원하는 판 */
     .sm-intent-section { margin-bottom: 18px; }
     .sm-intent-section:last-child { margin-bottom: 0; }
     .sm-intent-label {
@@ -502,6 +502,9 @@
       font: inherit; font-size: 14px; color: var(--text); outline: none;
     }
     .sm-intent-message:focus { border-color: var(--green); }
+    .sm-intent-custom-wrap { display: none; margin-top: 8px; }
+    .sm-intent-custom-wrap.is-visible { display: block; }
+    .sm-intent-custom-wrap .sm-intent-message { padding-right: 12px; }
     .sm-intent-count {
       position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
       font-size: 11px; color: var(--muted); pointer-events: none;
@@ -1182,8 +1185,8 @@
 
       $s('smBack').addEventListener('click', () => {
         if (_step === 2) renderStep1();
-        else if (_step === 3) renderStep2();
-        else if (_step === 4) { readStep4Form(); renderStep3(); }
+        else if (_step === 3) { readStep4Form(); renderStep2(); }
+        else if (_step === 4) renderStep4();
       });
 
       // ── 헬퍼 ──────────────────────────────────────────────────
@@ -1360,6 +1363,7 @@
           const ex = user && allVotes.find(v => v.vote_date === ds && String(v.user_id) === String(user.id));
           _intentMap[ds] = {
             gameStyle: ex?.game_style ?? '',
+            gameStyleCustom: ex?.game_style_custom ?? '',
             gameDepth: ex?.game_depth ?? '',
             playTraits: Array.isArray(ex?.play_traits) ? [...ex.play_traits] : [],
             recruitmentMessage: ex?.recruitment_message ?? '',
@@ -1629,7 +1633,7 @@
           });
         });
 
-        $s('smNext2').addEventListener('click', () => renderStep3());
+        $s('smNext2').addEventListener('click', () => renderStep4());
       }
 
       // ── 날짜 변경 (행 단위) ─────────────────────────────────────
@@ -2076,20 +2080,20 @@
 
       }
 
-      // ── Step 3: 게임 선택 ───────────────────────────────────────
+      // ── Step 4: 게임 선택 ───────────────────────────────────────
       function renderStep3() {
-        _step = 3;
+        _step = 4;
         if (!_activeDay || !_days.includes(_activeDay)) _activeDay = _days[0];
         $s('smTitle').textContent = '게임 선택';
         $s('smBack').style.visibility = 'visible';
-        $s('smBack').textContent = '← 시간 수정';
+        $s('smBack').textContent = '← 원하는 판 수정';
 
         const tabsHtml = _days.length > 1
           ? `<div class="sm-tabs" id="smGameTabs">${buildTabs()}</div>` : '';
         $s('smBody').innerHTML =
           `${tabsHtml}<p class="sm-hint">선택 사항이에요 — 없으면 건너뛰세요.</p><div id="smGameSections"></div>`;
         $s('smFooter').innerHTML =
-          `<button class="sched-confirm-btn" id="smNext3" type="button">다음 →</button>`;
+          `<button class="sched-confirm-btn" id="smSave" type="button">저장</button>`;
 
         renderStep2Games();
 
@@ -2104,10 +2108,10 @@
           });
         }
 
-        $s('smNext3').addEventListener('click', () => renderStep4());
+        $s('smSave').addEventListener('click', saveAll);
       }
 
-      const GAME_STYLE_LABELS = { party:'파티', strategy:'전략', any:'게임 유형 무관' };
+      const GAME_STYLE_LABELS = { party:'파티', strategy:'전략', any:'게임 유형 무관', other:'기타' };
       const GAME_DEPTH_LABELS = { light:'가볍게', medium:'적당히', deep:'깊게', any:'상관없음' };
       const PLAY_TRAIT_LABELS = { beginner_welcome:'초보 환영', new_game_ok:'새 게임 가능' };
 
@@ -2115,6 +2119,7 @@
         if (!_activeDay) return;
         _intentMap[_activeDay] = {
           gameStyle: document.querySelector('input[name="smGameStyle"]:checked')?.value || null,
+          gameStyleCustom: ($s('smGameStyleCustom')?.value || '').trim().slice(0, 30),
           gameDepth: document.querySelector('input[name="smGameDepth"]:checked')?.value || null,
           playTraits: [...document.querySelectorAll('input[name="smPlayTrait"]:checked')].map(el => el.value),
           recruitmentMessage: ($s('smRecruitmentMessage')?.value || '').trim().slice(0, 30),
@@ -2127,21 +2132,25 @@
         ).join('');
       }
 
-      // ── Step 4: 오늘 원하는 판 ──────────────────────────────────
+      // ── Step 3: 오늘 원하는 판 ──────────────────────────────────
       function renderStep4() {
-        _step = 4;
+        _step = 3;
         if (!_activeDay || !_days.includes(_activeDay)) _activeDay = _days[0];
-        const intent = _intentMap[_activeDay] || {gameStyle:null, gameDepth:null, playTraits:[], recruitmentMessage:''};
+        const intent = _intentMap[_activeDay] || {gameStyle:null, gameStyleCustom:'', gameDepth:null, playTraits:[], recruitmentMessage:''};
         const tabsHtml = _days.length > 1
           ? `<div class="sm-tabs" id="smIntentTabs">${buildTabs()}</div>` : '';
         $s('smTitle').textContent = '오늘 원하는 판';
         $s('smBack').style.visibility = 'visible';
-        $s('smBack').textContent = '← 게임 수정';
+        $s('smBack').textContent = '← 시간 수정';
         $s('smBody').innerHTML = `${tabsHtml}
           <p class="sm-hint">오늘 함께하고 싶은 판을 알려주세요.</p>
           <div class="sm-intent-section">
             <span class="sm-intent-label">게임 유형 <span class="sm-intent-required">필수</span></span>
             <div class="sm-intent-options">${intentOptionsHtml('smGameStyle', GAME_STYLE_LABELS, [intent.gameStyle])}</div>
+            <div class="sm-intent-custom-wrap${intent.gameStyle === 'other' ? ' is-visible' : ''}" id="smGameStyleCustomWrap">
+              <input class="sm-intent-message" id="smGameStyleCustom" type="text" maxlength="30"
+                placeholder="원하는 게임 유형을 입력해주세요" value="${esc(intent.gameStyleCustom || '')}">
+            </div>
           </div>
           <div class="sm-intent-section">
             <span class="sm-intent-label">게임 깊이 <span class="sm-intent-required">필수</span></span>
@@ -2159,7 +2168,7 @@
               <span class="sm-intent-count" id="smRecruitmentCount">${(intent.recruitmentMessage || '').length}/30</span>
             </div>
           </div>`;
-        $s('smFooter').innerHTML = `<button class="sched-confirm-btn" id="smSave" type="button">저장</button>`;
+        $s('smFooter').innerHTML = `<button class="sched-confirm-btn" id="smNext3" type="button">게임 선택 →</button>`;
 
         document.getElementById('smIntentTabs')?.querySelectorAll('.sm-tab').forEach(tab => {
           tab.addEventListener('click', () => {
@@ -2171,16 +2180,31 @@
         $s('smRecruitmentMessage')?.addEventListener('input', e => {
           $s('smRecruitmentCount').textContent = `${e.target.value.length}/30`;
         });
-        $s('smSave').addEventListener('click', () => {
+        document.querySelectorAll('input[name="smGameStyle"]').forEach(input => {
+          input.addEventListener('change', () => {
+            const customWrap = $s('smGameStyleCustomWrap');
+            const isOther = input.checked && input.value === 'other';
+            customWrap?.classList.toggle('is-visible', isOther);
+            if (isOther) $s('smGameStyleCustom')?.focus();
+          });
+        });
+        $s('smNext3').addEventListener('click', () => {
           readStep4Form();
-          const missingDay = _days.find(ds => !_intentMap[ds]?.gameStyle || !_intentMap[ds]?.gameDepth);
+          const missingDay = _days.find(ds => {
+            const dayIntent = _intentMap[ds];
+            return !dayIntent?.gameStyle || !dayIntent?.gameDepth
+              || (dayIntent.gameStyle === 'other' && !dayIntent.gameStyleCustom);
+          });
           if (missingDay) {
             _activeDay = missingDay;
             renderStep4();
-            showToast(`${formatLabel(missingDay)}의 게임 유형과 깊이를 선택해주세요.`);
+            const missingIntent = _intentMap[missingDay];
+            showToast(missingIntent?.gameStyle === 'other' && !missingIntent?.gameStyleCustom
+              ? `${formatLabel(missingDay)}의 기타 게임 유형을 입력해주세요.`
+              : `${formatLabel(missingDay)}의 게임 유형과 깊이를 선택해주세요.`);
             return;
           }
-          saveAll();
+          renderStep3();
         });
       }
 
@@ -2323,7 +2347,8 @@
             allVotes.push({
               vote_date:ds, user_id:String(user.id), nickname:user.nickname||'익명',
               time_start:t.s, time_end:t.e, guest_count:clampGuest(_guestMap[ds]),
-              game_style:intent.gameStyle, game_depth:intent.gameDepth,
+              game_style:intent.gameStyle, game_style_custom:intent.gameStyle === 'other' ? intent.gameStyleCustom : null,
+              game_depth:intent.gameDepth,
               play_traits:[...(intent.playTraits || [])], recruitment_message:intent.recruitmentMessage || null,
             });
             allVoteGames = allVoteGames.filter(g => !(g.vote_date===ds && String(g.user_id)===String(user.id)));

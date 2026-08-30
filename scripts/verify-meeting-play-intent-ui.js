@@ -1,4 +1,4 @@
-// 모임 플래너 Step 4 브라우저 검증 (운영 DB 쓰기 없음, 캡처는 OS 임시 폴더)
+// 모임 플래너 Step 3~4 브라우저 검증 (운영 DB 쓰기 없음, 캡처는 OS 임시 폴더)
 const { chromium } = require('playwright');
 const os = require('os');
 const path = require('path');
@@ -39,19 +39,18 @@ async function openStep4(browser, width, height, label) {
   await page.locator('.sm-day-chip:not([disabled])').first().click();
   await page.locator('#smNext1').click();
   await page.locator('#smNext2').click();
-  await page.locator('#smNext3').click();
   await page.locator('#smRecruitmentMessage').waitFor({state:'visible'});
 
   const metrics = await page.evaluate(() => {
     const sheet = document.querySelector('.sched-multi-sheet');
     const body = document.querySelector('.sm-body');
-    const save = document.querySelector('#smSave');
+    const next = document.querySelector('#smNext3');
     const rect = sheet.getBoundingClientRect();
-    const saveRect = save.getBoundingClientRect();
+    const nextRect = next.getBoundingClientRect();
     return {
       title: document.querySelector('#smTitle')?.textContent,
       sheet: {left:rect.left, right:rect.right, top:rect.top, bottom:rect.bottom, width:rect.width, height:rect.height},
-      save: {top:saveRect.top, bottom:saveRect.bottom},
+      next: {top:nextRect.top, bottom:nextRect.bottom},
       bodyClientWidth: body.clientWidth,
       bodyScrollWidth: body.scrollWidth,
       styleCount: document.querySelectorAll('input[name="smGameStyle"]').length,
@@ -59,34 +58,40 @@ async function openStep4(browser, width, height, label) {
       traitCount: document.querySelectorAll('input[name="smPlayTrait"]').length,
     };
   });
-  check(`${label}: Step 4 제목`, metrics.title === '오늘 원하는 판');
-  check(`${label}: 유형 3·깊이 4·성향 2`, metrics.styleCount === 3 && metrics.depthCount === 4 && metrics.traitCount === 2, JSON.stringify(metrics));
+  check(`${label}: 시간 다음은 오늘 원하는 판`, metrics.title === '오늘 원하는 판');
+  check(`${label}: 유형 4·깊이 4·성향 2`, metrics.styleCount === 4 && metrics.depthCount === 4 && metrics.traitCount === 2, JSON.stringify(metrics));
   check(`${label}: 가로 넘침 없음`, metrics.bodyScrollWidth <= metrics.bodyClientWidth, `${metrics.bodyScrollWidth}/${metrics.bodyClientWidth}`);
-  check(`${label}: 저장 버튼이 뷰포트 안`, metrics.save.top >= 0 && metrics.save.bottom <= height, JSON.stringify(metrics.save));
+  check(`${label}: 게임 선택 버튼이 뷰포트 안`, metrics.next.top >= 0 && metrics.next.bottom <= height, JSON.stringify(metrics.next));
   if (width === 360) check(`${label}: 시트가 화면 너비 사용`, metrics.sheet.left === 0 && metrics.sheet.right === 360, JSON.stringify(metrics.sheet));
   else check(`${label}: 시트 최대폭 650px`, metrics.sheet.width <= 650, JSON.stringify(metrics.sheet));
 
-  await page.locator('label.sm-intent-option:has(input[name="smGameStyle"][value="strategy"])').click();
+  await page.locator('label.sm-intent-option:has(input[name="smGameStyle"][value="other"])').click();
+  await page.locator('#smGameStyleCustom').fill('협력게임');
   await page.locator('label.sm-intent-option:has(input[name="smGameDepth"][value="medium"])').click();
   await page.locator('label.sm-intent-option:has(input[name="smPlayTrait"][value="beginner_welcome"])').click();
   await page.locator('#smRecruitmentMessage').fill('가'.repeat(31));
   check(`${label}: 브라우저 입력도 30자로 제한`, (await page.locator('#smRecruitmentMessage').inputValue()).length === 30);
   check(`${label}: 글자수 30/30 표시`, (await page.locator('#smRecruitmentCount').textContent()) === '30/30');
 
+  await page.locator('#smNext3').click();
+  check(`${label}: 원하는 판 다음은 게임 선택`, (await page.locator('#smTitle').textContent()) === '게임 선택');
+  check(`${label}: 게임 선택에서 최종 저장`, await page.locator('#smSave').isVisible());
   await page.locator('#smBack').click();
   await page.locator('#smNext3').click();
-  check(`${label}: 이전→다음 후 답변 유지`, await page.locator('input[name="smGameStyle"][value="strategy"]').isChecked()
+  await page.locator('#smBack').click();
+  check(`${label}: 이전→다음 후 기타 답변 유지`, await page.locator('input[name="smGameStyle"][value="other"]').isChecked()
+    && (await page.locator('#smGameStyleCustom').inputValue()) === '협력게임'
     && await page.locator('input[name="smGameDepth"][value="medium"]').isChecked()
     && await page.locator('input[name="smPlayTrait"][value="beginner_welcome"]').isChecked());
 
   const summary = await page.evaluate(() => {
     const vote = {vote_date:'2099-08-29', user_id:'u1', nickname:'검증', time_start:10, time_end:18,
-      guest_count:0, game_style:'strategy', game_depth:'medium', play_traits:['beginner_welcome'], recruitment_message:'전략 한 판 같이 해요'};
+      guest_count:0, game_style:'other', game_style_custom:'협력게임', game_depth:'medium', play_traits:['beginner_welcome'], recruitment_message:'협력 한 판 같이 해요'};
     const shown = window.buildBarsInCard([vote], [], null);
     const legacy = window.buildBarsInCard([{...vote, game_style:null, game_depth:null, play_traits:[], recruitment_message:null}], [], null);
     return {shown, legacy};
   });
-  check(`${label}: 주간 요약에 유형·깊이·성향·문구`, ['전략', '적당히', '초보 환영', '전략 한 판 같이 해요'].every(text => summary.shown.includes(text)));
+  check(`${label}: 주간 요약에 기타 유형·깊이·성향·문구`, ['협력게임', '적당히', '초보 환영', '협력 한 판 같이 해요'].every(text => summary.shown.includes(text)));
   check(`${label}: 레거시 NULL 행은 빈 요약 미생성`, !summary.legacy.includes('sched-bar-intent'));
 
   const shot = path.join(os.tmpdir(), `cottage-play-intent-${width}.png`);
