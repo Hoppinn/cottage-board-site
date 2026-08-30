@@ -1142,19 +1142,8 @@ function _bindMeetingSubsheet(subBody, ctx) {
             return `<div class="taste-game-item mb-week-game${clickable}"${gidAttr}${cnAttr}>${thumb}<span class="taste-game-name">${escH(it.name)}</span>${condTag}${mark}${badge}${_ro(`<button class="mb-rule-btn${ruleOn}" type="button" title="룰 설명 가능">📖</button>`)}${_ro('<button class="mb-kebab-btn" type="button" title="가까운 일정 관리" aria-label="메뉴">⋯</button>')}</div>`;
           };
 
-          const _renderWeekList = (listType) => {
-            const listId = listType === 'want' ? 'meetinglikedList' : 'meetingcuriousList';
-            const countId = listType === 'want' ? 'meetinglikedCount' : 'meetingcuriousCount';
-            const srcSet = listType === 'want' ? _likedSlugSet : _curiousSlugSet;
-            const listEl = subBody.querySelector('#' + listId);
-            const countEl = subBody.querySelector('#' + countId);
-            if (!listEl) return;
-            const items = _groupWeekGames(listType, srcSet);
-            listEl.innerHTML = items.length
-              ? items.map(it => _buildWeekChipHtml(it)).join('')
-              : (readOnly ? '<p class="taste-game-empty">아직 없어요</p>' : '<p class="taste-game-empty">＋ 버튼으로 가까운 일정에서 하고 싶은 게임을 추가해보세요</p>');
-            if (countEl) countEl.textContent = `${items.length}개`;
-          };
+          let _renderMeetingDates = null;
+          const _renderWeekList = () => { _renderMeetingDates?.(); };
 
           // 요일 선택(참여 등록한 날 내에서, 최소 1개) — 추가/수정 공용
           const _openMbDayPicker = ({ slug, customName, name, listType }, curDates, onDone) => {
@@ -1424,13 +1413,13 @@ function _bindMeetingSubsheet(subBody, ctx) {
             const listId = listType === 'want' ? 'meetinglikedList' : 'meetingcuriousList';
             const addBtnId = listType === 'want' ? 'meetinglikedAddBtn' : 'meetingcuriousAddBtn';
             const boxBtnId = listType === 'want' ? 'meetinglikedBoxBtn' : 'meetingcuriousBoxBtn';
-            const listEl = subBody.querySelector('#' + listId);
+            const listEl = subBody.querySelector('#mbWeekSection');
             const srcSet = listType === 'want' ? _likedSlugSet : _curiousSlugSet;
             subBody.querySelector('#' + addBtnId)?.addEventListener('click', () => _openMbAddModal(listType));
             subBody.querySelector('#' + boxBtnId)?.addEventListener('click', () => _openTasteBoxModal(listType));
             listEl?.addEventListener('click', async e => {
               const item = e.target.closest('.taste-game-item');
-              if (!item) return;
+              if (!item || item.dataset.listType !== listType) return;
               const slug = item.dataset.gameId || null;
               const customName = item.dataset.customName || null;
               const name = item.querySelector('.taste-game-name')?.textContent || '이 게임';
@@ -1451,7 +1440,7 @@ function _bindMeetingSubsheet(subBody, ctx) {
               const sel = e.target.closest('.mb-cond-select');
               if (!sel) return;
               const item = sel.closest('.taste-game-item');
-              if (!item) return;
+              if (!item || item.dataset.listType !== listType) return;
               const slug = item.dataset.gameId || null;
               const customName = item.dataset.customName || null;
               const grp = _groupWeekGames(listType, srcSet).find(it => (slug ? it.slug === slug : it.customName === customName));
@@ -1493,7 +1482,67 @@ function _bindMeetingSubsheet(subBody, ctx) {
             li.querySelector('.profile-record-thumb, .profile-record-thumb-empty')?.addEventListener('click', open);
           });
 
-          // 다가오는 일정 — mini bar (async, 플래너 편집 후 재호출 가능)
+          const _MB_STYLE_LABELS = { party: '파티', strategy: '전략', any: '게임 유형 무관', other: '기타' };
+          const _MB_DEPTH_LABELS = { light: '가볍게', medium: '적당히', deep: '깊게' };
+          const _MB_TRAIT_LABELS = { beginner_welcome: '초보 환영', new_game_ok: '새 게임 가능', hard_game_learning_ok: '어려운 게임도 배워보고 싶어요' };
+          const _formatVoteHour = hour => {
+            const whole = Math.floor(Number(hour));
+            return Math.round((Number(hour) - whole) * 10) === 5 ? `${whole}시30분` : `${whole}시`;
+          };
+          const _formatDateLabel = date => {
+            const day = _mbDay(date);
+            return `${day.label}`;
+          };
+          const _buildDateGameChipHtml = (game, listType, date) => {
+            const slug = game.game_id != null ? _mbSlug(game.game_id) : null;
+            const customName = game.custom_name || null;
+            const gd = slug ? window.gameData?.[slug] : null;
+            const name = gd ? (gd.title?.display || gd.title?.owned || gd.title?.bgg || slug) : (customName || slug || '');
+            const thumb = gd?.images?.thumbnail ? `<img class="taste-game-thumb" src="${escH(gd.images.thumbnail)}" alt="">` : `<span class="taste-game-thumb-empty"></span>`;
+            const ruleKey = slug ? `id:${slug}` : `cn:${customName || ''}`;
+            const ruleOn = _ruleSet.has(ruleKey) ? ' is-on' : '';
+            const condition = game.player_condition || 'any';
+            const bggId = gd?.bgg?.id ?? null;
+            const condOptions = Object.keys(_MB_COND_LABELS).map(value => ({
+              value,
+              label: value === 'any' ? _MB_COND_LABELS.any : (window.formatCondLabel?.(value, bggId) || _MB_COND_LABELS[value]),
+            }));
+            const condLabel = condOptions.find(option => option.value === condition)?.label || condition;
+            const selWidth = window._condSelWidth?.(condLabel) || '';
+            const cond = readOnly
+              ? (condition !== 'any' ? `<span class="mb-week-cond">${escH(condLabel)}</span>` : '')
+              : `<select class="mb-cond-select" style="width:${selWidth}" aria-label="인원 조건">${condOptions.map(option => `<option value="${option.value}"${option.value === condition ? ' selected' : ''}>${escH(option.label)}</option>`).join('')}</select>`;
+            const action = _ro(`<button class="mb-rule-btn${ruleOn}" type="button" title="룰 설명 가능">📖</button><button class="mb-kebab-btn" type="button" title="가까운 일정 관리" aria-label="메뉴">⋯</button>`);
+            return `<div class="taste-game-item mb-week-game${slug ? ' taste-game-item--clickable' : ''}" data-list-type="${listType}" data-date="${escH(date)}"${slug ? ` data-game-id="${escH(slug)}"` : ''}${customName ? ` data-custom-name="${escH(customName)}"` : ''}>${thumb}<span class="taste-game-name">${escH(name)}</span>${cond}${action}</div>`;
+          };
+          const _buildMeetingDateCardsHtml = (votes, voteGames) => {
+            const gamesByDate = new Map();
+            (voteGames || []).forEach(game => {
+              if (!gamesByDate.has(game.vote_date)) gamesByDate.set(game.vote_date, { want: [], learn: [] });
+              const type = game.list_type === 'learn' ? 'learn' : 'want';
+              gamesByDate.get(game.vote_date)[type].push(game);
+            });
+            const cards = [...(votes || [])].sort((a, b) => String(a.vote_date).localeCompare(String(b.vote_date))).map(vote => {
+              const games = gamesByDate.get(vote.vote_date) || { want: [], learn: [] };
+              const intent = [];
+              const style = vote.game_style === 'other' ? vote.game_style_custom : _MB_STYLE_LABELS[vote.game_style];
+              if (style) intent.push(style);
+              if (_MB_DEPTH_LABELS[vote.game_depth]) intent.push(_MB_DEPTH_LABELS[vote.game_depth]);
+              (vote.play_traits || []).forEach(trait => { if (_MB_TRAIT_LABELS[trait]) intent.push(_MB_TRAIT_LABELS[trait]); });
+              const renderGames = (type, label) => games[type].length
+                ? `<div class="mb-date-games"><div class="mb-date-games-label">${label}</div>${games[type].map(game => _buildDateGameChipHtml(game, type, vote.vote_date)).join('')}</div>`
+                : '';
+              return `<article class="mb-date-card${focusDate === vote.vote_date ? ' is-focused' : ''}" data-date="${escH(vote.vote_date)}" data-uid="${escH(userId)}" role="button" tabindex="0">
+                <div class="mb-date-card-head"><strong>${escH(_formatDateLabel(vote.vote_date))}</strong><span>${_formatVoteHour(vote.time_start)}~${_formatVoteHour(vote.time_end)}</span></div>
+                ${intent.length ? `<div class="mb-date-intent">${intent.map(item => `<span>${escH(item)}</span>`).join('')}</div>` : ''}
+                ${renderGames('want', '하고 싶은 게임')}${renderGames('learn', '배우고 싶은 게임')}
+                ${vote.recruitment_message ? `<p class="mb-date-message"><span>한마디</span>${escH(vote.recruitment_message)}</p>` : ''}
+              </article>`;
+            }).join('');
+            return cards || '<p class="taste-game-empty">다가오는 모임이 없어요.</p>';
+          };
+
+          // 다가오는 모임 — 날짜별 참여카드 중심(플래너의 가까운 미래 SSOT 재사용)
           const _loadMeetingWeek = async () => {
             const weekEl = subBody.querySelector('#mbWeekSection');
             const [uStart, uEnd] = _upcomingRange();
@@ -1506,14 +1555,31 @@ function _bindMeetingSubsheet(subBody, ctx) {
             _weekData.upcomingVotes = upcomingAllV.filter(v => String(v.user_id) === userId);
             _weekData.myVotes = _weekData.upcomingVotes;
             _weekData.myVoteGames = upcomingAllVG.filter(g => String(g.user_id) === userId);
-            // 가까운 미래 하고싶은/배우고싶은 게임 목록
-            _renderWeekList('want');
-            _renderWeekList('learn');
-            // 다가오는 일정 미니바
             if (weekEl) {
-              weekEl.innerHTML = `<div class="taste-section-label">📅 다가오는 일정 ${_ro('<button class="mb-planner-edit" type="button" title="모임 플래너 편집">✎ 편집</button>')}</div>` + _buildMiniBarWeekHtml(_weekData.upcomingVotes, _weekData.myVoteGames, userId, !readOnly, focusDate);
-              weekEl.querySelector('.mb-planner-edit')?.addEventListener('click', () =>
-                window.openPlannerModal?.({ weekOffset: 0, onDirtyClose: _loadMeetingWeek }));
+              const bindMeetingDateInteractions = () => {
+                weekEl.querySelector('.mb-planner-edit')?.addEventListener('click', () =>
+                  window.openPlannerModal?.({ weekOffset: 0, onDirtyClose: _loadMeetingWeek }));
+                weekEl.querySelector('#meetinglikedAddBtn')?.addEventListener('click', () => _openMbAddModal('want'));
+                weekEl.querySelector('#meetingcuriousAddBtn')?.addEventListener('click', () => _openMbAddModal('learn'));
+                weekEl.querySelectorAll('.mb-date-card[data-date][data-uid]').forEach(entry => {
+                  const openDate = e => {
+                    if (e.type === 'keydown' && !['Enter', ' '].includes(e.key)) return;
+                    if (e.type === 'keydown' && e.target !== entry) return;
+                    if (e.target.closest('button, a, input, select, textarea')) return;
+                    e.preventDefault();
+                    e.stopPropagation();
+                    window.openDateScheduleModal?.(entry.dataset.uid, entry.dataset.date);
+                  };
+                  entry.addEventListener('click', openDate);
+                  entry.addEventListener('keydown', openDate);
+                });
+              };
+              _renderMeetingDates = () => {
+                const cards = _buildMeetingDateCardsHtml(_weekData.upcomingVotes, _weekData.myVoteGames);
+                weekEl.innerHTML = `<div class="taste-section-label">다가오는 모임 ${_ro('<button class="mb-planner-edit" type="button" title="모임 플래너 편집">✎ 편집</button><button class="taste-add-btn taste-add-btn--inline" id="meetinglikedAddBtn" type="button">＋ 하고 싶은 게임</button><button class="taste-add-btn taste-add-btn--inline" id="meetingcuriousAddBtn" type="button">＋ 배우고 싶은 게임</button>')}</div>${cards}`;
+                bindMeetingDateInteractions();
+              };
+              _renderMeetingDates();
               // 상세팝업에서 참여자 이름을 눌러 다른 보드로 넘어간 뒤, "‹ 뒤로"로 지금 이 보드
               // (모임보드 서브시트, 진입점)로 되돌아올 수 있게 — openProfilePanel의 panel-level
               // backTo(패널 헤더 back 버튼)를 그대로 재사용한다(2026-08-09, 넘어간 뒤 끊기던 것).
@@ -1523,21 +1589,9 @@ function _bindMeetingSubsheet(subBody, ctx) {
               // "몇 번이고 뒤로가기가 누적돼야" 하는데 2~3번까지만 되던 것). 각 패널이 자기 backTo를
               // 그대로 물려주는 재귀 링크드리스트라 별도 스택 자료구조는 필요 없다(설계 원문 그대로).
               const _mbBackTo = { type: 'panel', autoSubsheet: 'meeting', label: `${user.nickname || '이전'}의 모임보드`, opts: { userId: String(userId), readOnly, nickname: user.nickname || '', backTo } };
-              const focused = focusDate ? weekEl.querySelector(`.mb-week-entry[data-date="${CSS.escape(String(focusDate))}"]`) : null;
+              const focused = focusDate ? weekEl.querySelector(`.mb-date-card[data-date="${CSS.escape(String(focusDate))}"]`) : null;
               focused?.scrollIntoView({ block: 'center', behavior: 'smooth' });
               focused?.classList.add('is-focused');
-              weekEl.querySelectorAll('.mb-week-entry[data-date][data-uid]').forEach(entry => {
-                const openDate = e => {
-                  if (e.type === 'keydown' && !['Enter', ' '].includes(e.key)) return;
-                  if (e.type === 'keydown' && e.target !== entry) return;
-                  if (e.target.closest('button, a, input, select, textarea')) return;
-                  e.preventDefault();
-                  e.stopPropagation();
-                  window.openDateScheduleModal?.(entry.dataset.uid, entry.dataset.date);
-                };
-                entry.addEventListener('click', openDate);
-                entry.addEventListener('keydown', openDate);
-              });
               weekEl.querySelectorAll('.mb-detail-btn').forEach(btn => btn.addEventListener('click', e => {
                 e.stopPropagation();
                 const _d = btn.dataset.date;
@@ -1558,7 +1612,7 @@ function _bindMeetingSubsheet(subBody, ctx) {
           if (!readOnly) {
           if (window.__mbLikesHandler) window.removeEventListener('cottage-likes-changed', window.__mbLikesHandler);
           const _onMbLikesChanged = (e) => {
-            const anchorList = subBody.querySelector('#meetinglikedList');
+            const anchorList = subBody.querySelector('#mbWeekSection');
             if (!anchorList || !document.body.contains(anchorList)) { window.removeEventListener('cottage-likes-changed', _onMbLikesChanged); return; }
             const { table, gameId, added } = e.detail || {};
             const slug = _mbSlug(gameId);
@@ -2479,7 +2533,21 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
   const _INTRO_DAY_LABELS = { mon:'월', tue:'화', wed:'수', thu:'목', fri:'금', sat:'토', sun:'일', flexible:'유동적' };
   const _INTRO_GAME_TYPE_LABELS = { party:'파티·친목', mystery:'추리·미스터리', strategy:'전략·유로', thematic:'테마·몰입', cooperative:'협력', social_deduction:'마피아·블러핑', card_deckbuilding:'카드·덱빌딩', puzzle_abstract:'퍼즐·추상', campaign_legacy:'캠페인·레거시', any:'장르 무관' };
   const _INTRO_CLOCKTOWER_LABELS = { love:'매우 좋아함', interested:'기회가 되면 참여하고 싶음', curious:'아직 모르지만 해보고 싶음', not_preferred:'별로 선호하지 않음', no:'참여하고 싶지 않음' };
-  const _PROFILE_DEPTH_LABELS = { light:'가볍게', medium:'적당히', deep:'깊게' };
+  const _PROFILE_WEIGHT_OPTIONS = {
+    weight_intro: { name:'입문', range:'1.00~1.50' },
+    weight_light: { name:'라이트', range:'1.51~2.50' },
+    weight_heavy: { name:'헤비', range:'2.51~3.50' },
+    weight_hardcore: { name:'하드코어', range:'3.51~5.00' },
+  };
+  const _PROFILE_LEGACY_DEPTH_LABELS = { light:'가볍게', medium:'적당히', deep:'깊게' };
+  const _PROFILE_DEPTH_LABELS = Object.fromEntries([
+    ...Object.entries(_PROFILE_WEIGHT_OPTIONS).map(([code, value]) => [code, `${value.name} · ${value.range}`]),
+    ...Object.entries(_PROFILE_LEGACY_DEPTH_LABELS),
+  ]);
+  const _PROFILE_DEPTH_SUMMARY_LABELS = Object.fromEntries([
+    ...Object.entries(_PROFILE_WEIGHT_OPTIONS).map(([code, value]) => [code, value.name]),
+    ...Object.entries(_PROFILE_LEGACY_DEPTH_LABELS),
+  ]);
   const _introLabels = (values, map) => (values || []).map(value => map[value] || value).join(', ');
   // ── 취향·모임 보드 공용 데이터 (R10b: 진입 시 DB 재조회 = 단일 소스) ────────────
   // 두 보드는 좋아요·궁금해요·한줄소개·피하는유형·룰설명을 똑같이 보여준다. 예전엔 각자
@@ -2538,7 +2606,7 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
     const items = [];
     const typeLabels = (d.preferredGameTypes || []).filter(value => value !== 'any').map(value => _INTRO_GAME_TYPE_LABELS[value] || value);
     if (typeLabels.length) items.push(typeLabels.slice(0, 2).join(' · '));
-    const depthLabels = (d.preferredGameDepths || []).map(value => _PROFILE_DEPTH_LABELS[value]).filter(Boolean);
+    const depthLabels = (d.preferredGameDepths || []).map(value => _PROFILE_DEPTH_SUMMARY_LABELS[value]).filter(Boolean);
     if (depthLabels.length) items.push(`깊이 ${depthLabels.join(' · ')}`);
     if (d.averagePlayFrequency != null) items.push(_INTRO_FREQUENCY_LABELS[d.averagePlayFrequency]);
     const hardestNames = (d.hardestGames || []).map(_profileGameName).filter(Boolean);
@@ -2575,7 +2643,12 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
       _introLabels(d.availableDays, _INTRO_DAY_LABELS),
       window.CottageDB?.formatMemberIntroTimes?.(d.availableTimes) || _introLabels(d.availableTimes, {}),
     ].filter(Boolean).join(' · ');
+    const legacyDepthCodes = depthCodes.filter(code => _PROFILE_LEGACY_DEPTH_LABELS[code]);
+    const selectedWeightCodes = depthCodes.filter(code => _PROFILE_WEIGHT_OPTIONS[code]);
+    const selectedWeightChips = selectedWeightCodes.map(code => `<span class="profile-depth-chip is-selected">${_PROFILE_WEIGHT_OPTIONS[code].name} · ${_PROFILE_WEIGHT_OPTIONS[code].range}</span>`).join('');
+    const legacyDepthText = legacyDepthCodes.map(code => _PROFILE_LEGACY_DEPTH_LABELS[code]).join(' · ');
     return `
+    ${_ro('<a class="profile-board-edit-link" href="/pages/club/club-intro.html">프로필 수정 →</a>')}
     ${d.expectation
       ? `<section class="profile-info-section profile-expectation-section">
       <div class="taste-section-label">함께 게임할 때</div>
@@ -2583,28 +2656,27 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
     </section>`
       : (readOnly ? '' : `<section class="profile-info-section profile-expectation-section">
       <div class="taste-section-label">함께 게임할 때</div>
-      <a class="profile-source-edit" href="/pages/club/club-intro.html">함께 게임할 때의 이야기를 남겨보세요 →</a>
+      <p class="profile-info-value is-empty">아직 작성하지 않았어요</p>
     </section>`)}
     <section class="profile-info-section profile-usual-play-section">
       <div class="taste-section-label">평소 플레이</div>
-      ${_ro('<a class="profile-source-edit" href="/pages/club/club-intro.html">평소 생활 수정 →</a>')}
       <div class="profile-info-list">
         ${_profileInfoRowHtml('평균 플레이 빈도', d.averagePlayFrequency != null ? _INTRO_FREQUENCY_LABELS[d.averagePlayFrequency] : '')}
         ${_profileInfoRowHtml('주로 함께하는 사람', _introLabels(d.companionTypes, _INTRO_COMPANION_LABELS))}
         ${_profileInfoRowHtml('가능한 요일·시간', availableStructured || d.available || '')}
         ${_profileInfoRowHtml('활동 지역', d.location || '')}
-        ${_profileInfoRowHtml('이동 가능 범위', d.travelRange || '')}
       </div>
     </section>
     <section class="profile-info-section profile-depth-section">
-      <div class="taste-section-label">게임 깊이</div>
+      <div class="taste-section-label">선호 웨이트</div>
       <div class="profile-info-list">
         <div class="profile-info-row profile-depth-row">
-          <span class="profile-info-label">선호 웨이트</span>
           <span class="profile-depth-options${readOnly ? ' is-readonly' : ''}">
-            ${Object.entries(_PROFILE_DEPTH_LABELS).map(([code, label]) => readOnly
-              ? (depthCodes.includes(code) ? `<span class="profile-depth-chip is-selected">${label}</span>` : '')
-              : `<button class="profile-depth-chip${depthCodes.includes(code) ? ' is-selected' : ''}" data-depth="${code}" type="button">${label}</button>`).join('') || '<span class="profile-info-value is-empty">미입력</span>'}
+            ${readOnly
+              ? (selectedWeightChips || (legacyDepthText ? `<span class="profile-depth-chip is-selected">${escH(legacyDepthText)}</span>` : ''))
+              : Object.entries(_PROFILE_WEIGHT_OPTIONS).map(([code, value]) => `<button class="profile-depth-chip${depthCodes.includes(code) ? ' is-selected' : ''}" data-depth="${code}" type="button"><span>${value.name}</span><small>${value.range}</small></button>`).join('')}
+            ${!readOnly && legacyDepthText ? `<span class="profile-depth-legacy">기존 선택: ${escH(legacyDepthText)} · 새 웨이트를 선택하면 새 기준으로 저장됩니다.</span>` : ''}
+            ${readOnly && !selectedWeightChips && !legacyDepthText ? '<span class="profile-info-value is-empty">미입력</span>' : ''}
           </span>
         </div>
       </div>
@@ -2694,7 +2766,7 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
   // 단일 소스)를 받는 함수이고, 변경이 일어난 자리에서 _syncTasteCard()로 다시 그린다.
   const _tasteCardSummaryHtml = (d) => {
     const types = (d.preferredGameTypes || []).filter(value => value !== 'any').map(value => _INTRO_GAME_TYPE_LABELS[value] || value).slice(0, 2);
-    const depths = (d.preferredGameDepths || []).map(value => _PROFILE_DEPTH_LABELS[value]).filter(Boolean);
+    const depths = (d.preferredGameDepths || []).map(value => _PROFILE_DEPTH_SUMMARY_LABELS[value]).filter(Boolean);
     const line1 = [types.join(' · '), depths.length ? depths.join(' · ') : ''].filter(Boolean).join(' · ');
     const frequency = d.averagePlayFrequency != null ? _INTRO_FREQUENCY_LABELS[d.averagePlayFrequency] : '';
     const companions = (d.companionTypes || []).map(value => _INTRO_COMPANION_LABELS[value] || value).slice(0, 2).join(' · ');
@@ -2787,36 +2859,25 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
   // 진입할 때마다 최신 데이터로 다시 빌드한다.
   function _buildMeetingInnerHtml(d) {
     const _meeting = d;
-    const _usualSummary = _profileSummaryItems(_meeting);
 
     return `
-    <div class="taste-game-section" id="mbWeekSection">
-      <div class="taste-section-label">📅 다가오는 일정</div>
+    <section class="meeting-board-section meeting-upcoming-section" aria-label="다가오는 모임">
+      <div id="mbWeekSection">
+      <div class="taste-section-label">다가오는 모임</div>
       <p class="taste-game-empty">불러오는 중…</p>
-    </div>
-    <div class="taste-game-section profile-taste-games-section">
-      <div class="taste-section-label taste-section-label--mb"><span class="mb-sec-name">❤️ 요즘 하고 싶은 게임</span> <span class="taste-count" id="meetinglikedCount"></span> ${_ro('<button class="taste-add-btn taste-add-btn--inline" id="meetinglikedAddBtn" type="button">＋추가</button>')} <button class="mb-taste-link" id="meetinglikedBoxBtn" type="button">평소 좋아하는 게임</button></div>
-      <div class="taste-game-list" id="meetinglikedList"><p class="taste-game-empty">불러오는 중…</p></div>
-    </div>
-    <div class="taste-game-section profile-taste-games-section">
-      <div class="taste-section-label taste-section-label--mb"><span class="mb-sec-name">💡 요즘 배우고 싶은 게임</span> <span class="taste-count" id="meetingcuriousCount"></span> ${_ro('<button class="taste-add-btn taste-add-btn--inline" id="meetingcuriousAddBtn" type="button">＋추가</button>')} <button class="mb-taste-link" id="meetingcuriousBoxBtn" type="button">평소 궁금한 게임</button></div>
-      <div class="taste-game-list" id="meetingcuriousList"><p class="taste-game-empty">불러오는 중…</p></div>
-    </div>
-    <div class="meeting-profile-section meeting-current-section">
-      <div class="taste-section-label">🙋 현재 참여 상태</div>
+      </div>
+    </section>
+    <section class="meeting-board-section meeting-plan-section">
+      <div class="taste-section-label">참여 계획</div>
       <div class="meeting-profile-display">
         ${_meetingProfileRowHtml('참여 가능 빈도', _introFrequencyRange(_meeting.possibleFrequencyMin, _meeting.possibleFrequencyMax))}
         ${_meetingProfileRowHtml('참여 희망 빈도', _introFrequencyRange(_meeting.desiredFrequencyMin, _meeting.desiredFrequencyMax))}
       </div>
-    </div>
-    <div class="meeting-profile-section meeting-usual-reference">
-      <div class="taste-section-label">👤 평소 참고 ${_ro('<button class="mb-pref-edit" type="button">프로필 보드 보기 →</button>')}</div>
-      ${_usualSummary.length ? `<div class="profile-summary-chips">${_usualSummary.map(item => `<span class="profile-summary-chip">${escH(item)}</span>`).join('')}</div>` : '<p class="taste-game-empty">프로필 보드에 등록된 평소 성향이 없어요.</p>'}
-    </div>
-    <div class="taste-game-section profile-taste-games-section">
-      <div class="taste-section-label">🕐 최근 모임 참여${stats.moimCount ? ` <span class="taste-count">${stats.moimCount}회</span>` : ''}</div>
+    </section>
+    <section class="meeting-board-section meeting-recent-section">
+      <div class="taste-section-label">최근 참여${stats.moimCount ? ` · ${stats.moimCount}회` : ''}</div>
       ${_recentPlaysHtml}
-    </div>
+    </section>
     `;
   }
 

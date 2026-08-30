@@ -29,19 +29,28 @@ check('다음 주 게임도 가까운 미래 목록에 포함', load.includes('_
   && load.includes('_weekData.myVotes = _weekData.upcomingVotes'));
 check('날짜 선택은 실제 가까운 참여 일정에서 생성', src.includes('new Set(_weekData.myVotes.map(v => v.vote_date))')
   && !src.includes('const _mbWeek ='));
-check('모임 보드 중심 정보가 먼저 렌더', build.indexOf('다가오는 일정') < build.indexOf('요즘 하고 싶은 게임')
-  && build.indexOf('요즘 하고 싶은 게임') < build.indexOf('현재 참여 상태'));
-check('평소 정보는 프로필 요약 참조만 사용', build.includes('_profileSummaryItems(_meeting)')
-  && build.includes('평소 참고') && build.includes('프로필 보드 보기'));
+check('모임 보드는 세 가지 주요 섹션으로 단순화', ['다가오는 모임', '참여 계획', '최근 참여']
+  .every(label => build.includes(label))
+  && build.includes('meeting-upcoming-section')
+  && build.includes('meeting-plan-section')
+  && build.includes('meeting-recent-section'));
+check('날짜별 카드가 당일 정보와 게임을 함께 렌더', src.includes('_buildMeetingDateCardsHtml')
+  && src.includes('data-date="${escH(vote.vote_date)}"')
+  && src.includes('vote.game_style') && src.includes('vote.game_depth')
+  && src.includes('vote.recruitment_message')
+  && src.includes("renderGames('want'") && src.includes("renderGames('learn'"));
+check('평소 참고 요약과 기존 분리 목록 제거', !build.includes('_profileSummaryItems(_meeting)')
+  && !build.includes('평소 참고') && !build.includes('요즘 하고 싶은 게임')
+  && !build.includes('요즘 배우고 싶은 게임') && !build.includes('현재 참여 상태'));
 check('평소 프로필 전체·가입 소개를 모임 보드에 재출력하지 않음', !build.includes('활동 지역')
   && !build.includes('이동 가능 범위') && !build.includes('바라는 점 및 각오')
   && !build.includes('시계탑 선호도'));
 check('기존 날짜별 게임 편집 SSOT 유지', src.includes('addMeetingVoteGame')
   && src.includes('removeMeetingVoteGame') && src.includes('setMeetingVoteGameCondition'));
 check('플래너 진입 날짜 컨텍스트를 전달하고 날짜 카드를 강조', src.includes('focusDate')
-  && src.includes('data-date="${escH(v.vote_date)}"') && src.includes('is-focused'));
-check('타인 readOnly 편집 가드 유지', build.includes("${_ro('<button class=\"taste-add-btn")
-  && src.includes("const condTag = readOnly"));
+  && src.includes('.mb-date-card[data-date=') && src.includes('is-focused'));
+check('타인 readOnly 편집 가드 유지', src.includes("${_ro('<button class=\"taste-add-btn")
+  && src.includes("const cond = readOnly") && src.includes("const action = _ro("));
 const cardStart = src.indexOf('// 모임 카드도 모임 보드와 같은 가까운 미래 범위를 쓴다.');
 const cardEnd = src.indexOf('// 그룹 요약용 카운트 추출', cardStart);
 const card = src.slice(cardStart, cardEnd);

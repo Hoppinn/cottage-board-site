@@ -1060,7 +1060,12 @@ window._cottageSess = (function () {
     } catch (err) { console.error('[getMeetingProfile]', err); return null; }
   }
 
-  const PROFILE_GAME_DEPTH_CODES = new Set(['light', 'medium', 'deep']);
+  // 새 선호 웨이트 코드는 legacy light/medium/deep와 의미가 다르다.
+  // legacy 값은 기존 회원 데이터 호환을 위해 계속 허용하되 자동 변환하지 않는다.
+  const PROFILE_GAME_DEPTH_CODES = new Set([
+    'weight_intro', 'weight_light', 'weight_heavy', 'weight_hardcore',
+    'light', 'medium', 'deep',
+  ]);
 
   function normalizeProfileGameDepths(depths) {
     if (!Array.isArray(depths)) return null;

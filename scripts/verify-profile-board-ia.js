@@ -1,4 +1,4 @@
-// 내보드 IA 028/API 계약 검증 (기본 DB 무접속, --live만 격리 행 쓰기 후 삭제)
+// 내보드 IA 028·029/API 계약 검증 (기본 DB 무접속, --live만 격리 행 쓰기 후 삭제)
 //   node scripts/verify-profile-board-ia.js --negctl
 //   node scripts/verify-profile-board-ia.js
 //   node scripts/verify-profile-board-ia.js --live  # 격리 행 왕복 후 삭제
@@ -11,6 +11,7 @@ const LIVE = process.argv.includes('--live');
 const root = path.join(__dirname, '..');
 const read = rel => fs.readFileSync(path.join(root, rel), 'utf8');
 const sql = read('docs/migrations/028_profile_board_ia.sql');
+const weightSql = read('docs/migrations/029_profile_weight_codes.sql');
 const clientSrc = read('assets/js/supabase-client.js');
 const boardSrc = read('assets/js/kakao-auth.js');
 const styleSrc = read('assets/css/style.css');
@@ -22,12 +23,15 @@ function check(label, condition, detail = '') {
   if (!condition) failures++;
 }
 
-console.log('=== 1. 028 migration 계약 ===');
+console.log('=== 1. 028·029 migration 계약 ===');
 check('평소 깊이는 TEXT[] 복수값', sql.includes('preferred_game_depths TEXT[]'));
-check('평소 깊이 허용값에 any 없음', sql.includes("ARRAY['light', 'medium', 'deep']::TEXT[]")
-  && !/preferred_game_depths[^;]*'any'/s.test(sql));
+check('평소 깊이 허용값에 any 없음', weightSql.includes("'weight_intro'")
+  && weightSql.includes("'weight_light'") && weightSql.includes("'weight_heavy'")
+  && weightSql.includes("'weight_hardcore'") && !/preferred_game_depths[^;]*'any'/s.test(weightSql));
 check('평소 깊이 중복값 DB 차단', ['light', 'medium', 'deep']
-  .every(code => sql.includes(`cardinality(array_positions(preferred_game_depths, '${code}')) <= 1`)));
+  .every(code => weightSql.includes(`cardinality(array_positions(preferred_game_depths, '${code}')) <= 1`))
+  && ['weight_intro', 'weight_light', 'weight_heavy', 'weight_hardcore']
+    .every(code => weightSql.includes(`cardinality(array_positions(preferred_game_depths, '${code}')) <= 1`)));
 check('어려웠던 게임은 순서 1~2와 사용자별 순서 UNIQUE', sql.includes('sort_order BETWEEN 1 AND 2')
   && sql.includes('UNIQUE (user_id, sort_order)'));
 check('카탈로그/직접입력 중 정확히 하나', sql.includes('num_nonnulls(') && sql.includes('= 1'));
@@ -51,7 +55,7 @@ const tasteStart = boardSrc.indexOf('function _buildTasteInnerHtml(d) {');
 const tasteEnd = boardSrc.indexOf('  // 기록 보드', tasteStart);
 const tasteBuilder = tasteStart >= 0 && tasteEnd > tasteStart
   ? [boardSrc.slice(tasteStart, tasteEnd)] : null;
-check('profile information flow has four sections', ['함께 게임할 때', '평소 플레이', '게임 깊이', '게임 취향']
+check('profile information flow has four sections', ['함께 게임할 때', '평소 플레이', '선호 웨이트', '게임 취향']
   .every(label => tasteBuilder?.[0].includes(label)));
 check('legacy split sections are removed', !!tasteBuilder
   && !tasteBuilder[0].includes('이런 플레이어예요')
@@ -66,7 +70,7 @@ check('profile board hides legacy bio and summary duplication', !!tasteBuilder
 check('expectation is conditional and owner-only empty CTA', !!tasteBuilder
   && tasteBuilder[0].includes('d.expectation')
   && tasteBuilder[0].includes("readOnly ? ''")
-  && tasteBuilder[0].includes('함께 게임할 때의 이야기를 남겨보세요'));
+  && tasteBuilder[0].includes('아직 작성하지 않았어요'));
 check('structured player fields appear once in their sections', !!tasteBuilder
   && (tasteBuilder[0].match(/선호 유형/g) || []).length === 1
   && (tasteBuilder[0].match(/선호 웨이트/g) || []).length === 1
@@ -74,9 +78,11 @@ check('structured player fields appear once in their sections', !!tasteBuilder
   && (tasteBuilder[0].match(/주로 함께하는 사람/g) || []).length === 1
   && (tasteBuilder[0].match(/가능한 요일·시간/g) || []).length === 1
   && (tasteBuilder[0].match(/활동 지역/g) || []).length === 1
-  && (tasteBuilder[0].match(/이동 가능 범위/g) || []).length === 1);
-check('location and travel range stay in usual play', !!tasteBuilder
-  && /profile-usual-play-section[\s\S]{0,1200}활동 지역[\s\S]{0,300}이동 가능 범위/.test(tasteBuilder[0]));
+  && !tasteBuilder[0].includes('이동 가능 범위'));
+check('location remains and travel range is hidden', !!tasteBuilder
+  && tasteBuilder[0].includes('활동 지역')
+  && !tasteBuilder[0].includes('이동 가능 범위')
+  && !tasteBuilder[0].includes('travelRange'));
 const tasteSection = tasteBuilder?.[0].match(/<section class="profile-info-section profile-taste-section">[\s\S]*?<\/section>/)?.[0] || '';
 check('avoid types and preferred types stay in game taste', !!tasteBuilder
   && tasteSection.includes('선호 유형')
@@ -86,10 +92,16 @@ check('rule explain remains an item action, not experience section', !!tasteBuil
   && boardSrc.includes('mb-rule-btn'));
 check('expectation uses normal body typography', styleSrc.includes('.profile-expectation-text{')
   && styleSrc.includes('font-size:13px') && styleSrc.includes('line-height:1.7'));
-check('multi-depth and hardest-games editors are wired', boardSrc.includes('Object.entries(_PROFILE_DEPTH_LABELS)')
+check('weight options and hardest-games editors are wired', boardSrc.includes('Object.entries(_PROFILE_WEIGHT_OPTIONS)')
+  && ['weight_intro', 'weight_light', 'weight_heavy', 'weight_hardcore'].every(code => boardSrc.includes(code))
   && boardSrc.includes('replaceProfileHardestGames') && boardSrc.includes('hardestGames.length >= 2'));
-check('readOnly edit controls use owner-only wrapper', boardSrc.includes("${_ro('<a class=\"profile-source-edit\"")
+check('single profile edit entry uses owner-only wrapper', boardSrc.includes("${_ro('<a class=\"profile-board-edit-link\"")
+  && !boardSrc.includes('평소 생활 수정 →')
   && boardSrc.includes("${_ro(`<button class=\"profile-hardest-add\""));
+check('legacy depth labels remain separate from new ranges', boardSrc.includes('_PROFILE_LEGACY_DEPTH_LABELS')
+  && boardSrc.includes("light:'가볍게'") && boardSrc.includes("medium:'적당히'") && boardSrc.includes("deep:'깊게'")
+  && boardSrc.includes('기존 선택:'));
+check('intro has no travel range UI residue', !introHtml.includes('이동 가능 범위') && !introHtml.includes('travel_range'));
 check('failed game save cannot paint a false added state', (boardSrc.match(/if \(saved === false\) return;/g) || []).length === 2);
 check('member intro card opens Profile Board', introHtml.includes('프로필 보드 보기 ›')
   && introHtml.includes('window.openOtherProfileSheet?.(uid)') && !introHtml.includes('window.openOtherMeetingSheet?.(uid)'));
@@ -216,10 +228,10 @@ async function runLiveContract() {
     const seeded = await db.from('profiles').insert({user_id:testUid, nickname:'028검증'}).select('user_id').maybeSingle();
     check('격리 프로필 생성', !seeded.error && seeded.data?.user_id === testUid, seeded.error?.message || '');
 
-    const depthSaved = await api.updatePreferredGameDepths(testUid, ['light', 'deep', 'light']);
+    const depthSaved = await api.updatePreferredGameDepths(testUid, ['weight_light', 'weight_heavy', 'weight_light']);
     const depthRead = await db.from('profiles').select('preferred_game_depths').eq('user_id', testUid).maybeSingle();
     check('평소 깊이 복수값 저장·되읽기', depthSaved.success === true
-      && JSON.stringify(depthRead.data?.preferred_game_depths) === JSON.stringify(['light', 'deep']), depthRead.error?.message || '');
+      && JSON.stringify(depthRead.data?.preferred_game_depths) === JSON.stringify(['weight_light', 'weight_heavy']), depthRead.error?.message || '');
     const invalidDepth = await db.from('profiles').update({preferred_game_depths:['any']}).eq('user_id', testUid);
     check('DB CHECK가 any 거부', !!invalidDepth.error);
 
@@ -266,10 +278,10 @@ async function runLiveContract() {
   const invalidAny = await window.CottageDB.updatePreferredGameDepths('u1', ['any']);
   check('평소 깊이 any 거부', NEG ? invalidAny?.error !== 'invalid' : invalidAny?.error === 'invalid',
     NEG ? 'negctl — 이 줄만 FAIL이어야 정상' : '');
-  const validDepths = await window.CottageDB.updatePreferredGameDepths('u1', ['deep', 'light', 'deep']);
+  const validDepths = await window.CottageDB.updatePreferredGameDepths('u1', ['weight_heavy', 'weight_light', 'weight_heavy']);
   const depthWrite = writes.find(item => item.table === 'profiles' && item.action === 'update');
   check('복수 깊이 손실 없이 저장·중복 정규화', validDepths.success === true
-    && JSON.stringify(depthWrite?.payload?.preferred_game_depths) === JSON.stringify(['deep', 'light']));
+    && JSON.stringify(depthWrite?.payload?.preferred_game_depths) === JSON.stringify(['weight_heavy', 'weight_light']));
 
   const tooMany = await window.CottageDB.replaceProfileHardestGames('u1', [
     {gameId:'a'}, {gameId:'b'}, {gameId:'c'},
