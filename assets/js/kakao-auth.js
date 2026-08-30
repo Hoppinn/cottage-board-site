@@ -2031,15 +2031,12 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
 
   if (!window.CottageDB?.getMyStats) return;
   const _sessForNotif = window._cottageSess?.get(String(user.id)) || {};
-  const _now = new Date();
-  const _monthStart = `${_now.getFullYear()}-${String(_now.getMonth()+1).padStart(2,'0')}-01`;
-  const _monthEnd   = new Date(_now.getFullYear(), _now.getMonth()+1, 0);
-  const _monthEndStr = `${_monthEnd.getFullYear()}-${String(_monthEnd.getMonth()+1).padStart(2,'0')}-${String(_monthEnd.getDate()).padStart(2,'0')}`;
+  const [_upcomingStart, _upcomingEnd] = _upcomingRange();
   const _emptyCodex = { html: '', playedCount: 0, totalGames: 0 };
   // likedGames/curiousGames를 따로 조회하지 않는다 — getMeetingProfile이 내부에서 같은
   // getUserLikedGamesAll/getUserCuriousGamesAll를 부르므로 예전엔 같은 쿼리를 한 Promise.all에서
   // 두 번 쏘고 결과를 별도 배열로 들고 있었다. 그 중복이 크로스보드 stale의 실체였다(R10b).
-  const [stats, notifs, _codexResult, userStats, voucherBalance, voucherProducts, voucherHistory, allBioSuggestions, allAvoidSuggestions, _thisMonthVotes, meetingProfile, _noticeAckKeys] = await Promise.all([
+  const [stats, notifs, _codexResult, userStats, voucherBalance, voucherProducts, voucherHistory, allBioSuggestions, allAvoidSuggestions, _upcomingCardVotes, _upcomingCardGames, meetingProfile, _noticeAckKeys] = await Promise.all([
     window.CottageDB.getMyStats(String(user.id), user.nickname || null),
     // 알림·교환권은 비공개 → 읽기전용에서는 조회하지 않음(개인정보)
     readOnly ? Promise.resolve([]) : (window.CottageDB.getMyNotifications?.(String(user.id), user.nickname || null, _sessForNotif.notifSeenAt || null, _sessForNotif.newGameSeenAt || null) || Promise.resolve([])),
@@ -2050,7 +2047,8 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
     readOnly ? Promise.resolve([]) : (window.CottageDB?.getVoucherHistory?.(String(user.id), 5) || Promise.resolve([])).catch(() => []),
     (window.CottageDB?.getAllBioTagSuggestions?.() || Promise.resolve([])).catch(() => []),
     (window.CottageDB?.getAllAvoidTagSuggestions?.() || Promise.resolve([])).catch(() => []),
-    (window.CottageDB?.getMeetingVotes?.(_monthStart, _monthEndStr) || Promise.resolve([])).catch(() => []),
+    (window.CottageDB?.getMeetingVotes?.(_upcomingStart, _upcomingEnd) || Promise.resolve([])).catch(() => []),
+    (window.CottageDB?.getMeetingVoteGames?.(_upcomingStart, _upcomingEnd) || Promise.resolve([])).catch(() => []),
     (window.CottageDB?.getProfileBoardData?.(String(user.id)) || window.CottageDB?.getMeetingProfile?.(String(user.id)) || Promise.resolve(null)).catch(() => null),
     // 전체공지·교환권공지 확인 여부 — 기기 간 동기화용(로컬 세션만으론 재노출됨)
     readOnly ? Promise.resolve([]) : (window.CottageDB?.getNoticeAckKeys?.(String(user.id)) || Promise.resolve([])).catch(() => []),
@@ -2442,19 +2440,27 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
   ].filter(Boolean);
   const _statsSummary = _summaryParts.length ? _summaryParts.join(' · ') : '활동 없음';
 
-  // 이번달 참여 일정 (내가 투표한 날짜, 오늘 이후만 — 지난 모임 숨김)
-  const _todayLocalStr = (() => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; })();
-  const _myVoteDates = (_thisMonthVotes || [])
-    .filter(v => String(v.user_id) === String(user.id) && v.vote_date >= _todayLocalStr)
-    .map(v => v.vote_date)
-    .sort();
+  // 모임 카드도 모임 보드와 같은 가까운 미래 범위를 쓴다. 날짜별 판 성향은 서로 다를 수
+  // 있으므로 하나로 합성하지 않고 일정 날짜와 날짜별 게임의 distinct 개수만 요약한다.
+  const _myVoteDates = [...new Set((_upcomingCardVotes || [])
+    .filter(v => String(v.user_id) === String(user.id))
+    .map(v => v.vote_date))].sort();
+  const _myCardGames = (_upcomingCardGames || []).filter(g => String(g.user_id) === String(user.id));
+  const _countCardGames = listType => new Set(_myCardGames
+    .filter(g => g.list_type === listType)
+    .map(g => g.game_id != null ? `id:${g.game_id}` : `cn:${String(g.custom_name || '').toLocaleLowerCase('ko-KR')}`))
+    .size;
+  const _wantCardCount = _countCardGames('want');
+  const _learnCardCount = _countCardGames('learn');
   let _scheduleHtml = '';
   if (_myVoteDates.length) {
-    const _fmtDate = ds => { const [,m,d] = ds.split('-'); return `${parseInt(m,10)}/${parseInt(d,10)} 정기모임`; };
-    const _show = _myVoteDates.slice(0, 2).map(_fmtDate);
+    const _days = '일월화수목금토';
+    const _fmtDate = ds => { const d = new Date(`${ds}T00:00:00`); return `${d.getMonth()+1}/${d.getDate()}(${_days[d.getDay()]})`; };
+    const _showDates = _myVoteDates.slice(0, 2).map(_fmtDate);
     const _extra = _myVoteDates.length - 2;
-    if (_extra > 0) _show.push(`외 ${_extra}건`);
-    _scheduleHtml = `<span class="profile-card-schedule">${_show.map(l => escH(l)).join('<br>')}</span>`;
+    const _dateLine = `${_showDates.join(' · ')}${_extra > 0 ? ` 외 ${_extra}건` : ''} 참여 가능`;
+    const _gameLine = [`하고 싶은 게임 ${_wantCardCount}`, `배우고 싶은 게임 ${_learnCardCount}`].join(' · ');
+    _scheduleHtml = `<span class="profile-card-schedule">다가오는 일정 ${_myVoteDates.length}건<br>${escH(_dateLine)}<br>${escH(_gameLine)}</span>`;
   }
 
   // 그룹 요약용 카운트 추출 — regex 실패 시 0 fallback
