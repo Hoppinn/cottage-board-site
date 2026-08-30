@@ -883,6 +883,10 @@
     let _initDone       = false;
     let _pendingRegister = null; // 홈 등록하기 버튼 → init 완료 전 도착한 date
     let _pendingEdit     = null; // 「이날 모임 상세」 등록/수정 버튼 → init 완료 전 도착한 date (_pendingRegister와 동일한 이유)
+    // 실제 Live Server 환경에서 .html/?embed=true가 정리된 URL로 iframe이 이동할 수 있다.
+    // 부모 프레임 안에서 실행 중이라는 사실 자체도 embed 판정에 포함해야 ready/date 전달이 멈추지 않는다.
+    const IS_EMBEDDED = window.parent !== window
+      || new URLSearchParams(location.search).get('embed') === 'true';
 
     // 활성 뷰 체류시간 추적(PLAN_active_view_tracking.md 3차) — schedSheetOverlay(단일 날짜
     // 시간 수정)와 schedMultiOverlay(멀티스텝 등록) 둘 다 "플래너에서 등록/수정 중"이라는
@@ -1168,7 +1172,7 @@
         //    부모가 모달을 숨기기 전에 한 프레임 그려져 깜빡인다(postMessage 비동기라 부모
         //    closeModal이 다음 태스크에 실행됨). 클래스 정리는 다음 정상 오픈(cottage-reset-week).
         if (document.body.classList.contains('is-quick-entry')) {
-          if (new URLSearchParams(location.search).get('embed') === 'true') {
+          if (IS_EMBEDDED) {
             window.parent.postMessage({ type: 'cottage-quick-entry-closed' }, '*');
           }
         }
@@ -2967,7 +2971,7 @@
     // 홈에서 등록/수정 진입 시 뒤쪽 주간 뷰를 보여주지 않고 대기 중인 부모창에
     // 등록 시트가 실제로 떴음을 알려 그 상태 그대로 모달을 드러내게 한다.
     function _notifySheetShown() {
-      if (new URLSearchParams(location.search).get('embed') === 'true') {
+      if (IS_EMBEDDED) {
         window.parent.postMessage({ type: 'cottage-sheet-shown' }, '*');
       }
     }
@@ -3044,7 +3048,7 @@
     init();
 
     // embed 모드: 부모 프레임에 ready 신호
-    if (new URLSearchParams(location.search).get('embed') === 'true') {
+    if (IS_EMBEDDED) {
       document.body.classList.add('is-embedded');
       window.parent.postMessage({ type: 'cottage-planner-ready' }, '*');
     }

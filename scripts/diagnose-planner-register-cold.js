@@ -23,7 +23,7 @@ function server() {
   });
 }
 
-async function runCase(browser, {name, loggedIn, frameDelay}) {
+async function runCase(browser, {name, loggedIn, frameDelay, stripEmbedQuery = false}) {
   const context = await browser.newContext({viewport:{width:360, height:720}});
   if (loggedIn) {
     await context.addInitScript(() => localStorage.setItem('kakao_user', JSON.stringify({
@@ -52,6 +52,17 @@ async function runCase(browser, {name, loggedIn, frameDelay}) {
   await page.goto(`${BASE}/index.html`, {waitUntil:'domcontentloaded'});
   const button = page.locator('#mpeGoPlanner');
   await button.waitFor({state:'visible', timeout:15000});
+  if (stripEmbedQuery) {
+    await page.evaluate(() => {
+      const frame = document.getElementById('plannerSheetFrame');
+      frame.classList.remove('is-ready');
+      frame.src = './pages/club/club-schedule.html';
+    });
+    await page.locator('#plannerSheetFrame').evaluate(frame => new Promise(resolve => {
+      if (frame.contentDocument?.readyState === 'complete') resolve();
+      else frame.addEventListener('load', resolve, { once:true });
+    }));
+  }
   await page.evaluate(() => {
     window.__coldTrace = [];
     const original = window.__openPlannerFor;
@@ -102,6 +113,7 @@ async function runCase(browser, {name, loggedIn, frameDelay}) {
     for (const testCase of [
       {name:'로그인·일반 초기 로드', loggedIn:true, frameDelay:0},
       {name:'로그인·iframe 1.5초 지연', loggedIn:true, frameDelay:1500},
+      {name:'로그인·embed 쿼리 소실', loggedIn:true, frameDelay:0, stripEmbedQuery:true},
       {name:'미로그인 초기 로드', loggedIn:false, frameDelay:0},
     ]) {
       if (!await runCase(browser, testCase)) failed = true;
