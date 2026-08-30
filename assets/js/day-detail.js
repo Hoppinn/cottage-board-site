@@ -201,6 +201,10 @@
     .dd-participants-toggle[open] > summary::after { content: '▲'; }
     .dd-participants-toggle > summary::-webkit-details-marker { display: none; }
     .dd-participants-body { border-top: 1px solid var(--line, #e5ddd2); }
+    .dd-my-games-editor { margin-bottom: 10px; }
+    .dd-my-games-editor > summary { color: var(--green); }
+    .dd-my-games-body { padding: 10px 2px 4px; }
+    .dd-my-games-help { margin: 7px 0 0; font-size: 11px; line-height: 1.45; color: var(--muted); }
     .dd-participant-block { padding: 10px 2px 9px; }
     .dd-participant-block + .dd-participant-block { border-top: 1px solid var(--line, #e5ddd2); }
     .dd-participant-block .dd-modal-nick { margin-bottom: 3px; }
@@ -1201,6 +1205,29 @@
     return participantsBody;
   }
 
+  /** 이날 모임 상세의 본인 전용 게임 조율. 전원 목록과 분리해 편집 UI가 참여자 수만큼 반복되지 않게 한다. */
+  function _buildMyMeetingGameEditorHtml(myVote, myGames, voteDate) {
+    if (!myVote) return '';
+    const wantGames = myGames.filter(g => g.list_type === 'want');
+    const learnGames = myGames.filter(g => g.list_type === 'learn');
+    const gameSections = [
+      _buildSchedGameSection(wantGames, '🎲', '하고 싶은 게임', true),
+      _buildSchedGameSection(learnGames, '📖', '배우고 싶은 게임', true),
+    ].join('');
+    const plannerHelp = voteDate >= _todayStr()
+      ? '<p class="dd-my-games-help">게임 추가·삭제와 오늘 상태 변경은 아래 ‘내 참여 수정하기’에서 할 수 있어요.</p>'
+      : '';
+    return `<details class="dd-participants-toggle dd-my-games-editor">
+      <summary>내 게임 조율</summary>
+      <div class="dd-participants-body dd-my-games-body">
+        ${gameSections || '<p class="dd-context-empty">선택한 게임이 없어요.</p>'}
+        <p class="dd-star-notice" style="display:none"></p>
+        <p class="dd-my-games-help">별은 대표 게임(최대 2개), 인원 메뉴는 희망 플레이 인원이에요.</p>
+        ${plannerHelp}
+      </div>
+    </details>`;
+  }
+
   /**
    * 룰렛 위젯 초기화 (휠·칩·게임추가·돌리기)
    * ⚠️ el.innerHTML 주입 + appendChild 이후에만 호출할 것 — 내부에서 el.querySelector로
@@ -1385,6 +1412,10 @@
     // 이 한 곳에서). 로그인 안 했으면 어차피 등록할 수 없으니 숨긴다.
     const user = window.getKakaoUser?.();
     const myVote = user && votes.find(v => String(v.user_id) === String(user.id));
+    const myGames = myVote
+      ? voteGames.filter(g => String(g.user_id) === String(myVote.user_id))
+      : [];
+    const myGameEditorHtml = _buildMyMeetingGameEditorHtml(myVote, myGames, voteDate);
     const plannerBtnHtml = (user && voteDate >= _todayStr())
       ? `<button class="dd-planner-btn" type="button">${myVote ? '내 참여 수정하기' : '플래너에서 등록하기'}</button>`
       : '';
@@ -1420,6 +1451,7 @@
               ${rouletteBtnHtml}
             </section>`
           : ''}
+        ${myGameEditorHtml}
         ${participantsBody
           ? `<details class="dd-participants-toggle" open>
               <summary>참여자별 보기</summary>
@@ -1450,6 +1482,18 @@
     // 게임 행 클릭 → 게임시트. 게임시트(--z-sheet 9500)가 이 모달 위에 겹쳐 뜨므로 닫지 않는다
     // (시트를 닫으면 이 모달로 복귀 — 닉네임→보드와 같은 레이어 방식).
     _bindDdGameHitClicks(el);
+
+    // 개인 날짜 상세에서만 가능했던 대표 게임·희망 인원 편집을 날짜 전체 상세에서도 제공한다.
+    // 성공 시 myGames의 같은 객체를 갱신하므로 현재 모달과 호출부 캐시가 일치하고,
+    // 홈처럼 별도 배열을 캐시하는 소비처에는 전역 변경 신호로 재조회를 요청한다.
+    if (myVote && myGames.length) {
+      _bindSchedEditors(el, {
+        userId: myVote.user_id,
+        voteDate,
+        myGames,
+        onDirty: () => window.dispatchEvent(new CustomEvent('cottage-meeting-changed', { detail: { reason: 'game-coordination' } })),
+      });
+    }
 
     // 등록/수정 → 플래너. 이 모달을 닫지 않는다(닉네임→보드·게임행→게임시트와 같은
     // 레이어 방식 — 플래너 --z-shelf 9600 > 이 모달 9050이라 겹쳐 뜬다).
