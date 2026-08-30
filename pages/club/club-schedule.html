@@ -2736,7 +2736,7 @@
         const openParticipant = e => {
           if (e.type === 'keydown' && !['Enter', ' '].includes(e.key)) return;
           if (e.type === 'keydown' && e.target !== card) return;
-          if (e.target.closest('button, a, input, select, textarea, .dd-game-hit')) return;
+          if (e.target.closest('button, a, input, select, textarea, .dd-game-hit, .sched-bar-name')) return;
           e.preventDefault();
           e.stopPropagation();
           window.CottageDB?.trackEvent('meeting_planner_bar_click');
@@ -2754,6 +2754,18 @@
         };
         card.addEventListener('click', openParticipant);
         card.addEventListener('keydown', openParticipant);
+      });
+
+      el.querySelectorAll('.sched-bar-name[data-uid]').forEach(name => {
+        const openMember = e => {
+          if (e.type === 'keydown' && !['Enter', ' '].includes(e.key)) return;
+          e.preventDefault();
+          e.stopPropagation();
+          window.CottageDB?.trackEvent('meeting_profile_click', { user_id: name.dataset.uid });
+          window.openOtherMeetingSheet?.(name.dataset.uid);
+        };
+        name.addEventListener('click', openMember);
+        name.addEventListener('keydown', openMember);
       });
 
       // 「하고 싶은/배우고 싶은 게임」 썸네일 클릭 → 게임시트 (2026-07-27, 이 주간뷰만 안 뚫려 있었음 —

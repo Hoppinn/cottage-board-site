@@ -1862,7 +1862,7 @@ window.addEventListener('cottage-meeting-changed', () => { _meetingReload?.(); }
       const openParticipant = e => {
         if (e.type === 'keydown' && !['Enter', ' '].includes(e.key)) return;
         if (e.type === 'keydown' && e.target !== card) return;
-        if (e.target.closest('button, a, input, select, textarea, .dd-game-hit')) return;
+        if (e.target.closest('button, a, input, select, textarea, .dd-game-hit, .sched-bar-name')) return;
         e.preventDefault();
         e.stopPropagation();
         const uid  = card.dataset.uid;
@@ -1872,6 +1872,18 @@ window.addEventListener('cottage-meeting-changed', () => { _meetingReload?.(); }
       };
       card.addEventListener('click', openParticipant);
       card.addEventListener('keydown', openParticipant);
+    });
+
+    previewEl.querySelectorAll('.sched-bar-name[data-uid]').forEach(name => {
+      const openMember = e => {
+        if (e.type === 'keydown' && !['Enter', ' '].includes(e.key)) return;
+        e.preventDefault();
+        e.stopPropagation();
+        window.CottageDB?.trackEvent('meeting_profile_click', { user_id: name.dataset.uid });
+        window.openOtherMeetingSheet?.(name.dataset.uid);
+      };
+      name.addEventListener('click', openMember);
+      name.addEventListener('keydown', openMember);
     });
 
     previewEl.querySelectorAll('.sched-bar-edit-btn').forEach(btn => {

@@ -866,7 +866,7 @@
       const openParticipant = e => {
         if (e.type === 'keydown' && !['Enter', ' '].includes(e.key)) return;
         if (e.type === 'keydown' && e.target !== card) return;
-        if (e.target.closest('button, a, input, select, textarea, .dd-game-hit')) return;
+        if (e.target.closest('button, a, input, select, textarea, .dd-game-hit, .sched-bar-name')) return;
         e.preventDefault();
         e.stopPropagation();
         window.CottageDB?.trackEvent('meeting_planner_bar_click', { date: card.dataset.date, user_id: card.dataset.uid });
@@ -874,6 +874,17 @@
       };
       card.addEventListener('click', openParticipant);
       card.addEventListener('keydown', openParticipant);
+    });
+    el.querySelectorAll('.sched-bar-name[data-uid]').forEach(name => {
+      const openMember = e => {
+        if (e.type === 'keydown' && !['Enter', ' '].includes(e.key)) return;
+        e.preventDefault();
+        e.stopPropagation();
+        window.CottageDB?.trackEvent('meeting_profile_click', { user_id: name.dataset.uid });
+        window.openOtherMeetingSheet?.(name.dataset.uid);
+      };
+      name.addEventListener('click', openMember);
+      name.addEventListener('keydown', openMember);
     });
     // +N명 더보기 토글 (막대가 접힘 구조일 때)
     el.querySelectorAll('.sched-card-more-btn').forEach(btn =>
@@ -1515,7 +1526,7 @@
         : '';
       return `<div class="sched-bar-item" data-date="${esc(v.vote_date)}" data-uid="${esc(v.user_id)}" role="button" tabindex="0">
         <div class="sched-bar-left">
-          <span class="sched-bar-name" data-uid="${esc(v.user_id)}">${esc(v.nickname)}</span>
+          <span class="sched-bar-name" data-uid="${esc(v.user_id)}" role="link" tabindex="0">${esc(v.nickname)}</span>
           ${guestN > 0 ? `<span class="sched-bar-guest" title="동반 인원 ${guestN}명">+${guestN}</span>` : ''}
           <span class="sched-bar-time-text">${window.formatVoteHour(v.time_start)}~${window.formatVoteHour(v.time_end)}</span>
           ${actions}
