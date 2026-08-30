@@ -1060,6 +1060,82 @@ window._cottageSess = (function () {
     } catch (err) { console.error('[getMeetingProfile]', err); return null; }
   }
 
+  const PROFILE_GAME_DEPTH_CODES = new Set(['light', 'medium', 'deep']);
+
+  function normalizeProfileGameDepths(depths) {
+    if (!Array.isArray(depths)) return null;
+    const normalized = [...new Set(depths.map(value => String(value).trim()).filter(Boolean))];
+    return normalized.every(value => PROFILE_GAME_DEPTH_CODES.has(value)) ? normalized : null;
+  }
+
+  async function getProfileHardestGames(userId) {
+    if (!userId) return [];
+    try {
+      const { data, error } = await db.from('profile_hardest_games')
+        .select('id, game_id, custom_name, sort_order')
+        .eq('user_id', String(userId))
+        .order('sort_order');
+      if (error) console.error('[getProfileHardestGames]', error);
+      return data || [];
+    } catch (err) { console.error('[getProfileHardestGames]', err); return []; }
+  }
+
+  // 프로필 보드 전용 통합 읽기. 기존 평소 생활 SSOT(getMeetingProfile)를 복사하지 않고
+  // 신규 깊이/경험만 합친다. 신규 스키마 조회가 실패해도 기존·readOnly 보드는 base로 유지된다.
+  async function getProfileBoardData(userId) {
+    if (!userId) return null;
+    try {
+      const [base, depthRes, hardestGames] = await Promise.all([
+        getMeetingProfile(userId),
+        db.from('profiles').select('preferred_game_depths').eq('user_id', String(userId)).maybeSingle(),
+        getProfileHardestGames(userId),
+      ]);
+      if (depthRes.error) console.error('[getProfileBoardData:profiles]', depthRes.error);
+      if (!base) return null;
+      return {
+        ...base,
+        preferredGameDepths: depthRes.data?.preferred_game_depths || [],
+        hardestGames,
+      };
+    } catch (err) { console.error('[getProfileBoardData]', err); return null; }
+  }
+
+  async function updatePreferredGameDepths(userId, depths) {
+    if (!userId) return { error: 'invalid' };
+    const normalized = normalizeProfileGameDepths(depths);
+    if (!normalized) return { error: 'invalid' };
+    try {
+      const { error } = await db.from('profiles')
+        .update({ preferred_game_depths: normalized })
+        .eq('user_id', String(userId));
+      return error ? { error } : { success: true };
+    } catch (e) { return { error: e }; }
+  }
+
+  async function replaceProfileHardestGames(userId, games) {
+    if (!userId || !Array.isArray(games) || games.length > 2) return { error: 'invalid' };
+    const normalized = [];
+    const seen = new Set();
+    for (const game of games) {
+      const gameId = String(game?.gameId ?? game?.game_id ?? '').trim();
+      const customName = String(game?.customName ?? game?.custom_name ?? '').trim();
+      if ((!gameId && !customName) || (gameId && customName) || gameId.length > 100 || customName.length > 100) {
+        return { error: 'invalid' };
+      }
+      const key = gameId ? `id:${gameId}` : `custom:${customName.toLocaleLowerCase('ko-KR')}`;
+      if (seen.has(key)) return { error: 'duplicate' };
+      seen.add(key);
+      normalized.push({ game_id: gameId || null, custom_name: customName || null });
+    }
+    try {
+      const { data, error } = await db.rpc('replace_profile_hardest_games', {
+        p_user_id: String(userId),
+        p_games: normalized,
+      });
+      return error ? { error } : { success: true, games: data || [] };
+    } catch (e) { return { error: e }; }
+  }
+
   // member_intros upsert — 유저당 1행(UNIQUE user_id), 자기소개/모임보드 양쪽에서 호출
   async function upsertMeetingIntro(userId, fields) {
     if (!userId) return { error: 'invalid' };
@@ -2114,6 +2190,10 @@ window._cottageSess = (function () {
     normalizeMemberIntroTimes,
     formatMemberIntroTimes,
     getMeetingProfile,
+    getProfileBoardData,
+    getProfileHardestGames,
+    updatePreferredGameDepths,
+    replaceProfileHardestGames,
     upsertMeetingIntro,
     submitMemberIntro,
     addMeetingGamePref,
@@ -2620,7 +2700,14 @@ window._cottageSess = (function () {
         row.game_style = gameStyle;
         row.game_style_custom = gameStyle === 'other' ? gameStyleCustom : null;
         row.game_depth = playIntent.gameDepth ?? null;
-        row.play_traits = Array.isArray(playIntent.playTraits) ? playIntent.playTraits : [];
+        const playTraits = Array.isArray(playIntent.playTraits)
+          ? [...new Set(playIntent.playTraits.map(value => String(value).trim()).filter(Boolean))]
+          : [];
+        const allowedPlayTraits = new Set(['beginner_welcome', 'new_game_ok', 'hard_game_learning_ok']);
+        if (!playTraits.every(value => allowedPlayTraits.has(value))) {
+          return { error: new Error('지원하지 않는 오늘의 플레이 성향입니다.') };
+        }
+        row.play_traits = playTraits;
         const message = String(playIntent.recruitmentMessage ?? '').trim();
         row.recruitment_message = message || null;
       }

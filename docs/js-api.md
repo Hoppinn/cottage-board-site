@@ -1,6 +1,6 @@
 # JS API 레퍼런스 — 코티지보드
 
-최종 갱신: 2026-08-30 (`getMeetingVotes`/`upsertMeetingVote`에 027 기타 게임 유형의 안정 코드·표시 문구 분리 계약 반영) / 2026-08-29 (`normalizeMemberIntroTimes`/`formatMemberIntroTimes` 추가, `submitMemberIntro`의 30분 슬롯·커스텀 유형 계약 반영) / 2026-08-29 (`getMeetingVotes`/`upsertMeetingVote`에 024 날짜별 판 의도 반영) / 2026-08-28 (`submitMemberIntro` 추가 + `getMeetingProfile`에 023 구조화 자기소개 필드 반영)
+최종 갱신: 2026-08-31 (028 프로필 보드 API 4종과 날짜별 `hard_game_learning_ok` 계약 추가) / 2026-08-30 (`getMeetingVotes`/`upsertMeetingVote`에 027 기타 게임 유형의 안정 코드·표시 문구 분리 계약 반영) / 2026-08-29 (`normalizeMemberIntroTimes`/`formatMemberIntroTimes` 추가, `submitMemberIntro`의 30분 슬롯·커스텀 유형 계약 반영)
 
 ---
 
@@ -128,9 +128,13 @@ return data || [];
 | `getPartySize(vote)` | 그 등록 1건의 **방문 인원** = `1 + guest_count`(동반 인원). null·문자열·음수·NaN 전부 1로 방어 |
 | `sumWeeklyPartySize(votes)` | **여러 날짜에 걸친 인원** — 유저별 **최대** 인원을 합산한다(월 3명·수 1명이면 그 사람 몫은 3). `sumPartySize`와 **다른 질문**이다: 저건 "그날 몇 명", 이건 "이 기간에 올 사람이 몇 명". 홈 상태 문구(*"N명이 기다리고 있어요"*)가 유일한 소비처. 동반 0이면 옛 `Set(user_id).size`와 동일 |
 | `sumPartySize(votes)` | votes 배열의 총 방문 인원. `user_id` 기준 dedupe 후 `getPartySize` 합산 — 옛 `Set(user_id).size`의 의미를 보존하면서 지인만 더한다. 🚨 **「N명」을 세는 자리는 전부 이것만 쓴다** — `.length`로 세면 그 화면만 조용히 다른 답을 낸다(#15 `visitorKey` 사건과 동형). 현재 소비처: 플래너 3곳+`calcOverlap`/`calcSummary`, 이날 상세 4곳, 홈 이번주 모임 1곳 |
-| `upsertMeetingVote(userId, nickname, voteDate, timeStart, timeEnd, guestCount=0, playIntent?)` | 모임 플래너: 가능 시간/날짜별 판 의도 등록·수정. UNIQUE(vote_date, user_id) upsert. `guestCount`는 동반 인원 — **인자를 생략하면 0으로 덮어쓴다**(수정 경로에서 기존 값을 안 실으면 동반 인원이 사라짐). 음수·NaN·소수는 0/정수로, 99 초과는 99로 접는다(DB CHECK와 같은 값). `playIntent`는 `{gameStyle, gameStyleCustom, gameDepth, playTraits, recruitmentMessage}`; `gameStyle='other'`이면 공백 제외 최대 30자의 `gameStyleCustom`이 필수이고 다른 코드에서는 DB에 NULL로 정규화한다. 인자 자체를 생략한 기존 호출은 판 의도 필드를 payload에 넣지 않아 저장값을 보존한다 |
+| `upsertMeetingVote(userId, nickname, voteDate, timeStart, timeEnd, guestCount=0, playIntent?)` | 모임 플래너: 가능 시간/날짜별 판 의도 등록·수정. UNIQUE(vote_date, user_id) upsert. `guestCount`는 동반 인원 — **인자를 생략하면 0으로 덮어쓴다**(수정 경로에서 기존 값을 안 실으면 동반 인원이 사라짐). 음수·NaN·소수는 0/정수로, 99 초과는 99로 접는다(DB CHECK와 같은 값). `playIntent`는 `{gameStyle, gameStyleCustom, gameDepth, playTraits, recruitmentMessage}`; `gameStyle='other'`이면 공백 제외 최대 30자의 `gameStyleCustom`이 필수이고 다른 코드에서는 DB에 NULL로 정규화한다. `playTraits` 허용값은 `beginner_welcome\|new_game_ok\|hard_game_learning_ok`이며 중복을 제거한다. 인자 자체를 생략한 기존 호출은 판 의도 필드를 payload에 넣지 않아 저장값을 보존한다 |
 | `deleteMeetingVote(userId, voteDate)` | 모임 플래너: 등록 취소. **cascade**: 같은 user_id+vote_date의 `meeting_vote_games`(하고싶은/배우고싶은 게임)도 함께 삭제 — 참여 취소 시 orphan 게임 방지 |
 | `getMeetingProfile(userId)` | **취향보드·모임보드 공용 단일 소스**. 기존 반환값에 023 구조화 자기소개 `companionTypes, averagePlayFrequency, possibleFrequencyMin/Max, desiredFrequencyMin/Max, availableDays, availableTimes, preferredGameTypes, clocktowerPreference, expectation, questionnaireCompletedAt`을 추가한다. `join_sources`는 관리자 전용이라 공개 프로필 반환값에서 의도적으로 제외. `avoidTags`는 계속 `profiles.avoid_tags` SSOT. ⚠️ 취향/모임 서브시트 데이터를 여기 말고 다시 조회하지 말 것 |
+| `getProfileBoardData(userId)` | 028 프로필 보드 통합 읽기. `getMeetingProfile(userId)`의 기존 평소 생활 SSOT를 재사용하고 `preferredGameDepths`(`profiles.preferred_game_depths`)와 `hardestGames`(`profile_hardest_games`, sort_order 순)를 합친다. 본인/readOnly 모두 대상 userId만 다르게 같은 함수를 쓴다. 신규 조회 하나가 실패해도 기존 보드 데이터는 별도 fallback을 유지한다 |
+| `getProfileHardestGames(userId)` | 028 가장 어려웠던 게임 최대 2개 조회. `[{id, game_id, custom_name, sort_order}]`, sort_order 오름차순. 조회 실패는 로그 후 `[]` |
+| `updatePreferredGameDepths(userId, depths)` | 028 평소 즐기는 게임 깊이 복수 저장. 허용값은 `light\|medium\|deep`뿐이고 `any`는 거부한다. 입력 순서를 보존하며 중복 코드를 제거한다 |
+| `replaceProfileHardestGames(userId, games)` | 028 가장 어려웠던 게임 목록 원자 교체. 최대 2개, 각 항목은 `{gameId}` 또는 `{customName}` 중 정확히 하나. `replace_profile_hardest_games` RPC가 삭제+삽입을 한 트랜잭션으로 처리한다 |
 | `upsertMeetingIntro(userId, fields)` | member_intros upsert (`onConflict:'user_id'`). 유저당 1행 보장. fields에 전달한 키만 갱신 |
 | `normalizeMemberIntroTimes(values)` | 모임원 프로필 시간 값을 정규화한다. 신규 `HH:00`/`HH:30` 슬롯은 그대로 보존하고, 기존 `morning/afternoon/evening/late_night`는 대응하는 30분 슬롯으로 읽는다. `flexible`은 슬롯과 동시에 유지한다. 기존 DB 행은 조회만으로 재작성하지 않는다 |
 | `formatMemberIntroTimes(values)` | 정규화된 30분 슬롯을 연속 범위로 합쳐 `09시30분~12시 · 22시30분~01시 · 시간대 유동적` 형식으로 반환한다. 0시 경계의 마지막/첫 슬롯도 한 범위로 합친다 |
