@@ -13,7 +13,7 @@
     'club-intro': '모임원 프로필', 'club-schedule': '모임 플래너',
     'club-rules': '동호회 참여 안내', 'price-rules': '가격·이용안내', 'guide': '홈페이지 기능',
     'my-board': '내 보드', 'my-board-growth': '내 보드 > 수집보드',
-    'my-board-taste': '내 보드 > 취향보드', 'my-board-records': '내 보드 > 기록보드',
+    'my-board-taste': '내 보드 > 프로필 보드', 'my-board-records': '내 보드 > 기록보드',
     'my-board-voucher': '내 보드 > 교환권', 'my-board-notif': '내 보드 > 소식',
     'my-board-usage': '내 보드 > 함께한 시간', 'my-board-meeting': '내 보드 > 모임보드',
     'other-board': '다른 회원 보드',

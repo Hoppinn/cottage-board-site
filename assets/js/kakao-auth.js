@@ -533,7 +533,8 @@ function _openGameAddSearchModal({ overlayId, title, inList, onAdd, onRemove }) 
 
   const addGame = async (gameId, customName) => {
     if (inList(gameId, customName)) return;
-    await onAdd(gameId, customName);
+    const saved = await onAdd(gameId, customName);
+    if (saved === false) return;
     _setAddedState(gameId, true);
   };
 
@@ -542,7 +543,8 @@ function _openGameAddSearchModal({ overlayId, title, inList, onAdd, onRemove }) 
   // 리스트의 ✕에 confirm이 붙은 건 거기선 복구하려면 모달을 다시 열어 검색해야 하기 때문.
   const removeGame = async (gameId, customName) => {
     if (!onRemove || !inList(gameId, customName)) return;
-    await onRemove(gameId, customName);
+    const saved = await onRemove(gameId, customName);
+    if (saved === false) return;
     _setAddedState(gameId, false);
   };
 
@@ -685,9 +687,9 @@ function _bindRecordSubsheet(subBody, ctx) {
           }
         }
 
-// ── '취향 보드' 서브시트 afterRender (R10a: openProfilePanel에서 추출) ──
+// ── 프로필 보드 서브시트 afterRender (레거시 내부 이름 taste 유지) ──
 function _bindTasteSubsheet(subBody, ctx) {
-  const { user, readOnly, panel, _emitLikesChanged, allBioSuggestions, _BIO_PREDEFINED, _ruleSet, onBioSaved } = ctx;
+  const { user, readOnly, panel, _emitLikesChanged, allBioSuggestions, _BIO_PREDEFINED, _ruleSet, onBioSaved, onProfileDataSaved, resolveGameName } = ctx;
           const userId = String(user.id);
 
           // ── 한줄 소개 ──
@@ -774,6 +776,89 @@ function _bindTasteSubsheet(subBody, ctx) {
             // 메인 패널 취향 카드 요약 즉시 갱신 — 미리보기 포맷을 여기서 다시 조립하지 않고
             // 카드 빌더 한 곳(_tasteCardSummaryHtml)에 맡긴다(포맷이 갈리지 않게).
             onBioSaved?.(newBio);
+          });
+
+          // ── 평소 즐기는 게임 깊이 (profiles.preferred_game_depths) ──
+          subBody.querySelectorAll('.profile-depth-chip[data-depth]').forEach(btn => {
+            btn.addEventListener('click', async () => {
+              const chips = [...subBody.querySelectorAll('.profile-depth-chip[data-depth]')];
+              const next = chips
+                .filter(chip => chip === btn ? !chip.classList.contains('is-selected') : chip.classList.contains('is-selected'))
+                .map(chip => chip.dataset.depth);
+              chips.forEach(chip => { chip.disabled = true; });
+              const result = await window.CottageDB?.updatePreferredGameDepths?.(userId, next);
+              chips.forEach(chip => { chip.disabled = false; });
+              if (!result?.success) {
+                window.showToast?.('게임 깊이를 저장하지 못했어요. 다시 시도해 주세요.');
+                return;
+              }
+              btn.classList.toggle('is-selected');
+              onProfileDataSaved?.({ preferredGameDepths: next });
+            });
+          });
+
+          // ── 가장 어려웠던 게임 최대 2개 (profile_hardest_games) ──
+          let hardestGames = (ctx.hardestGames || []).map(game => ({
+            game_id: game.game_id || null,
+            custom_name: game.custom_name || null,
+            sort_order: game.sort_order,
+          }));
+          const hardestList = subBody.querySelector('.profile-hardest-list');
+          const hardestAddBtn = subBody.querySelector('.profile-hardest-add');
+          const _hardestKey = game => game.game_id ? `id:${game.game_id}` : `custom:${String(game.custom_name || '').toLocaleLowerCase('ko-KR')}`;
+          const _hardestPayload = games => games.map(game => ({ gameId: game.game_id, customName: game.custom_name }));
+          function _renderHardestGames() {
+            if (!hardestList) return;
+            hardestList.innerHTML = hardestGames.length ? hardestGames.map((game, index) => `
+              <div class="profile-hardest-item" data-game-id="${escH(game.game_id || '')}" data-custom-name="${escH(game.custom_name || '')}">
+                <span class="profile-hardest-order">${index + 1}</span>
+                <span class="profile-hardest-name">${escH(resolveGameName?.(game) || game.custom_name || game.game_id || '')}</span>
+                <button class="profile-hardest-remove" type="button" title="삭제">✕</button>
+              </div>`).join('') : '<p class="profile-hardest-empty">해본 게임 중 어려웠던 게임을 추가해보세요</p>';
+            if (hardestAddBtn) hardestAddBtn.disabled = hardestGames.length >= 2;
+            hardestList.querySelectorAll('.profile-hardest-item').forEach(item => {
+              const gameId = item.dataset.gameId || null;
+              if (gameId) item.querySelector('.profile-hardest-name')?.addEventListener('click', () => {
+                window.ensureGameSheet?.();
+                window.openGameSheet?.(gameId);
+              });
+              item.querySelector('.profile-hardest-remove')?.addEventListener('click', async () => {
+                const key = gameId ? `id:${gameId}` : `custom:${String(item.dataset.customName || '').toLocaleLowerCase('ko-KR')}`;
+                const next = hardestGames.filter(game => _hardestKey(game) !== key);
+                const result = await window.CottageDB?.replaceProfileHardestGames?.(userId, _hardestPayload(next));
+                if (!result?.success) { window.showToast?.('게임 경험을 저장하지 못했어요.'); return; }
+                hardestGames = next.map((game, index) => ({ ...game, sort_order:index + 1 }));
+                _renderHardestGames();
+                onProfileDataSaved?.({ hardestGames });
+              });
+            });
+          }
+          hardestAddBtn?.addEventListener('click', () => {
+            _openGameAddSearchModal({
+              overlayId:'profileHardestAddModal',
+              title:'🏅 가장 어려웠던 게임 추가',
+              inList:(gameId, customName) => hardestGames.some(game => _hardestKey(game) === (gameId ? `id:${gameId}` : `custom:${String(customName || '').toLocaleLowerCase('ko-KR')}`)),
+              onAdd:async (gameId, customName) => {
+                if (hardestGames.length >= 2) { window.showToast?.('가장 어려웠던 게임은 2개까지 등록할 수 있어요.'); return false; }
+                const next = [...hardestGames, { game_id:gameId || null, custom_name:customName || null }];
+                const result = await window.CottageDB?.replaceProfileHardestGames?.(userId, _hardestPayload(next));
+                if (!result?.success) { window.showToast?.('게임 경험을 저장하지 못했어요.'); return false; }
+                hardestGames = next.map((game, index) => ({ ...game, sort_order:index + 1 }));
+                _renderHardestGames();
+                onProfileDataSaved?.({ hardestGames });
+                return true;
+              },
+              onRemove:async (gameId, customName) => {
+                const key = gameId ? `id:${gameId}` : `custom:${String(customName || '').toLocaleLowerCase('ko-KR')}`;
+                const next = hardestGames.filter(game => _hardestKey(game) !== key);
+                const result = await window.CottageDB?.replaceProfileHardestGames?.(userId, _hardestPayload(next));
+                if (!result?.success) return false;
+                hardestGames = next.map((game, index) => ({ ...game, sort_order:index + 1 }));
+                _renderHardestGames();
+                onProfileDataSaved?.({ hardestGames });
+                return true;
+              },
+            });
           });
 
           // ── 게임 목록 (좋아요·관심) — 원천 관리(game_likes/curious) ──
@@ -2012,7 +2097,7 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
     (window.CottageDB?.getAllBioTagSuggestions?.() || Promise.resolve([])).catch(() => []),
     (window.CottageDB?.getAllAvoidTagSuggestions?.() || Promise.resolve([])).catch(() => []),
     (window.CottageDB?.getMeetingVotes?.(_monthStart, _monthEndStr) || Promise.resolve([])).catch(() => []),
-    (window.CottageDB?.getMeetingProfile?.(String(user.id)) || Promise.resolve(null)).catch(() => null),
+    (window.CottageDB?.getProfileBoardData?.(String(user.id)) || window.CottageDB?.getMeetingProfile?.(String(user.id)) || Promise.resolve(null)).catch(() => null),
     // 전체공지·교환권공지 확인 여부 — 기기 간 동기화용(로컬 세션만으론 재노출됨)
     readOnly ? Promise.resolve([]) : (window.CottageDB?.getNoticeAckKeys?.(String(user.id)) || Promise.resolve([])).catch(() => []),
   ]);
@@ -2488,19 +2573,26 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
   // 음료교환권: voucherHtml 단독
   const _voucherInnerHtml = voucherHtml;
 
-  // 취향 보드
+  // 프로필 보드(레거시 내부 키 taste 유지)
   const AVOID_TAGS = ['마피아류', '실시간', '협상', '파티게임', '긴 플레이타임', '고난도 전략', '운 비중 높음', '공격/견제 강함'];
   const _BIO_PREDEFINED = ['전략게임을 좋아해요', '가벼운 파티게임 선호해요', '협력게임 팬이에요', '무거운 유로게임 마니아', '보드게임 처음 시작했어요', '코티지보드 단골이에요', '새로 해보는 게임이 좋아요', '한 게임을 진득하게 파는 걸 좋아해요', '전략을 분석하는 게 좋아요', '창의적인 플레이가 좋아요', '함께 교류하는 걸 좋아해요'];
+  const _INTRO_FREQUENCY_LABELS = ['몇 달에 1회 이하','월 1회','월 2~3회','주 1회','주 2회','주 3회','주 4회 이상'];
+  const _INTRO_COMPANION_LABELS = { friends:'친구·지인', partner:'연인·배우자', family:'가족', boardgame_group:'보드게임 모임·동호회', various:'상황에 따라 다양함' };
+  const _INTRO_DAY_LABELS = { mon:'월', tue:'화', wed:'수', thu:'목', fri:'금', sat:'토', sun:'일', flexible:'유동적' };
+  const _INTRO_GAME_TYPE_LABELS = { party:'파티·친목', mystery:'추리·미스터리', strategy:'전략·유로', thematic:'테마·몰입', cooperative:'협력', social_deduction:'마피아·블러핑', card_deckbuilding:'카드·덱빌딩', puzzle_abstract:'퍼즐·추상', campaign_legacy:'캠페인·레거시', any:'장르 무관' };
+  const _INTRO_CLOCKTOWER_LABELS = { love:'매우 좋아함', interested:'기회가 되면 참여하고 싶음', curious:'아직 모르지만 해보고 싶음', not_preferred:'별로 선호하지 않음', no:'참여하고 싶지 않음' };
+  const _PROFILE_DEPTH_LABELS = { light:'가볍게', medium:'적당히', deep:'깊게' };
+  const _introLabels = (values, map) => (values || []).map(value => map[value] || value).join(', ');
   // ── 취향·모임 보드 공용 데이터 (R10b: 진입 시 DB 재조회 = 단일 소스) ────────────
   // 두 보드는 좋아요·궁금해요·한줄소개·피하는유형·룰설명을 똑같이 보여준다. 예전엔 각자
   // 사본을 들고 있어 한쪽 편집이 반대편에 새로고침 전까지 안 보였다(크로스보드 stale).
   // 이제 서브시트에 들어갈 때마다 getMeetingProfile 하나를 다시 읽어 양쪽에 넘긴다.
-  const _emptyBoardData = { bio: '', avoidTags: [], nickname: '', location: '', available: '', travelRange: '', meetingStyle: [], companionTypes: [], averagePlayFrequency: null, possibleFrequencyMin: null, possibleFrequencyMax: null, desiredFrequencyMin: null, desiredFrequencyMax: null, availableDays: [], availableTimes: [], preferredGameTypes: [], clocktowerPreference: '', expectation: '', questionnaireCompletedAt: null, likedGames: [], curiousGames: [], ruleGames: [] };
+  const _emptyBoardData = { bio: '', avoidTags: [], nickname: '', location: '', available: '', travelRange: '', meetingStyle: [], companionTypes: [], averagePlayFrequency: null, possibleFrequencyMin: null, possibleFrequencyMax: null, desiredFrequencyMin: null, desiredFrequencyMax: null, availableDays: [], availableTimes: [], preferredGameTypes: [], preferredGameDepths: [], hardestGames: [], clocktowerPreference: '', expectation: '', questionnaireCompletedAt: null, likedGames: [], curiousGames: [], ruleGames: [] };
   // 재조회하는 동안 잠깐 보이는 자리(모임보드가 이미 쓰던 클래스 재사용 — 신규 CSS 없음)
   const _SUBSHEET_LOADING_HTML = '<p class="taste-game-empty">불러오는 중…</p>';
   let _boardData = meetingProfile || _emptyBoardData; // 패널 오픈 시 값이 최초의 '직전 값'
   async function _refreshBoardData() {
-    const mp = await (window.CottageDB?.getMeetingProfile?.(String(user.id)) || Promise.resolve(null))
+    const mp = await (window.CottageDB?.getProfileBoardData?.(String(user.id)) || window.CottageDB?.getMeetingProfile?.(String(user.id)) || Promise.resolve(null))
       .catch(e => { console.error('[openProfilePanel:_refreshBoardData]', e); return null; });
     // 성공했을 때만 교체 — 재조회가 실패해도 보고 있던 목록이 빈 목록으로 덮이지 않는다.
     // (쿼리 오류는 getMeetingProfile 내부에서 console.error로 울린다)
@@ -2536,8 +2628,43 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
     return `${games.slice(0, maxInitial).map(renderItem).join('')}<div class="taste-game-more-wrap" hidden>${games.slice(maxInitial).map(renderItem).join('')}</div><button class="taste-more-btn" type="button">더 보기 (${restCount}개 더)</button>`;
   }
 
-  // 진입할 때마다 최신 데이터로 다시 빌드(R10b). 첫 줄에서 원래 이름을 복원해
-  // 아래 템플릿 본문은 예전 그대로 — 바뀐 건 "언제 빌드하나"지 "무엇을 그리나"가 아니다.
+  const _profileGameName = game => {
+    const gameId = game?.game_id || game?.gameId || null;
+    const gd = gameId ? window.gameData?.[gameId] : null;
+    return gd ? (gd.title?.display || gd.title?.owned || gd.title?.bgg || String(gameId))
+      : (game?.custom_name || game?.customName || String(gameId || ''));
+  };
+  const _profileInfoRowHtml = (label, value) => `<div class="profile-info-row"><span class="profile-info-label">${label}</span><span class="profile-info-value${value ? '' : ' is-empty'}">${value ? escH(value) : '미입력'}</span></div>`;
+  const _profileSummaryItems = d => {
+    const items = [];
+    const typeLabels = (d.preferredGameTypes || []).filter(value => value !== 'any').map(value => _INTRO_GAME_TYPE_LABELS[value] || value);
+    if (typeLabels.length) items.push(typeLabels.slice(0, 2).join(' · '));
+    const depthLabels = (d.preferredGameDepths || []).map(value => _PROFILE_DEPTH_LABELS[value]).filter(Boolean);
+    if (depthLabels.length) items.push(`깊이 ${depthLabels.join(' · ')}`);
+    if (d.averagePlayFrequency != null) items.push(_INTRO_FREQUENCY_LABELS[d.averagePlayFrequency]);
+    const hardestNames = (d.hardestGames || []).map(_profileGameName).filter(Boolean);
+    if (hardestNames.length) items.push(`경험 ${hardestNames.join(' · ')}`);
+    const companions = (d.companionTypes || []).map(value => _INTRO_COMPANION_LABELS[value] || value);
+    if (companions.length) items.push(companions.slice(0, 2).join(' · '));
+    if (_bioTagsOf(d).some(tag => tag.includes('새로 해보는 게임'))) items.push('새 게임 도전 선호');
+    return items.slice(0, 6);
+  };
+  const _buildHardestGamesHtml = games => {
+    if (!games.length) return `<p class="profile-hardest-empty">${readOnly ? '등록된 게임이 없어요' : '해본 게임 중 어려웠던 게임을 추가해보세요'}</p>`;
+    return games.map(game => {
+      const name = _profileGameName(game);
+      const gameId = game.game_id || '';
+      const customName = game.custom_name || '';
+      return `<div class="profile-hardest-item" data-game-id="${escH(gameId)}" data-custom-name="${escH(customName)}">
+        <span class="profile-hardest-order">${Number(game.sort_order) || ''}</span>
+        <span class="profile-hardest-name">${escH(name)}</span>
+        ${_ro('<button class="profile-hardest-remove" type="button" title="삭제">✕</button>')}
+      </div>`;
+    }).join('');
+  };
+
+  // 진입할 때마다 최신 데이터로 다시 빌드(R10b). 기존 취향 목록은 유지하되
+  // 사람 요약 → 평소 스타일/환경 → 실제 경험 → 구체적 게임 취향 순으로 재배치한다.
   function _buildTasteInnerHtml(d) {
     const _bio = d.bio || '';
     const _bioTags = _bioTagsOf(d);
@@ -2545,8 +2672,17 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
     const _ruleSet = _makeRuleSet(d);
     const likedGames = d.likedGames || [];
     const curiousGames = d.curiousGames || [];
+    const depthCodes = d.preferredGameDepths || [];
+    const hardestGames = d.hardestGames || [];
+    const ruleNames = (d.ruleGames || []).map(_profileGameName).filter(Boolean);
+    const summaryItems = _profileSummaryItems(d);
+    const availableStructured = [
+      _introLabels(d.availableDays, _INTRO_DAY_LABELS),
+      window.CottageDB?.formatMemberIntroTimes?.(d.availableTimes) || _introLabels(d.availableTimes, {}),
+    ].filter(Boolean).join(' · ');
+    const newGameTrait = _bioTags.some(tag => tag.includes('새로 해보는 게임')) ? '새 게임 도전 선호' : '';
     return `
-    <div class="taste-bio-section">
+    <div class="taste-bio-section profile-intro-section">
       <div class="taste-section-label">한줄 소개</div>
       <div class="taste-bio-row">
         <span class="taste-bio-display" data-bio="${escH(_bio)}">${_bioTags.length ? _bioTags.map(t => `<span class="taste-bio-tag">${escH(t)}</span>`).join('') : `<span class="taste-bio-placeholder">${readOnly ? '소개 없음' : '소개를 추가해보세요'}</span>`}</span>
@@ -2567,6 +2703,51 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
         </div>
       </div>`)}
     </div>
+    <div class="profile-player-summary" aria-label="핵심 플레이어 요약">
+      <div class="taste-section-label">이런 플레이어예요</div>
+      ${summaryItems.length ? `<div class="profile-summary-chips">${summaryItems.map(item => `<span class="profile-summary-chip">${escH(item)}</span>`).join('')}</div>` : `<p class="profile-summary-empty">${readOnly ? '아직 요약할 프로필 정보가 없어요.' : '플레이 스타일을 채우면 핵심 요약이 만들어져요.'}</p>`}
+    </div>
+    <section class="profile-info-section">
+      <div class="taste-section-label">🎲 플레이 스타일 ${_ro('<a class="profile-source-edit" href="/pages/club/club-intro.html">평소 생활 수정 →</a>')}</div>
+      <div class="profile-info-list">
+        ${_profileInfoRowHtml('선호 유형', _introLabels(d.preferredGameTypes, _INTRO_GAME_TYPE_LABELS))}
+        <div class="profile-info-row profile-depth-row">
+          <span class="profile-info-label">즐기는 게임 깊이</span>
+          <span class="profile-depth-options${readOnly ? ' is-readonly' : ''}">
+            ${Object.entries(_PROFILE_DEPTH_LABELS).map(([code, label]) => readOnly
+              ? (depthCodes.includes(code) ? `<span class="profile-depth-chip is-selected">${label}</span>` : '')
+              : `<button class="profile-depth-chip${depthCodes.includes(code) ? ' is-selected' : ''}" data-depth="${code}" type="button">${label}</button>`).join('') || '<span class="profile-info-value is-empty">미입력</span>'}
+          </span>
+        </div>
+        ${_profileInfoRowHtml('평균 플레이 빈도', d.averagePlayFrequency != null ? _INTRO_FREQUENCY_LABELS[d.averagePlayFrequency] : '')}
+        ${_profileInfoRowHtml('주로 함께하는 사람', _introLabels(d.companionTypes, _INTRO_COMPANION_LABELS))}
+        ${newGameTrait ? _profileInfoRowHtml('새 게임 성향', newGameTrait) : ''}
+      </div>
+    </section>
+    <section class="profile-info-section profile-environment-section">
+      <div class="taste-section-label">🧭 플레이 환경</div>
+      <div class="profile-info-list">
+        ${_profileInfoRowHtml('평소 가능한 때', availableStructured || d.available || '')}
+        ${_profileInfoRowHtml('활동 지역', d.location || '')}
+        ${_profileInfoRowHtml('이동 가능 범위', d.travelRange || '')}
+      </div>
+    </section>
+    <section class="profile-info-section profile-experience-section">
+      <div class="taste-section-label">🏅 게임 경험</div>
+      <div class="profile-experience-block">
+        <div class="profile-experience-head"><span>가장 어려웠던 게임</span>${_ro(`<button class="profile-hardest-add" type="button"${hardestGames.length >= 2 ? ' disabled' : ''}>+ 게임 추가</button>`)}</div>
+        <div class="profile-hardest-list">${_buildHardestGamesHtml(hardestGames)}</div>
+        <p class="profile-experience-hint">초급·중급 같은 자기평가 대신 실제 게임 경험으로 보여줘요.</p>
+      </div>
+      <div class="profile-experience-block">
+        <div class="profile-experience-head"><span>룰 설명 가능한 게임</span><span class="taste-count">${ruleNames.length}개</span></div>
+        ${ruleNames.length ? `<p class="profile-rule-summary">${escH(ruleNames.slice(0, 6).join(' · '))}${ruleNames.length > 6 ? ` · +${ruleNames.length - 6}` : ''}</p>` : '<p class="profile-hardest-empty">등록된 게임이 없어요</p>'}
+      </div>
+    </section>
+    <section class="profile-taste-section">
+      <div class="taste-section-label">❤️ 게임 취향</div>
+      ${d.clocktowerPreference ? _profileInfoRowHtml('시계탑 선호', _INTRO_CLOCKTOWER_LABELS[d.clocktowerPreference] || d.clocktowerPreference) : ''}
+    </section>
     <div class="taste-game-section">
       <div class="taste-section-label">❤️ 좋아하는 게임 <span class="taste-count" id="tastelikedCount">${likedGames.length}개</span> ${_ro('<button class="taste-add-btn taste-add-btn--inline" id="tastelikedAddBtn" type="button">+ 게임 추가</button>')}</div>
       <div class="taste-game-list" id="tastelikedList">${_buildTasteGameItems(likedGames, _ruleSet)}</div>
@@ -2639,10 +2820,16 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
   // 카드는 옛 개수 그대로였다(들어가면 4개, 나오면 3개). 이제 _boardData(취향·모임 공용
   // 단일 소스)를 받는 함수이고, 변경이 일어난 자리에서 _syncTasteCard()로 다시 그린다.
   const _tasteCardSummaryHtml = (d) => {
-    const tags = _bioTagsOf(d);
-    const preview = tags.length ? `${tags.slice(0, 2).map(t => `#${t}`).join(' ')}${tags.length > 2 ? ` +${tags.length - 2}` : ''}` : '';
-    return (preview ? `<span class="profile-card-bio-row">${escH(preview)}</span>` : '') +
-      `<span class="profile-card-games-row">❤️ 좋아하는 게임 ${(d.likedGames || []).length}개\n👀 해보고싶은 게임 ${(d.curiousGames || []).length}개</span>`;
+    const types = (d.preferredGameTypes || []).filter(value => value !== 'any').map(value => _INTRO_GAME_TYPE_LABELS[value] || value).slice(0, 2);
+    const depths = (d.preferredGameDepths || []).map(value => _PROFILE_DEPTH_LABELS[value]).filter(Boolean);
+    const line1 = [types.join(' · '), depths.length ? depths.join(' · ') : ''].filter(Boolean).join(' · ');
+    const frequency = d.averagePlayFrequency != null ? _INTRO_FREQUENCY_LABELS[d.averagePlayFrequency] : '';
+    const companions = (d.companionTypes || []).map(value => _INTRO_COMPANION_LABELS[value] || value).slice(0, 2).join(' · ');
+    const hardest = (d.hardestGames || []).map(_profileGameName).filter(Boolean).join(' · ');
+    return `${line1 ? `<span class="profile-card-bio-row">${escH(line1)}</span>` : ''}
+      ${(frequency || companions) ? `<span class="profile-card-profile-row">${escH([frequency, companions].filter(Boolean).join(' · '))}</span>` : ''}
+      ${hardest ? `<span class="profile-card-experience-row">경험: ${escH(hardest)}</span>` : ''}
+      <span class="profile-card-games-row">좋아하는 게임 ${(d.likedGames || []).length} · 해보고 싶은 게임 ${(d.curiousGames || []).length} · 룰 설명 ${(d.ruleGames || []).length}</span>`;
   };
   const _syncTasteCard = () => {
     const el = body.querySelector('.profile-card[data-subsheet="taste"] .profile-card-summary');
@@ -2720,12 +2907,6 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
     return `<div class="meeting-profile-row"><span class="meeting-profile-label">${label}</span><span class="meeting-profile-val${val ? '' : ' is-empty'}">${val ? escH(val) : '미입력'}</span></div>`;
   }
 
-  const _INTRO_FREQUENCY_LABELS = ['몇 달에 1회 이하','월 1회','월 2~3회','주 1회','주 2회','주 3회','주 4회 이상'];
-  const _INTRO_COMPANION_LABELS = { friends:'친구·지인', partner:'연인·배우자', family:'가족', boardgame_group:'보드게임 모임·동호회', various:'상황에 따라 다양함' };
-  const _INTRO_DAY_LABELS = { mon:'월', tue:'화', wed:'수', thu:'목', fri:'금', sat:'토', sun:'일', flexible:'유동적' };
-  const _INTRO_GAME_TYPE_LABELS = { party:'파티·친목', mystery:'추리·미스터리', strategy:'전략·유로', thematic:'테마·몰입', cooperative:'협력', social_deduction:'마피아·블러핑', card_deckbuilding:'카드·덱빌딩', puzzle_abstract:'퍼즐·추상', campaign_legacy:'캠페인·레거시', any:'장르 무관' };
-  const _INTRO_CLOCKTOWER_LABELS = { love:'매우 좋아함', interested:'기회가 되면 참여하고 싶음', curious:'아직 모르지만 해보고 싶음', not_preferred:'별로 선호하지 않음', no:'참여하고 싶지 않음' };
-  const _introLabels = (values, map) => (values || []).map(value => map[value] || value).join(', ');
   const _introFrequencyRange = (min, max) => {
     if (min == null || max == null) return '';
     return min === max ? _INTRO_FREQUENCY_LABELS[min] : `${_INTRO_FREQUENCY_LABELS[min]} ~ ${_INTRO_FREQUENCY_LABELS[max]}`;
@@ -2771,11 +2952,11 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
     </div>
     <div class="taste-game-section mb-pref-summary">
       <div class="mb-pref-block">
-        <div class="taste-section-label">👍 선호 스타일 ${_ro('<button class="mb-pref-edit" type="button" data-pref="like">취향보드에서 수정 →</button>')}</div>
+        <div class="taste-section-label">👍 선호 스타일 ${_ro('<button class="mb-pref-edit" type="button" data-pref="like">프로필 보드에서 수정 →</button>')}</div>
         <div class="mb-pref-tags" id="mbLikeStyleTags">${_mbLikeStyleHtml}</div>
       </div>
       <div class="mb-pref-block">
-        <div class="taste-section-label">👎 비선호 유형 ${_ro('<button class="mb-pref-edit" type="button" data-pref="avoid">취향보드에서 수정 →</button>')}</div>
+        <div class="taste-section-label">👎 비선호 유형 ${_ro('<button class="mb-pref-edit" type="button" data-pref="avoid">프로필 보드에서 수정 →</button>')}</div>
         <div class="mb-pref-tags">${_mbAvoidHtml}</div>
       </div>
     </div>
@@ -2840,9 +3021,14 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
     </div>
     <div class="profile-card-grid">
       <button class="profile-card" data-subsheet="taste" type="button">
-        <span class="profile-card-icon">❤️</span>
-        <span class="profile-card-label">취향 보드</span>
+        <span class="profile-card-icon">👤</span>
+        <span class="profile-card-label">프로필 보드</span>
         <span class="profile-card-summary">${_tasteCardSummaryHtml(_boardData)}</span>
+      </button>
+      <button class="profile-card" data-subsheet="meeting" type="button">
+        <span class="profile-card-icon">📅</span>
+        <span class="profile-card-label">모임 보드</span>
+        <span class="profile-card-summary">${_ro('<span class="profile-card-meeting-cta">가까운 일정 준비하기</span>')}${_scheduleHtml || `<span class="profile-card-meeting-empty">아직 등록한 일정이 없어요</span>`}</span>
       </button>
       <button class="profile-card" data-subsheet="records" type="button">
         <span class="profile-card-icon">📝</span>
@@ -2854,11 +3040,6 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
         <span class="profile-card-label">함께한 시간</span>
         <span class="profile-card-summary">${escH(_statsSummary)}</span>
       </button>`)}
-      <button class="profile-card" data-subsheet="meeting" type="button">
-        <span class="profile-card-icon">📅</span>
-        <span class="profile-card-label">모임 보드</span>
-        <span class="profile-card-summary">${_ro('<span class="profile-card-meeting-cta">이번 모임 준비하기</span>')}${_scheduleHtml || `<span class="profile-card-meeting-empty">아직 등록한 일정이 없어요</span>`}</span>
-      </button>
       ${_ro(`<button class="profile-card profile-card--span2" data-subsheet="voucher" type="button">
         <span class="profile-card-icon">🎫</span>
         <span class="profile-card-label">음료교환권</span>
@@ -3084,7 +3265,7 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
       } else if (type === 'taste') {
         _trackPvOnce('my-board-taste');
         // 진입 시 DB 재조회 → 모임보드에서 뭘 바꿨든 항상 최신(R10b). 스냅샷 임시방편 제거.
-        _openSubSheet('취향 보드', _SUBSHEET_LOADING_HTML, async subBody => {
+        _openSubSheet('프로필 보드', _SUBSHEET_LOADING_HTML, async subBody => {
           const d = await _refreshBoardData();
           if (!subBody.isConnected) return; // 재조회를 기다리는 사이 다른 서브시트로 떠남
           _syncTasteCard(); // 다른 기기·탭에서 바뀐 값도 카드에 반영(재조회한 값이 곧 진실)
@@ -3092,6 +3273,9 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
           _bindTasteSubsheet(subBody, {
             user, readOnly, panel, _emitLikesChanged, allBioSuggestions, _BIO_PREDEFINED, _ruleSet: _makeRuleSet(d),
             onBioSaved: (newBio) => { _boardData.bio = newBio; _syncTasteCard(); },
+            hardestGames: d.hardestGames || [],
+            resolveGameName: _profileGameName,
+            onProfileDataSaved: patch => { Object.assign(_boardData, patch); _syncTasteCard(); },
           });
           // 모임보드 '비선호 유형 수정 →'으로 들어왔으면 해당 섹션으로 스크롤(렌더 후여야 좌표가 나옴)
           if (_pendingTasteScrollTo === 'avoid') {

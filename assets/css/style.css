@@ -4676,6 +4676,8 @@ html:has(body.embed-mode) { scroll-padding-top: 0; }
 .profile-card-label{display:block;font-size:13px;font-weight:700;color:var(--text);}
 .profile-card-summary{display:block;font-size:11px;color:var(--muted);margin-top:4px;line-height:1.5;word-break:keep-all;white-space:pre-line;}
 .profile-card-bio-row{display:block;}
+.profile-card-profile-row,.profile-card-experience-row{display:block;margin-top:3px;}
+.profile-card-experience-row{color:var(--text);font-weight:600;}
 .profile-card-games-row{display:block;margin-top:6px;white-space:pre-line;}
 .profile-card-arrow{font-size:16px;color:var(--muted);flex-shrink:0;margin-left:auto;}
 .profile-card.has-badge{position:relative;}
@@ -4709,6 +4711,36 @@ html:has(body.embed-mode) { scroll-padding-top: 0; }
 .profile-gamelist-body.is-hidden{display:none;}
 /* 취향 보드 */
 .taste-bio-section,.taste-game-section,.taste-avoid-section{margin-bottom:28px;}
+.profile-player-summary,.profile-info-section,.profile-taste-section{margin-bottom:28px;}
+.profile-intro-section{margin-bottom:18px;}
+.profile-summary-chips{display:flex;flex-wrap:wrap;gap:6px;}
+.profile-summary-chip{display:inline-flex;align-items:center;min-height:28px;padding:4px 10px;box-sizing:border-box;border-radius:16px;background:var(--paper);border:1px solid var(--border);font-size:12px;font-weight:650;color:var(--text);line-height:1.35;}
+.profile-summary-empty,.profile-hardest-empty{font-size:12px;color:var(--muted);margin:0;line-height:1.6;}
+.profile-info-list{border-top:1px solid var(--border);border-bottom:1px solid var(--border);}
+.profile-info-row{display:grid;grid-template-columns:112px minmax(0,1fr);gap:10px;padding:9px 2px;border-bottom:1px solid var(--border);font-size:12px;line-height:1.5;align-items:start;}
+.profile-info-row:last-child{border-bottom:none;}
+.profile-info-label{color:var(--muted);}
+.profile-info-value{color:var(--text);font-weight:600;word-break:keep-all;}
+.profile-info-value.is-empty{color:var(--muted);font-weight:400;font-style:italic;}
+.profile-source-edit{margin-left:auto;font-size:10px;color:var(--text-info,#6b8cba);font-weight:500;text-decoration:none;white-space:nowrap;}
+.profile-depth-options{display:flex;flex-wrap:wrap;gap:5px;}
+.profile-depth-chip{border:1px solid var(--border);border-radius:14px;background:var(--paper);color:var(--muted);font:inherit;font-size:11px;padding:3px 9px;cursor:pointer;}
+.profile-depth-chip.is-selected{background:var(--green);border-color:var(--green);color:var(--bg);font-weight:700;}
+.profile-depth-options.is-readonly .profile-depth-chip{cursor:default;}
+.profile-experience-block{padding:10px 0;border-top:1px solid var(--border);}
+.profile-experience-block:last-child{border-bottom:1px solid var(--border);}
+.profile-experience-head{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:var(--text);margin-bottom:8px;}
+.profile-hardest-add{margin-left:auto;border:1px dashed var(--border);border-radius:12px;background:none;color:var(--muted);font-size:11px;padding:3px 9px;cursor:pointer;}
+.profile-hardest-add:disabled{opacity:.4;cursor:default;}
+.profile-hardest-list{display:flex;flex-direction:column;gap:5px;}
+.profile-hardest-item{display:grid;grid-template-columns:22px minmax(0,1fr) 24px;align-items:center;gap:7px;min-height:34px;padding:4px 6px;border-radius:8px;background:var(--card-bg);}
+.profile-hardest-order{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:var(--border);color:var(--text);font-size:11px;font-weight:800;}
+.profile-hardest-name{font-size:12px;font-weight:650;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.profile-hardest-item[data-game-id]:not([data-game-id=""]) .profile-hardest-name{cursor:pointer;}
+.profile-hardest-remove{border:none;background:none;color:var(--muted);cursor:pointer;font-size:12px;padding:3px;}
+.profile-experience-hint{font-size:10px;color:var(--muted);margin:6px 0 0;line-height:1.5;}
+.profile-rule-summary{font-size:12px;color:var(--text);line-height:1.65;margin:0;word-break:keep-all;}
+.profile-taste-section .profile-info-row{border-top:1px solid var(--border);border-bottom:1px solid var(--border);}
 .taste-section-label{font-size:13px;font-weight:700;color:var(--text);margin-bottom:8px;display:flex;align-items:center;gap:6px;}
 .taste-count{font-weight:400;color:var(--muted);}
 .taste-bio-row{display:flex;align-items:flex-start;gap:8px;}
@@ -4798,6 +4830,11 @@ html:has(body.embed-mode) { scroll-padding-top: 0; }
 .taste-tag:hover:not(.is-active){background:#f0ede8;color:#888;}
 .taste-more-btn{margin-top:6px;background:none;border:none;color:var(--muted);font-size:12px;cursor:pointer;padding:2px 0;text-decoration:underline;}
 .taste-more-btn:hover{color:var(--text);}
+@media(max-width:480px){
+  .profile-info-row{grid-template-columns:92px minmax(0,1fr);gap:7px;}
+  .profile-summary-chip{font-size:11px;padding:4px 8px;}
+  .profile-card-grid .profile-card{min-height:92px;}
+}
 /* 모임 보드 — 모임 프로필 (활동지역/참여시간/이동범위/한줄소개/스타일) */
 /* ── 모임보드 이번주 일정 미니막대 ── */
 .mb-week-list{display:flex;flex-direction:column;gap:8px;margin-bottom:4px;}

@@ -532,7 +532,7 @@
             ${r.preferred_game_types?.length ? `<div class="intro-card-news-row"><span class="intro-card-news-label">❤️</span><span class="intro-card-news-val">${escHtml(labelList(r.preferred_game_types, GAME_TYPE_LABELS))}</span></div>` : ''}
             ${r.expectation ? `<div class="intro-card-news-row"><span class="intro-card-news-label">💬</span><span class="intro-card-news-val">${escHtml(r.expectation.length > 52 ? `${r.expectation.slice(0, 52)}…` : r.expectation)}</span></div>` : ''}
           </div>
-          ${clickable ? '<div class="intro-card-news-cta">모임 보드 보기 ›</div>' : ''}
+          ${clickable ? '<div class="intro-card-news-cta">프로필 보드 보기 ›</div>' : ''}
         </div>`;
       }).join('');
 
@@ -541,12 +541,12 @@
         applyCardColor(card, card.dataset.color, Number(card.dataset.idx));
       });
 
-      // 카드 클릭 → 해당 회원의 모임 보드 (액션 버튼 클릭은 제외)
+      // 카드 클릭 → 해당 회원의 프로필 보드 (액션 버튼 클릭은 제외)
       el.querySelectorAll('.intro-card-news--clickable').forEach(card => {
         card.addEventListener('click', e => {
           if (e.target.closest('.intro-card-news-head button') || e.target.closest('.intro-edit-form')) return;
           const uid = card.dataset.userId;
-          if (uid) window.openOtherMeetingSheet?.(uid);
+          if (uid) window.openOtherProfileSheet?.(uid);
         });
       });
 

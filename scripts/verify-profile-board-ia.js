@@ -12,6 +12,9 @@ const root = path.join(__dirname, '..');
 const read = rel => fs.readFileSync(path.join(root, rel), 'utf8');
 const sql = read('docs/migrations/028_profile_board_ia.sql');
 const clientSrc = read('assets/js/supabase-client.js');
+const boardSrc = read('assets/js/kakao-auth.js');
+const introHtml = read('pages/club/club-intro.html');
+const pageLabels = read('assets/js/page-labels.js');
 let failures = 0;
 function check(label, condition, detail = '') {
   console.log(`  ${condition ? 'PASS' : 'FAIL'} ${label}${detail ? ` — ${detail}` : ''}`);
@@ -33,6 +36,28 @@ check('최대 2개 원자 교체 RPC', sql.includes('replace_profile_hardest_gam
 check('날짜별 어려운 게임 학습 의지 허용', sql.includes("'hard_game_learning_ok'"));
 
 console.log('\n=== 2. CottageDB API 실행 계약 ===');
+console.log('\n=== Profile board UI/entry contract ===');
+new vm.Script(boardSrc, {filename:'assets/js/kakao-auth.js'});
+new vm.Script(pageLabels, {filename:'assets/js/page-labels.js'});
+const cardStart = boardSrc.indexOf('<div class="profile-card-grid">');
+const cardOrder = ['taste', 'meeting', 'records', 'usage']
+  .map(key => boardSrc.indexOf(`data-subsheet="${key}"`, cardStart));
+check('main card order: profile > meeting > records > together', cardOrder.every(index => index >= 0)
+  && cardOrder.every((index, i) => i === 0 || cardOrder[i - 1] < index));
+check('profile label with legacy taste analytics key', boardSrc.includes('<span class="profile-card-label">프로필 보드</span>')
+  && boardSrc.includes("_openSubSheet('프로필 보드'") && boardSrc.includes("_trackPvOnce('my-board-taste')"));
+check('profile information flow has four layers', ['이런 플레이어예요', '플레이 스타일', '게임 경험', '게임 취향']
+  .every(label => boardSrc.includes(label)));
+check('location and travel range stay under play environment', /profile-environment-section[\s\S]{0,900}활동 지역[\s\S]{0,300}이동 가능 범위/.test(boardSrc));
+check('multi-depth and hardest-games editors are wired', boardSrc.includes('Object.entries(_PROFILE_DEPTH_LABELS)')
+  && boardSrc.includes('replaceProfileHardestGames') && boardSrc.includes('hardestGames.length >= 2'));
+check('readOnly edit controls use owner-only wrapper', boardSrc.includes("${_ro('<a class=\"profile-source-edit\"")
+  && boardSrc.includes("${_ro(`<button class=\"profile-hardest-add\""));
+check('failed game save cannot paint a false added state', (boardSrc.match(/if \(saved === false\) return;/g) || []).length === 2);
+check('member intro card opens Profile Board', introHtml.includes('프로필 보드 보기 ›')
+  && introHtml.includes('window.openOtherProfileSheet?.(uid)') && !introHtml.includes('window.openOtherMeetingSheet?.(uid)'));
+check('stable analytics key displays Profile Board label', pageLabels.includes("'my-board-taste': '내 보드 > 프로필 보드'"));
+
 new vm.Script(clientSrc, {filename:'assets/js/supabase-client.js'});
 
 const writes = [];
