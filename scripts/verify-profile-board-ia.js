@@ -1,11 +1,13 @@
-// 내보드 IA 028/API 계약 검증 (DB 쓰기 없음)
+// 내보드 IA 028/API 계약 검증 (기본 DB 무접속, --live만 격리 행 쓰기 후 삭제)
 //   node scripts/verify-profile-board-ia.js --negctl
 //   node scripts/verify-profile-board-ia.js
+//   node scripts/verify-profile-board-ia.js --live  # 격리 행 왕복 후 삭제
 const fs = require('fs');
 const path = require('path');
 const vm = require('vm');
 
 const NEG = process.argv.includes('--negctl');
+const LIVE = process.argv.includes('--live');
 const root = path.join(__dirname, '..');
 const read = rel => fs.readFileSync(path.join(root, rel), 'utf8');
 const sql = read('docs/migrations/028_profile_board_ia.sql');
@@ -93,6 +95,82 @@ global.supabase = {createClient:() => fakeDb};
 window.SUPABASE_CONFIG = {url:'https://verify.invalid', anonKey:'verify'};
 vm.runInThisContext(clientSrc, {filename:'assets/js/supabase-client.js'});
 
+async function runLiveContract() {
+  console.log('\n=== 3. 운영 DB/API 왕복 (격리 테스트 행) ===');
+  const liveStore = new Map();
+  const live = {
+    console, setTimeout, clearTimeout, setInterval, clearInterval, URL, URLSearchParams,
+    navigator:{userAgent:'node-verify', sendBeacon:()=>false},
+    location:{hostname:'localhost', href:'http://localhost/', pathname:'/', search:'', origin:'http://localhost'},
+    document:{readyState:'complete', referrer:'', addEventListener(){}, removeEventListener(){}, querySelectorAll:()=>[]},
+    localStorage:{
+      getItem:key => liveStore.get(key) ?? null, setItem:(key,value) => liveStore.set(key,String(value)),
+      removeItem:key => liveStore.delete(key), key:index => [...liveStore.keys()][index] ?? null,
+      get length() { return liveStore.size; },
+    },
+    addEventListener(){}, removeEventListener(){},
+    supabase:require('../node_modules/@supabase/supabase-js'),
+  };
+  live.window = live;
+  live.globalThis = live;
+  const context = vm.createContext(live);
+  vm.runInContext(read('assets/js/supabase-config.js'), context, {filename:'assets/js/supabase-config.js'});
+  vm.runInContext(clientSrc, context, {filename:'assets/js/supabase-client.js'});
+  const db = context._cottageSupabaseDb;
+  const api = context.CottageDB;
+  const testUid = '__test_profile_ia_028__';
+  const testDate = '2099-08-31';
+
+  await db.from('profile_hardest_games').delete().eq('user_id', testUid);
+  await db.from('meeting_votes').delete().eq('vote_date', testDate).eq('user_id', testUid);
+  await db.from('profiles').delete().eq('user_id', testUid);
+  try {
+    const seeded = await db.from('profiles').insert({user_id:testUid, nickname:'028검증'}).select('user_id').maybeSingle();
+    check('격리 프로필 생성', !seeded.error && seeded.data?.user_id === testUid, seeded.error?.message || '');
+
+    const depthSaved = await api.updatePreferredGameDepths(testUid, ['light', 'deep', 'light']);
+    const depthRead = await db.from('profiles').select('preferred_game_depths').eq('user_id', testUid).maybeSingle();
+    check('평소 깊이 복수값 저장·되읽기', depthSaved.success === true
+      && JSON.stringify(depthRead.data?.preferred_game_depths) === JSON.stringify(['light', 'deep']), depthRead.error?.message || '');
+    const invalidDepth = await db.from('profiles').update({preferred_game_depths:['any']}).eq('user_id', testUid);
+    check('DB CHECK가 any 거부', !!invalidDepth.error);
+
+    const hardestSaved = await api.replaceProfileHardestGames(testUid, [
+      {gameId:'ark-nova'}, {customName:'혁신의 시대'},
+    ]);
+    const hardestRead = await api.getProfileHardestGames(testUid);
+    check('어려웠던 게임 2개 순서 왕복', hardestSaved.success === true && hardestRead.length === 2
+      && hardestRead[0].game_id === 'ark-nova' && hardestRead[1].custom_name === '혁신의 시대');
+    const tooManyRpc = await db.rpc('replace_profile_hardest_games', {
+      p_user_id:testUid,
+      p_games:[{game_id:'a'}, {game_id:'b'}, {game_id:'c'}],
+    });
+    const afterRejected = await api.getProfileHardestGames(testUid);
+    check('RPC가 3개를 거부하고 기존 2개 보존', !!tooManyRpc.error && afterRejected.length === 2);
+
+    const intentSaved = await api.upsertMeetingVote(testUid, '028검증', testDate, 10, 20, 0, {
+      playTraits:['hard_game_learning_ok'],
+    });
+    const intentRows = await api.getMeetingVotes(testDate, testDate);
+    const intentRow = intentRows.find(row => row.user_id === testUid);
+    check('날짜별 어려운 게임 학습 의지 왕복', intentSaved.success === true
+      && intentRow?.play_traits?.includes('hard_game_learning_ok'));
+  } finally {
+    const hardestCleanup = await db.from('profile_hardest_games').delete().eq('user_id', testUid);
+    const voteCleanup = await db.from('meeting_votes').delete().eq('vote_date', testDate).eq('user_id', testUid);
+    const profileCleanup = await db.from('profiles').delete().eq('user_id', testUid);
+    const [hardestConfirm, voteConfirm, profileConfirm] = await Promise.all([
+      db.from('profile_hardest_games').select('id').eq('user_id', testUid),
+      db.from('meeting_votes').select('user_id').eq('vote_date', testDate).eq('user_id', testUid),
+      db.from('profiles').select('user_id').eq('user_id', testUid),
+    ]);
+    check('격리 테스트 데이터 삭제·0행 재확인',
+      !hardestCleanup.error && !voteCleanup.error && !profileCleanup.error
+      && !hardestConfirm.error && !voteConfirm.error && !profileConfirm.error
+      && hardestConfirm.data.length === 0 && voteConfirm.data.length === 0 && profileConfirm.data.length === 0);
+  }
+}
+
 (async () => {
   const apiNames = ['getProfileBoardData', 'getProfileHardestGames', 'updatePreferredGameDepths', 'replaceProfileHardestGames'];
   check('신규 API 4개 공개', apiNames.every(name => typeof window.CottageDB[name] === 'function'));
@@ -135,6 +213,8 @@ vm.runInThisContext(clientSrc, {filename:'assets/js/supabase-client.js'});
     playTraits:['persistent_profile_trait'],
   });
   check('평소 성향을 날짜별 play_traits에 혼입하지 않음', !!invalidTrait.error);
+
+  if (LIVE) await runLiveContract();
 
   console.log(failures === 0 ? '\n=== ALL PASS ===' : `\n=== ${failures} FAILED ===`);
   process.exit(failures === 0 ? 0 : 1);

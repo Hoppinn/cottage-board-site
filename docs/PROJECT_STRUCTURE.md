@@ -74,7 +74,7 @@
 │   │                               # ⚠️ setInterval을 스텁하지 말 것 — undici가 .unref()를 부른다.
 │   │                               #   덮으면 전 쿼리가 죽고 검사기가 0행을 정상처럼 보고한다
 │   ├── verify-profile-board-ia.js  # 028 프로필 깊이·어려웠던 게임·날짜별 학습 의지 DB/API 계약
-│   │                               #   모의 DB 실행 검증(무쓰기). --negctl 먼저 돌릴 것
+│   │                               #   기본 모의 DB(무접속), --live는 격리 행 왕복·삭제. --negctl 먼저
 │   ├── verify-party-size.js        # 모임 인원(등록 건수 ≠ 방문 인원) — 회귀 불변식 + 엣지 (읽기전용)
 │   │                               #   --negctl 먼저. --live를 줘야 실DB 조회(guest_count 필드 확인)
 │   ├── verify-intro-questionnaire.js # 필수 자기소개 문항·원자적 RPC·교환권 1회 unique 계약 (DB 불필요)
