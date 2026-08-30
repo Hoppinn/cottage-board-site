@@ -491,12 +491,13 @@
       const userIds = [...new Set(data.map(r => r.user_id).filter(Boolean))];
       let profileByUser = {};
       if (userIds.length) {
-        const { data: profilesData } = await db.from('profiles').select('user_id, bio, avoid_tags').in('user_id', userIds);
+        const { data: profilesData } = await db.from('profiles').select('user_id, bio, avoid_tags, rep_achievement_id').in('user_id', userIds);
         profileByUser = Object.fromEntries((profilesData || []).map(p => [p.user_id, p]));
       }
       data.forEach(r => {
         r._bio = r.user_id ? (profileByUser[r.user_id]?.bio || '') : '';
         r._avoid_tags = r.user_id ? (profileByUser[r.user_id]?.avoid_tags || []) : [];
+        r._rep_achievement_id = r.user_id ? (profileByUser[r.user_id]?.rep_achievement_id || null) : null;
       });
       addSharedCustomOptions(data);
 
@@ -519,20 +520,24 @@
         const edit   = canEdit ? `<button class="intro-card-edit"      data-id="${r.id}" type="button" title="수정">✎</button>` : '';
         const color  = canAct ? `<button class="intro-card-color-btn" data-id="${r.id}" type="button" title="색상 변경">🎨</button>` : '';
         const clickable = !!r.user_id;
+        const repPath = r._rep_achievement_id ? (window.CottageAchievements?.getCharacterPath?.(r._rep_achievement_id) || null) : null;
+        const repAvatar = repPath
+          ? `<img class="profile-panel-avatar" src="${escHtml(repPath)}" alt="">`
+          : `<span class="profile-panel-avatar profile-panel-avatar--empty">🐾</span>`;
         return `
         <div class="intro-card-news${clickable ? ' intro-card-news--clickable' : ''}" data-id="${r.id}" data-user-id="${escHtml(r.user_id || '')}" data-color="${escHtml(r.card_color||'')}" data-idx="${idx}">
           <div class="intro-card-news-head" style="position:relative">
             ${color}${edit}${del}
-            <div class="intro-card-news-nickname">${escHtml(r.nickname)}</div>
+            ${clickable ? `<div class="intro-card-news-identity"><button class="intro-card-news-avatar" type="button" aria-label="내보드 메인 열기">${repAvatar}</button><button class="intro-card-news-name" type="button" aria-label="내보드 메인 열기">${escHtml(r.nickname)}</button></div>` : `<div class="intro-card-news-nickname">${escHtml(r.nickname)}</div>`}
             <div class="intro-card-news-date">${formatDate(r.created_at)}</div>
           </div>
-          <div class="intro-card-news-body">
+          <div class="intro-card-news-body"${clickable ? ' role="button" tabindex="0" aria-label="프로필 보드 보기"' : ''}>
             ${r.average_play_frequency != null ? `<div class="intro-card-news-row"><span class="intro-card-news-label">🎲</span><span class="intro-card-news-val">평균 ${escHtml(FREQUENCY_LABELS[r.average_play_frequency])}</span></div>` : (r.favorite_games ? `<div class="intro-card-news-row"><span class="intro-card-news-label">🎲</span><span class="intro-card-news-val">${escHtml(r.favorite_games)}</span></div>` : '')}
             ${r.available_days?.length ? `<div class="intro-card-news-row"><span class="intro-card-news-label">📅</span><span class="intro-card-news-val">${escHtml(labelList(r.available_days, DAY_LABELS))} · ${escHtml(window.CottageDB?.formatMemberIntroTimes?.(r.available_times) || labelList(r.available_times, {}))}</span></div>` : (r.available ? `<div class="intro-card-news-row"><span class="intro-card-news-label">📅</span><span class="intro-card-news-val">${escHtml(r.available)}</span></div>` : '')}
             ${r.preferred_game_types?.length ? `<div class="intro-card-news-row"><span class="intro-card-news-label">❤️</span><span class="intro-card-news-val">${escHtml(labelList(r.preferred_game_types, GAME_TYPE_LABELS))}</span></div>` : ''}
             ${r.expectation ? `<div class="intro-card-news-row"><span class="intro-card-news-label">💬</span><span class="intro-card-news-val">${escHtml(r.expectation.length > 52 ? `${r.expectation.slice(0, 52)}…` : r.expectation)}</span></div>` : ''}
+            ${clickable ? '<div class="intro-card-news-cta">프로필 보드 보기 ›</div>' : ''}
           </div>
-          ${clickable ? '<div class="intro-card-news-cta">프로필 보드 보기 ›</div>' : ''}
         </div>`;
       }).join('');
 
@@ -541,12 +546,31 @@
         applyCardColor(card, card.dataset.color, Number(card.dataset.idx));
       });
 
-      // 카드 클릭 → 해당 회원의 프로필 보드 (액션 버튼 클릭은 제외)
+      // identity → 내보드, 프로필 내용 → 프로필 보드. 두 영역은 독립적으로 동작한다.
       el.querySelectorAll('.intro-card-news--clickable').forEach(card => {
-        card.addEventListener('click', e => {
-          if (e.target.closest('.intro-card-news-head button') || e.target.closest('.intro-edit-form')) return;
-          const uid = card.dataset.userId;
-          if (uid) window.openOtherProfileSheet?.(uid);
+        const uid = card.dataset.userId;
+        const openProfileBoard = e => {
+          e?.stopPropagation?.();
+          if (!uid) return;
+          const self = getCurrentUser();
+          const isSelf = self && String(self.id) === String(uid);
+          window.openProfilePanel?.('taste', { userId: String(uid), readOnly: !isSelf });
+        };
+        card.querySelectorAll('.intro-card-news-avatar, .intro-card-news-name').forEach(identity => identity.addEventListener('click', e => {
+          e.stopPropagation();
+          window.openOtherProfileSheet?.(uid);
+        }));
+        const content = card.querySelector('.intro-card-news-body');
+        content?.addEventListener('click', e => {
+          if (e.target.closest?.('button, a')) return;
+          openProfileBoard(e);
+        });
+        content?.addEventListener('keydown', e => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            if (e.target.closest?.('button, a')) return;
+            openProfileBoard(e);
+          }
         });
       });
 

@@ -36,20 +36,35 @@ const ok = (name, cond, extra = '') => {
   await page.waitForTimeout(2500);
 
   await page.evaluate((uid) => window.openOtherProfileSheet?.(uid), TARGET_UID);
-  await page.waitForSelector('.profile-panel-header', { timeout: 15000 });
+  await page.waitForSelector('.profile-panel-body', { timeout: 15000 });
   await page.waitForTimeout(1500);
 
   const snap = await page.evaluate(() => {
     const header = document.querySelector('.profile-panel-header')?.textContent?.trim() || '';
+    const compactHeader = document.querySelector('.profile-panel-compact-header');
+    const largeIdentity = document.querySelector('.profile-panel-profile-top');
+    const mainClose = document.querySelector('.profile-panel-main-close');
     const body = document.querySelector('.profile-panel-body')?.textContent || '';
     const codexMatch = body.match(/도감\s*(\d+)\s*\/\s*(\d+)/);
-    return { header, codexMatch: codexMatch ? { played: +codexMatch[1], total: +codexMatch[2] } : null };
+    return {
+      header,
+      compactHeader: compactHeader?.textContent?.trim() || '',
+      compactHeaderPrepared: !!compactHeader,
+      compactHeaderVisible: compactHeader?.classList.contains('is-visible') || false,
+      largeIdentityPresent: !!largeIdentity,
+      mainClosePresent: !!mainClose,
+      codexMatch: codexMatch ? { played: +codexMatch[1], total: +codexMatch[2] } : null,
+    };
   });
   console.log('패널 헤더:', JSON.stringify(snap.header));
+  console.log('compact 헤더:', JSON.stringify(snap.compactHeader));
   console.log('도감 매치:', JSON.stringify(snap.codexMatch));
 
-  ok('헤더에 "회원의" 폴백 문구가 없음(실제 닉네임으로 대체됐어야 함)', !snap.header.includes('회원의'), snap.header);
-  ok('헤더가 비어있지 않음(닉네임이 실제로 채워짐)', snap.header.length > 0, snap.header);
+  ok('기본 내 보드 진입 시 별도 헤더를 만들지 않음', snap.header.length === 0, snap.header);
+  ok('큰 identity 영역이 표시됨', snap.largeIdentityPresent);
+  ok('초기 닫기 X가 유지됨', snap.mainClosePresent);
+  ok('초기에는 compact header가 숨겨짐', !snap.compactHeaderVisible);
+  ok('스크롤용 내 보드 compact header가 준비됨', snap.compactHeaderPrepared && snap.compactHeader.includes('내 보드'), snap.compactHeader);
   ok('게임도감 played > 0 (0으로 안 뜸)', !!snap.codexMatch && snap.codexMatch.played > 0, JSON.stringify(snap.codexMatch));
 
   console.log('\n쓰기 시도 차단:', blockedWrites.length ? blockedWrites.join('\n  ') : '(0건)');

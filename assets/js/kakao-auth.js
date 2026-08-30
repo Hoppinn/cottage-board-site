@@ -2010,15 +2010,18 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
 
   const panel = document.createElement('div');
   panel.id = 'profilePanel';
-  panel.className = 'profile-panel' + (readOnly ? ' profile-panel--readonly' : '');
+  panel.className = 'profile-panel' + (readOnly ? ' profile-panel--readonly' : '') + (!backTo ? ' profile-panel--main' : '');
   const isOwnerUser = String(user.id) === String(OWNER_KAKAO_ID);
   const isDevMode = location.hostname === 'localhost' || isOwnerUser;
-  panel.innerHTML = `<div class="profile-panel-box">
-    <div class="profile-panel-header${backTo ? ' profile-panel-header--with-back' : ''}">
-      ${backTo ? `<button class="profile-panel-back" type="button">‹ ${escH(backTo.label || '뒤로')}</button>` : ''}
+  const _panelHeaderHtml = backTo ? `
+    <div class="profile-panel-header profile-panel-header--with-back">
+      <button class="profile-panel-back" type="button">‹ ${escH(backTo.label || '뒤로')}</button>
       <span class="profile-panel-title">${escH(user.nickname || (readOnly ? '회원' : '손님'))}의 ${_boardLabel}</span>
       <button aria-label="내 보드 닫기" class="profile-panel-close" type="button">✕</button>
-    </div>
+    </div>` : '';
+  panel.innerHTML = `<div class="profile-panel-box">
+    ${!backTo ? `<button aria-label="내 보드 닫기" class="profile-panel-close profile-panel-main-close" type="button">✕</button>` : ''}
+    ${_panelHeaderHtml}
     <div class="profile-panel-body">
       <p class="profile-panel-loading">불러오는 중...</p>
     </div>
@@ -2030,9 +2033,15 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
   // openProfilePanel 호출이 이 패널을 닫는 경우에도 토큰을 꺼내 pop할 수 있어야 하기 때문.
   panel._viewToken = window.pushActiveView?.(readOnly ? 'other-board' : 'my-board') ?? null;
   const _popView = () => window.popActiveView?.(panel._viewToken);
-  panel.querySelector('.profile-panel-close').addEventListener('click', () => { document.getElementById('profileSubSheet')?.remove(); _popView(); panel.remove(); });
-  panel.addEventListener('click', e => { if (e.target === panel) { document.getElementById('profileSubSheet')?.remove(); _popView(); panel.remove(); } });
-  panel.querySelector('.profile-panel-header').addEventListener('click', e => { if (!e.target.closest('button')) panel.querySelector('.profile-panel-body')?.scrollTo({top:0,behavior:'smooth'}); });
+  const _closePanel = () => {
+    panel._identityObserver?.disconnect();
+    document.getElementById('profileSubSheet')?.remove();
+    _popView();
+    panel.remove();
+  };
+  panel.querySelectorAll('.profile-panel-close').forEach(button => button.addEventListener('click', _closePanel));
+  panel.addEventListener('click', e => { if (e.target === panel) _closePanel(); });
+  panel.querySelector('.profile-panel-header')?.addEventListener('click', e => { if (!e.target.closest('button')) panel.querySelector('.profile-panel-body')?.scrollTo({top:0,behavior:'smooth'}); });
   // ⚠️ 자기 패널을 먼저 지운 뒤 복귀시킨다. 순서가 바뀌면 위 토글 가드(`if (existing) … if (!readOnly) return`)에
   // 걸려 내 보드가 안 열리고 화면이 텅 빈다.
   panel.querySelector('.profile-panel-back')?.addEventListener('click', () => {
@@ -2820,11 +2829,12 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
   const _repName = userStats?.repAch?.id
     ? (window.CottageAchievements?.getCharacterName?.(userStats.repAch.id) || null)
     : null;
-  const _repImgHtml = `<div class="profile-panel-avatar-wrap">${
+  const _repAvatarHtml =
     _repCharPath
       ? `<img class="profile-panel-avatar" src="${_repCharPath}" alt="${escH(_repName || '')}">`
-      : `<div class="profile-panel-avatar profile-panel-avatar--empty">🐾</div>`
-  }${_ro('<span class="profile-panel-avatar-edit">⚙</span>')}</div>`;
+      : `<span class="profile-panel-avatar profile-panel-avatar--empty">🐾</span>`;
+  const _repImgHtml = `<div class="profile-panel-avatar-wrap">${_repAvatarHtml}${_ro('<span class="profile-panel-avatar-edit">⚙</span>')}</div>`;
+  const _repIdentityHtml = `<span class="profile-panel-avatar-wrap">${_repAvatarHtml}</span>`;
   const _repLabel = _repName ? escH(_repName) : '대표 캐릭터 없음';
   const _repBtnLabel = userStats?.repAch?.id ? '대표 캐릭터 변경' : '대표 캐릭터 설정하기';
   // 대표 칭호: earned 검증 후 표시 (SQL 미실행/미획득 시 null)
@@ -2922,6 +2932,16 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
   }
 
   body.innerHTML = `
+    ${!backTo ? `<div class="profile-panel-compact-header" aria-hidden="true">
+      <div class="profile-panel-compact-header-inner">
+        <div class="profile-panel-compact-identity">
+          <span class="profile-panel-compact-avatar">${_repAvatarHtml}</span>
+          <span class="profile-panel-compact-nickname">${escH(user.nickname || (readOnly ? '회원' : '손님'))}</span>
+        </div>
+        <span class="profile-panel-compact-title">내 보드</span>
+        <button aria-label="내 보드 닫기" class="profile-panel-close profile-panel-compact-close" type="button">✕</button>
+      </div>
+    </div>` : ''}
     <div class="profile-panel-profile">
       <div class="profile-panel-profile-top">
         ${_repImgHtml}
@@ -2976,6 +2996,32 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
       </button>`)}
     </div>`;
 
+  body.querySelector('.profile-panel-compact-close')?.addEventListener('click', _closePanel);
+  const compactHeader = body.querySelector('.profile-panel-compact-header');
+  const largeIdentity = body.querySelector('.profile-panel-profile-top');
+  const mainClose = panel.querySelector('.profile-panel-main-close');
+  if (compactHeader && largeIdentity) {
+    const setCompactVisibility = visible => {
+      compactHeader.classList.toggle('is-visible', visible);
+      compactHeader.setAttribute('aria-hidden', visible ? 'false' : 'true');
+      mainClose?.classList.toggle('is-hidden', visible);
+      mainClose?.setAttribute('aria-hidden', visible ? 'true' : 'false');
+    };
+    if ('IntersectionObserver' in window) {
+      panel._identityObserver = new IntersectionObserver(([entry]) => setCompactVisibility(!entry.isIntersecting), {
+        root: body,
+        threshold: 0,
+        rootMargin: '-20px 0px 0px',
+      });
+      panel._identityObserver.observe(largeIdentity);
+    } else {
+      const syncCompactVisibility = () => setCompactVisibility(largeIdentity.getBoundingClientRect().bottom <= body.getBoundingClientRect().top + 20);
+      body.addEventListener('scroll', syncCompactVisibility, { passive: true });
+      panel._identityObserver = { disconnect: () => body.removeEventListener('scroll', syncCompactVisibility) };
+      syncCompactVisibility();
+    }
+  }
+
   // ── 서브시트 헬퍼 ──────────────────────────────────────────────
   // backTo: {label, onClick} — 지정하면 뒤로가기가 패널 메인이 아니라 그 자리(예: 알림
   // 목록)로 돌아간다. R10c 패턴(openOtherMeetingSheet의 backTo)을 _openSubSheet 자체에도
@@ -2987,11 +3033,14 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
     const sub = document.createElement('div');
     sub.id = 'profileSubSheet';
     sub.className = 'profile-subsheet' + (readOnly ? ' profile-subsheet--readonly' : '');
-    const backLabel = backTo?.label || `${escH(user.nickname || (readOnly ? '회원' : '손님'))}의 ${_boardLabel}`;
+    const isBoardSubsheet = ['프로필 보드', '모임 보드', '기록 보드', '함께한 시간', '수집 보드'].includes(title);
+    const backLabel = backTo?.label || (isBoardSubsheet ? '내 보드' : `${escH(user.nickname || (readOnly ? '회원' : '손님'))}의 ${_boardLabel}`);
     sub.innerHTML = `
       <div class="profile-subsheet-box">
         <div class="profile-subsheet-header">
-          <button class="profile-subsheet-back" type="button">‹ ${backLabel}</button>
+          <button class="profile-subsheet-back" type="button">${isBoardSubsheet
+            ? `<span class="profile-subsheet-back-identity"><span class="profile-subsheet-back-arrow">‹</span><span class="profile-subsheet-back-avatar">${_repIdentityHtml}</span><span class="profile-subsheet-back-name">${escH(user.nickname || (readOnly ? '회원' : '손님'))}</span></span>`
+            : `‹ ${backLabel}`}</button>
           <span class="profile-subsheet-title">${title}</span>
           <button aria-label="닫기" class="profile-subsheet-close" type="button">✕</button>
         </div>
@@ -3001,9 +3050,12 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
     // 서브시트를 패널로 되돌릴 때(뒤로가기/백드롭) 현재 DOM 상태를 스냅샷 → 재진입 시 변경분 유지.
     // (✕닫기는 패널 자체를 제거해 다음 오픈 시 DB에서 새로 읽으므로 스냅샷 불필요)
     // onLeave가 조용히 실패하면 스냅샷이 누락돼 재진입 시 상태가 되돌아간다(개별 읽음이 이걸 의존) → 로그 필수
-    const _leaveToPanel = () => {
+    const _returnToMain = () => {
       try { onLeave?.(sub.querySelector('.profile-subsheet-body')); } catch (e) { console.error('[_openSubSheet onLeave]', e); }
       sub.remove();
+    };
+    const _leaveToPanel = () => {
+      _returnToMain();
       if (backTo?.onClick) backTo.onClick();
     };
     sub.querySelector('.profile-subsheet-back').addEventListener('click', _leaveToPanel);

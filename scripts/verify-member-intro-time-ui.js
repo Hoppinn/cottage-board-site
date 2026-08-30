@@ -80,6 +80,21 @@ async function verify(browser, width, height) {
   await page.goto(`${BASE}/pages/club/club-intro.html`, {waitUntil:'networkidle'});
   await page.waitForFunction(() => window.CottageDB?.formatMemberIntroTimes);
   await page.evaluate(() => {
+    window.__introNavCalls = [];
+    window.openOtherProfileSheet = userId => window.__introNavCalls.push({type:'board', userId:String(userId)});
+    window.openProfilePanel = (subsheet, opts) => window.__introNavCalls.push({type:'profile', subsheet, opts});
+  });
+  const memberCard = page.locator('.intro-card-news[data-user-id="8888888888"]');
+  await memberCard.locator('.intro-card-news-name').dispatchEvent('click');
+  check(`${width}px: 모임원 identity 닉네임은 내보드`, JSON.stringify(await page.evaluate(() => window.__introNavCalls)) === JSON.stringify([{type:'board', userId:'8888888888'}]));
+  await memberCard.locator('.intro-card-news-avatar').dispatchEvent('click');
+  check(`${width}px: 모임원 identity 아바타는 내보드`, JSON.stringify(await page.evaluate(() => window.__introNavCalls.at(-1))) === JSON.stringify({type:'board', userId:'8888888888'})
+    && (await page.evaluate(() => window.__introNavCalls.length)) === 2);
+  await memberCard.locator('.intro-card-news-body').dispatchEvent('click');
+  check(`${width}px: 모임원 프로필 내용은 프로필 보드`, JSON.stringify(await page.evaluate(() => window.__introNavCalls.at(-1))) === JSON.stringify({type:'profile', subsheet:'taste', opts:{userId:'8888888888', readOnly:true}}));
+  await memberCard.locator('.intro-card-news-body').dispatchEvent('keydown', {key:'Enter'});
+  check(`${width}px: 프로필 본문 Enter는 중복 없이 프로필 보드`, (await page.evaluate(() => window.__introNavCalls.filter(call => call.type === 'profile').length)) === 2);
+  await page.evaluate(() => {
     window.CottageDB.submitMemberIntro = async (_userId, answers) => {
       await window.__captureIntroSubmit(answers);
       const voucherGranted = window.__submittedOnce === 0;

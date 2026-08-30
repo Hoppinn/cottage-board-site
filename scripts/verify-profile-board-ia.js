@@ -13,6 +13,7 @@ const read = rel => fs.readFileSync(path.join(root, rel), 'utf8');
 const sql = read('docs/migrations/028_profile_board_ia.sql');
 const clientSrc = read('assets/js/supabase-client.js');
 const boardSrc = read('assets/js/kakao-auth.js');
+const styleSrc = read('assets/css/style.css');
 const introHtml = read('pages/club/club-intro.html');
 const pageLabels = read('assets/js/page-labels.js');
 let failures = 0;
@@ -56,6 +57,32 @@ check('readOnly edit controls use owner-only wrapper', boardSrc.includes("${_ro(
 check('failed game save cannot paint a false added state', (boardSrc.match(/if \(saved === false\) return;/g) || []).length === 2);
 check('member intro card opens Profile Board', introHtml.includes('프로필 보드 보기 ›')
   && introHtml.includes('window.openOtherProfileSheet?.(uid)') && !introHtml.includes('window.openOtherMeetingSheet?.(uid)'));
+check('member intro identity/profile areas have separate destinations', introHtml.includes('intro-card-news-avatar')
+  && introHtml.includes('intro-card-news-name')
+  && introHtml.includes("window.openProfilePanel?.('taste'")
+  && introHtml.includes('e.stopPropagation()'));
+check('subboards share compact identity back header, including collection board', boardSrc.includes("'수집 보드'].includes(title)")
+  && boardSrc.includes('profile-subsheet-back-identity')
+  && boardSrc.includes('profile-subsheet-back-avatar')
+  && boardSrc.includes('profile-subsheet-back-name')
+  && boardSrc.includes('_repIdentityHtml')
+  && !boardSrc.includes('profile-subsheet-identity-avatar'));
+check('main board starts with large identity and scroll compact header', boardSrc.includes('const _panelHeaderHtml = backTo ?')
+  && boardSrc.includes('profile-panel-compact-header')
+  && boardSrc.includes('profile-panel-main-close')
+  && boardSrc.includes('new IntersectionObserver')
+  && boardSrc.includes('mainClose?.classList.toggle')
+  && boardSrc.includes('profile-panel-compact-title">내 보드</span>'));
+check('collection board is not added to main IA', !/<button class="profile-card"[^>]*data-subsheet="growth"/.test(boardSrc));
+check('main header micro spacing keeps alert left of close action', styleSrc.includes('.profile-panel--main .profile-panel-profile{padding-top:24px;}')
+  && styleSrc.includes('.profile-panel--main .profile-panel-nick-row{justify-content:flex-start;gap:12px;padding-right:44px;min-width:0;}')
+  && styleSrc.includes('.profile-panel-main-close{position:absolute;top:8px;right:14px;'));
+check('main identity and collection progress card gain separation without changing board grid gap', styleSrc.includes('.profile-panel--main .profile-growth-link{margin-top:12px;}')
+  && !styleSrc.includes('.profile-panel--main .profile-card-grid{margin-top:12px;}')
+  && styleSrc.includes('.profile-card-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}'));
+check('subboard character keeps glow room at 32px', styleSrc.includes('.profile-subsheet-back{justify-self:start;min-width:0;max-width:100%;overflow:visible;')
+  && styleSrc.includes('.profile-subsheet-back-avatar{display:flex;align-items:center;justify-content:center;width:32px;height:32px;')
+  && styleSrc.includes('.profile-subsheet-back-avatar .profile-panel-avatar{width:32px;height:32px;}'));
 check('stable analytics key displays Profile Board label', pageLabels.includes("'my-board-taste': '내 보드 > 프로필 보드'"));
 
 new vm.Script(clientSrc, {filename:'assets/js/supabase-client.js'});
