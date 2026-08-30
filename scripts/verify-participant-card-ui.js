@@ -45,17 +45,17 @@ async function verifyViewport(browser, width, height) {
   await page.waitForSelector('.sched-bar-item[data-date][data-uid]');
   await page.evaluate(() => {
     window.__participantOpenCall = null;
-    window.openDateScheduleModal = (uid, date) => { window.__participantOpenCall = {uid, date}; };
+    window.openOtherMeetingSheet = (uid, opts) => { window.__participantOpenCall = {uid, ...opts}; };
   });
   const actualCard = page.locator('.sched-bar-item[data-uid="__ui_only_cards__"]').first();
   const actualTarget = await actualCard.evaluate(card => ({uid:card.dataset.uid, date:card.dataset.date}));
   await actualCard.click({position:{x:12, y:Math.max(12, (await actualCard.boundingBox()).height - 12)}});
-  check(`${width}px: 본 플래너 카드 여백 클릭으로 개인 상세 진입`, await page.evaluate(
-    target => window.__participantOpenCall?.uid === target.uid && window.__participantOpenCall?.date === target.date, actualTarget));
+  check(`${width}px: 본 플래너 카드 여백 클릭으로 모임 보드 진입`, await page.evaluate(
+    target => window.__participantOpenCall?.uid === target.uid && window.__participantOpenCall?.focusDate === target.date, actualTarget));
   await page.evaluate(() => { window.__participantOpenCall = null; });
   await actualCard.focus();
   await actualCard.press('Enter');
-  check(`${width}px: 참여자 카드 Enter 키로 개인 상세 진입`, await page.evaluate(() => !!window.__participantOpenCall));
+  check(`${width}px: 참여자 카드 Enter 키로 모임 보드 진입`, await page.evaluate(() => !!window.__participantOpenCall));
   await page.evaluate(() => { window.__participantOpenCall = null; });
   let plannerDeletePrompt = false;
   page.once('dialog', dialog => { plannerDeletePrompt = true; dialog.dismiss(); });
@@ -170,8 +170,9 @@ async function verifyViewport(browser, width, height) {
     window.__realOpenPlannerFor = window.__openPlannerFor;
     window.__homeEditCall = null;
     window.__homePersonalCall = null;
+    window.__homeMeetingCall = null;
     window.__openPlannerFor = (date, isEdit) => { window.__homeEditCall = {date, isEdit}; };
-    window.openDateScheduleModal = () => { window.__homePersonalCall = true; };
+    window.openOtherMeetingSheet = (uid, opts) => { window.__homeMeetingCall = {uid, ...opts}; };
   });
   await homeEdit.click();
   check(`${width}px: 홈 수정 버튼이 수정 진입 실행`, await page.evaluate(
@@ -184,7 +185,8 @@ async function verifyViewport(browser, width, height) {
     && await page.evaluate(() => window.__homePersonalCall === null));
   const homeCard = page.locator('#meetingPreview .sched-bar-item').first();
   await homeCard.click({position:{x:12, y:Math.max(12, (await homeCard.boundingBox()).height - 12)}});
-  check(`${width}px: 홈 카드 본문이 개인 상세 실행`, await page.evaluate(() => window.__homePersonalCall === true));
+  check(`${width}px: 홈 카드 본문이 모임 보드 실행`, await page.evaluate(
+    date => window.__homeMeetingCall?.focusDate === date, fixtureDate));
 
   // 홈 빈 날짜의 「+ 플래너에서 등록하기」는 스텀이 아닌 실제 iframe 빠른진입으로 검증한다.
   await page.evaluate(() => {
@@ -226,8 +228,9 @@ async function verifyViewport(browser, width, height) {
   await page.evaluate(({date, vote}) => {
     window.__dayEditCall = null;
     window.__dayPersonalCall = null;
+    window.__dayMeetingCall = null;
     window.openPlannerModal = opts => { window.__dayEditCall = opts; };
-    window.openDateScheduleModal = (uid, ds) => { window.__dayPersonalCall = {uid, date:ds}; };
+    window.openOtherMeetingSheet = (uid, opts) => { window.__dayMeetingCall = {uid, ...opts}; };
     window.openDatePreviewModal(date, [vote], [], vote, () => {});
   }, {date:fixtureDate, vote:homeVote});
   await page.locator('#__ddModal .sched-bar-edit-btn').click();
@@ -251,8 +254,8 @@ async function verifyViewport(browser, width, height) {
   }, {date:fixtureDate, vote:homeVote});
   const dayCard = page.locator('#__ddModal .sched-bar-item').first();
   await dayCard.click({position:{x:12, y:Math.max(12, (await dayCard.boundingBox()).height - 12)}});
-  check(`${width}px: 하루치 카드 본문이 개인 상세 실행`, await page.evaluate(
-    ({uid, date}) => window.__dayPersonalCall?.uid === uid && window.__dayPersonalCall?.date === date,
+  check(`${width}px: 하루치 카드 본문이 모임 보드 실행`, await page.evaluate(
+    ({uid, date}) => window.__dayMeetingCall?.uid === uid && window.__dayMeetingCall?.focusDate === date,
     {uid:homeVote.user_id, date:fixtureDate}));
 
   // 날짜 전체 센터 모달: 2명·6명에서 요약→룰렛→참여자→내 액션 순서와 기존 동작을 검증한다.
@@ -273,8 +276,10 @@ async function verifyViewport(browser, width, height) {
         {vote_date:date, user_id:vote.user_id, list_type:'learn', game_id:games[i * 3 + 2]?.bggId || null, custom_name:games[i * 3 + 2]?.display || `배울게임${i + 1}`, player_condition:'any'},
       ]);
       window.__centerProfileCall = null;
+      window.__centerDayCall = null;
       window.__centerPlannerCall = null;
-      window.openOtherMeetingSheet = uid => { window.__centerProfileCall = uid; };
+      window.openOtherProfileSheet = uid => { window.__centerProfileCall = uid; };
+      window.openDateScheduleModal = (uid, date) => { window.__centerDayCall = {uid, date}; };
       window.openPlannerModal = opts => { window.__centerPlannerCall = opts; };
       window.openDateMeetingModal(date, votes, voteGames, {});
       return {
@@ -322,15 +327,19 @@ async function verifyViewport(browser, width, height) {
     check(`${width}px 센터 모달 ${participantCount}명: 내 참여 수정 문구`, metrics.ctaText === '내 참여 수정하기');
     check(`${width}px 센터 모달 ${participantCount}명: 높이·가로 overflow 정상`, metrics.fitsViewport && metrics.noOverflow, JSON.stringify(metrics));
 
-    const details = page.locator('#__ddModal .dd-participants-toggle');
+    const details = page.locator('#__ddModal .dd-participants-toggle:not(.dd-my-games-editor)');
     await details.locator('summary').click();
     check(`${width}px 센터 모달 ${participantCount}명: 참여자 접기`, !(await details.evaluate(node => node.open)));
     await details.locator('summary').click();
     check(`${width}px 센터 모달 ${participantCount}명: 참여자 펼치기`, await details.evaluate(node => node.open));
 
     await page.locator('#__ddModal .dd-nick-link').first().click();
-    check(`${width}px 센터 모달 ${participantCount}명: 개인 상세 진입`, await page.evaluate(
+    check(`${width}px 센터 모달 ${participantCount}명: 참여자 닉네임 내보드 진입`, await page.evaluate(
       uid => window.__centerProfileCall === uid, expected.myUserId));
+    await page.locator('#__ddModal .dd-participant-block').first().locator('.dd-time').click();
+    check(`${width}px 센터 모달 ${participantCount}명: 참여자 일반 영역 개인 날짜 상세 진입`, await page.evaluate(
+      ({uid, date}) => window.__centerDayCall?.uid === uid && window.__centerDayCall?.date === date,
+      {uid:expected.myUserId, date:fixtureDate}));
 
     await page.locator('#__ddModal .dd-roulette-open-btn').click();
     check(`${width}px 센터 모달 ${participantCount}명: 룰렛 독립 화면 진입`,

@@ -2770,16 +2770,7 @@
           e.stopPropagation();
           window.CottageDB?.trackEvent('meeting_planner_bar_click');
           const _uid = card.dataset.uid, _date = card.dataset.date;
-          window.openDateScheduleModal?.(_uid, _date, {
-            onDirtyClosed: (updatedGames) => {
-              if (updatedGames) {
-                allVoteGames = allVoteGames.filter(g => !(g.vote_date === _date && String(g.user_id) === _uid));
-                allVoteGames.push(...updatedGames);
-              }
-              renderWeekView(weekOffset);
-              try { window.parent?.postMessage({ type: 'cottage-meeting-saved' }, '*'); } catch (_) {}
-            },
-          });
+          window.openOtherMeetingSheet?.(_uid, { focusDate: _date });
         };
         card.addEventListener('click', openParticipant);
         card.addEventListener('keydown', openParticipant);
@@ -2791,7 +2782,7 @@
           e.preventDefault();
           e.stopPropagation();
           window.CottageDB?.trackEvent('meeting_profile_click', { user_id: name.dataset.uid });
-          window.openOtherMeetingSheet?.(name.dataset.uid);
+          window.openOtherProfileSheet?.(name.dataset.uid);
         };
         name.addEventListener('click', openMember);
         name.addEventListener('keydown', openMember);

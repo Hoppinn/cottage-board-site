@@ -1,4 +1,4 @@
-// 플래너 참여자 카드 클릭 분리 검증: 닉네임→모임 보드, 본문→개인 일정, 수정/삭제 독립.
+// 플래너 참여자 카드 클릭 분리 검증: 닉네임→내보드, 본문→모임 보드, 수정/삭제 독립.
 // 운영 DB 쓰기는 전부 차단하고 meeting GET 응답만 고정한다.
 const { chromium } = require('playwright');
 const fs = require('fs');
@@ -44,7 +44,8 @@ async function setSpies(page) {
     window.__profileCall = null;
     window.__personalCall = null;
     window.__editCall = null;
-    window.openOtherMeetingSheet = uid => { window.__profileCall = uid; };
+    window.openOtherProfileSheet = uid => { window.__profileCall = uid; };
+    window.openOtherMeetingSheet = (uid, opts) => { window.__meetingCall = {uid, ...opts}; };
     window.openDateScheduleModal = (uid, date) => { window.__personalCall = {uid, date}; };
   });
 }
@@ -52,7 +53,7 @@ async function setSpies(page) {
 async function assertNickname(page, root, label) {
   await page.locator(`${root} .sched-bar-name[data-uid="${UID}"]`).first().click();
   const state = await page.evaluate(() => ({profile:window.__profileCall, personal:window.__personalCall}));
-  check(`${label}: 닉네임은 모임 보드만 연다`, state.profile === (NEG ? '__negative__' : UID) && state.personal === null);
+  check(`${label}: 닉네임은 내보드만 연다`, state.profile === (NEG ? '__negative__' : UID) && state.personal === null, JSON.stringify(state));
 }
 
 async function assertCard(page, root, label) {
@@ -61,8 +62,8 @@ async function assertCard(page, root, label) {
   const expectedDate = await card.getAttribute('data-date');
   const box = await card.boundingBox();
   await card.click({position:{x:12, y:Math.max(12, box.height - 12)}});
-  const state = await page.evaluate(() => ({profile:window.__profileCall, personal:window.__personalCall}));
-  check(`${label}: 카드 본문은 개인 일정만 연다`, state.profile === null && state.personal?.uid === UID && state.personal?.date === expectedDate);
+  const state = await page.evaluate(() => ({profile:window.__profileCall, personal:window.__personalCall, meeting:window.__meetingCall}));
+  check(`${label}: 카드 본문은 모임 보드만 연다`, state.profile === null && state.personal === null && state.meeting?.uid === UID && state.meeting?.focusDate === expectedDate);
 }
 
 async function verify(width, height, browser) {

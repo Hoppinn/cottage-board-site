@@ -1879,7 +1879,7 @@ window.addEventListener('cottage-meeting-changed', () => { _meetingReload?.(); }
         const uid  = card.dataset.uid;
         const date = card.dataset.date;
         window.CottageDB?.trackEvent('meeting_planner_bar_click', { date, user_id: uid });
-        window.openDateScheduleModal?.(uid, date, { onDirtyClosed: () => _meetingReload?.() });
+        window.openOtherMeetingSheet?.(uid, { focusDate: date });
       };
       card.addEventListener('click', openParticipant);
       card.addEventListener('keydown', openParticipant);
@@ -1891,7 +1891,7 @@ window.addEventListener('cottage-meeting-changed', () => { _meetingReload?.(); }
         e.preventDefault();
         e.stopPropagation();
         window.CottageDB?.trackEvent('meeting_profile_click', { user_id: name.dataset.uid });
-        window.openOtherMeetingSheet?.(name.dataset.uid);
+        window.openOtherProfileSheet?.(name.dataset.uid);
       };
       name.addEventListener('click', openMember);
       name.addEventListener('keydown', openMember);

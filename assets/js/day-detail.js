@@ -932,7 +932,7 @@
         e.preventDefault();
         e.stopPropagation();
         window.CottageDB?.trackEvent('meeting_planner_bar_click', { date: card.dataset.date, user_id: card.dataset.uid });
-        window.openDateScheduleModal?.(card.dataset.uid, card.dataset.date, { onDirtyClosed: onChange });
+        window.openOtherMeetingSheet?.(card.dataset.uid, { focusDate: card.dataset.date });
       };
       card.addEventListener('click', openParticipant);
       card.addEventListener('keydown', openParticipant);
@@ -943,7 +943,7 @@
         e.preventDefault();
         e.stopPropagation();
         window.CottageDB?.trackEvent('meeting_profile_click', { user_id: name.dataset.uid });
-        window.openOtherMeetingSheet?.(name.dataset.uid);
+        window.openOtherProfileSheet?.(name.dataset.uid);
       };
       name.addEventListener('click', openMember);
       name.addEventListener('keydown', openMember);
@@ -1171,7 +1171,7 @@
   }
 
   /** 참여자별 보기 블록 HTML (닉네임 · 시간 · 하고싶은/배우고싶은 게임) */
-  function _buildParticipantsHtml(uniqueVotes, voteGames) {
+  function _buildParticipantsHtml(uniqueVotes, voteGames, voteDate) {
     const participantsBody = uniqueVotes.map(v => {
       const myGames = voteGames.filter(g => String(g.user_id) === String(v.user_id));
       // 참여자별 게임 옆에 그 사람이 설정한 인원조건 표시(읽기전용). 무관 포함 — 어떤 게임이 특정 인원 필요한지 한눈에.
@@ -1195,8 +1195,8 @@
       const learnGames = myGames.filter(g => g.list_type === 'learn');
       const wantHtml  = wantGames.length  ? `<ul class="dd-game-list">${wantGames.map(_li).join('')}</ul>` : '';
       const learnHtml = learnGames.length ? `<ul class="dd-game-list">${learnGames.map(_li).join('')}</ul>` : '';
-      return `<section class="dd-participant-block">
-        <div class="dd-modal-nick dd-nick-link" data-uid="${esc(v.user_id)}">${esc(v.nickname)}</div>
+      return `<section class="dd-participant-block" data-uid="${esc(v.user_id)}" data-date="${esc(voteDate)}" role="button" tabindex="0">
+        <div class="dd-modal-nick dd-nick-link" data-uid="${esc(v.user_id)}" role="link" tabindex="0">${esc(v.nickname)}</div>
         <div class="dd-time">${window.formatVoteHour(v.time_start)}~${window.formatVoteHour(v.time_end)}${partyCount([v]) > 1 ? ` · ${partyCount([v]) - 1}명 동반` : ''}</div>
         ${wantGames.length  ? `<div class="dd-section"><span class="dd-section-label">🎲 하고 싶은 게임</span>${wantHtml}</div>`  : ''}
         ${learnGames.length ? `<div class="dd-section"><span class="dd-section-label">📖 배우고 싶은 게임</span>${learnHtml}</div>` : ''}
@@ -1406,7 +1406,7 @@
 
     const statsHtml = _buildMeetingStatsHtml(votes, uniqueVotes, voteGames);
     const rouletteGames = _buildRouletteGames(voteGames);
-    const participantsBody = _buildParticipantsHtml(uniqueVotes, voteGames);
+    const participantsBody = _buildParticipantsHtml(uniqueVotes, voteGames, voteDate);
 
     // 등록/수정 진입 버튼 — 지난 날짜엔 등록 행동을 렌더하지 않는다(A-10, 판정은
     // 이 한 곳에서). 로그인 안 했으면 어차피 등록할 수 없으니 숨긴다.
@@ -1473,11 +1473,33 @@
     closeBtn.addEventListener('click', () => { _popDdViewToken(); el.remove(); });
     el.addEventListener('click', e => { if (e.target === el) { _popDdViewToken(); el.remove(); } });
 
-    // 참여자 닉네임 클릭 → 그 사람 모임 보드 (Phase D 진입점 규칙: 모임 참여자 = openOtherMeetingSheet)
+    // 참여자 블록 일반 영역 → 그 사람의 그날 개인 상세. 내부 액션은 부모로 전파하지 않는다.
+    el.querySelectorAll('.dd-participant-block[data-uid][data-date]').forEach(block => {
+      const openParticipant = e => {
+        if (e.type === 'keydown' && !['Enter', ' '].includes(e.key)) return;
+        if (e.type === 'keydown' && e.target !== block) return;
+        if (e.target.closest('button, a, input, select, textarea, .dd-game-hit, .dd-nick-link')) return;
+        e.preventDefault();
+        e.stopPropagation();
+        window.openDateScheduleModal?.(block.dataset.uid, block.dataset.date);
+      };
+      block.addEventListener('click', openParticipant);
+      block.addEventListener('keydown', openParticipant);
+    });
+
+    // 참여자 닉네임 클릭 → 그 사람 내 보드 메인
     // 보드는 이 모달 위에 겹쳐 뜬다(--z-profile 9100 > .dd-overlay--under-board 9050) —
     // 전환이 아니라 레이어를 쌓는 것이므로 모달을 닫지 않는다. 보드를 닫으면 이 모달이 그대로 보인다.
-    el.querySelectorAll('.dd-nick-link').forEach(n =>
-      n.addEventListener('click', () => window.openOtherMeetingSheet?.(n.dataset.uid)));
+    el.querySelectorAll('.dd-nick-link').forEach(n => {
+      const openMember = e => {
+        if (e.type === 'keydown' && !['Enter', ' '].includes(e.key)) return;
+        e.preventDefault();
+        e.stopPropagation();
+        window.openOtherProfileSheet?.(n.dataset.uid);
+      };
+      n.addEventListener('click', openMember);
+      n.addEventListener('keydown', openMember);
+    });
 
     // 게임 행 클릭 → 게임시트. 게임시트(--z-sheet 9500)가 이 모달 위에 겹쳐 뜨므로 닫지 않는다
     // (시트를 닫으면 이 모달로 복귀 — 닉네임→보드와 같은 레이어 방식).

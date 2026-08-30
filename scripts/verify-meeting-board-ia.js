@@ -38,6 +38,8 @@ check('평소 프로필 전체·가입 소개를 모임 보드에 재출력하�
   && !build.includes('시계탑 선호도'));
 check('기존 날짜별 게임 편집 SSOT 유지', src.includes('addMeetingVoteGame')
   && src.includes('removeMeetingVoteGame') && src.includes('setMeetingVoteGameCondition'));
+check('플래너 진입 날짜 컨텍스트를 전달하고 날짜 카드를 강조', src.includes('focusDate')
+  && src.includes('data-date="${escH(v.vote_date)}"') && src.includes('is-focused'));
 check('타인 readOnly 편집 가드 유지', build.includes("${_ro('<button class=\"taste-add-btn")
   && src.includes("const condTag = readOnly"));
 const cardStart = src.indexOf('// 모임 카드도 모임 보드와 같은 가까운 미래 범위를 쓴다.');

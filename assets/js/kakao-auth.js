@@ -1121,7 +1121,7 @@ function _bindTasteSubsheet(subBody, ctx) {
 // ── '모임 보드' 서브시트 afterRender (R10a: openProfilePanel에서 추출) ──
 function _bindMeetingSubsheet(subBody, ctx) {
   const { user, readOnly, body, _ro, _emitLikesChanged, _getGameKeyById, _ruleSet, _meeting, _meetingProfileRowHtml,
-          getPendingScroll, setPendingScroll, setTasteScrollTo, backTo } = ctx;
+          getPendingScroll, setPendingScroll, setTasteScrollTo, backTo, focusDate } = ctx;
           const userId = String(user.id);
 
           _bindActivityTogglesAndMore(subBody); // 최근 모임 참여 "더 보기" (2026-07-30)
@@ -1597,7 +1597,7 @@ function _bindMeetingSubsheet(subBody, ctx) {
             _renderWeekList('learn');
             // 다가오는 일정 미니바
             if (weekEl) {
-              weekEl.innerHTML = `<div class="taste-section-label">📅 다가오는 일정 ${_ro('<button class="mb-planner-edit" type="button" title="모임 플래너 편집">✎ 편집</button>')}</div>` + _buildMiniBarWeekHtml(_weekData.upcomingVotes, _weekData.myVoteGames, userId, !readOnly);
+              weekEl.innerHTML = `<div class="taste-section-label">📅 다가오는 일정 ${_ro('<button class="mb-planner-edit" type="button" title="모임 플래너 편집">✎ 편집</button>')}</div>` + _buildMiniBarWeekHtml(_weekData.upcomingVotes, _weekData.myVoteGames, userId, !readOnly, focusDate);
               weekEl.querySelector('.mb-planner-edit')?.addEventListener('click', () =>
                 window.openPlannerModal?.({ weekOffset: 0, onDirtyClose: _loadMeetingWeek }));
               // 상세팝업에서 참여자 이름을 눌러 다른 보드로 넘어간 뒤, "‹ 뒤로"로 지금 이 보드
@@ -1609,13 +1609,28 @@ function _bindMeetingSubsheet(subBody, ctx) {
               // "몇 번이고 뒤로가기가 누적돼야" 하는데 2~3번까지만 되던 것). 각 패널이 자기 backTo를
               // 그대로 물려주는 재귀 링크드리스트라 별도 스택 자료구조는 필요 없다(설계 원문 그대로).
               const _mbBackTo = { type: 'panel', autoSubsheet: 'meeting', label: `${user.nickname || '이전'}의 모임보드`, opts: { userId: String(userId), readOnly, nickname: user.nickname || '', backTo } };
-              weekEl.querySelectorAll('.mb-detail-btn').forEach(btn => btn.addEventListener('click', () => {
+              const focused = focusDate ? weekEl.querySelector(`.mb-week-entry[data-date="${CSS.escape(String(focusDate))}"]`) : null;
+              focused?.scrollIntoView({ block: 'center', behavior: 'smooth' });
+              focused?.classList.add('is-focused');
+              weekEl.querySelectorAll('.mb-week-entry[data-date][data-uid]').forEach(entry => {
+                const openDate = e => {
+                  if (e.type === 'keydown' && !['Enter', ' '].includes(e.key)) return;
+                  if (e.type === 'keydown' && e.target !== entry) return;
+                  if (e.target.closest('button, a, input, select, textarea')) return;
+                  e.preventDefault();
+                  e.stopPropagation();
+                  window.openDateScheduleModal?.(entry.dataset.uid, entry.dataset.date);
+                };
+                entry.addEventListener('click', openDate);
+                entry.addEventListener('keydown', openDate);
+              });
+              weekEl.querySelectorAll('.mb-detail-btn').forEach(btn => btn.addEventListener('click', e => {
+                e.stopPropagation();
                 const _d = btn.dataset.date;
                 // 읽기전용: 남의 보드 상세는 편집 불가 스케줄 뷰로. 자기 보드는 편집 가능한 프리뷰 모달.
                 // 읽기전용: 남의 보드도 그날 전원 막대 차트로. 편집은 막기 위해 myVote=null(내 막대 하이라이트·✎✕ 없음).
                 // 상세도 같은 upcomingAllV/upcomingAllVG를 써야 범위가 어긋나지 않는다.
-                if (readOnly) { window.openDatePreviewModal?.(_d, upcomingAllV.filter(v => v.vote_date === _d), upcomingAllVG.filter(g => g.vote_date === _d), null, null, _mbBackTo); return; }
-                window.openDatePreviewModal?.(_d, upcomingAllV.filter(v => v.vote_date === _d), upcomingAllVG.filter(g => g.vote_date === _d), _weekData.upcomingVotes.find(v => v.vote_date === _d) || null, _loadMeetingWeek, _mbBackTo);
+                window.openDateScheduleModal?.(userId, _d);
               }));
             }
             // 취향보드 수정 후 "‹ 모임 보드"로 복귀 시 눌렀던 스크롤 위치 복원 (렌더 완료 후)
@@ -1945,7 +1960,7 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
   //   { type:'panel', autoSubsheet, label, opts? } — 알림에서 남의 보드로 들어온 경우 내 보드로
   // 서브시트→패널 뒤로가기는 _openSubSheet가 이미 하므로, 여기는 패널 한 칸만 담당(깊이 1).
   // 체인이 생겨도 각 패널의 클로저가 자기 backTo를 들고 있어 스택 자료구조가 필요 없다.
-  const { userId: _targetUserId = null, readOnly = false, backTo = null } = opts;
+  const { userId: _targetUserId = null, readOnly = false, backTo = null, focusDate = null } = opts;
   const _selfUser = getKakaoUser();
   const user = readOnly
     ? { id: String(_targetUserId), nickname: opts.nickname || '' }
@@ -3221,9 +3236,9 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
           _syncTasteCard(); // 모임보드도 같은 소스(_boardData)를 쓴다 → 취향 카드 함께 최신화
           subBody.innerHTML = _buildMeetingInnerHtml(d);
           _bindMeetingSubsheet(subBody, {
-            user, readOnly, body, _ro, _emitLikesChanged, _getGameKeyById, _ruleSet: _makeRuleSet(d), _meeting: d, _meetingProfileRowHtml,
-            getPendingScroll: () => _pendingMeetingScrollTop, setPendingScroll: v => { _pendingMeetingScrollTop = v; },
-            setTasteScrollTo: v => { _pendingTasteScrollTo = v; },
+              user, readOnly, body, _ro, _emitLikesChanged, _getGameKeyById, _ruleSet: _makeRuleSet(d), _meeting: d, _meetingProfileRowHtml,
+              getPendingScroll: () => _pendingMeetingScrollTop, setPendingScroll: v => { _pendingMeetingScrollTop = v; },
+            setTasteScrollTo: v => { _pendingTasteScrollTo = v; }, focusDate,
             backTo, // 상세팝업 뒤로가기 체인용(2026-08-09) — 이 패널 자신이 들어온 backTo를 그대로 물려준다
           });
         }); // end meeting afterRender
@@ -3270,8 +3285,8 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
 async function openOtherProfileSheet(userId, opts = {}) {
   if (!userId) return;
   const self = getKakaoUser();
-  if (self && String(self.id) === String(userId)) return openProfilePanel('taste', opts);
-  return openProfilePanel('taste', { userId: String(userId), readOnly: true, ...opts });
+  if (self && String(self.id) === String(userId)) return openProfilePanel(null, opts);
+  return openProfilePanel(null, { userId: String(userId), readOnly: true, ...opts });
 }
 window.openOtherProfileSheet = openOtherProfileSheet;
 
@@ -3285,7 +3300,7 @@ function _upcomingRange() {
   return [fmt(today), fmt(end)];
 }
 
-function _buildMiniBarWeekHtml(myVotes, voteGames, userId, isOwner) {
+function _buildMiniBarWeekHtml(myVotes, voteGames, userId, isOwner, focusDate = null) {
   const _days = ['일','월','화','수','목','금','토'];
   const _vg = Array.isArray(voteGames) ? voteGames : [];
 
@@ -3323,7 +3338,7 @@ function _buildMiniBarWeekHtml(myVotes, voteGames, userId, isOwner) {
     const total = 18; // 9~27시(익일 새벽 3시까지 등록 가능, 2026-08-18)
     const left  = ((v.time_start - 9) / total * 100).toFixed(1);
     const width = ((v.time_end - v.time_start) / total * 100).toFixed(1);
-    return `<div class="mb-week-entry">
+    return `<div class="mb-week-entry${focusDate === v.vote_date ? ' is-focused' : ''}" data-date="${escH(v.vote_date)}" data-uid="${escH(String(userId))}" role="button" tabindex="0">
       <div class="mb-week-row">
         <span class="mb-week-date">${escH(fmtVD(v.vote_date))}</span>
         <div class="mb-mini-bar-wrap"><div class="mb-mini-bar-fill" style="left:${left}%;width:${width}%"></div></div>

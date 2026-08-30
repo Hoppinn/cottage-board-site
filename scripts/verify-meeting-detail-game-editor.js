@@ -51,7 +51,7 @@ check('편집 대상은 로그인 본인의 날짜별 게임만', modal.includes
   && modal.includes('if (myVote && myGames.length)') && modal.includes('_bindSchedEditors(el'));
 check('기존 저장 함수와 성공 갱신 신호 재사용', src.includes('setMeetingVoteGamePriority')
   && src.includes('setMeetingVoteGameCondition') && modal.includes("reason: 'game-coordination'"));
-check('전원 참여자 목록은 계속 읽기전용', src.includes("_buildParticipantsHtml(uniqueVotes, voteGames)")
+check('전원 참여자 목록은 계속 읽기전용', src.includes("_buildParticipantsHtml(uniqueVotes, voteGames, voteDate)")
   && !src.slice(src.indexOf('function _buildParticipantsHtml'), helperStart).includes('_bindSchedEditors'));
 check('기존 플래너 전체 편집·재조회 유지', modal.includes('class="dd-planner-btn"')
   && modal.includes('getMeetingVotes(voteDate, voteDate)')
