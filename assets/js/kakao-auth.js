@@ -692,92 +692,6 @@ function _bindTasteSubsheet(subBody, ctx) {
   const { user, readOnly, panel, _emitLikesChanged, allBioSuggestions, _BIO_PREDEFINED, _ruleSet, onBioSaved, onProfileDataSaved, resolveGameName } = ctx;
           const userId = String(user.id);
 
-          // ── 한줄 소개 ──
-          const bioRow = subBody.querySelector('.taste-bio-row');
-          const bioDisplay = subBody.querySelector('.taste-bio-display');
-          const bioEditWrap = subBody.querySelector('.taste-bio-edit-wrap');
-          const bioCustomInput = subBody.querySelector('.taste-bio-custom-input');
-          const bioCustomTagsWrap = subBody.querySelector('.taste-bio-custom-tags');
-          const _PREDEFINED_CHIPS = _BIO_PREDEFINED;
-
-          // (R10b) 재진입 시 bio를 다시 그리던 블록 제거 — 이제 진입할 때마다 DB에서 읽어
-          // HTML을 새로 빌드하므로 subBody가 이미 최신이다.
-
-          function _renderBioDisplay(tags) {
-            bioDisplay.innerHTML = tags.length
-              ? tags.map(t => `<span class="taste-bio-tag">${escH(t)}</span>`).join('')
-              : '<span class="taste-bio-placeholder">소개를 추가해보세요</span>';
-          }
-
-          function _renderCustomTags(customTags) {
-            bioCustomTagsWrap.innerHTML = customTags.map(t =>
-              `<span class="taste-bio-tag-edit" data-tag="${escH(t)}">${escH(t)}<button class="taste-bio-tag-remove" type="button" aria-label="삭제">✕</button></span>`
-            ).join('');
-            bioCustomTagsWrap.querySelectorAll('.taste-bio-tag-remove').forEach(btn => {
-              btn.addEventListener('click', () => { btn.closest('.taste-bio-tag-edit').remove(); });
-            });
-          }
-
-          subBody.querySelector('.taste-bio-edit-btn')?.addEventListener('click', () => {
-            bioRow.style.display = 'none';
-            bioEditWrap.style.display = '';
-            const currentTags = [...new Set((bioDisplay.dataset.bio || '').split(',').map(t => t.trim()).filter(Boolean))];
-            subBody.querySelectorAll('.taste-bio-chip').forEach(chip => {
-              chip.classList.toggle('is-selected', currentTags.includes(chip.textContent.trim()));
-            });
-            const menuChipTexts = [...subBody.querySelectorAll('.taste-bio-chip')].map(c => c.textContent.trim());
-            const customTags = currentTags.filter(t => !menuChipTexts.includes(t));
-            _renderCustomTags(customTags);
-            bioCustomInput.value = '';
-            bioCustomInput.focus();
-          });
-
-          subBody.querySelectorAll('.taste-bio-chip').forEach(chip => {
-            chip.addEventListener('click', () => { chip.classList.toggle('is-selected'); });
-          });
-
-          function _addCustomTag() {
-            const val = bioCustomInput.value.trim();
-            if (!val) return;
-            const existing = [...bioCustomTagsWrap.querySelectorAll('.taste-bio-tag-edit')].map(el => el.dataset.tag);
-            if (!existing.includes(val)) {
-              _renderCustomTags([...existing, val]);
-            }
-            bioCustomInput.value = '';
-            bioCustomInput.focus();
-          }
-          bioCustomInput?.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); _addCustomTag(); } });
-          subBody.querySelector('.taste-bio-custom-add')?.addEventListener('click', _addCustomTag);
-
-          subBody.querySelector('.taste-bio-cancel-btn')?.addEventListener('click', () => {
-            bioRow.style.display = '';
-            bioEditWrap.style.display = 'none';
-          });
-
-          subBody.querySelector('.taste-bio-save-btn')?.addEventListener('click', async () => {
-            if (bioCustomInput?.value.trim()) {
-              window.showToast?.('＋를 눌러 취향을 추가한 뒤 저장해 주세요') || alert('＋를 눌러 취향을 추가한 뒤 저장해 주세요');
-              bioCustomInput.focus();
-              return;
-            }
-            const selectedChips = [...subBody.querySelectorAll('.taste-bio-chip.is-selected')].map(c => c.textContent.trim());
-            const customTags = [...bioCustomTagsWrap.querySelectorAll('.taste-bio-tag-edit')].map(el => el.dataset.tag);
-            const allTags = [...new Set([...selectedChips, ...customTags])].slice(0, 6);
-            const newBio = allTags.join(',');
-            // 신규 커뮤니티 칩 감지 → 관리자 알림 (page_events 로그)
-            const _allBioSet = new Set(allBioSuggestions || []);
-            allTags.filter(t => !_PREDEFINED_CHIPS.includes(t) && !_allBioSet.has(t))
-              .forEach(() => window.CottageDB?.trackEvent?.('new_bio_chip'));
-            await window.CottageDB?.updateUserBio?.(userId, newBio);
-            bioDisplay.dataset.bio = newBio;
-            _renderBioDisplay(allTags);
-            bioRow.style.display = '';
-            bioEditWrap.style.display = 'none';
-            // 메인 패널 취향 카드 요약 즉시 갱신 — 미리보기 포맷을 여기서 다시 조립하지 않고
-            // 카드 빌더 한 곳(_tasteCardSummaryHtml)에 맡긴다(포맷이 갈리지 않게).
-            onBioSaved?.(newBio);
-          });
-
           // ── 평소 즐기는 게임 깊이 (profiles.preferred_game_depths) ──
           subBody.querySelectorAll('.profile-depth-chip[data-depth]').forEach(btn => {
             btn.addEventListener('click', async () => {
@@ -2619,6 +2533,7 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
       : (game?.custom_name || game?.customName || String(gameId || ''));
   };
   const _profileInfoRowHtml = (label, value) => `<div class="profile-info-row"><span class="profile-info-label">${label}</span><span class="profile-info-value${value ? '' : ' is-empty'}">${value ? escH(value) : '미입력'}</span></div>`;
+  // 모임 보드의 짧은 평소 참고 요약용. 프로필 보드에서는 사용하지 않는다.
   const _profileSummaryItems = d => {
     const items = [];
     const typeLabels = (d.preferredGameTypes || []).filter(value => value !== 'any').map(value => _INTRO_GAME_TYPE_LABELS[value] || value);
@@ -2647,92 +2562,65 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
     }).join('');
   };
 
-  // 진입할 때마다 최신 데이터로 다시 빌드(R10b). 기존 취향 목록은 유지하되
-  // 사람 요약 → 평소 스타일/환경 → 실제 경험 → 구체적 게임 취향 순으로 재배치한다.
+  // 진입할 때마다 최신 데이터로 다시 빌드(R10b). 프로필 보드는
+  // 모임 한마디 → 평소 플레이 → 게임 깊이 → 게임 취향 순으로 표시한다.
   function _buildTasteInnerHtml(d) {
-    const _bio = d.bio || '';
-    const _bioTags = _bioTagsOf(d);
     const _avoidTags = d.avoidTags || [];
     const _ruleSet = _makeRuleSet(d);
     const likedGames = d.likedGames || [];
     const curiousGames = d.curiousGames || [];
     const depthCodes = d.preferredGameDepths || [];
     const hardestGames = d.hardestGames || [];
-    const ruleNames = (d.ruleGames || []).map(_profileGameName).filter(Boolean);
-    const summaryItems = _profileSummaryItems(d);
     const availableStructured = [
       _introLabels(d.availableDays, _INTRO_DAY_LABELS),
       window.CottageDB?.formatMemberIntroTimes?.(d.availableTimes) || _introLabels(d.availableTimes, {}),
     ].filter(Boolean).join(' · ');
-    const newGameTrait = _bioTags.some(tag => tag.includes('새로 해보는 게임')) ? '새 게임 도전 선호' : '';
     return `
-    <div class="taste-bio-section profile-intro-section">
-      <div class="taste-section-label">한줄 소개</div>
-      <div class="taste-bio-row">
-        <span class="taste-bio-display" data-bio="${escH(_bio)}">${_bioTags.length ? _bioTags.map(t => `<span class="taste-bio-tag">${escH(t)}</span>`).join('') : `<span class="taste-bio-placeholder">${readOnly ? '소개 없음' : '소개를 추가해보세요'}</span>`}</span>
-        ${_ro('<button class="taste-bio-edit-btn" type="button" title="편집">✏️</button>')}
-      </div>
-      ${_ro(`<div class="taste-bio-edit-wrap" style="display:none">
-        <div class="taste-bio-chips">
-          ${_BIO_PREDEFINED.map(ex => `<button class="taste-bio-chip" type="button">${escH(ex)}</button>`).join('')}
-        </div>
-        <div class="taste-bio-custom-wrap">
-          <input type="text" class="taste-bio-custom-input" maxlength="20" placeholder="직접 입력 후 Enter">
-          <button aria-label="직접 입력한 것 추가" class="taste-bio-custom-add" type="button">+</button>
-        </div>
-        <div class="taste-bio-custom-tags"></div>
-        <div class="taste-bio-actions">
-          <button class="taste-bio-save-btn" type="button">저장</button>
-          <button class="taste-bio-cancel-btn" type="button">취소</button>
-        </div>
-      </div>`)}
-    </div>
-    <div class="profile-player-summary" aria-label="핵심 플레이어 요약">
-      <div class="taste-section-label">이런 플레이어예요</div>
-      ${summaryItems.length ? `<div class="profile-summary-chips">${summaryItems.map(item => `<span class="profile-summary-chip">${escH(item)}</span>`).join('')}</div>` : `<p class="profile-summary-empty">${readOnly ? '아직 요약할 프로필 정보가 없어요.' : '플레이 스타일을 채우면 핵심 요약이 만들어져요.'}</p>`}
-    </div>
-    <section class="profile-info-section">
-      <div class="taste-section-label">🎲 플레이 스타일 ${_ro('<a class="profile-source-edit" href="/pages/club/club-intro.html">평소 생활 수정 →</a>')}</div>
+    ${d.expectation
+      ? `<section class="profile-info-section profile-expectation-section">
+      <div class="taste-section-label">함께 게임할 때</div>
+      <p class="profile-expectation-text">${escH(d.expectation)}</p>
+    </section>`
+      : (readOnly ? '' : `<section class="profile-info-section profile-expectation-section">
+      <div class="taste-section-label">함께 게임할 때</div>
+      <a class="profile-source-edit" href="/pages/club/club-intro.html">함께 게임할 때의 이야기를 남겨보세요 →</a>
+    </section>`)}
+    <section class="profile-info-section profile-usual-play-section">
+      <div class="taste-section-label">평소 플레이</div>
+      ${_ro('<a class="profile-source-edit" href="/pages/club/club-intro.html">평소 생활 수정 →</a>')}
       <div class="profile-info-list">
-        ${_profileInfoRowHtml('선호 유형', _introLabels(d.preferredGameTypes, _INTRO_GAME_TYPE_LABELS))}
+        ${_profileInfoRowHtml('평균 플레이 빈도', d.averagePlayFrequency != null ? _INTRO_FREQUENCY_LABELS[d.averagePlayFrequency] : '')}
+        ${_profileInfoRowHtml('주로 함께하는 사람', _introLabels(d.companionTypes, _INTRO_COMPANION_LABELS))}
+        ${_profileInfoRowHtml('가능한 요일·시간', availableStructured || d.available || '')}
+        ${_profileInfoRowHtml('활동 지역', d.location || '')}
+        ${_profileInfoRowHtml('이동 가능 범위', d.travelRange || '')}
+      </div>
+    </section>
+    <section class="profile-info-section profile-depth-section">
+      <div class="taste-section-label">게임 깊이</div>
+      <div class="profile-info-list">
         <div class="profile-info-row profile-depth-row">
-          <span class="profile-info-label">즐기는 게임 깊이</span>
+          <span class="profile-info-label">선호 웨이트</span>
           <span class="profile-depth-options${readOnly ? ' is-readonly' : ''}">
             ${Object.entries(_PROFILE_DEPTH_LABELS).map(([code, label]) => readOnly
               ? (depthCodes.includes(code) ? `<span class="profile-depth-chip is-selected">${label}</span>` : '')
               : `<button class="profile-depth-chip${depthCodes.includes(code) ? ' is-selected' : ''}" data-depth="${code}" type="button">${label}</button>`).join('') || '<span class="profile-info-value is-empty">미입력</span>'}
           </span>
         </div>
-        ${_profileInfoRowHtml('평균 플레이 빈도', d.averagePlayFrequency != null ? _INTRO_FREQUENCY_LABELS[d.averagePlayFrequency] : '')}
-        ${_profileInfoRowHtml('주로 함께하는 사람', _introLabels(d.companionTypes, _INTRO_COMPANION_LABELS))}
-        ${newGameTrait ? _profileInfoRowHtml('새 게임 성향', newGameTrait) : ''}
       </div>
-    </section>
-    <section class="profile-info-section profile-environment-section">
-      <div class="taste-section-label">🧭 플레이 환경</div>
-      <div class="profile-info-list">
-        ${_profileInfoRowHtml('평소 가능한 때', availableStructured || d.available || '')}
-        ${_profileInfoRowHtml('활동 지역', d.location || '')}
-        ${_profileInfoRowHtml('이동 가능 범위', d.travelRange || '')}
-      </div>
-    </section>
-    <section class="profile-info-section profile-experience-section">
-      <div class="taste-section-label">🏅 게임 경험</div>
       <div class="profile-experience-block">
         <div class="profile-experience-head"><span>가장 어려웠던 게임</span>${_ro(`<button class="profile-hardest-add" type="button"${hardestGames.length >= 2 ? ' disabled' : ''}>+ 게임 추가</button>`)}</div>
         <div class="profile-hardest-list">${_buildHardestGamesHtml(hardestGames)}</div>
-        <p class="profile-experience-hint">초급·중급 같은 자기평가 대신 실제 게임 경험으로 보여줘요.</p>
-      </div>
-      <div class="profile-experience-block">
-        <div class="profile-experience-head"><span>룰 설명 가능한 게임</span><span class="taste-count">${ruleNames.length}개</span></div>
-        ${ruleNames.length ? `<p class="profile-rule-summary">${escH(ruleNames.slice(0, 6).join(' · '))}${ruleNames.length > 6 ? ` · +${ruleNames.length - 6}` : ''}</p>` : '<p class="profile-hardest-empty">등록된 게임이 없어요</p>'}
+        <p class="profile-experience-hint">실제로 플레이해본 범위를 보여줘요.</p>
       </div>
     </section>
-    <section class="profile-taste-section">
-      <div class="taste-section-label">❤️ 게임 취향</div>
+    <section class="profile-info-section profile-taste-section">
+      <div class="taste-section-label">게임 취향</div>
+      <div class="profile-info-list">
+        ${_profileInfoRowHtml('선호 유형', _introLabels(d.preferredGameTypes, _INTRO_GAME_TYPE_LABELS))}
       ${d.clocktowerPreference ? _profileInfoRowHtml('시계탑 선호', _INTRO_CLOCKTOWER_LABELS[d.clocktowerPreference] || d.clocktowerPreference) : ''}
-    </section>
-    <div class="taste-game-section">
+      </div>
+    <div class="taste-game-section profile-taste-games-section">
       <div class="taste-section-label">❤️ 좋아하는 게임 <span class="taste-count" id="tastelikedCount">${likedGames.length}개</span> ${_ro('<button class="taste-add-btn taste-add-btn--inline" id="tastelikedAddBtn" type="button">+ 게임 추가</button>')}</div>
       <div class="taste-game-list" id="tastelikedList">${_buildTasteGameItems(likedGames, _ruleSet)}</div>
     </div>
@@ -2758,7 +2646,8 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
         <input type="text" class="taste-avoid-custom-input" maxlength="15" placeholder="직접 입력 후 Enter">
         <button aria-label="직접 입력한 것 추가" class="taste-avoid-custom-add" type="button">+</button>
       </div>
-    </div>`}`;
+    </div>
+    </section>`}`;
   }
   // 기록 보드: 플레이기록/게임평/사진 3섹션 토글 (항상 표시, 기본 열림)
   const _openActivityList = html => html.replace('class="profile-activity-list is-collapsed"', 'class="profile-activity-list"');
@@ -2905,11 +2794,11 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
       <div class="taste-section-label">📅 다가오는 일정</div>
       <p class="taste-game-empty">불러오는 중…</p>
     </div>
-    <div class="taste-game-section">
+    <div class="taste-game-section profile-taste-games-section">
       <div class="taste-section-label taste-section-label--mb"><span class="mb-sec-name">❤️ 요즘 하고 싶은 게임</span> <span class="taste-count" id="meetinglikedCount"></span> ${_ro('<button class="taste-add-btn taste-add-btn--inline" id="meetinglikedAddBtn" type="button">＋추가</button>')} <button class="mb-taste-link" id="meetinglikedBoxBtn" type="button">평소 좋아하는 게임</button></div>
       <div class="taste-game-list" id="meetinglikedList"><p class="taste-game-empty">불러오는 중…</p></div>
     </div>
-    <div class="taste-game-section">
+    <div class="taste-game-section profile-taste-games-section">
       <div class="taste-section-label taste-section-label--mb"><span class="mb-sec-name">💡 요즘 배우고 싶은 게임</span> <span class="taste-count" id="meetingcuriousCount"></span> ${_ro('<button class="taste-add-btn taste-add-btn--inline" id="meetingcuriousAddBtn" type="button">＋추가</button>')} <button class="mb-taste-link" id="meetingcuriousBoxBtn" type="button">평소 궁금한 게임</button></div>
       <div class="taste-game-list" id="meetingcuriousList"><p class="taste-game-empty">불러오는 중…</p></div>
     </div>
@@ -2924,7 +2813,7 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
       <div class="taste-section-label">👤 평소 참고 ${_ro('<button class="mb-pref-edit" type="button">프로필 보드 보기 →</button>')}</div>
       ${_usualSummary.length ? `<div class="profile-summary-chips">${_usualSummary.map(item => `<span class="profile-summary-chip">${escH(item)}</span>`).join('')}</div>` : '<p class="taste-game-empty">프로필 보드에 등록된 평소 성향이 없어요.</p>'}
     </div>
-    <div class="taste-game-section">
+    <div class="taste-game-section profile-taste-games-section">
       <div class="taste-section-label">🕐 최근 모임 참여${stats.moimCount ? ` <span class="taste-count">${stats.moimCount}회</span>` : ''}</div>
       ${_recentPlaysHtml}
     </div>

@@ -47,9 +47,45 @@ check('main card order: profile > meeting > records > together', cardOrder.every
   && cardOrder.every((index, i) => i === 0 || cardOrder[i - 1] < index));
 check('profile label with legacy taste analytics key', boardSrc.includes('<span class="profile-card-label">프로필 보드</span>')
   && boardSrc.includes("_openSubSheet('프로필 보드'") && boardSrc.includes("_trackPvOnce('my-board-taste')"));
-check('profile information flow has four layers', ['이런 플레이어예요', '플레이 스타일', '게임 경험', '게임 취향']
-  .every(label => boardSrc.includes(label)));
-check('location and travel range stay under play environment', /profile-environment-section[\s\S]{0,900}활동 지역[\s\S]{0,300}이동 가능 범위/.test(boardSrc));
+const tasteStart = boardSrc.indexOf('function _buildTasteInnerHtml(d) {');
+const tasteEnd = boardSrc.indexOf('  // 기록 보드', tasteStart);
+const tasteBuilder = tasteStart >= 0 && tasteEnd > tasteStart
+  ? [boardSrc.slice(tasteStart, tasteEnd)] : null;
+check('profile information flow has four sections', ['함께 게임할 때', '평소 플레이', '게임 깊이', '게임 취향']
+  .every(label => tasteBuilder?.[0].includes(label)));
+check('legacy split sections are removed', !!tasteBuilder
+  && !tasteBuilder[0].includes('이런 플레이어예요')
+  && !tasteBuilder[0].includes('플레이 환경')
+  && !tasteBuilder[0].includes('게임 경험'));
+check('profile board hides legacy bio and summary duplication', !!tasteBuilder
+  && !tasteBuilder[0].includes('한줄 소개')
+  && !tasteBuilder[0].includes('taste-bio-')
+  && !tasteBuilder[0].includes('profile-summary')
+  && !tasteBuilder[0].includes('_profileSummaryItems')
+  && !tasteBuilder[0].includes('_bioTagsOf'));
+check('expectation is conditional and owner-only empty CTA', !!tasteBuilder
+  && tasteBuilder[0].includes('d.expectation')
+  && tasteBuilder[0].includes("readOnly ? ''")
+  && tasteBuilder[0].includes('함께 게임할 때의 이야기를 남겨보세요'));
+check('structured player fields appear once in their sections', !!tasteBuilder
+  && (tasteBuilder[0].match(/선호 유형/g) || []).length === 1
+  && (tasteBuilder[0].match(/선호 웨이트/g) || []).length === 1
+  && (tasteBuilder[0].match(/평균 플레이 빈도/g) || []).length === 1
+  && (tasteBuilder[0].match(/주로 함께하는 사람/g) || []).length === 1
+  && (tasteBuilder[0].match(/가능한 요일·시간/g) || []).length === 1
+  && (tasteBuilder[0].match(/활동 지역/g) || []).length === 1
+  && (tasteBuilder[0].match(/이동 가능 범위/g) || []).length === 1);
+check('location and travel range stay in usual play', !!tasteBuilder
+  && /profile-usual-play-section[\s\S]{0,1200}활동 지역[\s\S]{0,300}이동 가능 범위/.test(tasteBuilder[0]));
+const tasteSection = tasteBuilder?.[0].match(/<section class="profile-info-section profile-taste-section">[\s\S]*?<\/section>/)?.[0] || '';
+check('avoid types and preferred types stay in game taste', !!tasteBuilder
+  && tasteSection.includes('선호 유형')
+  && tasteSection.includes('taste-avoid-section'));
+check('rule explain remains an item action, not experience section', !!tasteBuilder
+  && !tasteBuilder[0].includes('profile-rule-summary')
+  && boardSrc.includes('mb-rule-btn'));
+check('expectation uses normal body typography', styleSrc.includes('.profile-expectation-text{')
+  && styleSrc.includes('font-size:13px') && styleSrc.includes('line-height:1.7'));
 check('multi-depth and hardest-games editors are wired', boardSrc.includes('Object.entries(_PROFILE_DEPTH_LABELS)')
   && boardSrc.includes('replaceProfileHardestGames') && boardSrc.includes('hardestGames.length >= 2'));
 check('readOnly edit controls use owner-only wrapper', boardSrc.includes("${_ro('<a class=\"profile-source-edit\"")
