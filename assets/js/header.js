@@ -1,5 +1,7 @@
 (function () {
-  if (new URLSearchParams(location.search).get('embed') === '1') {
+  const _embedQuery = new URLSearchParams(location.search);
+  const _embedHash = new URLSearchParams(location.hash.slice(1));
+  if (_embedQuery.get('embed') === '1' || _embedHash.get('embed') === '1') {
     document.body.classList.add('embed-mode');
     document.addEventListener('click', function (e) {
       const a = e.target.closest('a[href]');
@@ -9,8 +11,10 @@
       let url;
       try { url = new URL(href, location.href); } catch (err) { return; }
       if (url.origin !== location.origin || !url.pathname.endsWith('.html')) return;
-      if (url.searchParams.get('embed') === '1') return;
+      if (url.searchParams.get('embed') === '1' || new URLSearchParams(url.hash.slice(1)).get('embed') === '1') return;
       url.searchParams.set('embed', '1');
+      // localhost의 extensionless redirect가 query를 버려도 hash는 보존된다.
+      url.hash = 'embed=1';
       e.preventDefault();
       location.href = url.toString();
     });

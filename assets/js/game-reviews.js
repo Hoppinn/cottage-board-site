@@ -133,8 +133,9 @@
   function trackRecordStart() { window.CottageDB?.trackEvent('record_start'); }
 
   function isEmbeddedRecordHub() {
-    const embed = new URLSearchParams(location.search).get('embed');
-    return embed === '1' || embed === 'true';
+    const queryEmbed = new URLSearchParams(location.search).get('embed');
+    const hashEmbed = new URLSearchParams(location.hash.slice(1)).get('embed');
+    return queryEmbed === '1' || queryEmbed === 'true' || hashEmbed === '1';
   }
 
   let tried = false;
@@ -168,7 +169,8 @@
     // 동호회 기록&사진에서 건너온 경우에만 복귀 링크. 홈이 이 페이지를 iframe으로 미리 로드하므로
     // embed 모드에선 띄우지 않는다(모달 안에 「돌아가기」가 뜨면 갈 곳이 없다).
     if (!embedded && !document.body.classList.contains('embed-mode')) window.renderCrossBackLink?.();
-    const startInput = params.get('tab') === 'input';
+    const hashParams = new URLSearchParams(location.hash.slice(1));
+    const startInput = params.get('tab') === 'input' || hashParams.get('tab') === 'input';
     // ① embed는 홈의 프리로드(사용자가 연 적 없음)라 제외 — 열릴 땐 ③으로 잡힌다
     if (startInput && !embedded) trackRecordStart();
 

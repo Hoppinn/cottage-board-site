@@ -19,7 +19,9 @@ function check(label, condition) {
 
 console.log('=== 기록 센터모달 UX ===');
 check('홈 iframe은 공통 compact 규약 embed=1을 사용',
-  indexPage.includes("game-reviews.html?embed=1&tab=input") && !indexPage.includes('game-reviews.html?embed=true&tab=input'));
+  indexPage.includes("game-reviews.html?embed=1&tab=input#embed=1&tab=input") && !indexPage.includes('game-reviews.html?embed=true&tab=input'));
+check('extensionless redirect가 query를 버려도 header가 hash embed=1을 인식',
+  /new URLSearchParams\(location\.hash\.slice\(1\)\)/.test(read('assets/js/header.js')));
 check('embed 모드에서 header·breadcrumb·히어로·푸터를 첫 페인트부터 제외',
   /body\.embed-mode \.breadcrumb,[\s\S]*body\.embed-mode \.page-mini-hero,[\s\S]*body\.embed-mode footer/.test(css));
 check('embed 모드 탭 자체가 iframe 스크롤 기준 sticky',

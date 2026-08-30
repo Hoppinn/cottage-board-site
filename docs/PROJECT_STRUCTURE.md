@@ -229,7 +229,7 @@
 
 ```
 assets/js/
-├── header.js                   # 헤더 HTML 주입(로고·메뉴·검색버튼) + embed 모드 처리(embed=1 시 헤더 미삽입,
+├── header.js                   # 헤더 HTML 주입(로고·메뉴·검색버튼) + embed 모드 처리(query/hash의 embed=1 시 헤더 미삽입,
 │                               #   내부 .html 링크 클릭에 embed=1 자동 전파). data-index="true" 스크립트 속성으로
 │                               #   index.html vs 하위 페이지 상대경로 분기. 상세는 §2-A "embed 모드"
 ├── supabase-config.js          # Supabase URL + anonKey 설정 (window.SUPABASE_CONFIG)
@@ -325,7 +325,7 @@ assets/js/
 
 ### embed 모드 (`?embed=1`)
 
-URL에 `embed=1` 파라미터가 있으면 `header.js`가 `body.embed-mode` 클래스 추가 후 헤더 미삽입.  
+URL query 또는 hash에 `embed=1`이 있으면 `header.js`가 `body.embed-mode` 클래스 추가 후 헤더 미삽입. localhost의 extensionless redirect가 query를 버리는 경로에서는 hash 표식을 사용한다.
 `style.css`에 전역 규칙 → `body.embed-mode .site-header, .site-footer { display:none }`
 
 embed 모드에서는 `header.js`가 `document` 클릭을 가로채 내부 `.html` 링크 클릭 시 `embed=1`을 자동으로 붙여 재이동시킨다(143차-176) — 시트 안에서 다른 내부 링크(브레드크럼, 카드 등)를 눌러도 헤더가 다시 삽입되지 않도록 하는 단일 진입점. 외부 링크·`target="_blank"`·`#`/`mailto:`/`tel:`/`javascript:` 링크는 제외.

@@ -1,6 +1,6 @@
 # PROJECT_STATE — 코티지보드 현재 상태 보고서
 
-최종 갱신: 2026-08-31 (최근 플레이 → 기록 센터모달 compact UX 구현 완료, 실화면 확인 대기). **열린 버그 0건. 열린 마이그레이션 0건.**
+최종 갱신: 2026-08-31 (최근 플레이 → 기록 센터모달 runtime regression 수정·검증 완료). **열린 버그 0건. 열린 마이그레이션 0건.**
 
 > ✅ **오늘 나온 두 DB 버그(부분갱신 필드 덮어쓰기·SELECT 컬럼 누락)와 같은 패턴이 코드 전체에 더 있는지 전수 조사 완료 — 추가 발견 0건.** 여러 필드를 받는 `update*` 함수는 `updateGamePlay`뿐(나머지는 단일 필드라 해당 패턴 불가), `recordGamePlay` 호출 6곳 전부 추적해 DB 조회 결과를 재사용하는 3곳은 이미 같은 수정으로 해결됨을 확인, 나머지 3곳은 DB 조회가 아니라 화면 입력값을 쓰는 구조라 무관. 재조사 불필요.
 
@@ -14,7 +14,7 @@
 
 ## 0. 진행 중 작업 (세션 시작 시 확인)
 
-**현재 목표:** 최근 플레이 미리보기에서 여는 플레이 기록 iframe 센터모달을 compact하게 복원하고, 기록 탐색을 탭·월 단위로 단순화한다. 구현·자동검증은 완료했고 360/1280 실화면 확인만 남았다. DB·저장 구조는 바꾸지 않았다.
+**현재 목표:** 최근 플레이 미리보기에서 여는 플레이 기록 iframe 센터모달을 compact하게 복원하고, 기록 탐색을 탭·월 단위로 단순화한다. 구현·runtime 검증을 완료했고 DB·저장 구조는 바꾸지 않았다.
 
 - **종료 조건:** 프로필·모임 보드의 표시 구조를 기존 SSOT와 편집·모달 경로를 유지한 채 구현하고 자동검증한다.
 - **이번 작업 완료:** 모임원 프로필 카드의 identity 영역은 `openOtherProfileSheet`로 내보드 메인에, 프로필 내용 영역은 `openProfilePanel('taste', ...)`로 프로필 보드에 진입한다. 내보드 메인은 별도 제목 헤더 없이 큰 identity로 시작하고 스크롤 후에만 `내 보드` compact header를 표시하며, 메인 identity 상단 여백은 10px, identity와 바로 아래 수집 진행 카드 사이 여백은 12px로 조정했다. 수집 진행 카드와 4개 보드 카드 사이 및 카드 그리드 자체의 `gap:8px`은 유지했다. 알림은 X 영역과 겹치지 않게 왼쪽에 배치했다. 프로필·모임·기록·함께한 시간·수집 보드 서브시트는 기존 `< 내 보드` back UI를 확장한 단일 `< 캐릭터 닉네임 | 보드명 | X` header를 사용하고 캐릭터/wrapper를 32px로 키워 기존 glow가 보이도록 했다. 프로필 보드는 `모임 한마디`(expectation) → `평소 플레이`(빈도·동반자·가능 시간·지역) → `게임 깊이`(선호 웨이트·가장 어려웠던 게임) → `게임 취향`(선호 유형·피하는 유형·시계탑·게임 목록) 4개 덩어리로 단순화했고, `profiles.bio` 한줄 소개 및 bio 기반 자동 요약과 독립 룰 설명/환경/경험 대섹션은 화면에서 제거했다. 저장 구조·기존 데이터·`updateUserBio()` API와 게임 항목 토글은 유지했으며 신규 DB·localStorage·상태관리 구조는 없다.
@@ -26,9 +26,9 @@
 - **검증 보류:** `verify-member-intro-time-ui.js`의 기존 `최초 지급 완료` 검사는 같은 테스트 안에서 완료된 설문 행을 읽는 타이밍에 따라 360/1280 어느 쪽에서도 변동해 실패할 수 있다. 이번 변경의 identity 닉네임·아바타·프로필 본문·Enter 분리 검사는 360/1280에서 통과했고, 이 기존 쿠폰 검사는 이번 작업의 판정에서 제외했다.
 - **이번 작업 완료:** `embed=1` 기존 규약으로 글로벌 헤더·breadcrumb·히어로를 iframe 첫 페인트부터 제외하고, 기존 기록 탭을 iframe 스크롤 기준 sticky로 유지한다. 활성 탭 재클릭은 같은 iframe의 최상단으로만 이동한다. 날짜별 기록은 실제 최신 월만 기본 OPEN, 이후 명시적 클릭으로 최대 한 달만 OPEN한다.
 - **제외 범위:** 기록 DB/API·저장·입력 폼/사진/validation·기록 카드 구성·다른 보드 개편. 스크롤 위치 기반 월 자동 전환도 만들지 않는다.
-- **검증 완료:** `node scripts/verify-record-modal-ux.js`, `node --check assets/js/index-page.js`, `node --check assets/js/game-reviews.js`, `npm.cmd run check`, `git diff --check` 통과. 자동검사기는 실제 저장 API를 일부러 잘못 가정했을 때 FAIL을 내는 것을 먼저 확인한 뒤 올바른 `recordGamePlay` 호출로 재검증했다.
-- **실화면 확인 대기:** 인앱 브라우저가 제공되지 않아 360/1280에서 모달 최상단·sticky 탭·활성 탭 재클릭·월 전환을 아직 읽지 못했다. 사용자 확인 후 이 항목을 닫는다.
-- **다음 원자 작업:** 360/1280에서 최근 플레이 미리보기 → 기록 보기/입력 모달을 열어 위 4개 경로를 확인한다. 기록 보드·함께한 시간 개편은 시작하지 않는다.
+- **runtime 원인·검증:** Playwright가 `127.0.0.1:5500`에서 실제 홈→최근 플레이→기록 모달을 열어보니 iframe `src`에는 query가 있었지만 서버의 extensionless redirect가 최종 URL에서 query를 버렸다(`.../game-reviews`, body=`owned-page`, 내부 header·breadcrumb·hero 모두 visible). iframe URL의 hash에도 `embed=1&tab=input`을 넣고 `header.js`/게임 기록 허브가 query·hash 양쪽을 읽도록 최소 수정했다. 수정 후 360/1280에서 최종 URL=`.../game-reviews#embed=1&tab=input`, body=`owned-page embed-mode is-embedded`, `.site-header` 없음, breadcrumb·hero=`display:none`, 탭=`position:sticky; top:0`을 실측했다. Playwright 환경의 외부 네트워크는 차단돼 실제 기록 조회는 `불러오기 실패`였으므로 월 데이터 click은 DB 무접속 계약검사로만 확인했다.
+- **검증 완료:** `node scripts/verify-record-modal-ux.js`, `node --check assets/js/header.js`, `node --check assets/js/index-page.js`, `node --check assets/js/game-reviews.js`, `npm.cmd run check`, `git diff --check` 통과. 자동검사기는 실제 저장 API를 일부러 잘못 가정했을 때 FAIL을 내는 것을 먼저 확인한 뒤 올바른 `recordGamePlay` 호출로 재검증했다.
+- **다음 후보 작업:** 실계정에서 신규 `weight_*` 저장·재오픈 왕복. 기록 보드·함께한 시간 개편은 시작하지 않는다.
 - **약칭 출처 분류 보류 (2026-08-29):** `ID 수동 301행`은 사용자 직접입력 횟수가 아니라 BGG-ID 정본 적중 행 수임을 확인했다. 현재 ID 정본 294키를 값 계보로 배타 분류하면 `레거시 값 유지·복원 135키/137행`, `fallback 충돌 해결값 유지 155키/160행`, `이후 개별 추가 4키/4행(244608·280480·312484·400366)`, 미분류 0이다. 다음 시작점은 이 분류를 `audit-abbr-migration.js` 출력으로 고정하고 두 TSV의 `bgg-id`/`manual-abbr-missing` 표기를 `ID 명시 약칭`/`fallback 사용` 계열로 바꾼 뒤 집합 대조·커밋하는 것이다. 아직 보고서 파일은 수정하지 않았다.
 
 🚨 **§0의 「다음 큰 덩어리」를 적을 땐 그 자리가 정말 열려 있는지 도메인 문서와 대조할 것** — 2026-07-22 §0이 「P3 드릴다운 미착수」를 가리켰으나 admin-analytics는 2026-07-20 완료로 적고 있었다(`ddPanelHtml` 실재). 재측정이 아니었으면 있는 기능을 다시 만들 뻔했다.
