@@ -1475,7 +1475,7 @@ window.addEventListener('cottage-record-changed', initRecentPlay);
   let pendingTab = null;
   let iframeLightboxOpen = false;
   // 활성 뷰 체류시간 추적(PLAN_active_view_tracking.md 3차) — 이 모달은 game-reviews.html을
-  // embed=true iframe으로 보여준다. iframe 내부는 _isEmbeddedFrame() 가드로 자기 트래킹이
+  // embed=1 iframe으로 보여준다. iframe 내부는 _isEmbeddedFrame() 가드로 자기 트래킹이
   // 이미 꺼져 있으니(#24 방지), 부모(이 파일)가 대신 push/pop한다. 새 가상 키를 만들지 않고
   // 기존 실페이지 키 'game-reviews'를 그대로 쓴다 — 직접 이동해서 보든 이 팝업으로 보든
   // 같은 화면이라 같은 라벨이 맞다(V2_ONLY_PAGE_KEYS엔 추가하지 않는다 — 이미 v1부터 있던
@@ -1486,7 +1486,7 @@ window.addEventListener('cottage-record-changed', initRecentPlay);
   function preloadIfLoggedIn() {
     if (preloaded || !window.getKakaoUser?.()) return;
     preloaded = true;
-    frame.src = './pages/game/game-reviews.html?embed=true&tab=input';
+    frame.src = './pages/game/game-reviews.html?embed=1&tab=input';
   }
   window.addEventListener('kakao-auth-ready', preloadIfLoggedIn);
   window.addEventListener('cottage-auth-changed', preloadIfLoggedIn);
@@ -1519,7 +1519,7 @@ window.addEventListener('cottage-record-changed', initRecentPlay);
     const curPath = frame.contentWindow?.location?.pathname ?? '';
     if (!curPath.endsWith('game-reviews.html')) {
       frame.classList.remove('is-ready');
-      frame.src = './pages/game/game-reviews.html?embed=true&tab=input';
+      frame.src = './pages/game/game-reviews.html?embed=1&tab=input';
     }
   }
 

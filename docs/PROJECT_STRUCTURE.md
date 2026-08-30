@@ -77,6 +77,8 @@
 │   │                               #   기본 모의 DB(무접속), --live는 격리 행 왕복·삭제. --negctl 먼저
 │   ├── verify-meeting-board-ia.js  # 모임 보드 평소 참조/가까운 미래 범위/날짜별 게임 SSOT 계약
 │   │                               #   DB 무접속. --negctl로 이번 주 경계 퇴행 감지 확인
+│   ├── verify-record-modal-ux.js   # 홈 최근 플레이 → 기록 iframe 모달의 compact/embed·sticky 탭·날짜별 월 단일 accordion 계약
+│   │                               #   DB 무접속. 독립 페이지 상단 구조와 기록 입력 API 경로를 함께 보존 확인
 │   ├── verify-planner-profile-today.js # 개인 날짜 상세의 프로필 평소/날짜별 오늘 분리와 편집 보존
 │   │                               #   DB 무접속. --negctl로 정보 순서 판정 확인
 │   ├── verify-meeting-detail-game-editor.js # 이날 모임 상세의 본인 게임 조율 이전 계약

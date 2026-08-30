@@ -132,6 +132,11 @@
   //      ②의 click이 안 일어나는 경로다
   function trackRecordStart() { window.CottageDB?.trackEvent('record_start'); }
 
+  function isEmbeddedRecordHub() {
+    const embed = new URLSearchParams(location.search).get('embed');
+    return embed === '1' || embed === 'true';
+  }
+
   let tried = false;
   function tryInit() { if (tried) return; tried = true; initHub(); }
   window.addEventListener('kakao-auth-ready', tryInit);
@@ -157,7 +162,7 @@
     document.title = '플레이 기록 | 코티지보드';
 
     const params = new URLSearchParams(location.search);
-    const embedded = params.get('embed') === 'true';
+    const embedded = isEmbeddedRecordHub();
     if (embedded) document.body.classList.add('is-embedded');
 
     // 동호회 기록&사진에서 건너온 경우에만 복귀 링크. 홈이 이 페이지를 iframe으로 미리 로드하므로
@@ -177,6 +182,11 @@
 
     root.querySelectorAll('.pr-tab').forEach(tab => {
       tab.addEventListener('click', () => {
+        if (tab.classList.contains('is-active')) {
+          // iframe 자신의 스크롤 컨테이너만 처음으로 되돌린다. 입력값이나 탭 상태는 건드리지 않는다.
+          if (embedded) document.scrollingElement?.scrollTo({ top: 0, behavior: 'smooth' });
+          return;
+        }
         root.querySelectorAll('.pr-tab').forEach(t => t.classList.remove('is-active'));
         root.querySelectorAll('.pr-panel').forEach(p => p.classList.remove('is-active'));
         tab.classList.add('is-active');
@@ -751,7 +761,19 @@
   }
 
   function _restoreViewState(panel, _openSess, _openSub, _sy, _openMonth) {
+    const embeddedDateView = currentView === 'date' && isEmbeddedRecordHub();
+    if (embeddedDateView) {
+      // 과거에는 여러 달이 열린 상태도 저장될 수 있었다. 모달 날짜별 보기로 복원할 땐
+      // 가장 최근 DOM 순서의 한 달만 되살려 single-open 계약을 넘기지 않는다.
+      const restoredMonth = [...panel.querySelectorAll('.pr-session--bydate')]
+        .find(el => _openSess.has(el.querySelector('.pr-session-date')?.textContent?.trim()));
+      if (restoredMonth) {
+        panel.querySelectorAll('.pr-session--bydate').forEach(el => el.classList.remove('is-open'));
+        restoredMonth.classList.add('is-open');
+      }
+    }
     panel.querySelectorAll('.pr-session').forEach(el => {
+      if (embeddedDateView && el.classList.contains('pr-session--bydate')) return;
       if (_openSess.has(el.querySelector('.pr-session-date')?.textContent?.trim())) el.classList.add('is-open');
     });
     panel.querySelectorAll('.pr-sub-session').forEach(el => {
@@ -985,7 +1007,27 @@
     bindToggle(panel);
 
     panel.querySelectorAll('.pr-session-hd').forEach(hd => {
-      hd.addEventListener('click', () => hd.closest('.pr-session').classList.toggle('is-open'));
+      hd.addEventListener('click', () => {
+        const session = hd.closest('.pr-session');
+        if (currentView !== 'date' || !isEmbeddedRecordHub() || !session?.classList.contains('pr-session--bydate')) {
+          session?.classList.toggle('is-open');
+          return;
+        }
+
+        const wasOpen = session.classList.contains('is-open');
+        panel.querySelectorAll('.pr-session--bydate.is-open').forEach(el => el.classList.remove('is-open'));
+        if (wasOpen) return;
+        session.classList.add('is-open');
+
+        // 위 월이 접히며 클릭한 헤더가 sticky 탭 뒤로 밀린 경우에만 최소 위치 보정한다.
+        requestAnimationFrame(() => {
+          const tabBottom = root.querySelector('.pr-tabs')?.getBoundingClientRect().bottom ?? 0;
+          const rect = hd.getBoundingClientRect();
+          if (rect.top < tabBottom || rect.bottom > window.innerHeight) {
+            hd.scrollIntoView({ behavior: 'auto', block: 'start' });
+          }
+        });
+      });
     });
     panel.querySelectorAll('.pr-month-hd').forEach(hd => {
       hd.addEventListener('click', () => hd.closest('.pr-month-session').classList.toggle('is-open'));
@@ -1321,7 +1363,7 @@
       const totalGames = [...dateMap.values()].reduce((s, gm) => s + [...gm.values()].reduce((s2, recs) => s2 + recs.length, 0), 0);
       const isLatestMonth = ym === latestYm;
 
-      html += `<div class="pr-session pr-session--bydate">
+      html += `<div class="pr-session pr-session--bydate${isEmbeddedRecordHub() && isLatestMonth ? ' is-open' : ''}">
         <button class="pr-session-hd" type="button">
           <span class="pr-session-date">${monthLabel}</span>
           <span class="pr-session-summary">${dateMap.size}일 · ${totalGames}게임</span>

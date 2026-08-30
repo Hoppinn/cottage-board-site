@@ -7658,7 +7658,24 @@ button.home-section-more{background:none;border:none;cursor:pointer;padding:0;}
 .sheet-fullscreen-link{position:absolute;bottom:10px;right:12px;font-size:11px;color:var(--text-info);text-decoration:none;z-index:2;opacity:0.75;}
 .sheet-fullscreen-link:hover{opacity:1;text-decoration:underline;}
 
-/* embedded 모드: 헤더·푸터·브레드크럼·페이지히어로 숨김 */
+/* embedded 모드: 공통 헤더가 embed=1에서 동기적으로 빠지므로 첫 페인트부터
+   기록 탭이 모달의 첫 UI가 된다. 독립 페이지의 상단 구조에는 적용하지 않는다. */
+body.embed-mode .breadcrumb,
+body.embed-mode .page-mini-hero,
+body.embed-mode footer { display:none!important; }
+body.embed-mode .inner-page { padding:16px 18px 36px; }
+body.embed-mode #reviewRoot { padding-bottom:0; }
+body.embed-mode #reviewRoot .pr-tabs {
+  position:sticky;
+  top:0;
+  z-index:1;
+  margin:0 -18px 20px;
+  padding:0 52px 0 18px;
+  background:var(--bg);
+}
+body.embed-mode .pr-session--bydate > .pr-session-hd { scroll-margin-top:48px; }
+
+/* 이전 embed=true iframe 캐시와의 호환: game-reviews.js 초기화 뒤에도 같은 compact 규칙을 유지한다. */
 body.is-embedded .site-header,
 body.is-embedded footer,
 body.is-embedded .breadcrumb,
