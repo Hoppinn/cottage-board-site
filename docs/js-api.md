@@ -1,6 +1,6 @@
 # JS API 레퍼런스 — 코티지보드
 
-최종 갱신: 2026-08-29 (`getMeetingVotes`/`upsertMeetingVote`에 024 날짜별 판 의도 반영) / 2026-08-28 (`submitMemberIntro` 추가 + `getMeetingProfile`에 023 구조화 자기소개 필드 반영) / 2026-08-10 (`upsertGameOverride`/`getGameOverride`에 `ruleSections`(021) 반영 — 헤더 타임스탬프가 실제 내용보다 3주 넘게 낡아 있던 것도 같이 바로잡음)
+최종 갱신: 2026-08-29 (`normalizeMemberIntroTimes`/`formatMemberIntroTimes` 추가, `submitMemberIntro`의 30분 슬롯·커스텀 유형 계약 반영) / 2026-08-29 (`getMeetingVotes`/`upsertMeetingVote`에 024 날짜별 판 의도 반영) / 2026-08-28 (`submitMemberIntro` 추가 + `getMeetingProfile`에 023 구조화 자기소개 필드 반영)
 
 ---
 
@@ -132,7 +132,9 @@ return data || [];
 | `deleteMeetingVote(userId, voteDate)` | 모임 플래너: 등록 취소. **cascade**: 같은 user_id+vote_date의 `meeting_vote_games`(하고싶은/배우고싶은 게임)도 함께 삭제 — 참여 취소 시 orphan 게임 방지 |
 | `getMeetingProfile(userId)` | **취향보드·모임보드 공용 단일 소스**. 기존 반환값에 023 구조화 자기소개 `companionTypes, averagePlayFrequency, possibleFrequencyMin/Max, desiredFrequencyMin/Max, availableDays, availableTimes, preferredGameTypes, clocktowerPreference, expectation, questionnaireCompletedAt`을 추가한다. `join_sources`는 관리자 전용이라 공개 프로필 반환값에서 의도적으로 제외. `avoidTags`는 계속 `profiles.avoid_tags` SSOT. ⚠️ 취향/모임 서브시트 데이터를 여기 말고 다시 조회하지 말 것 |
 | `upsertMeetingIntro(userId, fields)` | member_intros upsert (`onConflict:'user_id'`). 유저당 1행 보장. fields에 전달한 키만 갱신 |
-| `submitMemberIntro(userId, answers)` | 023 필수 자기소개 전체 제출 RPC 래퍼. answers의 구조화 답변을 `submit_member_intro`에 전달하고 `{success, id, voucherGranted}` 반환. DB가 소개 저장·avoid_tags 갱신·`intro_complete` 교환권 1회 지급을 한 트랜잭션으로 처리하므로, 화면에서 별도 지급 INSERT를 하지 않는다 |
+| `normalizeMemberIntroTimes(values)` | 모임원 프로필 시간 값을 정규화한다. 신규 `HH:00`/`HH:30` 슬롯은 그대로 보존하고, 기존 `morning/afternoon/evening/late_night`는 대응하는 30분 슬롯으로 읽는다. `flexible`은 슬롯과 동시에 유지한다. 기존 DB 행은 조회만으로 재작성하지 않는다 |
+| `formatMemberIntroTimes(values)` | 정규화된 30분 슬롯을 연속 범위로 합쳐 `09시30분~12시 · 22시30분~01시 · 시간대 유동적` 형식으로 반환한다. 0시 경계의 마지막/첫 슬롯도 한 범위로 합친다 |
+| `submitMemberIntro(userId, answers)` | 023 필수 자기소개 전체 제출 RPC 래퍼. answers의 구조화 답변을 `submit_member_intro`에 전달하고 `{success, id, voucherGranted}` 반환. 사용자 키는 카카오 ID 문자열이며 반환 `id`는 `member_intros.id` UUID다. `availableTimes`는 30분 슬롯과 선택적 `flexible`, 선호/비선호 유형 배열은 기본 코드와 20자 이하 사용자 추가값을 받을 수 있다. DB가 소개 저장·avoid_tags 갱신·`intro_complete` 교환권 1회 지급을 한 트랜잭션으로 처리하므로 화면에서 별도 지급 INSERT를 하지 않는다 |
 | `addMeetingGamePref(userId, listType, gameId, customName)` / `removeMeetingGamePref(...)` | meeting_game_prefs 추가/삭제. listType: `'want_this_time'` \| `'can_explain_rules'`. addGamePref/removeGamePref와 동일 구조 |
 | `getMeetingVoteGames(startDate, endDate)` | 모임 플래너 날짜별 게임 선호 조회. → `[{vote_date, user_id, list_type, game_id, custom_name, is_priority, player_condition}]`. getMeetingVotes와 동일 패턴 |
 | `addMeetingVoteGame(userId, voteDate, listType, gameId, customName)` | meeting_vote_games 추가. listType: `'want'`\|`'learn'`. 중복(23505) 성공 처리. addMeetingGamePref와 동일 구조 + voteDate |

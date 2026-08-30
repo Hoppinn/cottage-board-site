@@ -942,6 +942,71 @@ window._cottageSess = (function () {
     } catch (e) { return { error: e }; }
   }
 
+  const MEMBER_INTRO_LEGACY_TIME_RANGES = {
+    morning: [12, 24],
+    afternoon: [24, 36],
+    evening: [36, 48],
+    late_night: [0, 12],
+  };
+
+  function memberIntroSlotCode(index) {
+    const minutes = (index % 48) * 30;
+    return `${String(Math.floor(minutes / 60)).padStart(2, '0')}:${minutes % 60 ? '30' : '00'}`;
+  }
+
+  // 과거 오전/오후/저녁/심야 값을 30분 슬롯으로 읽되 DB 행을 일괄 변경하지 않는다.
+  function normalizeMemberIntroTimes(values) {
+    const slots = new Set();
+    let flexible = false;
+    (values || []).forEach(value => {
+      if (value === 'flexible') { flexible = true; return; }
+      const legacy = MEMBER_INTRO_LEGACY_TIME_RANGES[value];
+      if (legacy) {
+        for (let i = legacy[0]; i < legacy[1]; i++) slots.add(memberIntroSlotCode(i));
+        return;
+      }
+      if (/^([01][0-9]|2[0-3]):(00|30)$/.test(value)) slots.add(value);
+    });
+    const ordered = [...slots].sort((a, b) => a.localeCompare(b));
+    if (flexible) ordered.push('flexible');
+    return ordered;
+  }
+
+  function formatMemberIntroTimePoint(slotIndex, allow24 = false) {
+    if (allow24 && slotIndex === 48) return '24시';
+    const minutes = (slotIndex % 48) * 30;
+    const hour = String(Math.floor(minutes / 60)).padStart(2, '0');
+    return minutes % 60 ? `${hour}시30분` : `${hour}시`;
+  }
+
+  // 0시 경계에서 이어진 슬롯도 한 범위로 합쳐 22시30분~01시처럼 표시한다.
+  function formatMemberIntroTimes(values) {
+    const normalized = normalizeMemberIntroTimes(values);
+    const flexible = normalized.includes('flexible');
+    const selected = new Set(normalized.filter(value => value !== 'flexible').map(value => {
+      const [hour, minute] = value.split(':').map(Number);
+      return hour * 2 + (minute === 30 ? 1 : 0);
+    }));
+    const ranges = [];
+    let start = null;
+    for (let i = 0; i <= 48; i++) {
+      const on = i < 48 && selected.has(i);
+      if (on && start == null) start = i;
+      if (!on && start != null) { ranges.push({ start, end:i, wraps:false }); start = null; }
+    }
+    if (ranges.length > 1 && ranges[0].start === 0 && ranges[ranges.length - 1].end === 48) {
+      const first = ranges.shift();
+      const last = ranges.pop();
+      ranges.push({ start:last.start, end:first.end, wraps:true });
+    }
+    const labels = ranges.map(range => {
+      const end = range.wraps ? range.end : range.end;
+      return `${formatMemberIntroTimePoint(range.start)}~${formatMemberIntroTimePoint(end, !range.wraps)}`;
+    });
+    if (flexible) labels.push('시간대 유동적');
+    return labels.join(' · ');
+  }
+
   // 본인 모임 보드 / 자기소개 편집용 — profiles.bio + member_intros + game_likes/game_curious + can_explain_rules 통합 조회
   // want_this_time은 game_likes 미러링으로 전환 후 읽기 중단 (db-schema.md UNUSED 참조)
   async function getMeetingProfile(userId) {
@@ -2040,6 +2105,8 @@ window._cottageSess = (function () {
     updateNotifSeenAt,
     addNotifReadKeys,
     getNoticeAckKeys,
+    normalizeMemberIntroTimes,
+    formatMemberIntroTimes,
     getMeetingProfile,
     upsertMeetingIntro,
     submitMemberIntro,

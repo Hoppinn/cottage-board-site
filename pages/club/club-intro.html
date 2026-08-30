@@ -81,15 +81,15 @@
               <div class="intro-wizard-step" data-step="3">
                 <h3>참여 가능한 시간</h3>
                 <div class="intro-form-fields">
-                  <fieldset class="intro-question" data-group="availableDays"><legend>주로 참여 가능한 요일 <span class="intro-required">*</span><small>복수 선택 가능</small></legend><div class="intro-choice-grid intro-choice-grid--days"><label><input type="checkbox" value="mon">월</label><label><input type="checkbox" value="tue">화</label><label><input type="checkbox" value="wed">수</label><label><input type="checkbox" value="thu">목</label><label><input type="checkbox" value="fri">금</label><label><input type="checkbox" value="sat">토</label><label><input type="checkbox" value="sun">일</label><label data-exclusive="true"><input type="checkbox" value="flexible">일정에 따라 유동적</label></div></fieldset>
-                  <fieldset class="intro-question" data-group="availableTimes"><legend>주로 참여 가능한 시간대 <span class="intro-required">*</span><small>복수 선택 가능</small></legend><div class="intro-choice-grid"><label><input type="checkbox" value="morning">오전 6~12시</label><label><input type="checkbox" value="afternoon">오후 12~18시</label><label><input type="checkbox" value="evening">저녁 18~24시</label><label><input type="checkbox" value="late_night">심야 0~6시</label><label data-exclusive="true"><input type="checkbox" value="flexible">시간대 유동적</label></div></fieldset>
+                  <fieldset class="intro-question" data-group="availableDays"><legend>주로 참여 가능한 요일 <span class="intro-required">*</span><small>복수 선택 가능</small></legend><div class="intro-choice-grid intro-choice-grid--days"><label><input type="checkbox" value="mon">월</label><label><input type="checkbox" value="tue">화</label><label><input type="checkbox" value="wed">수</label><label><input type="checkbox" value="thu">목</label><label><input type="checkbox" value="fri">금</label><label><input type="checkbox" value="sat">토</label><label><input type="checkbox" value="sun">일</label><label class="intro-choice-wide"><input type="checkbox" value="flexible">일정에 따라 유동적</label></div></fieldset>
+                  <fieldset class="intro-question" data-group="availableTimes"><legend>주로 참여 가능한 시간대 <span class="intro-required">*</span><small>30분 단위로 여러 구간을 선택할 수 있어요</small></legend><div class="intro-time-picker" id="introTimePicker"></div><p class="intro-time-result" id="introTimeResult" aria-live="polite">시간을 선택해주세요.</p><div class="intro-choice-grid intro-choice-grid--single"><label><input type="checkbox" id="introTimeFlexible" value="flexible">시간대 유동적</label></div></fieldset>
                 </div>
               </div>
               <div class="intro-wizard-step" data-step="4">
                 <h3>좋아하고 꺼리는 게임</h3>
                 <div class="intro-form-fields">
-                  <fieldset class="intro-question" data-group="preferredGameTypes"><legend>좋아하는 게임 유형 <span class="intro-required">*</span><small>복수 선택 가능</small></legend><div class="intro-choice-grid"><label><input type="checkbox" value="party">파티·친목</label><label><input type="checkbox" value="mystery">추리·미스터리</label><label><input type="checkbox" value="strategy">전략·유로</label><label><input type="checkbox" value="thematic">테마·몰입</label><label><input type="checkbox" value="cooperative">협력</label><label><input type="checkbox" value="social_deduction">마피아·블러핑</label><label><input type="checkbox" value="card_deckbuilding">카드·덱빌딩</label><label><input type="checkbox" value="puzzle_abstract">퍼즐·추상</label><label><input type="checkbox" value="campaign_legacy">캠페인·레거시</label><label data-exclusive="true"><input type="checkbox" value="any">장르를 가리지 않음</label></div></fieldset>
-                  <fieldset class="intro-question" data-group="avoidGameTypes"><legend>꺼리는 게임 유형 <span class="intro-required">*</span><small>복수 선택 가능</small></legend><div class="intro-choice-grid"><label><input type="checkbox" value="마피아류">마피아류</label><label><input type="checkbox" value="실시간">실시간</label><label><input type="checkbox" value="협상">협상</label><label><input type="checkbox" value="파티게임">파티게임</label><label><input type="checkbox" value="긴 플레이타임">긴 플레이타임</label><label><input type="checkbox" value="고난도 전략">고난도 전략</label><label><input type="checkbox" value="운 비중 높음">운 비중 높음</label><label><input type="checkbox" value="공격/견제 강함">공격·견제 강함</label><label data-exclusive="true"><input type="checkbox" value="none">딱히 없음</label></div></fieldset>
+                  <fieldset class="intro-question" data-group="preferredGameTypes"><legend>좋아하는 게임 유형 <span class="intro-required">*</span><small>복수 선택 가능</small></legend><div class="intro-choice-grid"><label><input type="checkbox" value="party">파티·친목</label><label><input type="checkbox" value="mystery">추리·미스터리</label><label><input type="checkbox" value="strategy">전략·유로</label><label><input type="checkbox" value="thematic">테마·몰입</label><label><input type="checkbox" value="cooperative">협력</label><label><input type="checkbox" value="social_deduction">마피아·블러핑</label><label><input type="checkbox" value="card_deckbuilding">카드·덱빌딩</label><label><input type="checkbox" value="puzzle_abstract">퍼즐·추상</label><label><input type="checkbox" value="campaign_legacy">캠페인·레거시</label><label data-exclusive="true"><input type="checkbox" value="any">장르를 가리지 않음</label></div><div class="intro-custom-option"><input class="intro-input" id="introPreferredCustom" type="text" maxlength="20" placeholder="기타 유형"><button type="button" data-add-custom="preferredGameTypes">추가</button></div></fieldset>
+                  <fieldset class="intro-question" data-group="avoidGameTypes"><legend>꺼리는 게임 유형 <span class="intro-required">*</span><small>복수 선택 가능</small></legend><div class="intro-choice-grid"><label><input type="checkbox" value="마피아류">마피아류</label><label><input type="checkbox" value="실시간">실시간</label><label><input type="checkbox" value="협상">협상</label><label><input type="checkbox" value="파티게임">파티게임</label><label><input type="checkbox" value="긴 플레이타임">긴 플레이타임</label><label><input type="checkbox" value="고난도 전략">고난도 전략</label><label><input type="checkbox" value="운 비중 높음">운 비중 높음</label><label><input type="checkbox" value="공격/견제 강함">공격·견제 강함</label><label data-exclusive="true"><input type="checkbox" value="none">딱히 없음</label></div><div class="intro-custom-option"><input class="intro-input" id="introAvoidCustom" type="text" maxlength="20" placeholder="기타 유형"><button type="button" data-add-custom="avoidGameTypes">추가</button></div></fieldset>
                 </div>
               </div>
               <div class="intro-wizard-step" data-step="5">
@@ -166,13 +166,15 @@
     const FREQUENCY_LABELS = ['몇 달에 1회 이하','월 1회','월 2~3회','주 1회','주 2회','주 3회','주 4회 이상'];
     const COMPANION_LABELS = { friends:'친구·지인', partner:'연인·배우자', family:'가족', boardgame_group:'보드게임 모임·동호회', various:'상황에 따라 다양함' };
     const DAY_LABELS = { mon:'월', tue:'화', wed:'수', thu:'목', fri:'금', sat:'토', sun:'일', flexible:'유동적' };
-    const TIME_LABELS = { morning:'오전', afternoon:'오후', evening:'저녁', late_night:'심야', flexible:'유동적' };
     const GAME_TYPE_LABELS = { party:'파티·친목', mystery:'추리·미스터리', strategy:'전략·유로', thematic:'테마·몰입', cooperative:'협력', social_deduction:'마피아·블러핑', card_deckbuilding:'카드·덱빌딩', puzzle_abstract:'퍼즐·추상', campaign_legacy:'캠페인·레거시', any:'장르 무관' };
+    const BUILTIN_GAME_TYPES = new Set(Object.keys(GAME_TYPE_LABELS));
+    const BUILTIN_AVOID_TYPES = new Set(['마피아류','실시간','협상','파티게임','긴 플레이타임','고난도 전략','운 비중 높음','공격/견제 강함','none']);
     const CLOCKTOWER_LABELS = { love:'매우 좋아함', interested:'기회가 되면 참여하고 싶음', curious:'아직 모르지만 해보고 싶음', not_preferred:'별로 선호하지 않음', no:'참여하고 싶지 않음' };
     let didPrefill = false;
     let wizardStep = 1;
     let wizardIsEdit = false;
     let currentIntroRow = null;
+    let selectedTimeSlots = new Set();
 
     function setupFrequencySelects() {
       ['introAverageFrequency','introPossibleMin','introPossibleMax','introDesiredMin','introDesiredMax'].forEach(id => {
@@ -187,6 +189,127 @@
       const selected = new Set(values || []);
       document.querySelectorAll(`[data-group="${group}"] input`).forEach(input => { input.checked = selected.has(input.value); });
     }
+    function getAvailableTimes() {
+      const values = [...selectedTimeSlots].sort();
+      if (document.getElementById('introTimeFlexible').checked) values.push('flexible');
+      return values;
+    }
+    function setAvailableTimes(values) {
+      const normalized = window.CottageDB?.normalizeMemberIntroTimes?.(values) || values || [];
+      selectedTimeSlots = new Set(normalized.filter(value => value !== 'flexible'));
+      document.getElementById('introTimeFlexible').checked = normalized.includes('flexible');
+      syncTimePicker();
+    }
+    function syncTimePicker() {
+      document.querySelectorAll('.intro-time-slot').forEach(button => {
+        const selected = selectedTimeSlots.has(button.dataset.time);
+        button.classList.toggle('is-selected', selected);
+        button.setAttribute('aria-pressed', String(selected));
+      });
+      const values = getAvailableTimes();
+      document.getElementById('introTimeResult').textContent = values.length
+        ? (window.CottageDB?.formatMemberIntroTimes?.(values) || values.join(' · '))
+        : '시간을 선택해주세요.';
+    }
+    function slotCode(index) {
+      const minutes = (index % 48) * 30;
+      return `${String(Math.floor(minutes / 60)).padStart(2, '0')}:${minutes % 60 ? '30' : '00'}`;
+    }
+    function setupTimePicker() {
+      const picker = document.getElementById('introTimePicker');
+      const rows = [[12,24], [24,36], [36,48], [48,60]];
+      picker.innerHTML = rows.map(([start,end]) => {
+        const marks = [];
+        for (let i = start; i <= end; i += 6) marks.push(`<span>${String(Math.floor((i % 48) / 2)).padStart(2, '0')}</span>`);
+        const slots = [];
+        for (let i = start; i < end; i++) {
+          const code = slotCode(i);
+          const next = slotCode(i + 1);
+          slots.push(`<button class="intro-time-slot" type="button" data-time="${code}" aria-label="${code}~${next}" aria-pressed="false"></button>`);
+        }
+        return `<div class="intro-time-row"><div class="intro-time-marks">${marks.join('')}</div><div class="intro-time-track">${slots.join('')}</div></div>`;
+      }).join('');
+
+      let dragging = false;
+      let paintSelected = true;
+      let suppressClick = false;
+      const paint = button => {
+        if (paintSelected) selectedTimeSlots.add(button.dataset.time);
+        else selectedTimeSlots.delete(button.dataset.time);
+        syncTimePicker();
+      };
+      picker.addEventListener('pointerdown', event => {
+        const button = event.target.closest('.intro-time-slot');
+        if (!button || event.button !== 0) return;
+        paintSelected = !selectedTimeSlots.has(button.dataset.time);
+        paint(button);
+        suppressClick = true;
+        dragging = event.pointerType === 'mouse';
+        if (dragging) event.preventDefault();
+      });
+      picker.addEventListener('pointerover', event => {
+        const button = event.target.closest('.intro-time-slot');
+        if (dragging && button) paint(button);
+      });
+      document.addEventListener('pointerup', () => {
+        dragging = false;
+        setTimeout(() => { suppressClick = false; }, 0);
+      });
+      picker.addEventListener('click', event => {
+        const button = event.target.closest('.intro-time-slot');
+        if (!button) return;
+        if (suppressClick && event.detail > 0) { suppressClick = false; return; }
+        paintSelected = !selectedTimeSlots.has(button.dataset.time);
+        paint(button);
+      });
+      document.getElementById('introTimeFlexible').addEventListener('change', syncTimePicker);
+      syncTimePicker();
+    }
+    function addCustomOption(groupName, rawValue, checked = false) {
+      const value = String(rawValue || '').trim();
+      if (!value || value.length > 20) return false;
+      const group = document.querySelector(`[data-group="${groupName}"]`);
+      const grid = group?.querySelector('.intro-choice-grid');
+      if (!grid) return false;
+      const existing = [...grid.querySelectorAll('input')].find(input => input.value === value);
+      if (existing) {
+        if (checked) { existing.checked = true; existing.dispatchEvent(new Event('change', { bubbles:true })); }
+        return true;
+      }
+      const label = document.createElement('label');
+      label.className = 'intro-custom-choice';
+      const input = document.createElement('input');
+      input.type = 'checkbox';
+      input.value = value;
+      input.checked = checked;
+      label.append(input, document.createTextNode(value));
+      grid.insertBefore(label, grid.querySelector('label[data-exclusive="true"]'));
+      if (checked) input.dispatchEvent(new Event('change', { bubbles:true }));
+      return true;
+    }
+    function addSharedCustomOptions(intros) {
+      const preferred = new Set();
+      const avoided = new Set();
+      (intros || []).forEach(row => {
+        (row.preferred_game_types || []).forEach(value => { if (!BUILTIN_GAME_TYPES.has(value)) preferred.add(value); });
+        (row._avoid_tags || []).forEach(value => { if (!BUILTIN_AVOID_TYPES.has(value)) avoided.add(value); });
+      });
+      preferred.forEach(value => addCustomOption('preferredGameTypes', value));
+      avoided.forEach(value => addCustomOption('avoidGameTypes', value));
+    }
+    document.querySelectorAll('[data-add-custom]').forEach(button => {
+      const groupName = button.dataset.addCustom;
+      const input = button.previousElementSibling;
+      const add = () => {
+        const value = input.value.trim();
+        if (!value) { input.focus(); return; }
+        if (addCustomOption(groupName, value, true)) input.value = '';
+      };
+      button.addEventListener('click', add);
+      input.addEventListener('keydown', event => {
+        if (event.key === 'Enter') { event.preventDefault(); add(); }
+      });
+    });
     function labelList(values, map) {
       return (values || []).map(value => map[value] || value).join(', ');
     }
@@ -249,7 +372,7 @@
       }
       if (step === 3) {
         if (!selectedValues('availableDays').length) return stepFail('참여 가능한 요일을 하나 이상 선택해주세요.', document.querySelector('[data-group="availableDays"]'));
-        if (!selectedValues('availableTimes').length) return stepFail('참여 가능한 시간대를 하나 이상 선택해주세요.', document.querySelector('[data-group="availableTimes"]'));
+        if (!getAvailableTimes().length) return stepFail('참여 가능한 시간대를 하나 이상 선택해주세요.', document.querySelector('[data-group="availableTimes"]'));
       }
       if (step === 4) {
         if (!selectedValues('preferredGameTypes').length) return stepFail('좋아하는 게임 유형을 하나 이상 선택해주세요.', document.querySelector('[data-group="preferredGameTypes"]'));
@@ -268,17 +391,20 @@
     wizardNext.addEventListener('click', () => { if (validateStep(wizardStep)) showWizardStep(wizardStep + 1); });
     document.addEventListener('keydown', e => { if (e.key === 'Escape' && wizard.classList.contains('is-open')) closeWizard(); });
 
-    // '유동적/없음/장르 무관'은 같은 그룹의 다른 답과 동시에 선택하지 않는다.
-    document.querySelectorAll('.intro-choice-grid label[data-exclusive="true"] input').forEach(exclusive => {
-      exclusive.addEventListener('change', () => {
-        if (exclusive.checked) exclusive.closest('.intro-choice-grid').querySelectorAll('input').forEach(input => { if (input !== exclusive) input.checked = false; });
-      });
-      exclusive.closest('.intro-choice-grid').querySelectorAll('input').forEach(input => {
-        if (input === exclusive) return;
-        input.addEventListener('change', () => { if (input.checked) exclusive.checked = false; });
+    // '딱히 없음/장르 무관'만 같은 그룹의 다른 답과 동시에 선택하지 않는다.
+    document.querySelectorAll('[data-group="preferredGameTypes"], [data-group="avoidGameTypes"]').forEach(group => {
+      group.querySelector('.intro-choice-grid').addEventListener('change', event => {
+        const input = event.target.closest('input[type="checkbox"]');
+        if (!input?.checked) return;
+        const grid = input.closest('.intro-choice-grid');
+        const exclusive = grid.querySelector('label[data-exclusive="true"] input');
+        if (!exclusive) return;
+        if (input === exclusive) grid.querySelectorAll('input').forEach(other => { if (other !== input) other.checked = false; });
+        else exclusive.checked = false;
       });
     });
     setupFrequencySelects();
+    setupTimePicker();
 
     // 자기소개 작성은 로그인 필수 (모임 보드와 user_id 기준으로 연동되기 때문)
     function _syncLoginUI() {
@@ -324,7 +450,7 @@
       document.getElementById('introDesiredMin').value = r.desired_frequency_min ?? '';
       document.getElementById('introDesiredMax').value = r.desired_frequency_max ?? '';
       setSelectedValues('availableDays', r.available_days);
-      setSelectedValues('availableTimes', r.available_times);
+      setAvailableTimes(r.available_times);
       setSelectedValues('preferredGameTypes', r.preferred_game_types);
       setSelectedValues('avoidGameTypes', r._avoid_tags?.length ? r._avoid_tags : (r.questionnaire_completed_at ? ['none'] : []));
       const clocktower = document.querySelector(`[name="clocktowerPreference"][value="${r.clocktower_preference || ''}"]`);
@@ -372,6 +498,7 @@
         r._bio = r.user_id ? (profileByUser[r.user_id]?.bio || '') : '';
         r._avoid_tags = r.user_id ? (profileByUser[r.user_id]?.avoid_tags || []) : [];
       });
+      addSharedCustomOptions(data);
 
       const currentUser = getCurrentUser();
       const myRow = currentUser ? data.find(r => String(r.user_id) === String(currentUser.id)) : null;
@@ -401,7 +528,7 @@
           </div>
           <div class="intro-card-news-body">
             ${r.average_play_frequency != null ? `<div class="intro-card-news-row"><span class="intro-card-news-label">🎲</span><span class="intro-card-news-val">평균 ${escHtml(FREQUENCY_LABELS[r.average_play_frequency])}</span></div>` : (r.favorite_games ? `<div class="intro-card-news-row"><span class="intro-card-news-label">🎲</span><span class="intro-card-news-val">${escHtml(r.favorite_games)}</span></div>` : '')}
-            ${r.available_days?.length ? `<div class="intro-card-news-row"><span class="intro-card-news-label">📅</span><span class="intro-card-news-val">${escHtml(labelList(r.available_days, DAY_LABELS))} · ${escHtml(labelList(r.available_times, TIME_LABELS))}</span></div>` : (r.available ? `<div class="intro-card-news-row"><span class="intro-card-news-label">📅</span><span class="intro-card-news-val">${escHtml(r.available)}</span></div>` : '')}
+            ${r.available_days?.length ? `<div class="intro-card-news-row"><span class="intro-card-news-label">📅</span><span class="intro-card-news-val">${escHtml(labelList(r.available_days, DAY_LABELS))} · ${escHtml(window.CottageDB?.formatMemberIntroTimes?.(r.available_times) || labelList(r.available_times, {}))}</span></div>` : (r.available ? `<div class="intro-card-news-row"><span class="intro-card-news-label">📅</span><span class="intro-card-news-val">${escHtml(r.available)}</span></div>` : '')}
             ${r.preferred_game_types?.length ? `<div class="intro-card-news-row"><span class="intro-card-news-label">❤️</span><span class="intro-card-news-val">${escHtml(labelList(r.preferred_game_types, GAME_TYPE_LABELS))}</span></div>` : ''}
             ${r.expectation ? `<div class="intro-card-news-row"><span class="intro-card-news-label">💬</span><span class="intro-card-news-val">${escHtml(r.expectation.length > 52 ? `${r.expectation.slice(0, 52)}…` : r.expectation)}</span></div>` : ''}
           </div>
@@ -499,7 +626,7 @@
         desiredFrequencyMin: Number(document.getElementById('introDesiredMin').value),
         desiredFrequencyMax: Number(document.getElementById('introDesiredMax').value),
         availableDays: selectedValues('availableDays'),
-        availableTimes: selectedValues('availableTimes'),
+        availableTimes: getAvailableTimes(),
         preferredGameTypes: selectedValues('preferredGameTypes'),
         avoidGameTypes: selectedValues('avoidGameTypes'),
         clocktowerPreference: document.querySelector('[name="clocktowerPreference"]:checked')?.value || '',

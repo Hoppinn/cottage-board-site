@@ -2723,7 +2723,6 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
   const _INTRO_FREQUENCY_LABELS = ['몇 달에 1회 이하','월 1회','월 2~3회','주 1회','주 2회','주 3회','주 4회 이상'];
   const _INTRO_COMPANION_LABELS = { friends:'친구·지인', partner:'연인·배우자', family:'가족', boardgame_group:'보드게임 모임·동호회', various:'상황에 따라 다양함' };
   const _INTRO_DAY_LABELS = { mon:'월', tue:'화', wed:'수', thu:'목', fri:'금', sat:'토', sun:'일', flexible:'유동적' };
-  const _INTRO_TIME_LABELS = { morning:'오전', afternoon:'오후', evening:'저녁', late_night:'심야', flexible:'유동적' };
   const _INTRO_GAME_TYPE_LABELS = { party:'파티·친목', mystery:'추리·미스터리', strategy:'전략·유로', thematic:'테마·몰입', cooperative:'협력', social_deduction:'마피아·블러핑', card_deckbuilding:'카드·덱빌딩', puzzle_abstract:'퍼즐·추상', campaign_legacy:'캠페인·레거시', any:'장르 무관' };
   const _INTRO_CLOCKTOWER_LABELS = { love:'매우 좋아함', interested:'기회가 되면 참여하고 싶음', curious:'아직 모르지만 해보고 싶음', not_preferred:'별로 선호하지 않음', no:'참여하고 싶지 않음' };
   const _introLabels = (values, map) => (values || []).map(value => map[value] || value).join(', ');
@@ -2751,7 +2750,7 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
       ${_meetingProfileRowHtml('평균 플레이 빈도', _INTRO_FREQUENCY_LABELS[_meeting.averagePlayFrequency])}
       ${_meetingProfileRowHtml('참여 가능 빈도', _introFrequencyRange(_meeting.possibleFrequencyMin, _meeting.possibleFrequencyMax))}
       ${_meetingProfileRowHtml('참여 희망 빈도', _introFrequencyRange(_meeting.desiredFrequencyMin, _meeting.desiredFrequencyMax))}
-      ${_meetingProfileRowHtml('가능한 요일·시간', `${_introLabels(_meeting.availableDays, _INTRO_DAY_LABELS)} · ${_introLabels(_meeting.availableTimes, _INTRO_TIME_LABELS)}`)}
+      ${_meetingProfileRowHtml('가능한 요일·시간', `${_introLabels(_meeting.availableDays, _INTRO_DAY_LABELS)} · ${window.CottageDB?.formatMemberIntroTimes?.(_meeting.availableTimes) || _introLabels(_meeting.availableTimes, {})}`)}
       ${_meetingProfileRowHtml('좋아하는 게임 유형', _introLabels(_meeting.preferredGameTypes, _INTRO_GAME_TYPE_LABELS))}
       ${_meetingProfileRowHtml('시계탑 선호도', _INTRO_CLOCKTOWER_LABELS[_meeting.clocktowerPreference])}
       ${_meetingProfileRowHtml('바라는 점 및 각오', _meeting.expectation)}

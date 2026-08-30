@@ -6692,8 +6692,21 @@ html:has(body.embed-mode) { scroll-padding-top: 0; }
 }
 .intro-choice-grid input{margin:0;accent-color:var(--green);flex-shrink:0;}
 .intro-choice-grid--days{grid-template-columns:repeat(4,minmax(0,1fr));}
-.intro-choice-grid--days label[data-exclusive="true"]{grid-column:span 2;}
+.intro-choice-grid--days .intro-choice-wide{grid-column:span 2;}
 .intro-choice-grid--radio{grid-template-columns:1fr;}
+.intro-choice-grid--single{grid-template-columns:1fr;margin-top:8px;}
+.intro-time-picker{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 12px;touch-action:pan-y;user-select:none;}
+.intro-time-row{min-width:0;}
+.intro-time-marks{display:flex;justify-content:space-between;margin:0 0 4px;color:#8f826f;font-size:9px;font-weight:700;line-height:1;}
+.intro-time-track{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));overflow:hidden;border:1px solid #cfc3b1;border-radius:8px;background:#fff;}
+.intro-time-slot{min-width:0;height:34px;padding:0;border:0;border-right:1px solid rgba(207,195,177,.42);background:#fff;cursor:pointer;}
+.intro-time-slot:nth-child(even){border-right-color:#cfc3b1;}
+.intro-time-slot:last-child{border-right:0;}
+.intro-time-slot.is-selected{background:var(--green);}
+.intro-time-slot:focus-visible{position:relative;z-index:1;outline:2px solid var(--green-2);outline-offset:-2px;}
+.intro-time-result{min-height:18px;margin:7px 0 0;color:var(--green-2);font-size:12px;font-weight:800;line-height:1.45;}
+.intro-custom-option{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px;margin-top:7px;}
+.intro-custom-option button{min-width:54px;border:1px solid var(--line-soft);border-radius:8px;background:#f8f4ea;color:var(--green-2);font-family:inherit;font-size:12px;font-weight:800;cursor:pointer;}
 .intro-range-row{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:8px;}
 .intro-input{
   padding:8px 10px;
@@ -6737,6 +6750,8 @@ html:has(body.embed-mode) { scroll-padding-top: 0; }
   .intro-wizard-step h3{font-size:18px;}
   .intro-wizard-lead{font-size:15px;}
   .intro-wizard-step .intro-choice-grid label{padding:7px 8px;}
+  .intro-time-picker{grid-template-columns:1fr;gap:8px;}
+  .intro-time-slot{height:38px;}
   .intro-wizard-step .intro-textarea{min-height:100px;}
 }
 .intro-list-empty,.intro-list-loading{

@@ -8,7 +8,12 @@ const root = path.join(__dirname, '..');
 const read = rel => fs.readFileSync(path.join(root, rel), 'utf8');
 const html = read('pages/club/club-intro.html');
 const adminHtml = read('pages/admin/requests-admin.html');
-let sql = read('docs/migrations/023_member_intro_questionnaire.sql');
+let sql = [
+  read('docs/migrations/023_member_intro_questionnaire.sql'),
+  read('docs/migrations/025_fix_member_intro_uuid_return.sql'),
+  read('docs/migrations/026_member_intro_time_slots_custom_types.sql'),
+].join('\n');
+const latestSql = read('docs/migrations/026_member_intro_time_slots_custom_types.sql');
 const client = read('assets/js/supabase-client.js');
 const negctl = process.argv.includes('--negctl');
 
@@ -45,13 +50,14 @@ const joinSources = ['store_visit','friend_referral','cottage_homepage','open_ch
 const companionTypes = ['friends','partner','family','boardgame_group','various'];
 const groupOptionCount = group => {
   const block = html.match(new RegExp(`data-group="${group}"[\\s\\S]*?<\\/fieldset>`))?.[0] || '';
-  return (block.match(/<input\b/g) || []).length;
+  return (block.match(/<input\b[^>]*type="(?:checkbox|radio)"/g) || []).length;
 };
 check(inOrder(html, joinSources), '가입 경로 7개 순서 불일치');
 check(inOrder(html, companionTypes), '동반 유형 5개 순서 불일치');
 check((html.match(/data-group="joinSources"/g) || []).length === 1, '가입 경로 그룹 중복/누락');
 check(groupOptionCount('availableDays') === 8, '가능 요일 선택지 개수 불일치');
-check(groupOptionCount('availableTimes') === 5, '가능 시간대 선택지 개수 불일치');
+check(groupOptionCount('availableTimes') === 1, '시간대 유동적 선택지 누락');
+check(html.includes('const rows = [[12,24], [24,36], [36,48], [48,60]]'), '30분 시간 막대 48슬롯 구성 누락');
 check(groupOptionCount('preferredGameTypes') === 10, '선호 게임 유형 선택지 개수 불일치');
 check(groupOptionCount('avoidGameTypes') === 9, '비선호 게임 유형 선택지 개수 불일치');
 check(groupOptionCount('clocktowerPreference') === 5, '시계탑 선호도 선택지 개수 불일치');
@@ -62,16 +68,43 @@ check(html.includes('desiredFrequencyMin > answers.desiredFrequencyMax'), '희�
 
 check(sql.includes(uniqueClause), 'intro_complete 사용자당 1회 unique index 누락');
 check(sql.includes("ON CONFLICT (user_id) WHERE reason = 'intro_complete' DO NOTHING"), '중복 지급 충돌 처리 누락');
-check(sql.includes('CREATE OR REPLACE FUNCTION public.submit_member_intro'), '원자적 제출 RPC 누락');
+check(sql.includes('CREATE OR REPLACE FUNCTION public.submit_member_intro') || sql.includes('CREATE FUNCTION public.submit_member_intro'), '원자적 제출 RPC 누락');
 check(sql.includes('UPDATE public.profiles SET avoid_tags = v_avoid_tags'), 'avoid_tags SSOT 갱신 누락');
 check(sql.includes('IF NOT FOUND THEN'), '프로필 미존재 전체 롤백 가드 누락');
-check(sql.includes("'flexible' = ANY(p_available_days)"), '요일 유동적 배타 검증 누락');
-check(sql.includes("'flexible' = ANY(p_available_times)"), '시간대 유동적 배타 검증 누락');
+check(latestSql.includes('RETURNS TABLE(intro_id UUID'), 'member_intros UUID 반환 계약 누락');
+check(latestSql.includes('v_intro_id UUID'), 'member_intros UUID 로컬 변수 누락');
+check(!latestSql.includes("'flexible' = ANY(p_available_days)"), '요일 유동적이 다른 요일과 여전히 배타적');
+check(!latestSql.includes("'flexible' = ANY(p_available_times)"), '시간대 유동적이 시간 슬롯과 여전히 배타적');
+check(latestSql.includes("item !~ '^([01][0-9]|2[0-3]):(00|30)$'"), '30분 슬롯 DB 검증 누락');
 check(sql.includes("'any' = ANY(p_preferred_game_types)"), '장르 무관 배타 검증 누락');
 check(client.includes("db.rpc('submit_member_intro'"), 'CottageDB RPC 래퍼 누락');
 check(client.includes('submitMemberIntro,'), 'CottageDB export 누락');
+check(client.includes('normalizeMemberIntroTimes,') && client.includes('formatMemberIntroTimes,'), '시간 호환 공용 API 누락');
+check(html.includes('data-add-custom="preferredGameTypes"') && html.includes('data-add-custom="avoidGameTypes"'), '게임 유형 기타 입력 누락');
 check(adminHtml.includes("join_sources').not('user_id','is',null)"), '관리자 가입 경로 조회 누락');
 check(!/joinSources: intro\.join_sources/.test(client), '공개 모임 보드에 가입 경로가 노출됨');
+
+const memory = new Map();
+const clientWindow = {
+  SUPABASE_CONFIG:{url:'https://example.invalid', anonKey:'test'},
+  supabase:{createClient:() => ({})},
+  addEventListener:()=>{}, dispatchEvent:()=>{},
+};
+clientWindow.window = clientWindow;
+vm.runInNewContext(client, {
+  window:clientWindow,
+  console,
+  localStorage:{getItem:key => memory.get(key) || null, setItem:(key, value) => memory.set(key, value)},
+  document:{addEventListener:()=>{}},
+  Image:function(){}, FileReader:function(){}, URL:{createObjectURL:()=>'', revokeObjectURL:()=>{}},
+  Blob:function(){}, CustomEvent:function(){}, setTimeout, clearTimeout,
+});
+const timeApi = clientWindow.CottageDB;
+check(timeApi.formatMemberIntroTimes(['09:00','09:30','10:00','10:30','11:00','11:30']) === '09시~12시', '단일 시간 범위 출력 불일치');
+check(timeApi.formatMemberIntroTimes(['09:30','10:00','10:30','11:00','11:30']) === '09시30분~12시', '30분 시간 범위 출력 불일치');
+check(timeApi.formatMemberIntroTimes(['22:30','23:00','23:30','00:00','00:30']) === '22시30분~01시', '자정 넘김 시간 범위 출력 불일치');
+check(timeApi.formatMemberIntroTimes(['09:00','09:30','15:00','15:30','flexible']) === '09시~10시 · 15시~16시 · 시간대 유동적', '복수 범위+유동적 출력 불일치');
+check(timeApi.normalizeMemberIntroTimes(['morning','flexible']).length === 13, '기존 오전 데이터 30분 슬롯 호환 불일치');
 
 if (failures.length) {
   console.error(`🔴 ${failures.length}건 실패`);
