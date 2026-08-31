@@ -69,8 +69,8 @@
       color: var(--muted);
     }
     .dd-meeting-header .dd-x-btn:hover { color: var(--green); background: #f5ede3; }
-    .dd-meeting-modal { display: flex; flex-direction: column; height: auto; }
-    .dd-meeting-modal .dd-modal-scroll { flex: 0 1 auto; min-height: 0; max-height: none; }
+    .dd-meeting-modal { display: flex; flex-direction: column; height: min(78dvh, 480px); max-height: calc(100dvh - 32px); }
+    .dd-meeting-modal .dd-modal-scroll { flex: 1 1 auto; min-height: 0; max-height: none; }
     .dd-close-btn {
       background: #ede8e0; border: none; border-radius: 20px;
       padding: 6px 24px; font-size: 13px; cursor: pointer;
@@ -185,7 +185,7 @@
     .dd-cond-select { appearance: none; -webkit-appearance: none; -moz-appearance: none; font-size: 11px; padding: 2px 14px 2px 5px; border-radius: 10px; border: 1px solid #ede8e0; background: #f0ece6 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='7' height='7' viewBox='0 0 8 8'%3E%3Cpath d='M1 2l3 3 3-3' stroke='%239e8e7e' stroke-width='1.3' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") no-repeat right 3px center; background-size: 7px 7px; color: var(--muted, #9e8e7e); cursor: pointer; flex-shrink: 0; white-space: nowrap; }
     .dd-cond-tag { font-size: 11px; color: var(--muted, #9e8e7e); font-weight: 400; flex-shrink: 0; align-self: center; white-space: nowrap; }
 
-    /* ── 날짜 전체 모임 상세 — 게임 조율 + 참여자별 ── */
+    /* ── 날짜 전체 모임 상세 — 인원 조율 + 참여자별 ── */
     .dd-meeting-section { margin-top: 16px; }
     .dd-meeting-section-title { margin: 0 0 8px; font-size: 14px; font-weight: 800; color: var(--text); }
     .dd-participant-list { display: grid; gap: 8px; }
@@ -1416,8 +1416,8 @@
     const gameText = shared.length
       ? shared.map(game => `${esc(game.name)} ${game.users.size}\uBA85`).join(' \u00B7 ')
       : '\uACF5\uD1B5 \uAD00\uC2EC \uAC8C\uC784\uC774 \uC544\uC9C1 \uC5C6\uC5B4\uC694.';
-    return `<section class="game-coordination-summary${compact ? ' game-coordination-summary--compact' : ''}" aria-label="\uAC8C\uC784 \uC870\uC728 \uC694\uC57D">
-      <strong>\uAC8C\uC784 \uC870\uC728</strong>
+    return `<section class="game-coordination-summary${compact ? ' game-coordination-summary--compact' : ''}" aria-label="\uC778\uC6D0 \uC870\uC728 \uC694\uC57D">
+      <strong>\uC778\uC6D0 \uC870\uC728</strong>
       ${meetingSummary ? `<p class="game-coordination-summary-meta">${esc(meetingSummary)}</p>` : ''}
       <div><span>\uC120\uD638 \uC720\uD615</span><p>${styleText}</p></div>
       <div><span>\uACB9\uCE58\uB294 \uAC8C\uC784</span><p>${gameText}</p></div>

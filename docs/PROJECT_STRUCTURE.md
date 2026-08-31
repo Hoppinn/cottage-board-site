@@ -81,7 +81,7 @@
 │   │                               #   DB 무접속. 독립 페이지 상단 구조와 기록 입력 API 경로를 함께 보존 확인
 │   ├── verify-planner-profile-today.js # 개인 날짜 상세의 프로필 평소/날짜별 오늘 분리와 편집 보존
 │   │                               #   DB 무접속. --negctl로 정보 순서 판정 확인
-│   ├── verify-meeting-detail-game-editor.js # 이날 모임 상세의 본인 게임 조율 이전 계약
+│   ├── verify-meeting-detail-game-editor.js # 이날 모임 상세의 본인 게임 편집 이전 계약
 │   │                               #   DB 무접속. --negctl로 본인 전용 게이트 판정 확인
 │   ├── verify-party-size.js        # 모임 인원(등록 건수 ≠ 방문 인원) — 회귀 불변식 + 엣지 (읽기전용)
 │   │                               #   --negctl 먼저. --live를 줘야 실DB 조회(guest_count 필드 확인)
@@ -268,9 +268,9 @@ assets/js/
 │                               #   프로필의 평소 유형·깊이·경험과 해당 날짜의 유형·깊이·성향·모집
 │                               #   문구·게임을 「평소」「오늘」 두 구획으로 표시한다. 대표 게임/인원
 │                               #   조건은 기존처럼 본인만 편집하고 타인은 readOnly다.
-│                               # openDateMeetingModal은 날짜 전체 요약·룰렛·전원 읽기전용 목록 앞에
-│                               #   본인 전용 접힌 「내 게임 조율」을 둔다. 대표 게임/희망 인원은
-│                               #   즉시 편집하고 게임 추가·삭제는 기존 플래너 편집을 유지한다.
+│                               # openDateMeetingModal은 날짜 전체 「인원 조율」·룰렛·전원 상세 목록을
+│                               #   두 섹션으로 보여 준다. 본인 카드의 오늘 게임에서 희망 인원만 즉시
+│                               #   편집하고 게임 추가·삭제·대표 지정은 기존 플래너 편집을 유지한다.
 ├── booklet-courses-data.js      # 추천게임 책자 코스 정적 데이터(window.BOOKLET_COURSES, 2026-08)
 │                               # DB 아님 — 책자가 자주 안 바뀐다는 전제로 코드 배포로만 갱신
 │                               # gameKey는 cottage-games-data-output.js(window.gameData) 키와 일치해야 함
