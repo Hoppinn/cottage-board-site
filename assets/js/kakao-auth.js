@@ -615,7 +615,14 @@ function _bindActivityTogglesAndMore(subBody) {
 // ── '기록 보드' 서브시트 afterRender (R10a: openProfilePanel에서 추출) ──
 // ctx: _allPhotoData는 splice로 변형되지만 재할당은 없음 → 참조 전달 안전
 function _bindRecordSubsheet(subBody, ctx) {
-  const { _getGameKeyById, _allPhotoData, _PHOTO_SHOW } = ctx;
+  const { _getGameKeyById, _allPhotoData, _PHOTO_SHOW, readOnly } = ctx;
+          if (!subBody.querySelector('.profile-record-action-row')) {
+            const actionRow = document.createElement('div');
+            actionRow.className = 'profile-record-action-row';
+            actionRow.innerHTML = `${readOnly ? '' : '<a class="profile-record-link" href="/pages/game/game-reviews.html?tab=input">기록 작성하기</a>'}
+              <a class="profile-record-link" href="/pages/game/game-reviews.html">플레이 기록 페이지</a>`;
+            subBody.appendChild(actionRow);
+          }
           _bindActivityTogglesAndMore(subBody);
           // 게임평 텍스트: 2줄로 자르고 항목별 "더보기"를 붙이던 방식은 2026-07-30 제거 —
           // 대부분 짧은 글인데 거의 매 항목마다 잘려서 "더보기"가 반복되니 오히려 산만하고,
@@ -1047,6 +1054,13 @@ function _bindMeetingSubsheet(subBody, ctx) {
           const userId = String(user.id);
 
           _bindActivityTogglesAndMore(subBody); // 최근 모임 참여 "더 보기" (2026-07-30)
+          if (!subBody.querySelector('.meeting-board-page-link')) {
+            const previewLink = document.createElement('a');
+            previewLink.className = 'meeting-board-page-link';
+            previewLink.href = '/?focus=meeting';
+            previewLink.textContent = '코티지 모임 미리보기로 가기';
+            subBody.appendChild(previewLink);
+          }
 
           // 평소 성향은 프로필 보드가 SSOT다. 모임 보드에서는 짧게 참조하고 편집은 프로필로 보낸다.
           subBody.querySelectorAll('.mb-pref-edit').forEach(btn => {
@@ -2768,7 +2782,10 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
       </div>
     </div>
     </section>`}
-    ${_ro('<a class="profile-board-edit-link" href="/pages/club/club-intro.html">프로필 수정 →</a>')}`;
+    <div class="profile-board-action-row">
+      ${_ro('<a class="profile-board-edit-link" href="/pages/club/club-intro.html">프로필 수정</a>')}
+      <a class="profile-board-page-link" href="/pages/club/club-intro.html">모임원 프로필 페이지 가기</a>
+    </div>`;
   }
   // 기록 보드: 플레이기록/게임평/사진 3섹션 토글 (항상 표시, 기본 열림)
   const _openActivityList = html => html.replace('class="profile-activity-list is-collapsed"', 'class="profile-activity-list"');
@@ -3292,7 +3309,7 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
 
       } else if (type === 'records') {
         _trackPvOnce('my-board-records');
-        _openSubSheet('기록 보드', _recordInnerHtml, subBody => _bindRecordSubsheet(subBody, { _getGameKeyById, _allPhotoData, _PHOTO_SHOW }), 'profile-subsheet-body--records', bodyEl => { _recordInnerHtml = bodyEl.innerHTML; }); // 뒤로가기 시 현재 상태 스냅샷(재진입 유지)
+        _openSubSheet('기록 보드', _recordInnerHtml, subBody => _bindRecordSubsheet(subBody, { _getGameKeyById, _allPhotoData, _PHOTO_SHOW, readOnly }), 'profile-subsheet-body--records', bodyEl => { _recordInnerHtml = bodyEl.innerHTML; }); // 뒤로가기 시 현재 상태 스냅샷(재진입 유지)
 
 
       } else if (type === 'usage') {

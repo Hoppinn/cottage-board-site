@@ -1615,6 +1615,21 @@ let _plannerPendingEdit = null; // 홈 수정 버튼 → 프레임 준비 전 �
 let _meetingDirty  = false;    // 플래너에서 저장 완료 신호 수신 → closeModal 시 재조회
 let _meetingReload = null;     // initMeetingSection이 loadWeek 참조를 주입
 
+// 보드의 「코티지 모임 미리보기로 가기」는 메인 진입 후 카드가 화면 시작점에 오게 한다.
+// fragment 기본 이동은 sticky header와 전역 smooth scroll의 영향을 함께 받아 위치가 흔들린다.
+(function focusMeetingPreviewFromBoard() {
+  if (new URLSearchParams(location.search).get('focus') !== 'meeting') return;
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    const section = document.getElementById('meeting');
+    if (!section) return;
+    const headerHeight = document.querySelector('.site-header')?.offsetHeight || 0;
+    const previousBehavior = document.documentElement.style.scrollBehavior;
+    document.documentElement.style.scrollBehavior = 'auto';
+    window.scrollTo(0, Math.max(0, section.offsetTop - headerHeight));
+    document.documentElement.style.scrollBehavior = previousBehavior;
+  }));
+})();
+
 // 모임보드 게임 목록 인원조건 select(kakao-auth.js)에서 바로 반영 — 홈 미리보기는
 // dayVotes/dayGames를 초기 로드 시점 값으로만 렌더해 별도 갱신 신호 없이는 갱신 안 됨.
 window.addEventListener('cottage-meeting-changed', () => { _meetingReload?.(); });

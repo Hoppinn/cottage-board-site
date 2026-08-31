@@ -4780,7 +4780,10 @@ html:has(body.embed-mode) { scroll-padding-top: 0; }
 .profile-usual-play-section .profile-info-label,.profile-taste-section > .profile-info-list .profile-info-label{line-height:1.33;}
 .profile-usual-play-section .profile-info-row,.profile-taste-section > .profile-info-list .profile-info-row{min-height:25px;box-sizing:border-box;padding:1px 2px;}
 .profile-source-edit{margin-left:auto;font-size:10px;color:var(--text-info,#6b8cba);font-weight:500;text-decoration:none;white-space:nowrap;}
-.profile-board-edit-link{display:block;width:100%;margin:0;border:1px solid var(--border);border-radius:9px;background:var(--card-bg);color:var(--text-info,#6b8cba);font:inherit;font-size:12px;font-weight:700;padding:10px;cursor:pointer;}
+.profile-board-action-row,.profile-record-action-row{display:flex;gap:8px;}
+.profile-board-edit-link,.profile-board-page-link,.profile-record-link,.meeting-board-page-link{display:flex;flex:1;align-items:center;justify-content:center;min-height:42px;box-sizing:border-box;margin:0;border:1px solid var(--border);border-radius:9px;background:var(--card-bg);color:var(--text-info,#6b8cba);font:inherit;font-size:12px;font-weight:700;padding:10px;text-align:center;text-decoration:none;cursor:pointer;}
+.profile-board-page-link,.profile-record-link,.meeting-board-page-link{color:var(--green);}
+.profile-board-edit-link:hover,.profile-board-page-link:hover,.profile-record-link:hover,.meeting-board-page-link:hover{background:var(--bg-soft);}
 .profile-depth-row{grid-template-columns:1fr;}
 .profile-depth-options{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:4px;width:100%;}
 .profile-depth-chip{display:grid;grid-template-columns:minmax(0,1fr);align-content:center;justify-items:start;gap:2px;min-width:0;min-height:54px;border:1px solid var(--border);border-radius:14px;background:var(--paper);color:var(--muted);font:inherit;font-size:11px;padding:7px 6px;cursor:pointer;}
@@ -5076,8 +5079,8 @@ html:has(body.embed-mode) { scroll-padding-top: 0; }
 .profile-record-stats li{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border);font-size:14px;}
 .profile-record-stats li span{color:var(--muted);}
 .profile-record-stats li strong{color:#5a3418;font-weight:700;}
-.profile-record-link{display:block;text-align:center;background:var(--bg-soft);color:var(--green);border-radius:10px;padding:12px;font-size:13px;font-weight:600;text-decoration:none;}
-.profile-record-link:hover{background:#ece7df;}
+.profile-record-action-row{margin-top:18px;}
+.meeting-board-page-link{width:100%;margin-top:4px;}
 /* 서브시트 (profile-subsheet) — profile 전용, gameSheet 계열과 무관 */
 .profile-subsheet{position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:var(--z-subsheet);display:flex;align-items:flex-end;justify-content:center;}
 .profile-subsheet-box{background:#fff;border-radius:18px;width:100%;max-width:480px;height:calc(100vh - 48px);height:calc(100dvh - 48px);display:flex;flex-direction:column;overflow:hidden;margin:0 10px 16px;}
