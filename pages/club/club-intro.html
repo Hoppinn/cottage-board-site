@@ -560,24 +560,23 @@
         const canEdit = !!currentUser && String(r.user_id) === String(currentUser.id);
         const edit   = canEdit ? `<button class="intro-card-edit"      data-id="${r.id}" type="button" title="수정" aria-label="모임원 프로필 수정">✎</button>` : '';
         const color  = canAct ? `<button class="intro-card-color-btn" data-id="${r.id}" type="button" title="색상 변경" aria-label="카드 색상 변경">🎨</button>` : '';
+        const actions = canAct ? `<div class="intro-card-news-actions">${color}${edit}${del}</div>` : '';
         const clickable = !!r.user_id;
         const repPath = r._rep_achievement_id ? (window.CottageAchievements?.getCharacterPath?.(r._rep_achievement_id) || null) : null;
         const repAvatar = repPath
           ? `<img class="profile-panel-avatar" src="${escHtml(repPath)}" alt="">`
           : `<span class="profile-panel-avatar profile-panel-avatar--empty">🐾</span>`;
         return `
-        <div class="intro-card-news${clickable ? ' intro-card-news--clickable' : ''}${canAct ? ' intro-card-news--has-actions' : ''}" data-id="${r.id}" data-user-id="${escHtml(r.user_id || '')}" data-color="${escHtml(r.card_color||'')}" data-idx="${idx}"${clickable ? ` role="button" tabindex="0" aria-label="${escHtml(r.nickname)} 내 보드 열기"` : ''}>
+        <div class="intro-card-news${clickable ? ' intro-card-news--clickable' : ''}" data-id="${r.id}" data-user-id="${escHtml(r.user_id || '')}" data-color="${escHtml(r.card_color||'')}" data-idx="${idx}"${clickable ? ` role="button" tabindex="0" aria-label="${escHtml(r.nickname)} 내 보드 열기"` : ''}>
           <div class="intro-card-news-head">
-            ${color}${edit}${del}
             <div class="intro-card-news-identity"><span class="intro-card-news-avatar">${repAvatar}</span><strong class="intro-card-news-name">${escHtml(r.nickname)}</strong></div>
+            ${actions}
           </div>
           <div class="intro-card-news-body">
-            ${r.preferred_game_types?.length ? `<div class="intro-card-news-taste"><span class="intro-card-news-label">좋아하는 게임 유형</span><span class="intro-card-news-val">${escHtml(labelList(r.preferred_game_types, GAME_TYPE_LABELS))}</span></div>` : ''}
-            ${(r.average_play_frequency != null || r.favorite_games || r.available_days?.length || r.available) ? `<div class="intro-card-news-meta">
-              ${r.average_play_frequency != null ? `<div class="intro-card-news-row"><span class="intro-card-news-label">평균 플레이 빈도</span><span class="intro-card-news-val">${escHtml(FREQUENCY_LABELS[r.average_play_frequency])}</span></div>` : (r.favorite_games ? `<div class="intro-card-news-row"><span class="intro-card-news-label">평소 플레이</span><span class="intro-card-news-val">${escHtml(r.favorite_games)}</span></div>` : '')}
-              ${r.available_days?.length ? `<div class="intro-card-news-row"><span class="intro-card-news-label">가능한 요일·시간</span><span class="intro-card-news-val">${escHtml(formatAvailability(r.available_days, r.available_times))}</span></div>` : (r.available ? `<div class="intro-card-news-row"><span class="intro-card-news-label">가능한 요일·시간</span><span class="intro-card-news-val">${escHtml(r.available)}</span></div>` : '')}
-            </div>` : ''}
-            ${r.expectation || r._bio ? `<div class="intro-card-news-message"><span class="intro-card-news-label">한마디</span><p>${escHtml(r.expectation || r._bio)}</p></div>` : ''}
+            ${r.preferred_game_types?.length ? `<div class="intro-card-news-summary" aria-label="좋아하는 게임 유형: ${escHtml(labelList(r.preferred_game_types, GAME_TYPE_LABELS))}"><span aria-hidden="true">🎲</span><span>${escHtml(labelList(r.preferred_game_types, GAME_TYPE_LABELS))}</span></div>` : ''}
+            ${r.available_days?.length ? `<div class="intro-card-news-summary" aria-label="가능한 요일과 시간: ${escHtml(formatAvailability(r.available_days, r.available_times))}"><span aria-hidden="true">🗓</span><span>${escHtml(formatAvailability(r.available_days, r.available_times))}</span></div>` : (r.available ? `<div class="intro-card-news-summary" aria-label="가능한 요일과 시간: ${escHtml(r.available)}"><span aria-hidden="true">🗓</span><span>${escHtml(r.available)}</span></div>` : '')}
+            ${r.expectation || r._bio ? `<p class="intro-card-news-message">${escHtml(r.expectation || r._bio)}</p>` : ''}
+            ${clickable ? '<span class="intro-card-news-link" aria-hidden="true">내 보드 ›</span>' : ''}
           </div>
         </div>`;
       }).join('');
