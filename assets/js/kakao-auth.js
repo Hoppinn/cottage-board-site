@@ -2651,11 +2651,11 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
     ${_ro('<a class="profile-board-edit-link" href="/pages/club/club-intro.html">프로필 수정 →</a>')}
     ${d.expectation
       ? `<section class="profile-info-section profile-expectation-section">
-      <div class="taste-section-label">함께 게임할 때</div>
+      <div class="taste-section-label">코티지에서 함께 게임할 때</div>
       <p class="profile-expectation-text">${escH(d.expectation)}</p>
     </section>`
       : (readOnly ? '' : `<section class="profile-info-section profile-expectation-section">
-      <div class="taste-section-label">함께 게임할 때</div>
+      <div class="taste-section-label">코티지에서 함께 게임할 때</div>
       <p class="profile-info-value is-empty">아직 작성하지 않았어요</p>
     </section>`)}
     <section class="profile-info-section profile-usual-play-section">

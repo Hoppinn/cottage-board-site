@@ -55,7 +55,7 @@ const tasteStart = boardSrc.indexOf('function _buildTasteInnerHtml(d) {');
 const tasteEnd = boardSrc.indexOf('  // 기록 보드', tasteStart);
 const tasteBuilder = tasteStart >= 0 && tasteEnd > tasteStart
   ? [boardSrc.slice(tasteStart, tasteEnd)] : null;
-check('profile information flow has four sections', ['함께 게임할 때', '평소 플레이', '선호 웨이트', '게임 취향']
+check('profile information flow has four sections', ['코티지에서 함께 게임할 때', '평소 플레이', '선호 웨이트', '게임 취향']
   .every(label => tasteBuilder?.[0].includes(label)));
 check('legacy split sections are removed', !!tasteBuilder
   && !tasteBuilder[0].includes('이런 플레이어예요')
