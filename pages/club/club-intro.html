@@ -575,7 +575,7 @@
         const canEdit = !!currentUser && String(r.user_id) === String(currentUser.id);
         const edit   = canEdit ? `<button class="intro-card-edit"      data-id="${r.id}" type="button" title="수정" aria-label="모임원 프로필 수정">✎</button>` : '';
         const color  = canAct ? `<button class="intro-card-color-btn" data-id="${r.id}" type="button" title="색상 변경" aria-label="카드 색상 변경">🎨</button>` : '';
-        const actions = canAct ? `<div class="intro-card-news-actions">${edit}${del}${color}</div>` : '';
+        const actions = canAct ? `<div class="intro-card-news-actions">${color}${edit}${del}</div>` : '';
         const clickable = !!r.user_id;
         const repPath = r._rep_achievement_id ? (window.CottageAchievements?.getCharacterPath?.(r._rep_achievement_id) || null) : null;
         const repAvatar = repPath
