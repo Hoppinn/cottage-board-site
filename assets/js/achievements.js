@@ -705,7 +705,7 @@
       return `<li><button class="profile-codex-game-item" type="button" data-game-id="${esc(gameId)}" aria-label="${gameName} 게임 정보 열기">✅ <span>${gameName}</span></button></li>`;
     };
 
-    const _recentGames = codexGames.slice(0, 3);
+    const _recentGames = codexGames.slice(0, 4);
     const _codexPreviewHtml = `<div class="profile-codex-preview">` +
       `<div class="profile-codex-preview-stat">` +
       `<span class="profile-codex-count">${playedCount} <span>/ ${totalGames}</span></span>` +
@@ -715,8 +715,8 @@
         ? `<ul class="profile-codex-game-list">${_recentGames.map(gameItemHtml).join('')}</ul>`
         : `<p class="profile-codex-empty">아직 수집한 게임이 없어요.</p>`) +
       `</div>`;
-    const _fullListHtml = playedCount > 3
-      ? `<ul class="profile-codex-game-list">${codexGames.slice(3).map(gameItemHtml).join('')}</ul>`
+    const _fullListHtml = playedCount > 4
+      ? `<ul class="profile-codex-game-list">${codexGames.slice(4).map(gameItemHtml).join('')}</ul>`
       : '';
 
     const html = `<div class="profile-codex-section">
