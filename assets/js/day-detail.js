@@ -75,8 +75,8 @@
     .dd-meeting-header .dd-close-btn:hover { color: var(--green); background: #f5ede3; }
     .dd-meeting-modal .dd-planner-btn { flex: 1; }
     .dd-meeting-modal .dd-close-row .dd-close-btn { padding-inline: 18px; }
-    .dd-meeting-modal { display: flex; flex-direction: column; }
-    .dd-meeting-modal .dd-modal-scroll { flex: 1; min-height: 0; max-height: none; }
+    .dd-meeting-modal { display: flex; flex-direction: column; height: auto; }
+    .dd-meeting-modal .dd-modal-scroll { flex: 0 1 auto; min-height: 0; max-height: none; }
     .dd-close-btn {
       background: #ede8e0; border: none; border-radius: 20px;
       padding: 6px 24px; font-size: 13px; cursor: pointer;
@@ -148,6 +148,7 @@
     }
     .dd-context-block--today .dd-context-chip { color: var(--green); font-weight: 700; }
     .dd-context-message { margin: 7px 0 0; font-size: 12px; line-height: 1.5; color: var(--text); overflow-wrap: anywhere; }
+    .dd-context-block--today .dd-today-games { margin-top: 10px; }
     .dd-context-empty { margin: 0; font-size: 11px; color: var(--muted); }
     .dd-context-block .dd-section:last-child { margin-bottom: 0; }
     .dd-section { margin-bottom: 6px; }
@@ -393,6 +394,7 @@
     }
     .game-coordination-summary > strong { display:block; margin-bottom:8px; font-size:13px; color:var(--text); }
     .game-coordination-summary-meta { margin:-3px 0 8px; font-size:11px; color:var(--muted); }
+    .game-coordination-summary-meta + div { margin-top: 12px; }
     .game-coordination-summary > div + div { margin-top:7px; }
     .game-coordination-summary span { display:block; font-size:10px; color:var(--muted); }
     .game-coordination-summary p { margin:2px 0 0; font-size:12px; line-height:1.55; color:var(--text); overflow-wrap:anywhere; }
@@ -417,7 +419,7 @@
       color: var(--green, #7a4828); cursor: pointer; text-align: left;
     }
     .game-coordination-summary .dd-roulette-open-btn {
-      margin-top: 10px; padding-top: 9px;
+      margin-top: 14px; padding-top: 10px;
       border-top: 1px solid var(--line, #e5ddd2);
     }
     .dd-roulette-open-btn:active { background: #ede5d8; }
@@ -684,7 +686,7 @@
       <div class="dd-context-title">오늘</div>
       ${chips.length ? `<div class="dd-context-chips">${chips.map(label => `<span class="dd-context-chip">${esc(label)}</span>`).join('')}</div>` : '<p class="dd-context-empty">등록된 오늘의 플레이 성향이 없어요.</p>'}
       ${message ? `<p class="dd-context-message">💬 ${esc(message)}</p>` : ''}
-      ${gamesHtml}
+      ${gamesHtml ? `<div class="dd-today-games">${gamesHtml}</div>` : ''}
       ${starNoticeHtml}
     </div>`;
   }
@@ -1133,7 +1135,7 @@
       if (c > peakCnt) peakCnt = c;
     }
 
-    return `${count}명 참여${peakCnt >= 2 ? ` · 최대 ${peakCnt}명 겹침` : ''}`;
+    return `${count}명 참여${peakCnt >= 2 ? ` · 최대 ${peakCnt}명 시간 겹침` : ''}`;
   }
 
   // .dd-game-hit(게임 썸네일) 클릭 → 게임시트. openDateMeetingModal·openDateScheduleModal·
@@ -1451,7 +1453,7 @@
       : '';
 
     const rouletteBtnHtml = rouletteGames.length >= 2
-      ? '<button class="dd-roulette-open-btn" type="button">🎡 룰렛으로 정하기</button>'
+      ? '<button class="dd-roulette-open-btn" type="button">🎡 룰렛으로 정하기 ›</button>'
       : '';
     const roulettePanelHtml = rouletteGames.length >= 2
       ? `<div class="dd-roulette-panel" id="__ddRoulettePanel" style="display:none">
