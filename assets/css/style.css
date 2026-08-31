@@ -330,6 +330,10 @@ textarea{
   font-weight:700;
 }
 
+.menu-group--nested > .menu-group-header{
+  color:#5a3418;
+}
+
 /* 현재 페이지 메뉴 active */
 .header-menu a.is-current{
   background:#f0e4d4;

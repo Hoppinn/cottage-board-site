@@ -363,20 +363,24 @@ document.querySelectorAll('.menu-group-header').forEach(btn=>{
 
 // 현재 페이지 메뉴 active 표시 + 해당 그룹 자동 펼침
 (()=>{
-  const currentPath = location.pathname.replace(/\/$/, '') || '/index.html';
+  const normalizeMenuPath = pathname => {
+    const path = pathname.replace(/\/$/, '') || '/index.html';
+    return path.replace(/\.html$/, '');
+  };
+  const currentPath = normalizeMenuPath(location.pathname);
   const currentHash = location.hash;
   const allLinks = Array.from(document.querySelectorAll('.header-menu a'));
   const hashMatchExists = allLinks.some(l=>{
     const raw = l.getAttribute('href') || '';
     if(raw === '#' || raw.startsWith('#')) return false;
     const u = new URL(l.href, location.href);
-    return u.pathname.replace(/\/$/, '') === currentPath && u.hash && u.hash === currentHash;
+    return normalizeMenuPath(u.pathname) === currentPath && u.hash && u.hash === currentHash;
   });
   allLinks.forEach(link=>{
     const rawHref = link.getAttribute('href') || '';
     if(rawHref === '#' || rawHref.startsWith('#')) return;
     const u = new URL(link.href, location.href);
-    const linkPath = u.pathname.replace(/\/$/, '');
+    const linkPath = normalizeMenuPath(u.pathname);
     const linkHash = u.hash;
     const matches = linkHash
       ? linkPath === currentPath && linkHash === currentHash
