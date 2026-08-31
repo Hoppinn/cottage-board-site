@@ -425,11 +425,14 @@ function _afterGrowthRender(subBody, expandChar = false, expandTitle = false, re
       const hidden = codexBody.classList.toggle('is-hidden');
       codexPreviewList?.classList.toggle('is-hidden', !hidden);
       codexToggleBtn.textContent = hidden ? '전체 보기 ▾' : '접기 ▴';
-      requestAnimationFrame(() => requestAnimationFrame(() => {
-        const afterTop = codexToggleBtn.getBoundingClientRect().top;
-        const delta = afterTop - beforeTop;
-        if (Math.abs(delta) > 0.5) subBody.scrollTop += delta;
-      }));
+      void subBody.offsetHeight;
+      const delta = codexToggleBtn.getBoundingClientRect().top - beforeTop;
+      if (Math.abs(delta) > 0.5) {
+        const previousBehavior = subBody.style.scrollBehavior;
+        subBody.style.scrollBehavior = 'auto';
+        subBody.scrollTop = Math.max(0, subBody.scrollTop + delta);
+        subBody.style.scrollBehavior = previousBehavior;
+      }
     });
   }
   subBody.querySelectorAll('.profile-codex-game-item[data-game-id]').forEach(item => {
