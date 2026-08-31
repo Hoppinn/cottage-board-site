@@ -2518,13 +2518,13 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
       : '';
     const _gameHtml = [_meetingGameLine('want', '하고 싶은 게임'), _meetingGameLine('learn', '배우고 싶은 게임')].filter(Boolean).join('');
     const _messageHtml = _meetingMessages.length
-      ? `<div class="profile-card-meeting-line"><span class="profile-card-meeting-label">한마디</span><span class="profile-card-meeting-games">${escH(_meetingMessages[0].length > 28 ? `${_meetingMessages[0].slice(0, 28)}…` : _meetingMessages[0])}</span></div>`
+      ? `<div class="profile-card-meeting-line profile-card-meeting-line--message"><span class="profile-card-meeting-label">한마디</span><span class="profile-card-meeting-games">${escH(_meetingMessages[0].length > 28 ? `${_meetingMessages[0].slice(0, 28)}…` : _meetingMessages[0])}</span></div>`
       : '';
     const _dateLimit = 3;
     const _shownDates = _meetingDateLabels.slice(0, _dateLimit);
     const _extraDates = _meetingDateLabels.length - _shownDates.length;
     const _dateHtml = `${_shownDates.join(' · ')}${_extraDates > 0 ? ` 외 ${_extraDates}회` : ''}`;
-    _scheduleHtml = `<span class="profile-card-schedule"><span class="profile-card-meeting-heading">다가오는 참여</span><span class="profile-card-meeting-weeks">${escH(_dateHtml)}</span>${_styleHtml}${_gameHtml}${_messageHtml}</span>`;
+    _scheduleHtml = `<span class="profile-card-schedule"><span class="profile-card-meeting-heading">다가오는 모임</span><span class="profile-card-meeting-weeks">${escH(_dateHtml)}</span>${_styleHtml}${_gameHtml}${_messageHtml}</span>`;
   }
 
   // 그룹 요약용 카운트 추출 — regex 실패 시 0 fallback

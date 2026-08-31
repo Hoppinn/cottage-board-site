@@ -4715,14 +4715,16 @@ html:has(body.embed-mode) { scroll-padding-top: 0; }
 .profile-card-grid .profile-card-arrow{display:none;}
 /* 이번달 참여일정 / 모임 보드 카드 */
 .profile-card-schedule{display:block;font-size:10px;color:var(--green,#3a7d44);margin-top:4px;line-height:1.55;}
+.profile-card[data-subsheet="meeting"] .profile-card-summary{margin-top:6px;}
 .profile-card-meeting-heading,.profile-card-meeting-weeks,.profile-card-meeting-line{display:block;}
 .profile-card-meeting-heading{font-size:11px;font-weight:700;color:var(--text);}
 .profile-card-meeting-weeks{font-weight:600;color:var(--green,#3a7d44);}
-.profile-card-meeting-tags{display:flex;flex-wrap:wrap;gap:3px;margin-top:4px;}
+.profile-card-meeting-tags{display:flex;flex-wrap:wrap;column-gap:3px;row-gap:4px;margin-top:6px;}
 .profile-card-meeting-tags span{padding:1px 5px;border:1px solid #d9e6d7;border-radius:8px;background:#f4faf3;color:var(--green,#3a7d44);white-space:nowrap;}
 .profile-card-meeting-line{margin-top:3px;}
+.profile-card-meeting-line--message{margin-top:10px;}
 .profile-card-meeting-label{display:block;font-size:9px;color:var(--muted);}
-.profile-card-meeting-games{display:block;color:var(--text);font-size:10px;line-height:1.4;}
+.profile-card-meeting-games{display:block;color:var(--text);font-size:10px;line-height:1.48;}
 .profile-card--span2{grid-column:span 2;}
 .profile-card-grid .profile-card--span2{flex-direction:row;align-items:center;gap:9px;min-height:0;padding:3px 14px;}
 .profile-card-grid .profile-card--span2 .profile-card-icon{font-size:16px;}
