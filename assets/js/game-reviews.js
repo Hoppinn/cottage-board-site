@@ -1062,7 +1062,7 @@
         const hd = event.target.closest('.pr-session--bydate > .pr-session-hd');
         if (!hd || !panel.contains(hd)) return;
         const session = hd.closest('.pr-session--bydate');
-        if (currentView !== 'date' || !isEmbeddedRecordHub() || !session) return;
+        if (currentView !== 'date' || !session) return;
         event.preventDefault();
         hd.blur();
         const wasOpen = session.classList.contains('is-open');
