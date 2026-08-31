@@ -421,9 +421,15 @@ function _afterGrowthRender(subBody, expandChar = false, expandTitle = false, re
     codexToggleBtn.addEventListener('click', () => {
       const codexBody = subBody.querySelector('.profile-codex-body');
       const codexPreviewList = subBody.querySelector('.profile-codex-preview-list');
+      const beforeTop = codexToggleBtn.getBoundingClientRect().top;
       const hidden = codexBody.classList.toggle('is-hidden');
       codexPreviewList?.classList.toggle('is-hidden', !hidden);
       codexToggleBtn.textContent = hidden ? '전체 보기 ▾' : '접기 ▴';
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        const afterTop = codexToggleBtn.getBoundingClientRect().top;
+        const delta = afterTop - beforeTop;
+        if (Math.abs(delta) > 0.5) subBody.scrollTop += delta;
+      }));
     });
   }
   subBody.querySelectorAll('.profile-codex-game-item[data-game-id]').forEach(item => {
