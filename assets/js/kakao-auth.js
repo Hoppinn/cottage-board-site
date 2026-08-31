@@ -2484,22 +2484,10 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
     const gameData = gameKey ? window.gameData?.[gameKey] : null;
     return gameData ? (gameData.title?.display || gameData.title?.owned || gameData.title?.bgg || gameKey) : (game?.custom_name || rawId);
   };
-  const _meetingWeekLabel = dateStr => {
-    const date = new Date(`${dateStr}T00:00:00`);
-    const today = new Date(); today.setHours(0, 0, 0, 0);
-    const monday = new Date(today);
-    const day = monday.getDay();
-    monday.setDate(monday.getDate() - (day === 0 ? 6 : day - 1));
-    const diffWeeks = Math.floor((date.getTime() - monday.getTime()) / (7 * 86400000));
-    return diffWeeks <= 0 ? '이번 주' : diffWeeks === 1 ? '다음 주' : `${diffWeeks}주 후`;
-  };
-  const _upcomingWeekCounts = [];
-  const _weekCountMap = new Map();
-  _myUpcomingVotes.forEach(v => {
-    const key = _meetingWeekLabel(v.vote_date);
-    _weekCountMap.set(key, (_weekCountMap.get(key) || 0) + 1);
+  const _meetingDateLabels = _myUpcomingVotes.map(v => {
+    const date = new Date(`${v.vote_date}T00:00:00`);
+    return `${date.getMonth() + 1}/${date.getDate()}(${'일월화수목금토'[date.getDay()]})`;
   });
-  _weekCountMap.forEach((count, label) => _upcomingWeekCounts.push(`${label} ${count}회`));
   const _uniqueMeetingValues = values => [...new Set(values.filter(Boolean))];
   const _meetingStyles = _uniqueMeetingValues(_myUpcomingVotes.flatMap(v => [
     v.game_style === 'other' ? v.game_style_custom : _meetingStyleLabels[v.game_style],
@@ -2532,7 +2520,11 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
     const _messageHtml = _meetingMessages.length
       ? `<div class="profile-card-meeting-line"><span class="profile-card-meeting-label">한마디</span><span class="profile-card-meeting-games">${escH(_meetingMessages[0].length > 28 ? `${_meetingMessages[0].slice(0, 28)}…` : _meetingMessages[0])}</span></div>`
       : '';
-    _scheduleHtml = `<span class="profile-card-schedule"><span class="profile-card-meeting-heading">다가오는 참여</span><span class="profile-card-meeting-weeks">${escH(_upcomingWeekCounts.join(' · '))}</span>${_styleHtml}${_gameHtml}${_messageHtml}</span>`;
+    const _dateLimit = 3;
+    const _shownDates = _meetingDateLabels.slice(0, _dateLimit);
+    const _extraDates = _meetingDateLabels.length - _shownDates.length;
+    const _dateHtml = `${_shownDates.join(' · ')}${_extraDates > 0 ? ` 외 ${_extraDates}회` : ''}`;
+    _scheduleHtml = `<span class="profile-card-schedule"><span class="profile-card-meeting-heading">다가오는 참여</span><span class="profile-card-meeting-weeks">${escH(_dateHtml)}</span>${_styleHtml}${_gameHtml}${_messageHtml}</span>`;
   }
 
   // 그룹 요약용 카운트 추출 — regex 실패 시 0 fallback

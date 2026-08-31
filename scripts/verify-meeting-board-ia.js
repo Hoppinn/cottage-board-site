@@ -58,7 +58,8 @@ check('메인 모임 카드도 같은 가까운 미래 범위 사용', src.inclu
   && src.includes('getMeetingVotes?.(_upcomingStart, _upcomingEnd)')
   && src.includes('getMeetingVoteGames?.(_upcomingStart, _upcomingEnd)')
   && !src.includes('_monthStart'));
-check('메인 카드는 예정 참여와 당일 참여 정보를 압축해 요약', card.includes('_meetingWeekLabel')
+check('메인 카드는 예정 날짜와 당일 참여 정보를 압축해 요약', card.includes('_meetingDateLabels')
+  && card.includes('_dateLimit') && card.includes('외 ${_extraDates}회')
   && card.includes('다가오는 참여') && card.includes('_meetingStyles')
   && card.includes('_meetingGamesByType') && card.includes('recruitment_message')
   && !card.includes('가까운 일정 준비하기') && !card.includes('다가오는 일정 ${_myVoteDates.length}건')
