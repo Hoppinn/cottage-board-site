@@ -424,6 +424,14 @@ function _afterGrowthRender(subBody, expandChar = false, expandTitle = false, re
       codexToggleBtn.textContent = hidden ? '전체 보기 ▾' : '접기 ▴';
     });
   }
+  subBody.querySelectorAll('.profile-codex-game-item[data-game-id]').forEach(item => {
+    item.addEventListener('click', () => {
+      const gameKey = window.getGameKeyById?.(item.dataset.gameId);
+      if (!gameKey || !window.openGameSheet) return;
+      window.ensureGameSheet?.();
+      window.openGameSheet(gameKey);
+    });
+  });
   const achToggleBtn = subBody.querySelector('.profile-ach-toggle-btn');
   if (achToggleBtn) {
     achToggleBtn.addEventListener('click', () => {

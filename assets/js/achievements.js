@@ -696,6 +696,11 @@
     const barWidth = Math.min(pct, 100);
 
     const esc = s => window.escH(s);   // GS5: 정본 위임 (supabase-client.js)
+    const gameItemHtml = r => {
+      const gameId = String(r?.game_id || '');
+      const gameName = esc(getGameName(gameId));
+      return `<li><button class="profile-codex-game-item" type="button" data-game-id="${esc(gameId)}" aria-label="${gameName} 게임 정보 열기">✅ <span>${gameName}</span></button></li>`;
+    };
 
     const _recentGames = playedGames.slice(0, 3);
     const _codexPreviewHtml = `<div class="profile-codex-preview">` +
@@ -704,11 +709,11 @@
       `<span class="profile-codex-grade">${grade}</span>` +
       `</div>` +
       (_recentGames.length
-        ? `<ul class="profile-codex-game-list">${_recentGames.map(r => `<li class="profile-codex-game-item">✅ ${esc(getGameName(r.game_id))}</li>`).join('')}</ul>`
+        ? `<ul class="profile-codex-game-list">${_recentGames.map(gameItemHtml).join('')}</ul>`
         : `<p class="profile-codex-empty">아직 수집한 게임이 없어요.</p>`) +
       `</div>`;
     const _fullListHtml = playedCount
-      ? `<ul class="profile-codex-game-list">${playedGames.map(r => `<li class="profile-codex-game-item">✅ ${esc(getGameName(r.game_id))}</li>`).join('')}</ul>`
+      ? `<ul class="profile-codex-game-list">${playedGames.map(gameItemHtml).join('')}</ul>`
       : `<p class="profile-codex-empty">아직 수집한 게임이 없어요.</p>`;
 
     const html = `<div class="profile-codex-section">
