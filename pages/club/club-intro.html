@@ -13,7 +13,9 @@
 
 <body class="owned-page">
   <script>
-    if (new URLSearchParams(location.search).get('wizard') === '1' && window.parent !== window) {
+    const wizardQuery = new URLSearchParams(location.search);
+    const wizardHash = new URLSearchParams(location.hash.slice(1));
+    if ((wizardQuery.get('wizard') === '1' || wizardHash.get('wizard') === '1') && window.parent !== window) {
       document.documentElement.classList.add('intro-wizard-embed');
     }
   </script>
@@ -756,23 +758,21 @@
       wizardComplete.hidden = false;
     });
 
-    const _autoOpenEditWizard = (() => {
-      const queryParams = new URLSearchParams(location.search);
-      const hashParams = new URLSearchParams(location.hash.slice(1));
-      return queryParams.get('edit') === '1' || hashParams.get('edit') === '1';
-    })();
-    const _openEditWizardWhenReady = () => {
-      if (_autoOpenEditWizard && getCurrentUser()) openWizard({ edit: !!currentIntroRow?.questionnaire_completed_at });
+    const _wizardEmbed = document.documentElement.classList.contains('intro-wizard-embed');
+    const _notifyWizardReady = () => {
+      if (_wizardEmbed && getCurrentUser()) window.parent.postMessage({ type: 'cottage-profile-intro-ready' }, '*');
     };
+    window.addEventListener('message', e => {
+      if (e.data?.type === 'cottage-open-profile-intro-wizard') document.getElementById('introWizardOpenBtn')?.click();
+    });
 
-    // 페이지 진입 직후에는 카카오 세션 복원이 아직 끝나지 않을 수 있다. ?edit=1은
-    // 첫 loadIntros 결과뿐 아니라 인증 완료 뒤 다시 불러온 결과에서도 위저드를 연다.
+    // 임베드 진입은 URL 자동열기가 아니라, 데이터 준비 뒤 부모가 보내는 기존 버튼 클릭으로만 연다.
     window.addEventListener('cottage-auth-changed', () => {
-      loadIntros().then(_openEditWizardWhenReady);
+      loadIntros().then(_notifyWizardReady);
     });
 
     _syncLoginUI();
-    loadIntros().then(_openEditWizardWhenReady);
+    loadIntros().then(_notifyWizardReady);
   })();
   </script>
 

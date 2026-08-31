@@ -636,9 +636,16 @@ function _openBoardFrameModal({ src, title, tab = null, wizardOnly = false }) {
   const frame = modal.querySelector('.record-iframe-frame, .board-wizard-frame');
   const loader = modal.querySelector('.record-iframe-loader');
   const previousOverflow = document.body.style.overflow;
+  let wizardStartRequested = false;
   const onKeydown = e => { if (e.key === 'Escape') close(); };
   const onMessage = e => {
-    if (e.source === frame.contentWindow && e.data?.type === 'cottage-close-profile-wizard') close();
+    if (e.source !== frame.contentWindow) return;
+    if (e.data?.type === 'cottage-profile-intro-ready' && wizardOnly && !wizardStartRequested) {
+      wizardStartRequested = true;
+      frame.contentWindow?.postMessage({ type: 'cottage-open-profile-intro-wizard' }, '*');
+    } else if (e.data?.type === 'cottage-close-profile-wizard') {
+      close();
+    }
   };
   const close = () => {
     document.removeEventListener('keydown', onKeydown);
@@ -670,16 +677,20 @@ function _bindRecordSubsheet(subBody, ctx) {
           if (!subBody.querySelector('.profile-record-action-row')) {
             const actionRow = document.createElement('div');
             actionRow.className = 'profile-record-action-row';
-            actionRow.innerHTML = `${readOnly ? '' : '<button class="profile-record-link" data-board-frame-src="/pages/game/game-reviews.html?embed=1&tab=input" data-board-frame-title="기록 작성하기" data-board-frame-tab="input" type="button">기록 작성하기</button>'}
+            actionRow.innerHTML = `${readOnly ? '' : '<button class="profile-record-link" data-board-frame-src="/pages/game/game-reviews.html?embed=1&tab=input" data-board-frame-title="기록 작성" data-board-frame-tab="input" type="button">기록 작성</button>'}
               <a class="profile-record-link" href="/pages/game/game-reviews.html">플레이 기록 페이지 &gt;</a>`;
             subBody.appendChild(actionRow);
           }
           subBody.querySelectorAll('[data-board-frame-src]').forEach(button => {
-            button.addEventListener('click', () => _openBoardFrameModal({
+            button.addEventListener('click', e => {
+              e.preventDefault();
+              e.stopPropagation();
+              _openBoardFrameModal({
               src: button.dataset.boardFrameSrc,
               title: button.dataset.boardFrameTitle,
               tab: button.dataset.boardFrameTab || null,
-            }));
+              });
+            });
           });
           _bindActivityTogglesAndMore(subBody);
           // 게임평 텍스트: 2줄로 자르고 항목별 "더보기"를 붙이던 방식은 2026-07-30 제거 —
@@ -764,11 +775,15 @@ function _bindRecordSubsheet(subBody, ctx) {
 function _bindTasteSubsheet(subBody, ctx) {
   const { user, readOnly, _emitLikesChanged, allBioSuggestions, _BIO_PREDEFINED, _ruleSet, onBioSaved, onProfileDataSaved, resolveGameName } = ctx;
           subBody.querySelectorAll('[data-board-frame-src]').forEach(button => {
-            button.addEventListener('click', () => _openBoardFrameModal({
+            button.addEventListener('click', e => {
+              e.preventDefault();
+              e.stopPropagation();
+              _openBoardFrameModal({
               src: button.dataset.boardFrameSrc,
               title: button.dataset.boardFrameTitle,
               wizardOnly: button.dataset.boardFrameWizard === 'true',
-            }));
+              });
+            });
           });
           const userId = String(user.id);
 
@@ -2848,8 +2863,8 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
     </div>
     </section>`}
     <div class="profile-board-action-row">
-      ${_ro('<button class="profile-board-edit-link" data-board-frame-src="/pages/club/club-intro.html?embed=1&wizard=1&edit=1" data-board-frame-title="프로필 수정" data-board-frame-wizard="true" type="button">프로필 수정</button>')}
-      <a class="profile-board-page-link" href="/pages/club/club-intro.html">프로필 페이지 &gt;</a>
+      ${_ro(`<button class="profile-board-edit-link" data-board-frame-src="/pages/club/club-intro.html?embed=1&wizard=1#embed=1&wizard=1" data-board-frame-title="${d.questionnaireCompletedAt ? '프로필 수정' : '프로필 작성'}" data-board-frame-wizard="true" type="button">${d.questionnaireCompletedAt ? '프로필 수정' : '프로필 작성'}</button>`)}
+      <a class="profile-board-page-link" href="/pages/club/club-intro.html">모임원 프로필 페이지 &gt;</a>
     </div>`;
   }
   // 기록 보드: 플레이기록/게임평/사진 3섹션 토글 (항상 표시, 기본 열림)
