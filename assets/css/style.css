@@ -4702,8 +4702,9 @@ html:has(body.embed-mode) { scroll-padding-top: 0; }
 .profile-codex-count span{font-size:13px;font-weight:400;color:var(--muted);}
 .profile-codex-grade{font-size:12px;color:var(--muted);}
 .profile-codex-list-section{border-top:1px solid var(--border);padding-top:8px;}
-.profile-codex-game-list{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:5px;}
-.profile-codex-game-item{display:flex;align-items:center;width:100%;padding:0;border:0;border-radius:6px;background:none;color:var(--text);font-size:12px;line-height:1.35;text-align:left;cursor:pointer;}
+.profile-codex-game-list{list-style:none;padding:0;margin:4px 0 0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:10px;row-gap:5px;}
+.profile-codex-game-item{display:flex;align-items:flex-start;gap:4px;width:100%;min-width:0;padding:0;border:0;border-radius:6px;background:none;color:var(--text);font-size:12px;line-height:1.35;text-align:left;cursor:pointer;}
+.profile-codex-game-item span{min-width:0;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;}
 .profile-codex-game-item:hover{background:var(--paper);}
 .profile-codex-game-item:focus-visible{outline:2px solid var(--green);outline-offset:1px;}
 .profile-codex-more-wrap.is-hidden{display:none;}
