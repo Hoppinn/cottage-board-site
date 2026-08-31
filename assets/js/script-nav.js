@@ -122,6 +122,23 @@ const menuToggle =
 const mobileMenu =
   document.querySelector('#mobileMenu');
 
+function setMenuGroupOpen(group, isOpen){
+  if (!group) return;
+  group.classList.toggle('is-open', isOpen);
+}
+
+function openMenuGroupAncestors(el){
+  let group = el?.closest('.menu-group');
+  while (group) {
+    setMenuGroupOpen(group, true);
+    group = group.parentElement.closest('.menu-group');
+  }
+}
+
+function closeMenuGroupBranch(group){
+  setMenuGroupOpen(group, false);
+  group.querySelectorAll('.menu-group').forEach(child => setMenuGroupOpen(child, false));
+}
 
 function resetMenuGroups(){
   // 잔류 inline style 및 preview-active 초기화
@@ -159,8 +176,7 @@ function resetMenuGroups(){
         const link = document.querySelector(`.header-menu a[href*="${match}"]`);
         if (link) {
           link.classList.add('preview-active');
-          const group = link.closest('.menu-group');
-          if (group) group.classList.add('is-open');
+          openMenuGroupAncestors(link);
         }
       }
     });
@@ -187,8 +203,7 @@ function resetMenuGroups(){
     currentLink.style.setProperty('color', '#fff', 'important');
     currentLink.style.setProperty('font-weight', '900', 'important');
     currentLink.style.setProperty('border-radius', '8px', 'important');
-    const activeGroup = currentLink.closest('.menu-group');
-    if(activeGroup) activeGroup.classList.add('is-open');
+    openMenuGroupAncestors(currentLink);
   }
 }
 
@@ -226,8 +241,7 @@ function refreshMenuActive() {
         const link = document.querySelector(`.header-menu a[href*="${match}"]`);
         if (link) {
           link.classList.add('preview-active');
-          const group = link.closest('.menu-group');
-          if (group) group.classList.add('is-open');
+          openMenuGroupAncestors(link);
         }
       }
     });
@@ -242,8 +256,7 @@ function refreshMenuActive() {
       recommendLink.style.setProperty('color', '#fff', 'important');
       recommendLink.style.setProperty('font-weight', '900', 'important');
       recommendLink.style.setProperty('border-radius', '8px', 'important');
-      const group = recommendLink.closest('.menu-group');
-      if (group) group.classList.add('is-open');
+      openMenuGroupAncestors(recommendLink);
     }
   }
 
@@ -262,8 +275,7 @@ function refreshMenuActive() {
     currentLink.style.setProperty('color', '#fff', 'important');
     currentLink.style.setProperty('font-weight', '900', 'important');
     currentLink.style.setProperty('border-radius', '8px', 'important');
-    const activeGroup = currentLink.closest('.menu-group');
-    if (activeGroup) activeGroup.classList.add('is-open');
+    openMenuGroupAncestors(currentLink);
   }
 }
 
@@ -342,8 +354,10 @@ document.querySelectorAll('.menu-group-header').forEach(btn=>{
   btn.addEventListener('click', ()=>{
     const group = btn.closest('.menu-group');
     const isOpen = group.classList.contains('is-open');
-    document.querySelectorAll('.menu-group').forEach(g=>g.classList.remove('is-open'));
-    if(!isOpen) group.classList.add('is-open');
+    Array.from(group.parentElement.children)
+      .filter(child => child !== group && child.classList?.contains('menu-group'))
+      .forEach(closeMenuGroupBranch);
+    setMenuGroupOpen(group, !isOpen);
   });
 });
 
@@ -369,8 +383,7 @@ document.querySelectorAll('.menu-group-header').forEach(btn=>{
       : linkPath === currentPath && !hashMatchExists;
     if(matches){
       link.classList.add('is-current');
-      const group = link.closest('.menu-group');
-      if(group) group.classList.add('is-open');
+      openMenuGroupAncestors(link);
     }
   });
 
@@ -385,8 +398,7 @@ document.querySelectorAll('.menu-group-header').forEach(btn=>{
       const linkDir = u.pathname.replace(/\/[^/]+$/, '/');
       if(linkDir === currentDir){
         link.classList.add('is-current');
-        const group = link.closest('.menu-group');
-        if(group) group.classList.add('is-open');
+        openMenuGroupAncestors(link);
       }
     });
   }

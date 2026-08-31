@@ -57,16 +57,16 @@
       <div class="menu-group-body">
         <a href="${p}info/price-rules.html">가격 · 이용안내</a>
         <a href="${p}info/guide.html">홈페이지 기능</a>
+        <div class="menu-group menu-group--nested">
+          <button class="menu-group-header" type="button">동호회 <span class="menu-group-arrow">›</span></button>
+          <div class="menu-group-body">
+            <a href="${p}club/club.html">동호회 홈</a>
+            <a href="${p}club/club-schedule.html">모임 플래너</a>
+            <a href="${p}club/club-intro.html">모임원 프로필</a>
+            <a href="${p}club/club-history.html">모임 기록 &amp; 사진</a>
+          </div>
+        </div>
         <a href="${p}admin/requests.html">요청하기</a>
-      </div>
-    </div>
-    <div class="menu-group">
-      <button class="menu-group-header" type="button">동호회 <span class="menu-group-arrow">›</span></button>
-      <div class="menu-group-body">
-        <a href="${p}club/club.html">동호회 홈</a>
-        <a href="${p}club/club-schedule.html">모임 플래너</a>
-        <a href="${p}club/club-intro.html">모임원 프로필</a>
-        <a href="${p}club/club-history.html">모임 기록 &amp; 사진</a>
       </div>
     </div>
     <div class="menu-login-area">

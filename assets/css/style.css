@@ -312,7 +312,7 @@ textarea{
   transition:transform 0.18s ease;
 }
 
-.menu-group.is-open .menu-group-arrow{
+.menu-group.is-open > .menu-group-header .menu-group-arrow{
   transform:rotate(90deg);
 }
 
@@ -363,16 +363,16 @@ textarea{
 
 
 /* 모바일: 클릭으로 아코디언 */
-.menu-group.is-open .menu-group-body{
+.menu-group.is-open > .menu-group-body{
   display:flex;
 }
 
 /* 데스크톱: 호버로 드롭다운 */
 @media(hover:hover) and (pointer:fine){
-  .menu-group:hover .menu-group-body{
+  .menu-group:hover > .menu-group-body{
     display:flex;
   }
-  .menu-group:hover .menu-group-arrow{
+  .menu-group:hover > .menu-group-header .menu-group-arrow{
     transform:rotate(90deg);
   }
 }
@@ -8332,10 +8332,10 @@ body.is-embedded .inner-page{padding-top:0;}
   }
 
   /* PC에서는 is-open(클릭)이 아닌 hover만으로 드롭다운 */
-  .menu-group.is-open .menu-group-body{
+  .menu-group.is-open > .menu-group-body{
     display:none;
   }
-  .menu-group:hover .menu-group-body{
+  .menu-group:hover > .menu-group-body{
     display:flex;
   }
 
@@ -8410,7 +8410,24 @@ body.is-embedded .inner-page{padding-top:0;}
     display:none;
   }
 
-  .menu-group:hover .menu-group-body{
+  .menu-group--nested{
+    width:100%;
+    padding:0;
+  }
+
+  .menu-group--nested > .menu-group-header{
+    width:100%;
+    padding:9px 14px;
+    font-size:15px;
+  }
+
+  .menu-group--nested > .menu-group-body{
+    top:0;
+    left:100%;
+    padding:10px;
+  }
+
+  .menu-group:hover > .menu-group-body{
     display:flex;
   }
 
