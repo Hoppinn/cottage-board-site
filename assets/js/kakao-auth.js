@@ -663,7 +663,7 @@ function _bindRecordSubsheet(subBody, ctx) {
           if (!subBody.querySelector('.profile-record-action-row')) {
             const actionRow = document.createElement('div');
             actionRow.className = 'profile-record-action-row';
-            actionRow.innerHTML = `${readOnly ? '' : '<button class="profile-record-link" data-board-frame-src="/pages/game/game-reviews.html?embed=1&tab=input" data-board-frame-title="기록 작성하기" data-board-frame-tab="input" type="button">기록 작성하기</button><span class="profile-board-action-divider" aria-hidden="true">|</span>'}
+            actionRow.innerHTML = `${readOnly ? '' : '<button class="profile-record-link" data-board-frame-src="/pages/game/game-reviews.html?embed=1&tab=input" data-board-frame-title="기록 작성하기" data-board-frame-tab="input" type="button">기록 작성하기</button>'}
               <a class="profile-record-link" href="/pages/game/game-reviews.html">플레이 기록 페이지 &gt;</a>`;
             subBody.appendChild(actionRow);
           }
@@ -756,12 +756,6 @@ function _bindRecordSubsheet(subBody, ctx) {
 // ── 프로필 보드 서브시트 afterRender (레거시 내부 이름 taste 유지) ──
 function _bindTasteSubsheet(subBody, ctx) {
   const { user, readOnly, _emitLikesChanged, allBioSuggestions, _BIO_PREDEFINED, _ruleSet, onBioSaved, onProfileDataSaved, resolveGameName } = ctx;
-          subBody.querySelectorAll('[data-board-frame-src]').forEach(button => {
-            button.addEventListener('click', () => _openBoardFrameModal({
-              src: button.dataset.boardFrameSrc,
-              title: button.dataset.boardFrameTitle,
-            }));
-          });
           const userId = String(user.id);
 
           // ── 평소 즐기는 게임 깊이 (profiles.preferred_game_depths) ──
@@ -2840,7 +2834,7 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
     </div>
     </section>`}
     <div class="profile-board-action-row">
-      ${_ro('<button class="profile-board-edit-link" data-board-frame-src="/pages/club/club-intro.html?edit=1" data-board-frame-title="프로필 수정" type="button">프로필 수정</button><span class="profile-board-action-divider" aria-hidden="true">|</span>')}
+      ${_ro('<a class="profile-board-edit-link" href="/pages/club/club-intro.html?edit=1">프로필 수정</a>')}
       <a class="profile-board-page-link" href="/pages/club/club-intro.html">프로필 페이지 &gt;</a>
     </div>`;
   }

@@ -748,17 +748,23 @@
       wizardComplete.hidden = false;
     });
 
-    // 로그인/로그아웃 시 폼 표시 + 삭제 버튼 표시 여부 갱신
-    window.addEventListener('cottage-auth-changed', loadIntros);
+    const _autoOpenEditWizard = (() => {
+      const queryParams = new URLSearchParams(location.search);
+      const hashParams = new URLSearchParams(location.hash.slice(1));
+      return queryParams.get('edit') === '1' || hashParams.get('edit') === '1';
+    })();
+    const _openEditWizardWhenReady = () => {
+      if (_autoOpenEditWizard && getCurrentUser()) openWizard({ edit: !!currentIntroRow?.questionnaire_completed_at });
+    };
+
+    // 페이지 진입 직후에는 카카오 세션 복원이 아직 끝나지 않을 수 있다. ?edit=1은
+    // 첫 loadIntros 결과뿐 아니라 인증 완료 뒤 다시 불러온 결과에서도 위저드를 연다.
+    window.addEventListener('cottage-auth-changed', () => {
+      loadIntros().then(_openEditWizardWhenReady);
+    });
 
     _syncLoginUI();
-    loadIntros().then(() => {
-      const embedParams = new URLSearchParams(location.search);
-      const hashParams = new URLSearchParams(location.hash.slice(1));
-      if (embedParams.get('edit') === '1' || hashParams.get('edit') === '1') {
-        openWizard({ edit: !!currentIntroRow?.questionnaire_completed_at });
-      }
-    });
+    loadIntros().then(_openEditWizardWhenReady);
   })();
   </script>
 
