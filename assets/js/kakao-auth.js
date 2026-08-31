@@ -1565,7 +1565,7 @@ function _bindMeetingSubsheet(subBody, ctx) {
               const renderGames = (type, label) => games[type].length
                 ? `<div class="mb-date-games"><div class="mb-date-games-label">${label}</div>${games[type].map(game => _buildDateGameChipHtml(game, type, vote.vote_date)).join('')}</div>`
                 : '';
-              return `<article class="mb-date-card${focusDate === vote.vote_date ? ' is-focused' : ''}" data-date="${escH(vote.vote_date)}" data-uid="${escH(userId)}" role="button" tabindex="0">
+              return `<article class="mb-date-card${focusDate === vote.vote_date ? ' is-focused' : ''}" data-date="${escH(vote.vote_date)}" data-uid="${escH(userId)}">
                 <div class="mb-date-card-head"><strong>${escH(_formatDateLabel(vote.vote_date))}</strong><span class="mb-date-card-time">${_formatVoteHour(vote.time_start)}~${_formatVoteHour(vote.time_end)}</span>${_ro(`<span class="mb-date-card-actions"><button class="mb-date-edit" type="button" data-date="${escH(vote.vote_date)}" aria-label="${escH(_formatDateLabel(vote.vote_date))} 참여 수정">수정</button><button class="mb-date-delete" type="button" data-date="${escH(vote.vote_date)}" aria-label="${escH(_formatDateLabel(vote.vote_date))} 참여 삭제">삭제</button></span>`)}</div>
                 ${intent.length ? `<div class="mb-date-intent">${intent.map(item => `<span>${escH(item)}</span>`).join('')}</div>` : ''}
                 ${renderGames('want', '하고 싶은 게임')}${renderGames('learn', '배우고 싶은 게임')}
@@ -1592,18 +1592,6 @@ function _bindMeetingSubsheet(subBody, ctx) {
               const bindMeetingDateInteractions = () => {
                 weekEl.querySelector('.mb-planner-edit')?.addEventListener('click', () =>
                   window.openPlannerModal?.({ weekOffset: 0, register: true, onDirtyClose: _loadMeetingWeek }));
-                weekEl.querySelectorAll('.mb-date-card[data-date][data-uid]').forEach(entry => {
-                  const openDate = e => {
-                    if (e.type === 'keydown' && !['Enter', ' '].includes(e.key)) return;
-                    if (e.type === 'keydown' && e.target !== entry) return;
-                    if (e.target.closest('button, a, input, select, textarea')) return;
-                    e.preventDefault();
-                    e.stopPropagation();
-                    window.openDateScheduleModal?.(entry.dataset.uid, entry.dataset.date);
-                  };
-                  entry.addEventListener('click', openDate);
-                  entry.addEventListener('keydown', openDate);
-                });
                 weekEl.querySelectorAll('.mb-date-edit').forEach(btn => btn.addEventListener('click', e => {
                   e.stopPropagation();
                   window.openPlannerModal?.({ weekOffset: 0, edit: btn.dataset.date, onDirtyClose: _loadMeetingWeek });

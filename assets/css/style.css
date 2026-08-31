@@ -4904,7 +4904,7 @@ html:has(body.embed-mode) { scroll-padding-top: 0; }
 .mb-detail-btn:hover{background:#f0f7f0;border-color:var(--green,#3a7d44);}
 .mb-week-entry.is-focused{outline:2px solid var(--line,#e5ddd2);outline-offset:3px;border-radius:8px;}
 .meeting-board-section{margin-bottom:28px;}
-.mb-date-card{padding:11px 12px;border:1px solid var(--line,#e5ddd2);border-radius:10px;background:#f8f4ee;cursor:pointer;}
+.mb-date-card{padding:11px 12px;border:1px solid var(--line,#e5ddd2);border-radius:10px;background:#f8f4ee;}
 .mb-date-card + .mb-date-card{margin-top:8px;}
 .mb-date-card.is-focused{outline:2px solid var(--line,#e5ddd2);outline-offset:3px;border-radius:8px;}
 .mb-date-card-head{display:flex;align-items:baseline;justify-content:space-between;gap:8px;font-size:13px;color:var(--text);}
@@ -4916,6 +4916,8 @@ html:has(body.embed-mode) { scroll-padding-top: 0; }
 .mb-date-intent span{font-size:10.5px;line-height:1.35;color:var(--green);background:var(--line,#e5ddd2);border-radius:12px;padding:2px 6px;}
 .mb-date-games{margin-top:9px;}
 .mb-date-games-label{font-size:11px;color:var(--muted);margin-bottom:4px;}
+.mb-date-games .taste-game-thumb{width:24px;height:24px;}
+.mb-date-games .taste-game-thumb-empty{width:24px;height:24px;}
 .mb-date-message{margin:10px 0 0;font-size:12px;line-height:1.5;color:var(--text);white-space:pre-wrap;word-break:break-word;}
 .mb-date-message span{display:block;color:var(--muted);margin:0 0 2px;}
 .mb-planner-cta{display:block;text-align:center;font-size:12px;color:var(--green,#3a7d44);font-weight:600;padding:8px;background:#f0f7f0;border-radius:8px;text-decoration:none;margin-top:8px;}

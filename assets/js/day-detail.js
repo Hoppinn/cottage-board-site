@@ -226,6 +226,7 @@
     .dd-participant-card .dd-section { margin-bottom: 4px; }
     .dd-participant-card .dd-section-label { margin-bottom: 2px; }
     .dd-participant-card .dd-game-list--editable li { padding: 2px 0; }
+    .dd-participant-card .dd-game-thumb { width: 24px; height: 24px; }
 
     /* ── 막대 공용 CSS (주간 카드 + 홈 미리보기) ── */
     .sched-bar-axis {
@@ -355,7 +356,7 @@
     .sched-bar-game-chip--want { background: var(--bg-soft); color: var(--green); }
     .sched-bar-game-chip--learn { background: var(--line); color: var(--muted); }
     .sched-bar-game-thumb {
-      width: 9px; height: 9px; margin-right: 2px;
+      width: 17px; height: 17px; margin-right: 3px;
       border-radius: 2px; object-fit: cover; flex-shrink: 0;
     }
     .sched-bar-game-chip .dd-game-hit { padding: 1px; margin: -1px; }

@@ -58,6 +58,9 @@ check('모임 등록은 등록 시트로 열고 게임 추가 버튼은 노출�
 check('날짜 카드별 수정·삭제 액션과 기존 삭제 API 유지', src.includes('mb-date-edit')
   && src.includes('mb-date-delete') && src.includes('deleteMeetingVote')
   && src.includes('edit: btn.dataset.date'));
+check('참여자 카드가 중복 개인 상세 모달을 열지 않음', src.includes('<article class="mb-date-card')
+  && !src.includes('entry.addEventListener(\'click\', openDate)')
+  && !src.includes('entry.addEventListener(\'keydown\', openDate)'));
 const cardStart = src.indexOf('const _myUpcomingVotes = (_upcomingCardVotes || [])');
 const cardEnd = src.indexOf('// 그룹 요약용 카운트 추출', cardStart);
 const card = src.slice(cardStart, cardEnd);
