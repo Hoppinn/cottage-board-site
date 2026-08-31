@@ -217,12 +217,12 @@
       justify-content: space-between;
       font-size: 10px;
       color: var(--muted);
-      margin: 0 2px 5px;
+      margin: 0 2px 6px;
     }
     .sched-bar-item {
       display: block;
       min-width: 0;
-      margin-bottom: 7px;
+      margin-bottom: 8px;
       padding: 7px 8px;
       border: 1px solid var(--line, #e5ddd2);
       border-radius: 9px;
@@ -343,8 +343,8 @@
     }
     .sched-bar-game-chip .dd-game-hit { padding: 1px; margin: -1px; }
     .sched-card-bars {
-      margin-top: 8px;
-      padding-top: 8px;
+      margin-top: 10px;
+      padding-top: 10px;
       border-top: 1px solid #ede8e0;
     }
     .sched-card-more-btn {
