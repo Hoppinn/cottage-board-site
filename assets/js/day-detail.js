@@ -194,6 +194,11 @@
     .dd-meeting-section-title { margin: 0 0 8px; font-size: 14px; font-weight: 800; color: var(--text); }
     .dd-participant-list { display: grid; gap: 8px; }
     .dd-participant-head { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
+    .dd-participant-nick-wrap { display: flex; align-items: baseline; flex: 1 1 auto; min-width: 0; gap: 3px; }
+    .dd-participant-actions { display: inline-flex; align-items: center; gap: 1px; flex: 0 0 auto; }
+    .dd-participant-action { display: inline-flex; align-items: center; justify-content: center; width: 18px; height: 18px; padding: 0; border: 0; border-radius: 4px; background: none; color: #b8b0a4; font-size: 11px; line-height: 1; cursor: pointer; }
+    .dd-participant-action:hover, .dd-participant-action:active { background: #ede8de; color: var(--green); }
+    .dd-participant-action--delete:hover, .dd-participant-action--delete:active { background: #fdecea; color: #d94f4f; }
     .dd-participant-card {
       padding: 11px 12px;
       border: 1px solid var(--line, #e5ddd2);
@@ -1223,9 +1228,15 @@
             _buildSchedGameSection(learnGames, '📖', '배우고 싶은 게임', true, true),
           ].join('')
         : readOnlyGamesHtml;
+      const participantActions = isMine
+        ? `<span class="dd-participant-actions" aria-label="내 참여 관리">
+            <button class="dd-participant-action" data-dd-participant-action="edit" type="button" aria-label="참여 시간 수정">✎</button>
+            <button class="dd-participant-action dd-participant-action--delete" data-dd-participant-action="delete" type="button" aria-label="참여 삭제">🗑️</button>
+          </span>`
+        : '';
       return `<article class="dd-participant-card">
         <div class="dd-participant-head">
-          <div class="dd-modal-nick">${esc(v.nickname)}</div>
+          <div class="dd-participant-nick-wrap"><div class="dd-modal-nick">${esc(v.nickname)}</div>${participantActions}</div>
           <div class="dd-time">${window.formatVoteHour(v.time_start)}~${window.formatVoteHour(v.time_end)}${partyCount([v]) > 1 ? ` · ${partyCount([v]) - 1}명 동반` : ''}</div>
         </div>
         ${_buildUsualContextHtml(profileByUserId.get(String(v.user_id)))}
@@ -1518,6 +1529,23 @@
     // 참여자별 카드는 이 모달 안에서 필요한 정보를 모두 보여 주며, 게임 항목만 게임시트로 연다.
     // 게임 행 클릭 → 게임시트. 게임시트(--z-sheet 9500)가 이 모달 위에 겹쳐 뜨므로 닫지 않는다
     // (시트를 닫으면 이 모달로 복귀 — 닉네임→보드와 같은 레이어 방식).
+    const refreshMeetingDetail = async reason => {
+      const [freshVotes, freshGames] = await Promise.all([
+        window.CottageDB?.getMeetingVotes(voteDate, voteDate) ?? [],
+        window.CottageDB?.getMeetingVoteGames(voteDate, voteDate) ?? [],
+      ]);
+      window.openDateMeetingModal(voteDate, freshVotes, freshGames, opts);
+      window.dispatchEvent(new CustomEvent('cottage-meeting-changed', { detail: { reason } }));
+    };
+    el.querySelector('.dd-participant-action[data-dd-participant-action="edit"]')?.addEventListener('click', () => {
+      window.openPlannerModal?.({ weekOffset: 0, edit: voteDate, onDirtyClose: () => refreshMeetingDetail('edit') });
+    });
+    el.querySelector('.dd-participant-action[data-dd-participant-action="delete"]')?.addEventListener('click', async () => {
+      if (!myVote || !confirm(`${fmtDate(voteDate)} 참여를 취소할까요?`)) return;
+      const result = await window.CottageDB?.deleteMeetingVote?.(String(myVote.user_id), voteDate);
+      if (result?.success) await refreshMeetingDetail('delete');
+    });
+
     _bindDdGameHitClicks(el);
 
     // 개인 날짜 상세에서만 가능했던 대표 게임·희망 인원 편집을 날짜 전체 상세에서도 제공한다.
