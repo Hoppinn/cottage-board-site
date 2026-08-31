@@ -420,7 +420,9 @@ function _afterGrowthRender(subBody, expandChar = false, expandTitle = false, re
   if (codexToggleBtn) {
     codexToggleBtn.addEventListener('click', () => {
       const codexBody = subBody.querySelector('.profile-codex-body');
+      const codexPreviewList = subBody.querySelector('.profile-codex-preview-list');
       const hidden = codexBody.classList.toggle('is-hidden');
+      codexPreviewList?.classList.toggle('is-hidden', !hidden);
       codexToggleBtn.textContent = hidden ? '전체 보기 ▾' : '접기 ▴';
     });
   }

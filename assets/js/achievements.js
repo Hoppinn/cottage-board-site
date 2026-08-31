@@ -719,11 +719,11 @@
       `<span class="profile-codex-grade">${grade}</span>` +
       `</div>` +
       (_recentGames.length
-        ? gameListHtml(_recentGames)
+        ? `<div class="profile-codex-preview-list">${gameListHtml(_recentGames)}</div>`
         : `<p class="profile-codex-empty">아직 수집한 게임이 없어요.</p>`) +
       `</div>`;
-    const _fullListHtml = playedCount > 4
-      ? gameListHtml(codexGames.slice(4))
+    const _fullListHtml = playedCount
+      ? gameListHtml(codexGames)
       : '';
 
     const html = `<div class="profile-codex-section">
