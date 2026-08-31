@@ -1,6 +1,6 @@
 # PROJECT_STATE — 코티지보드 현재 상태 보고서
 
-최종 갱신: 2026-08-31 (최근 플레이 → 기록 센터모달 runtime regression 수정·검증 완료). **열린 버그 0건. 열린 마이그레이션 0건.**
+최종 갱신: 2026-08-31 (기록 센터모달 최종 수동 확인 반영). **기록 센터모달은 사용자 화면에서 의도한 동작을 확인했고 열린 버그가 없다.**
 
 > ✅ **오늘 나온 두 DB 버그(부분갱신 필드 덮어쓰기·SELECT 컬럼 누락)와 같은 패턴이 코드 전체에 더 있는지 전수 조사 완료 — 추가 발견 0건.** 여러 필드를 받는 `update*` 함수는 `updateGamePlay`뿐(나머지는 단일 필드라 해당 패턴 불가), `recordGamePlay` 호출 6곳 전부 추적해 DB 조회 결과를 재사용하는 3곳은 이미 같은 수정으로 해결됨을 확인, 나머지 3곳은 DB 조회가 아니라 화면 입력값을 쓰는 구조라 무관. 재조사 불필요.
 
@@ -13,8 +13,6 @@
 ---
 
 ## 0. 진행 중 작업 (세션 시작 시 확인)
-
-**현재 작업 — 1. 기록 센터모달:** 최신 데이터 렌더 뒤 최근 월 OPEN·single-open·고정 크기 sticky 탭·활성 탭 재클릭 내부 scroll-top. DB/저장 구조 변경 없음.
 
 **현재 작업 — 2. 플래너 게임 조율 요약:** `buildBarsInCard(..., includeCoordinationSummary=true)`를 플래너 카드에만 사용하고, 날짜 상세는 같은 내부 helper를 재사용. votes/vote-games의 기존 데이터만 읽는다.
 
@@ -32,9 +30,9 @@
 - **이전 네비게이션 검증:** `verify-meeting-detail-game-editor.js` 정상 9건과 의도적 실패 1건, 평소/오늘·플래너·크로스 네비게이션 회귀 및 PC 1280·모바일 360 실화면 확인을 완료했다. 이번 작업의 자동 계약검사와 모임원 identity 카드 동작 검사는 통과했다.
 - **검증 상태:** 프로필 보드 4개 덩어리와 모임 보드 3개 주요 섹션 IA·SSOT·편집/읽기전용 계약검사, 신규/legacy 웨이트 코드 분리·travel_range 숨김·단일 프로필 수정 진입점 검사, 중복·분리 대섹션 제거 음성 조건, JS 문법검사, `npm.cmd run check`, `git diff --check`를 통과했다. 모임 보드 날짜 카드 재렌더 후 클릭·편집 경로도 코드 계약에 반영했다. **029는 운영 DB에 적용됐고 적용 SQL의 `invalid_depth_rows = 0`을 확인했다.** 신규 `weight_*` 실저장·재오픈 왕복과 인앱 브라우저 360/1280 실화면은 아직 재확인하지 못했다. 기존 공통 identity header 코드는 변경하지 않았다.
 - **검증 보류:** `verify-member-intro-time-ui.js`의 기존 `최초 지급 완료` 검사는 같은 테스트 안에서 완료된 설문 행을 읽는 타이밍에 따라 360/1280 어느 쪽에서도 변동해 실패할 수 있다. 이번 변경의 identity 닉네임·아바타·프로필 본문·Enter 분리 검사는 360/1280에서 통과했고, 이 기존 쿠폰 검사는 이번 작업의 판정에서 제외했다.
-- **이번 작업 완료:** `embed=1` 기존 규약으로 글로벌 헤더·breadcrumb·히어로를 iframe 첫 페인트부터 제외하고, 기존 기록 탭을 iframe 스크롤 기준 sticky로 유지한다. 활성 탭 재클릭은 같은 iframe의 최상단으로만 이동한다. 날짜별 기록은 실제 최신 월만 기본 OPEN, 이후 명시적 클릭으로 최대 한 달만 OPEN한다.
+- **이번 작업 완료:** `embed=1` 기존 규약으로 글로벌 헤더·breadcrumb·히어로를 iframe 첫 페인트부터 제외하고, 기존 기록 탭을 iframe 스크롤 기준 sticky로 유지한다. 활성 탭 재클릭은 같은 iframe의 최상단으로만 이동한다. 날짜별 기록은 실제 최신 월·최신 일이 기본 OPEN이고, 월을 열 때마다 해당 월의 최신 일이 기본 OPEN이며 월·날짜 single-open을 유지한다. 모임별 기록은 진입 시 모두 닫혀 있고, 모임을 열면 최신 월·최신 일이 기본 OPEN이며 모임 안에서도 월·날짜 single-open을 유지한다. 월·모임·날짜 전환은 위쪽 열린 콘텐츠가 접힐 때만 target viewport 위치를 보정하고, 위쪽 항목을 열 때는 불필요한 미세 이동 없이 즉시 연다. 새 content는 다음 frame에 펼치며 기록 embed에서는 smooth scroll을 사용하지 않는다.
 - **제외 범위:** 기록 DB/API·저장·입력 폼/사진/validation·기록 카드 구성·다른 보드 개편. 스크롤 위치 기반 월 자동 전환도 만들지 않는다.
-- **runtime 원인·검증:** Playwright가 `127.0.0.1:5500`에서 실제 홈→최근 플레이→기록 모달을 열어보니 iframe `src`에는 query가 있었지만 서버의 extensionless redirect가 최종 URL에서 query를 버렸다(`.../game-reviews`, body=`owned-page`, 내부 header·breadcrumb·hero 모두 visible). iframe URL의 hash에도 `embed=1&tab=input`을 넣고 `header.js`/게임 기록 허브가 query·hash 양쪽을 읽도록 최소 수정했다. 수정 후 360/1280에서 최종 URL=`.../game-reviews#embed=1&tab=input`, body=`owned-page embed-mode is-embedded`, `.site-header` 없음, breadcrumb·hero=`display:none`, 탭=`position:sticky; top:0`을 실측했다. Playwright 환경의 외부 네트워크는 차단돼 실제 기록 조회는 `불러오기 실패`였으므로 월 데이터 click은 DB 무접속 계약검사로만 확인했다.
+- **runtime 원인·검증:** Playwright가 `127.0.0.1:5500`에서 실제 홈→최근 플레이→기록 모달을 열어보니 iframe `src`에는 query가 있었지만 서버의 extensionless redirect가 최종 URL에서 query를 버렸다(`.../game-reviews`, body=`owned-page`, 내부 header·breadcrumb·hero 모두 visible). iframe URL의 hash에도 `embed=1&tab=input`을 넣고 `header.js`/게임 기록 허브가 query·hash 양쪽을 읽도록 최소 수정했다. 수정 후 360/1280에서 최종 URL=`.../game-reviews#embed=1&tab=input`, body=`owned-page embed-mode is-embedded`, `.site-header` 없음, breadcrumb·hero=`display:none`, 탭=`position:sticky; top:0`을 실측했다. Playwright 환경의 외부 네트워크는 차단돼 실제 기록 조회는 `불러오기 실패`였으므로 월 데이터 click은 DB 무접속 계약검사로만 확인했고, 최종 accordion·sticky·전환 동작은 사용자 로그인 화면에서 수동 확인했다.
 - **검증 완료:** `node scripts/verify-record-modal-ux.js`, `node --check assets/js/header.js`, `node --check assets/js/index-page.js`, `node --check assets/js/game-reviews.js`, `npm.cmd run check`, `git diff --check` 통과. 자동검사기는 실제 저장 API를 일부러 잘못 가정했을 때 FAIL을 내는 것을 먼저 확인한 뒤 올바른 `recordGamePlay` 호출로 재검증했다.
 - **다음 후보 작업:** 실계정에서 신규 `weight_*` 저장·재오픈 왕복. 기록 보드·함께한 시간 개편은 시작하지 않는다.
 - **약칭 출처 분류 보류 (2026-08-29):** `ID 수동 301행`은 사용자 직접입력 횟수가 아니라 BGG-ID 정본 적중 행 수임을 확인했다. 현재 ID 정본 294키를 값 계보로 배타 분류하면 `레거시 값 유지·복원 135키/137행`, `fallback 충돌 해결값 유지 155키/160행`, `이후 개별 추가 4키/4행(244608·280480·312484·400366)`, 미분류 0이다. 다음 시작점은 이 분류를 `audit-abbr-migration.js` 출력으로 고정하고 두 TSV의 `bgg-id`/`manual-abbr-missing` 표기를 `ID 명시 약칭`/`fallback 사용` 계열로 바꾼 뒤 집합 대조·커밋하는 것이다. 아직 보고서 파일은 수정하지 않았다.

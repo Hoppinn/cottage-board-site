@@ -135,7 +135,10 @@
   function isEmbeddedRecordHub() {
     const queryEmbed = new URLSearchParams(location.search).get('embed');
     const hashEmbed = new URLSearchParams(location.hash.slice(1)).get('embed');
-    return queryEmbed === '1' || queryEmbed === 'true' || hashEmbed === '1';
+    // Live Server/extensionless redirect가 query/hash를 잃어도 부모 모달 iframe에서는
+    // embed 동작을 유지한다. URL 표식은 직접 진입 호환용으로 계속 보존한다.
+    return window.parent !== window
+      || queryEmbed === '1' || queryEmbed === 'true' || hashEmbed === '1';
   }
 
   let tried = false;
@@ -164,7 +167,7 @@
 
     const params = new URLSearchParams(location.search);
     const embedded = isEmbeddedRecordHub();
-    if (embedded) document.body.classList.add('is-embedded');
+    if (embedded) document.body.classList.add('is-embedded', 'embed-mode');
 
     // 동호회 기록&사진에서 건너온 경우에만 복귀 링크. 홈이 이 페이지를 iframe으로 미리 로드하므로
     // embed 모드에선 띄우지 않는다(모달 안에 「돌아가기」가 뜨면 갈 곳이 없다).
@@ -778,9 +781,16 @@
       if (embeddedDateView && el.classList.contains('pr-session--bydate')) return;
       if (_openSess.has(el.querySelector('.pr-session-date')?.textContent?.trim())) el.classList.add('is-open');
     });
-    panel.querySelectorAll('.pr-sub-session').forEach(el => {
-      if (_openSub.has(el.dataset.date)) el.classList.add('is-open');
-    });
+    if (embeddedDateView) {
+      panel.querySelectorAll('.pr-sub-session').forEach(el => el.classList.remove('is-open'));
+      const restoredSub = [...panel.querySelectorAll('.pr-sub-session')]
+        .find(el => _openSub.has(el.dataset.date));
+      restoredSub?.classList.add('is-open');
+    } else {
+      panel.querySelectorAll('.pr-sub-session').forEach(el => {
+        if (_openSub.has(el.dataset.date)) el.classList.add('is-open');
+      });
+    }
     if (_openMonth) {
       panel.querySelectorAll('.pr-month-session').forEach(el => {
         if (_openMonth.has(el.querySelector('.pr-month-label')?.textContent?.trim())) el.classList.add('is-open');
@@ -1017,34 +1027,140 @@
     }
     bindToggle(panel);
 
-    panel.querySelectorAll('.pr-session-hd').forEach(hd => {
-      hd.addEventListener('click', () => {
-        const session = hd.closest('.pr-session');
-        if (currentView !== 'date' || !isEmbeddedRecordHub() || !session?.classList.contains('pr-session--bydate')) {
-          session?.classList.toggle('is-open');
-          return;
-        }
+    const openLatestDate = month => {
+      if (!month) return;
+      month.querySelectorAll('.pr-sub-session.is-open').forEach(el => el.classList.remove('is-open'));
+      month.querySelector('.pr-sub-session')?.classList.add('is-open');
+    };
+    const compensateHeaderPosition = (header, beforeTop) => {
+      const scroller = document.scrollingElement;
+      if (!scroller || beforeTop == null) return;
+      void panel.offsetHeight;
+      const shift = header.getBoundingClientRect().top - beforeTop;
+      if (shift < 0) scroller.scrollTop = Math.max(0, scroller.scrollTop + shift);
+    };
+    const hasOpenAbove = (selector, target, beforeTop) => [...panel.querySelectorAll(selector)]
+      .some(el => el !== target && el.getBoundingClientRect().top < beforeTop);
+    const bindViewportPress = header => {
+      let pressedTop = null;
+      header.addEventListener('pointerdown', () => { pressedTop = header.getBoundingClientRect().top; });
+      header.addEventListener('mousedown', event => event.preventDefault());
+      return () => {
+        const top = pressedTop ?? header.getBoundingClientRect().top;
+        pressedTop = null;
+        return top;
+      };
+    };
+    panel.querySelectorAll('.pr-session--bydate > .pr-session-hd').forEach(hd => {
+      hd.addEventListener('pointerdown', () => { hd._prPressedTop = hd.getBoundingClientRect().top; });
+      hd.addEventListener('mousedown', event => event.preventDefault());
+    });
 
+    if (!panel.dataset.monthAccordionBound) {
+      panel.dataset.monthAccordionBound = '1';
+      panel.addEventListener('click', event => {
+        const hd = event.target.closest('.pr-session--bydate > .pr-session-hd');
+        if (!hd || !panel.contains(hd)) return;
+        const session = hd.closest('.pr-session--bydate');
+        if (currentView !== 'date' || !isEmbeddedRecordHub() || !session) return;
+        event.preventDefault();
+        hd.blur();
         const wasOpen = session.classList.contains('is-open');
+        const targetTopBefore = hd._prPressedTop ?? hd.getBoundingClientRect().top;
+        hd._prPressedTop = null;
+        const shouldCompensate = hasOpenAbove('.pr-session--bydate.is-open', session, targetTopBefore);
         panel.querySelectorAll('.pr-session--bydate.is-open').forEach(el => el.classList.remove('is-open'));
         if (wasOpen) return;
+        if (shouldCompensate) compensateHeaderPosition(hd, targetTopBefore);
         session.classList.add('is-open');
-
-        // 위 월이 접히며 클릭한 헤더가 sticky 탭 뒤로 밀린 경우에만 최소 위치 보정한다.
-        requestAnimationFrame(() => {
-          const tabBottom = root.querySelector('.pr-tabs')?.getBoundingClientRect().bottom ?? 0;
-          const rect = hd.getBoundingClientRect();
-          if (rect.top < tabBottom || rect.bottom > window.innerHeight) {
-            hd.scrollIntoView({ behavior: 'auto', block: 'start' });
-          }
-        });
+        requestAnimationFrame(() => openLatestDate(session));
+      });
+    }
+    panel.querySelectorAll('.pr-session:not(.pr-session--bydate) > .pr-session-hd').forEach(hd => {
+      const getPressedTop = bindViewportPress(hd);
+      hd.addEventListener('click', event => {
+        event.preventDefault();
+        hd.blur();
+        const session = hd.closest('.pr-session');
+        if (!session) return;
+        const wasOpen = session.classList.contains('is-open');
+        if (wasOpen) {
+          session.classList.remove('is-open');
+          getPressedTop();
+          return;
+        }
+        const targetTopBefore = getPressedTop();
+        const shouldCompensate = hasOpenAbove('.pr-session:not(.pr-session--bydate).is-open', session, targetTopBefore);
+        panel.querySelectorAll('.pr-session:not(.pr-session--bydate).is-open')
+          .forEach(el => el.classList.remove('is-open'));
+        if (shouldCompensate) compensateHeaderPosition(hd, targetTopBefore);
+        session.classList.add('is-open');
+        const month = session.querySelector('.pr-month-session');
+        if (month) {
+          month.classList.add('is-open');
+          openLatestDate(month);
+        }
       });
     });
     panel.querySelectorAll('.pr-month-hd').forEach(hd => {
-      hd.addEventListener('click', () => hd.closest('.pr-month-session').classList.toggle('is-open'));
+      const getPressedTop = bindViewportPress(hd);
+      hd.addEventListener('click', event => {
+        event.preventDefault();
+        hd.blur();
+        const month = hd.closest('.pr-month-session');
+        const group = month?.closest('.pr-session');
+        if (!month || !group) return;
+        const wasOpen = month.classList.contains('is-open');
+        const targetTopBefore = getPressedTop();
+        const shouldCompensate = hasOpenAbove('.pr-month-session.is-open', month, targetTopBefore);
+        group.querySelectorAll('.pr-month-session.is-open').forEach(el => el.classList.remove('is-open'));
+        if (!wasOpen) {
+          if (shouldCompensate) compensateHeaderPosition(hd, targetTopBefore);
+          month.classList.add('is-open');
+          requestAnimationFrame(() => openLatestDate(month));
+        } else {
+          getPressedTop();
+        }
+      });
     });
     panel.querySelectorAll('.pr-sub-hd').forEach(hd => {
-      hd.addEventListener('click', () => hd.closest('.pr-sub-session').classList.toggle('is-open'));
+      const getPressedTop = bindViewportPress(hd);
+      hd.addEventListener('click', event => {
+        event.preventDefault();
+        hd.blur();
+        const sub = hd.closest('.pr-sub-session');
+        const month = sub?.closest('.pr-session--bydate');
+        const groupMonth = sub?.closest('.pr-month-session');
+        if (!sub) return;
+        if (currentView === 'group' && groupMonth) {
+          const wasOpen = sub.classList.contains('is-open');
+          const targetTopBefore = getPressedTop();
+          const shouldCompensate = hasOpenAbove('.pr-sub-session.is-open', sub, targetTopBefore);
+          groupMonth.querySelectorAll('.pr-sub-session.is-open').forEach(el => el.classList.remove('is-open'));
+          if (!wasOpen) {
+            if (shouldCompensate) compensateHeaderPosition(hd, targetTopBefore);
+            requestAnimationFrame(() => sub.classList.add('is-open'));
+          } else {
+            getPressedTop();
+          }
+          return;
+        }
+        if (currentView !== 'date' || !isEmbeddedRecordHub() || !month) {
+          sub.classList.toggle('is-open');
+          getPressedTop();
+          return;
+        }
+        const wasOpen = sub.classList.contains('is-open');
+        const targetTopBefore = getPressedTop();
+        const shouldCompensate = hasOpenAbove('.pr-session--bydate .pr-sub-session.is-open', sub, targetTopBefore);
+        panel.querySelectorAll('.pr-session--bydate .pr-sub-session.is-open')
+          .forEach(el => el.classList.remove('is-open'));
+        if (!wasOpen) {
+          if (shouldCompensate) compensateHeaderPosition(hd, targetTopBefore);
+          // 2단계: 위치 보정이 끝난 다음 frame에 새 내용만 펼친다.
+          requestAnimationFrame(() => sub.classList.add('is-open'));
+        }
+      });
     });
 
     // 참여자 이름 클릭 → 해당 회원 읽기전용 보드 열기
@@ -1364,8 +1480,14 @@
       groupMap.get(g).push(r);
     }
 
-    const sortedMonths = [...months.entries()].sort((a, b) => b[0].localeCompare(a[0]));
-    const latestYm = sortedMonths[0]?.[0];
+    // 날짜 미지정('?')은 문자열 정렬에서 숫자 연월보다 앞서므로, 실제 연월이
+    // 있으면 그것을 최신 월 기준으로 삼는다. 날짜 미지정 기록만 있을 때만 '?'를 쓴다.
+    const sortedMonths = [...months.entries()].sort((a, b) => {
+      if (a[0] === '?') return 1;
+      if (b[0] === '?') return -1;
+      return b[0].localeCompare(a[0]);
+    });
+    const latestYm = sortedMonths.find(([ym]) => ym !== '?')?.[0] || sortedMonths[0]?.[0];
 
     let html = '';
     for (const [ym, dateMap] of sortedMonths) {
@@ -1390,7 +1512,7 @@
         const totalDateGames = [...groupMap.values()].reduce((s, recs) => s + recs.length, 0);
         const dateLabel = formatKstDateWithDay(dateStr);
 
-        html += `<div class="pr-sub-session" data-date="${dateStr}">
+        html += `<div class="pr-sub-session${isLatestDate ? ' is-open' : ''}" data-date="${dateStr}">
           <button class="pr-sub-hd" type="button">
             <span class="pr-sub-date">${escH(dateLabel)}</span>
             <span class="pr-sub-summary">${totalDateGames}게임</span>

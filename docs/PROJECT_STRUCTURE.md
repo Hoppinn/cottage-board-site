@@ -323,6 +323,20 @@ assets/js/
 
 ## 2-A. 인앱 iframe 시트 패턴
 
+### 기록 센터 실제 렌더 경계
+
+`index.html`의 `#openRecordViewBtn`은 `assets/js/index-page.js`의
+`openModal('records')`를 거쳐 `#recordIframeFrame`에
+`pages/game/game-reviews.html`을 embed URL로 로드한다. iframe 내부의
+`assets/js/game-reviews.js`가 `initHub()`를 실행하고, `loadRecords()`의
+데이터 로딩 완료 후 `renderRecords()`와 `renderDateView()`가 기록 월을
+렌더링한다. 월 기본 open·single-open·탭 재클릭 scroll-top은 이 iframe
+문서의 상태를 기준으로 동작한다.
+
+기록 iframe은 query/hash의 `embed` 표식뿐 아니라 실제 iframe 여부도
+확인하므로 redirect가 URL 표식을 잃어도 embed CSS와 모달 동작 경계를
+유지한다.
+
 ### embed 모드 (`?embed=1`)
 
 URL query 또는 hash에 `embed=1`이 있으면 `header.js`가 `body.embed-mode` 클래스 추가 후 헤더 미삽입. localhost의 extensionless redirect가 query를 버리는 경로에서는 hash 표식을 사용한다.

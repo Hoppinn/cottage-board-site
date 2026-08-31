@@ -4692,6 +4692,8 @@ html:has(body.embed-mode) { scroll-padding-top: 0; }
 .profile-card:active{background:#ede8df;}
 .profile-card-icon{font-size:18px;flex-shrink:0;}
 .profile-card-label{display:block;font-size:13px;font-weight:700;color:var(--text);}
+.profile-card-label-chevron{display:inline-block;margin-left:2px;color:var(--muted);font-size:15px;font-weight:500;line-height:1;transition:color .12s,transform .12s;}
+.profile-card:hover .profile-card-label-chevron{color:var(--green);transform:translateX(2px);}
 .profile-card-summary{display:block;font-size:11px;color:var(--muted);margin-top:4px;line-height:1.5;word-break:keep-all;white-space:pre-line;}
 .profile-card-bio-row{display:block;}
 .profile-card-profile-row,.profile-card-detail-row{display:block;margin-top:4px;}
@@ -7679,10 +7681,16 @@ button.home-section-more{background:none;border:none;cursor:pointer;padding:0;}
    기록 탭이 모달의 첫 UI가 된다. 독립 페이지의 상단 구조에는 적용하지 않는다. */
 body.embed-mode .breadcrumb,
 body.embed-mode .page-mini-hero,
-body.embed-mode footer { display:none!important; }
-body.embed-mode .inner-page { padding:16px 18px 36px; }
-body.embed-mode #reviewRoot { padding-bottom:0; }
-body.embed-mode #reviewRoot .pr-tabs {
+body.embed-mode footer,
+body.is-embedded .breadcrumb,
+body.is-embedded .page-mini-hero,
+body.is-embedded footer { display:none!important; }
+body.embed-mode .inner-page,
+body.is-embedded .inner-page { padding:0 18px 36px; }
+body.embed-mode #reviewRoot,
+body.is-embedded #reviewRoot { padding-bottom:0; }
+body.embed-mode #reviewRoot .pr-tabs,
+body.is-embedded #reviewRoot .pr-tabs {
   position:sticky;
   top:0;
   z-index:1;
@@ -7690,18 +7698,29 @@ body.embed-mode #reviewRoot .pr-tabs {
   padding:0 52px 0 18px;
   background:var(--bg);
   box-sizing:border-box;
+  height:45px;
   min-height:45px;
   align-items:stretch;
 }
-body.embed-mode #reviewRoot .pr-tab{box-sizing:border-box;min-height:45px;}
-body.embed-mode .pr-session--bydate > .pr-session-hd { scroll-margin-top:48px; }
+body.embed-mode #reviewRoot .pr-tab,
+body.is-embedded #reviewRoot .pr-tab{box-sizing:border-box;height:45px;min-height:45px;}
+body.embed-mode #reviewRoot,
+body.is-embedded #reviewRoot { overflow-anchor:none; }
+html:has(body.embed-mode),
+html:has(body.is-embedded),
+body.embed-mode,
+body.is-embedded { overflow-anchor:none; }
+html:has(body.embed-mode),
+html:has(body.is-embedded) { scroll-behavior:auto; }
+body.embed-mode .pr-session--bydate > .pr-session-hd,
+body.is-embedded .pr-session--bydate > .pr-session-hd { scroll-margin-top:48px; }
 
 /* 이전 embed=true iframe 캐시와의 호환: game-reviews.js 초기화 뒤에도 같은 compact 규칙을 유지한다. */
 body.is-embedded .site-header,
 body.is-embedded footer,
 body.is-embedded .breadcrumb,
 body.is-embedded .page-mini-hero{display:none!important;}
-body.is-embedded .inner-page{padding-top:16px;}
+body.is-embedded .inner-page{padding-top:0;}
 .home-section-desc{font-size:13px;color:var(--text-info);margin:0 0 12px;line-height:1.6;}
 .home-section-cta{
   display:inline-block;margin-top:16px;
@@ -7960,6 +7979,9 @@ body.is-embedded .inner-page{padding-top:16px;}
 .pr-sub-hd-row .pr-hd-caption-menu { position: absolute; right: 38px; top: 50%; transform: translateY(-50%); }
 .pr-sub-summary { font-size: 12px; font-weight: 700; color: #8c7e6e; flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: none; }
 .pr-sub-arrow { font-size: 13px; color: #a09080; flex-shrink: 0; transition: transform 0.2s; margin-left: auto; }
+.pr-session-arrow,
+.pr-month-arrow,
+.pr-sub-arrow { transition: none; }
 .pr-sub-session.is-open .pr-sub-arrow { transform: rotate(180deg); }
 .pr-sub-body { display: none; }
 .pr-sub-session.is-open .pr-sub-body { display: block; }

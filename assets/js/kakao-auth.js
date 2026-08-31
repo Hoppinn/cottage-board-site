@@ -2963,32 +2963,32 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
     <div class="profile-card-grid">
       <button class="profile-card" data-subsheet="taste" type="button">
         <span class="profile-card-icon">👤</span>
-        <span class="profile-card-label">프로필 보드</span>
+        <span class="profile-card-label">프로필 보드 <span class="profile-card-label-chevron" aria-hidden="true">›</span></span>
         <span class="profile-card-summary">${_tasteCardSummaryHtml(_boardData)}</span>
       </button>
       <button class="profile-card" data-subsheet="meeting" type="button">
         <span class="profile-card-icon">📅</span>
-        <span class="profile-card-label">모임 보드</span>
+        <span class="profile-card-label">모임 보드 <span class="profile-card-label-chevron" aria-hidden="true">›</span></span>
         <span class="profile-card-summary">${_ro('<span class="profile-card-meeting-cta">가까운 일정 준비하기</span>')}${_scheduleHtml || `<span class="profile-card-meeting-empty">아직 등록한 일정이 없어요</span>`}</span>
       </button>
       <button class="profile-card" data-subsheet="records" type="button">
         <span class="profile-card-icon">📝</span>
-        <span class="profile-card-label">기록 보드</span>
+        <span class="profile-card-label">기록 보드 <span class="profile-card-label-chevron" aria-hidden="true">›</span></span>
         <span class="profile-card-summary">${escH(_recordCardSummary)}</span>
       </button>
       ${_ro(`<button class="profile-card" data-subsheet="usage" type="button">
         <span class="profile-card-icon">📊</span>
-        <span class="profile-card-label">함께한 시간</span>
+        <span class="profile-card-label">함께한 시간 <span class="profile-card-label-chevron" aria-hidden="true">›</span></span>
         <span class="profile-card-summary">${escH(_statsSummary)}</span>
       </button>`)}
       ${_ro(`<button class="profile-card profile-card--span2" data-subsheet="voucher" type="button">
         <span class="profile-card-icon">🎫</span>
-        <span class="profile-card-label">음료교환권</span>
+        <span class="profile-card-label">음료교환권 <span class="profile-card-label-chevron" aria-hidden="true">›</span></span>
         <span class="profile-card-summary">${escH(_voucherCardSummary)}</span>
       </button>`)}
       ${_adminOnly(`<button class="profile-card profile-card--span2 profile-card--admin" data-subsheet="adminboard" type="button">
         <span class="profile-card-icon">🛠️</span>
-        <span class="profile-card-label">회원 분석<span class="profile-card-admin-tag">관리자</span></span>
+        <span class="profile-card-label">회원 분석<span class="profile-card-admin-tag">관리자</span> <span class="profile-card-label-chevron" aria-hidden="true">›</span></span>
         <span class="profile-card-summary">이 회원의 페이지·이용·활동 보기</span>
       </button>`)}
     </div>`;

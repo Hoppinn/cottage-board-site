@@ -28,7 +28,7 @@ check('embed 모드 탭 자체가 iframe 스크롤 기준 sticky',
   /body\.embed-mode #reviewRoot \.pr-tabs[\s\S]*position:sticky;[\s\S]*top:0;/.test(css));
 check('sticky dimensions remain fixed',
   /body\.embed-mode #reviewRoot \.pr-tabs[\s\S]*box-sizing:border-box;[\s\S]*min-height:45px;/.test(css)
-  && css.includes('body.embed-mode #reviewRoot .pr-tab{box-sizing:border-box;min-height:45px;}'));
+  && /body\.embed-mode #reviewRoot \.pr-tab,[\s\S]*body\.is-embedded #reviewRoot \.pr-tab\{box-sizing:border-box;min-height:45px;\}/.test(css));
 check('별도 센터모달 탭 헤더를 만들지 않고 기존 탭을 재사용',
   reviews.includes('<div class="pr-tabs">') && !page.includes('record-modal-tabs'));
 check('활성 탭 재클릭은 iframe document scroller만 최상단 이동',
@@ -37,8 +37,14 @@ check('날짜별 최근 실제 데이터 월만 embed에서 기본 OPEN',
   reviews.includes("pr-session--bydate${isEmbeddedRecordHub() && isLatestMonth ? ' is-open' : ''}")
   && reviews.includes("if (!_restoreState && currentView === 'date' && isEmbeddedRecordHub())")
   && reviews.includes("months[0].classList.add('is-open')"));
+check('최신 월의 최신 일도 기본 OPEN',
+  reviews.includes("pr-sub-session${isLatestDate ? ' is-open' : ''}")
+  && reviews.includes('const latestDate = sortedDates[0]?.[0];'));
+check('같은 월의 날짜 accordion은 single-open',
+  reviews.includes("month.querySelectorAll('.pr-sub-session.is-open')")
+  && reviews.includes("el.classList.remove('is-open')"));
 check('날짜별 월 클릭은 열린 월을 먼저 모두 닫아 single-open 유지',
-  reviews.includes(".pr-session--bydate.is-open').forEach(el => el.classList.remove('is-open'))"));
+  reviews.includes("panel.querySelectorAll('.pr-session--bydate.is-open').forEach(el => el.classList.remove('is-open'))"));
 check('기존 다중 월 펼침 상태를 다시 렌더해도 한 달만 복원',
   reviews.includes('const embeddedDateView = currentView === \'date\' && isEmbeddedRecordHub();')
   && reviews.includes('const restoredMonth = [...panel.querySelectorAll(\'.pr-session--bydate\')]'));
