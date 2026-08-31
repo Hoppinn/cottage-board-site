@@ -60,6 +60,13 @@ check('모임 등록은 등록 시트로 열고 게임 추가 버튼은 노출�
 check('날짜 카드별 수정·삭제 액션과 기존 삭제 API 유지', src.includes('mb-date-edit')
   && src.includes('mb-date-delete') && src.includes('deleteMeetingVote')
   && src.includes('edit: btn.dataset.date'));
+check('다가오는 모임은 참여 등록 하나와 날짜 옆 아이콘 액션을 사용', src.includes('＋ 참여 등록')
+  && !src.includes('id="meetinglikedAddBtn"') && !src.includes('id="meetingcuriousAddBtn"')
+  && src.includes('class="mb-date-card-main"')
+  && src.includes('title="참여 수정"') && src.includes('title="참여 삭제"'));
+check('참여 페이스는 기존 빈도·가능 요일·시간 데이터를 함께 표시', build.includes("'참여 가능 빈도'")
+  && build.includes("'참여 희망 빈도'") && build.includes("'가능한 요일'") && build.includes("'가능한 시간'")
+  && build.includes('formatMemberIntroDays') && build.includes('formatMemberIntroTimes'));
 check('참여자 카드가 중복 개인 상세 모달을 열지 않음', src.includes('<article class="mb-date-card')
   && !src.includes('entry.addEventListener(\'click\', openDate)')
   && !src.includes('entry.addEventListener(\'keydown\', openDate)'));

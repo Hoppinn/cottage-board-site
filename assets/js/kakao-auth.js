@@ -1566,7 +1566,7 @@ function _bindMeetingSubsheet(subBody, ctx) {
                 ? `<div class="mb-date-games"><div class="mb-date-games-label">${label}</div>${games[type].map(game => _buildDateGameChipHtml(game, type, vote.vote_date)).join('')}</div>`
                 : '';
               return `<article class="mb-date-card${focusDate === vote.vote_date ? ' is-focused' : ''}" data-date="${escH(vote.vote_date)}" data-uid="${escH(userId)}">
-                <div class="mb-date-card-head"><strong>${escH(_formatDateLabel(vote.vote_date))}</strong><span class="mb-date-card-time">${_formatVoteHour(vote.time_start)}~${_formatVoteHour(vote.time_end)}</span>${_ro(`<span class="mb-date-card-actions"><button class="mb-date-edit" type="button" data-date="${escH(vote.vote_date)}" aria-label="${escH(_formatDateLabel(vote.vote_date))} 참여 수정">수정</button><button class="mb-date-delete" type="button" data-date="${escH(vote.vote_date)}" aria-label="${escH(_formatDateLabel(vote.vote_date))} 참여 삭제">삭제</button></span>`)}</div>
+                <div class="mb-date-card-head"><span class="mb-date-card-main"><strong>${escH(_formatDateLabel(vote.vote_date))}</strong>${_ro(`<span class="mb-date-card-actions"><button class="mb-date-edit" type="button" data-date="${escH(vote.vote_date)}" aria-label="${escH(_formatDateLabel(vote.vote_date))} 참여 수정" title="참여 수정">✎</button><button class="mb-date-delete" type="button" data-date="${escH(vote.vote_date)}" aria-label="${escH(_formatDateLabel(vote.vote_date))} 참여 삭제" title="참여 삭제">✕</button></span>`)}</span><span class="mb-date-card-time">${_formatVoteHour(vote.time_start)}~${_formatVoteHour(vote.time_end)}</span></div>
                 ${intent.length ? `<div class="mb-date-intent">${intent.map(item => `<span>${escH(item)}</span>`).join('')}</div>` : ''}
                 ${renderGames('want', '하고 싶은 게임')}${renderGames('learn', '배우고 싶은 게임')}
                 ${vote.recruitment_message ? `<p class="mb-date-message"><span>한마디</span>${escH(vote.recruitment_message)}</p>` : ''}
@@ -2947,6 +2947,13 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
   // 진입할 때마다 최신 데이터로 다시 빌드한다.
   function _buildMeetingInnerHtml(d) {
     const _meeting = d;
+    const _availableDayText = window.CottageDB?.formatMemberIntroDays?.(_meeting.availableDays)
+      || _introLabels(_meeting.availableDays, _INTRO_DAY_LABELS_EXTENDED);
+    const _availableDays = [_availableDayText,
+      (_meeting.availableDays || []).some(value => String(value) === 'flexible') ? '일정 유동적' : '']
+      .filter(Boolean).join(' · ');
+    const _availableTimes = window.CottageDB?.formatMemberIntroTimes?.(_meeting.availableTimes)
+      || _introLabels(_meeting.availableTimes, {});
 
     return `
     <section class="meeting-board-section meeting-upcoming-section" aria-label="다가오는 모임">
@@ -2960,6 +2967,8 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
       <div class="meeting-profile-display">
         ${_meetingProfileRowHtml('참여 가능 빈도', _introFrequencyRange(_meeting.possibleFrequencyMin, _meeting.possibleFrequencyMax))}
         ${_meetingProfileRowHtml('참여 희망 빈도', _introFrequencyRange(_meeting.desiredFrequencyMin, _meeting.desiredFrequencyMax))}
+        ${_meetingProfileRowHtml('가능한 요일', _availableDays)}
+        ${_meetingProfileRowHtml('가능한 시간', _availableTimes)}
       </div>
     </section>
     <section class="meeting-board-section meeting-recent-section">
