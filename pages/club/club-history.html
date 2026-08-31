@@ -223,16 +223,63 @@
     }
 
     function attachHandlers(root) {
+      const compensateHeaderPosition = (header, beforeTop) => {
+        const scroller = document.scrollingElement;
+        if (!scroller || beforeTop == null) return;
+        void root.offsetHeight;
+        const shift = header.getBoundingClientRect().top - beforeTop;
+        if (shift < 0) {
+          // 전역 smooth scroll은 아코디언 위치 보정에 쓰지 않는다.
+          const previousBehavior = scroller.style.scrollBehavior;
+          scroller.style.scrollBehavior = 'auto';
+          scroller.scrollTop = Math.max(0, scroller.scrollTop + shift);
+          scroller.style.scrollBehavior = previousBehavior;
+        }
+      };
+      const hasOpenAbove = (selector, target, beforeTop) => [...root.querySelectorAll(selector)]
+        .some(el => el !== target && el.getBoundingClientRect().top < beforeTop);
+      const bindViewportPress = header => {
+        let pressedTop = null;
+        header.addEventListener('pointerdown', () => { pressedTop = header.getBoundingClientRect().top; });
+        header.addEventListener('mousedown', event => event.preventDefault());
+        return () => {
+          const top = pressedTop ?? header.getBoundingClientRect().top;
+          pressedTop = null;
+          return top;
+        };
+      };
       root.querySelectorAll('.pr-session-hd').forEach(hd => {
-        hd.addEventListener('click', () => hd.closest('.pr-session').classList.toggle('is-open'));
+        const getPressedTop = bindViewportPress(hd);
+        hd.addEventListener('click', event => {
+          event.preventDefault();
+          hd.blur();
+          const session = hd.closest('.pr-session');
+          if (!session) return;
+          const wasOpen = session.classList.contains('is-open');
+          const targetTopBefore = getPressedTop();
+          const shouldCompensate = hasOpenAbove('.pr-session.is-open', session, targetTopBefore);
+          root.querySelectorAll('.pr-session.is-open').forEach(openSession => openSession.classList.remove('is-open'));
+          if (!wasOpen) {
+            if (shouldCompensate) compensateHeaderPosition(hd, targetTopBefore);
+            session.classList.add('is-open');
+          }
+        });
       });
       root.querySelectorAll('.pr-sub-hd').forEach(hd => {
-        hd.addEventListener('click', () => {
+        const getPressedTop = bindViewportPress(hd);
+        hd.addEventListener('click', event => {
+          event.preventDefault();
+          hd.blur();
           const session = hd.closest('.pr-sub-session');
           if (!session) return;
           const wasOpen = session.classList.contains('is-open');
+          const targetTopBefore = getPressedTop();
+          const shouldCompensate = hasOpenAbove('.pr-sub-session.is-open', session, targetTopBefore);
           root.querySelectorAll('.pr-sub-session.is-open').forEach(openSession => openSession.classList.remove('is-open'));
-          if (!wasOpen) session.classList.add('is-open');
+          if (!wasOpen) {
+            if (shouldCompensate) compensateHeaderPosition(hd, targetTopBefore);
+            session.classList.add('is-open');
+          }
         });
       });
       root.querySelectorAll('.pr-rec-more-btn').forEach(btn => {

@@ -1037,7 +1037,14 @@
       if (!scroller || beforeTop == null) return;
       void panel.offsetHeight;
       const shift = header.getBoundingClientRect().top - beforeTop;
-      if (shift < 0) scroller.scrollTop = Math.max(0, scroller.scrollTop + shift);
+      if (shift < 0) {
+        // 전역 html{scroll-behavior:smooth}가 위치 보정까지 애니메이션으로 만들면
+        // 닫히는 항목과 보정이 서로 다른 프레임에 보여 화면이 흔들린다.
+        const previousBehavior = scroller.style.scrollBehavior;
+        scroller.style.scrollBehavior = 'auto';
+        scroller.scrollTop = Math.max(0, scroller.scrollTop + shift);
+        scroller.style.scrollBehavior = previousBehavior;
+      }
     };
     const hasOpenAbove = (selector, target, beforeTop) => [...panel.querySelectorAll(selector)]
       .some(el => el !== target && el.getBoundingClientRect().top < beforeTop);
