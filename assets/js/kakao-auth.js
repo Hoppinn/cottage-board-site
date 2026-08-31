@@ -2009,7 +2009,7 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
   const _existingWasReadOnly = existing?.classList.contains('profile-panel--readonly');
   // 기존 패널을 자기 close 핸들러를 안 거치고 강제로 치우는 경로 — 그 패널이 push해둔
   // activeView도 여기서 같이 pop해야 한다(토큰은 DOM 노드에 저장돼 있어 이 클로저 밖에서도 접근 가능).
-  if (existing) { window.popActiveView?.(existing._viewToken); existing.remove(); document.getElementById('profileSubSheet')?.remove(); if (!readOnly && !_existingWasReadOnly) return; }
+  if (existing) { window.removeEventListener('cottage-meeting-changed', existing._meetingPreviewRefresh); window.popActiveView?.(existing._viewToken); existing.remove(); document.getElementById('profileSubSheet')?.remove(); if (!readOnly && !_existingWasReadOnly) return; }
 
   const panel = document.createElement('div');
   panel.id = 'profilePanel';
@@ -2038,6 +2038,7 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
   const _popView = () => window.popActiveView?.(panel._viewToken);
   const _closePanel = () => {
     panel._identityObserver?.disconnect();
+    window.removeEventListener('cottage-meeting-changed', panel._meetingPreviewRefresh);
     document.getElementById('profileSubSheet')?.remove();
     _popView();
     panel.remove();
@@ -2470,11 +2471,6 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
   // 모임 카드도 모임 보드와 같은 가까운 미래 범위를 쓴다. 날짜별 vote의 실제 참여
   // 정보(meeting_votes)와 날짜별 게임(meeting_vote_games)을 한 장의 짧은 요약으로 압축한다.
   // 평소 프로필 값은 여기서 읽지 않는다 — 프로필 보드의 다른 영역과 중복되기 때문이다.
-  const _myUpcomingVotes = (_upcomingCardVotes || [])
-    .filter(v => String(v.user_id) === String(user.id))
-    .sort((a, b) => String(a.vote_date).localeCompare(String(b.vote_date)));
-  const _myUpcomingGames = (_upcomingCardGames || [])
-    .filter(g => String(g.user_id) === String(user.id));
   const _meetingStyleLabels = { party: '파티', strategy: '전략', any: '게임 유형 무관', other: '기타' };
   const _meetingDepthLabels = { light: '가볍게', medium: '적당히', deep: '깊게' };
   const _meetingTraitLabels = { beginner_welcome: '초보 환영', new_game_ok: '새 게임 가능', hard_game_learning_ok: '어려운 게임도 배워보고 싶어요' };
@@ -2486,48 +2482,49 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
     const gameData = gameKey ? window.gameData?.[gameKey] : null;
     return gameData ? (gameData.title?.display || gameData.title?.owned || gameData.title?.bgg || gameKey) : (game?.custom_name || rawId);
   };
-  const _meetingDateLabels = _myUpcomingVotes.map(v => {
-    const date = new Date(`${v.vote_date}T00:00:00`);
-    return `${date.getMonth() + 1}/${date.getDate()}(${'일월화수목금토'[date.getDay()]})`;
-  });
   const _uniqueMeetingValues = values => [...new Set(values.filter(Boolean))];
-  const _meetingStyles = _uniqueMeetingValues(_myUpcomingVotes.flatMap(v => [
-    v.game_style === 'other' ? v.game_style_custom : _meetingStyleLabels[v.game_style],
-    _meetingDepthLabels[v.game_depth],
-    ...(v.play_traits || []).map(trait => _meetingTraitLabels[trait]),
-  ])).slice(0, 4);
-  const _meetingGamesByType = listType => {
-    const seen = new Set();
-    return _myUpcomingGames.filter(g => g.list_type === listType).filter(g => {
-      const key = g.game_id != null ? `id:${g.game_id}` : `cn:${String(g.custom_name || '').trim().toLocaleLowerCase('ko-KR')}`;
-      if (seen.has(key)) return false;
-      seen.add(key);
-      return true;
+  const _renderMeetingPreview = (allVotes, allGames) => {
+    const myVotes = (allVotes || []).filter(v => String(v.user_id) === String(user.id))
+      .sort((a, b) => String(a.vote_date).localeCompare(String(b.vote_date)));
+    const myGames = (allGames || []).filter(g => String(g.user_id) === String(user.id));
+    if (!myVotes.length) return '<span class="profile-card-meeting-empty">아직 예정된 모임이 없어요</span>';
+    const meetingDateLabels = myVotes.map(v => {
+      const date = new Date(`${v.vote_date}T00:00:00`);
+      return `${date.getMonth() + 1}/${date.getDate()}(${'일월화수목금토'[date.getDay()]})`;
     });
-  };
-  const _meetingGameLine = (listType, label) => {
-    const games = _meetingGamesByType(listType);
-    if (!games.length) return '';
-    const shown = games.slice(0, 3).map(_meetingGameName).filter(Boolean);
-    const extra = games.length - shown.length;
-    return `<div class="profile-card-meeting-line"><span class="profile-card-meeting-label">${label}</span><span class="profile-card-meeting-games">${shown.map(escH).join(' · ')}${extra > 0 ? ` 외 ${extra}개` : ''}</span></div>`;
-  };
-  const _meetingMessages = _uniqueMeetingValues(_myUpcomingVotes.map(v => String(v.recruitment_message || '').trim()));
-  let _scheduleHtml = '<span class="profile-card-meeting-empty">아직 예정된 모임이 없어요</span>';
-  if (_myUpcomingVotes.length) {
-    const _styleHtml = _meetingStyles.length
-      ? `<div class="profile-card-meeting-tags">${_meetingStyles.map(label => `<span>${escH(label)}</span>`).join('')}</div>`
+    const meetingStyles = _uniqueMeetingValues(myVotes.flatMap(v => [
+      v.game_style === 'other' ? v.game_style_custom : _meetingStyleLabels[v.game_style],
+      _meetingDepthLabels[v.game_depth],
+      ...(v.play_traits || []).map(trait => _meetingTraitLabels[trait]),
+    ]));
+    const meetingGamesByType = listType => {
+      const seen = new Set();
+      return myGames.filter(g => g.list_type === listType).filter(g => {
+        const key = g.game_id != null ? `id:${g.game_id}` : `cn:${String(g.custom_name || '').trim().toLocaleLowerCase('ko-KR')}`;
+        if (seen.has(key)) return false;
+        seen.add(key);
+        return true;
+      });
+    };
+    const meetingGameLine = (listType, label) => {
+      const games = meetingGamesByType(listType).map(_meetingGameName).filter(Boolean);
+      return games.length ? `<div class="profile-card-meeting-line"><span class="profile-card-meeting-label">${label}</span><span class="profile-card-meeting-games">${games.map(escH).join(' · ')}</span></div>` : '';
+    };
+    const meetingMessages = _uniqueMeetingValues(myVotes.map(v => String(v.recruitment_message || '').trim()));
+    const styleHtml = meetingStyles.length
+      ? `<div class="profile-card-meeting-tags">${meetingStyles.map(label => `<span>${escH(label)}</span>`).join('')}</div>`
       : '';
-    const _gameHtml = [_meetingGameLine('want', '하고 싶은 게임'), _meetingGameLine('learn', '배우고 싶은 게임')].filter(Boolean).join('');
-    const _messageHtml = _meetingMessages.length
-      ? `<div class="profile-card-meeting-line profile-card-meeting-line--message"><span class="profile-card-meeting-label">한마디</span><span class="profile-card-meeting-games">${escH(_meetingMessages[0].length > 28 ? `${_meetingMessages[0].slice(0, 28)}…` : _meetingMessages[0])}</span></div>`
+    const gameHtml = [meetingGameLine('want', '하고 싶은 게임'), meetingGameLine('learn', '배우고 싶은 게임')].filter(Boolean).join('');
+    const messageHtml = meetingMessages.length
+      ? `<div class="profile-card-meeting-line profile-card-meeting-line--message"><span class="profile-card-meeting-label">한마디</span><span class="profile-card-meeting-games">${meetingMessages.map(escH).join(' · ')}</span></div>`
       : '';
     const _dateLimit = 3;
-    const _shownDates = _meetingDateLabels.slice(0, _dateLimit);
-    const _extraDates = _meetingDateLabels.length - _shownDates.length;
+    const _shownDates = meetingDateLabels.slice(0, _dateLimit);
+    const _extraDates = meetingDateLabels.length - _shownDates.length;
     const _dateHtml = `${_shownDates.join(' · ')}${_extraDates > 0 ? ` 외 ${_extraDates}회` : ''}`;
-    _scheduleHtml = `<span class="profile-card-schedule"><span class="profile-card-meeting-heading">다가오는 모임</span><span class="profile-card-meeting-weeks">${escH(_dateHtml)}</span>${_styleHtml}${_gameHtml}${_messageHtml}</span>`;
-  }
+    return `<span class="profile-card-schedule"><span class="profile-card-meeting-heading">다가오는 모임</span><span class="profile-card-meeting-weeks">${escH(_dateHtml)}</span>${styleHtml}${gameHtml}${messageHtml}</span>`;
+  };
+  const _scheduleHtml = _renderMeetingPreview(_upcomingCardVotes, _upcomingCardGames);
 
   // 그룹 요약용 카운트 추출 — regex 실패 시 0 fallback
   // KA3: build 함수가 {html, count, total} 객체를 직접 반환하므로 HTML regex 파싱 불필요(구 _safeInt 제거)
@@ -3041,6 +3038,18 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
       </button>`)}
     </div>`;
 
+  const _refreshMeetingPreview = async () => {
+    const preview = body.querySelector('[data-subsheet="meeting"] .profile-card-summary');
+    if (!preview) return;
+    const [freshVotes, freshGames] = await Promise.all([
+      window.CottageDB?.getMeetingVotes?.(_upcomingStart, _upcomingEnd) || Promise.resolve([]),
+      window.CottageDB?.getMeetingVoteGames?.(_upcomingStart, _upcomingEnd) || Promise.resolve([]),
+    ]);
+    if (panel.isConnected) preview.innerHTML = _renderMeetingPreview(freshVotes, freshGames);
+  };
+  panel._meetingPreviewRefresh = () => { _refreshMeetingPreview().catch(() => {}); };
+  window.addEventListener('cottage-meeting-changed', panel._meetingPreviewRefresh);
+
   body.querySelector('.profile-panel-compact-close')?.addEventListener('click', _closePanel);
   const compactHeader = body.querySelector('.profile-panel-compact-header');
   const largeIdentity = body.querySelector('.profile-panel-profile-top');
@@ -3104,7 +3113,7 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
       if (backTo?.onClick) backTo.onClick();
     };
     sub.querySelector('.profile-subsheet-back').addEventListener('click', _leaveToPanel);
-    sub.querySelector('.profile-subsheet-close').addEventListener('click', () => { sub.remove(); panel.remove(); });
+    sub.querySelector('.profile-subsheet-close').addEventListener('click', _closePanel);
     sub.addEventListener('click', e => { if (e.target === sub) _leaveToPanel(); });
     sub.querySelector('.profile-subsheet-header').addEventListener('click', e => { if (!e.target.closest('button')) sub.querySelector('.profile-subsheet-body')?.scrollTo({top:0,behavior:'smooth'}); });
     if (afterRender) afterRender(sub.querySelector('.profile-subsheet-body'));

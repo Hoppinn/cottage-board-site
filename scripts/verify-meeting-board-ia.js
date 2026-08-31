@@ -57,6 +57,11 @@ check('타인 readOnly 편집 가드 유지', src.includes("${_ro('<button class
 check('모임 등록은 등록 시트로 열고 게임 추가 버튼은 노출하지 않음', src.includes('register: true')
   && daySrc.includes('cottage-register-open') && src.includes('＋ 참여 등록')
   && !src.includes('id="meetinglikedAddBtn"') && !src.includes('id="meetingcuriousAddBtn"'));
+check('미리보기는 저장 직후 재조회하고 모든 일정의 고유 참여 정보를 합친다', daySrc.includes("reason: 'planner-save'")
+  && src.includes("window.addEventListener('cottage-meeting-changed', panel._meetingPreviewRefresh)")
+  && src.includes('const _renderMeetingPreview = (allVotes, allGames) =>')
+  && !src.includes('])).slice(0, 4)')
+  && src.includes("meetingMessages.map(escH).join(' · ')") && src.includes("meetingGamesByType(listType).map(_meetingGameName)"));
 check('첫 참여 등록도 플래너 초기화 전 요청을 보존', scheduleSrc.includes('let _pendingRegisterOpen = false')
   && scheduleSrc.includes('if (_pendingRegisterOpen)')
   && scheduleSrc.includes('_pendingRegisterOpen = true'));
@@ -73,17 +78,17 @@ check('참여 페이스는 기존 빈도·가능 요일·시간 데이터를 함
 check('참여자 카드가 중복 개인 상세 모달을 열지 않음', src.includes('<article class="mb-date-card')
   && !src.includes('entry.addEventListener(\'click\', openDate)')
   && !src.includes('entry.addEventListener(\'keydown\', openDate)'));
-const cardStart = src.indexOf('const _myUpcomingVotes = (_upcomingCardVotes || [])');
+const cardStart = src.indexOf('const _renderMeetingPreview = (allVotes, allGames) =>');
 const cardEnd = src.indexOf('// 그룹 요약용 카운트 추출', cardStart);
 const card = src.slice(cardStart, cardEnd);
 check('메인 모임 카드도 같은 가까운 미래 범위 사용', src.includes('const [_upcomingStart, _upcomingEnd] = _upcomingRange()')
   && src.includes('getMeetingVotes?.(_upcomingStart, _upcomingEnd)')
   && src.includes('getMeetingVoteGames?.(_upcomingStart, _upcomingEnd)')
   && !src.includes('_monthStart'));
-check('메인 카드는 예정 날짜와 당일 참여 정보를 압축해 요약', card.includes('_meetingDateLabels')
+check('메인 카드는 예정 날짜와 당일 참여 정보를 압축해 요약', card.includes('meetingDateLabels')
   && card.includes('_dateLimit') && card.includes('${_extraDates}회')
-  && card.includes('다가오는 모임') && card.includes('_meetingStyles')
-  && card.includes('_meetingGamesByType') && card.includes('recruitment_message')
+  && card.includes('다가오는 모임') && card.includes('meetingStyles')
+  && card.includes('meetingGamesByType') && card.includes('recruitment_message')
   && !card.includes('가까운 일정 준비하기') && !card.includes('다가오는 일정 ${_myVoteDates.length}건')
   && !card.includes('_profileSummaryItems'));
 check('날짜 상세 진입 시 최신 게임 목록을 재조회', scheduleSrc.includes('getMeetingVoteGames(ds, ds)')

@@ -1119,7 +1119,12 @@
       _pmAwaitingReveal = false;
       _pmReveal();
     }
-    if (e.data?.type === 'cottage-meeting-saved') { _pmDirty = true; _pmOnDirty?.(); } // 저장 즉시 부모 갱신(닫을 때만 기다리지 않음)
+    if (e.data?.type === 'cottage-meeting-saved') {
+      _pmDirty = true;
+      _pmOnDirty?.();
+      // 플래너 밖의 홈·프로필 보드 미리보기는 자체 조회 결과를 들고 있으므로 저장 즉시 재조회하게 한다.
+      window.dispatchEvent(new CustomEvent('cottage-meeting-changed', { detail: { reason: 'planner-save' } }));
+    }
     // 🚨 club-schedule.html의 등록/수정 시트는 저장 성공 직후 *자기 자신*을 자동으로
     // 닫는다(is-quick-entry라 돌아갈 주간 뷰가 없어서) — 그런데 이 바깥 래퍼(#__plannerModal)는
     // 그 신호를 안 듣고 있었다. 그래서 안쪽 시트만 사라지고 **바깥 흰 박스가 빈 채로 계속
