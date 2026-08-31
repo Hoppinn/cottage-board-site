@@ -7040,7 +7040,8 @@ html:has(body.embed-mode) { scroll-padding-top: 0; }
 .intro-card-news-body{display:flex;flex:1;flex-direction:column;gap:6px;padding:9px 10px 10px;}
 .intro-card-news-summary{display:flex;gap:4px;align-items:flex-start;min-width:0;color:var(--text-dark);font-size:12px;font-weight:600;line-height:1.45;}
 .intro-card-news-summary span:last-child{min-width:0;word-break:keep-all;}
-.intro-card-news-message{display:-webkit-box;margin:2px 0 0;overflow:hidden;color:var(--text);font-size:12px;line-height:1.45;-webkit-box-orient:vertical;-webkit-line-clamp:2;}
+.intro-card-news-message{display:-webkit-box;margin:0 0 2px;overflow:hidden;color:var(--text);font-size:12px;line-height:1.45;-webkit-box-orient:vertical;-webkit-line-clamp:3;}
+.intro-card-news-games{margin-top:2px;color:var(--muted);font-size:10px;line-height:1.4;}
 .intro-card-news-link{align-self:flex-end;margin-top:auto;padding-top:3px;color:var(--green);font-size:11px;font-weight:700;}
 .intro-card-news--clickable{
   transition:box-shadow 0.15s ease,background 0.15s ease;

@@ -158,6 +158,7 @@
     function getCurrentUser() { return window.getKakaoUser?.() || null; }
 
     const FREQUENCY_LABELS = ['몇 달에 1회 이하','월 1회','월 2~3회','주 1회','주 2회','주 3회','주 4회 이상'];
+    const DEPTH_SUMMARY_LABELS = { weight_intro:'입문', weight_light:'라이트', weight_heavy:'헤비', weight_hardcore:'하드코어', light:'가볍게', medium:'적당히', deep:'깊게' };
     const COMPANION_LABELS = { friends:'친구·지인', partner:'연인·배우자', family:'가족', boardgame_group:'보드게임 모임·동호회', various:'상황에 따라 다양함' };
     const DAY_LABELS = { mon:'월', tue:'화', wed:'수', thu:'목', fri:'금', sat:'토', sun:'일', holiday:'공휴일', flexible:'일정 유동적' };
     const GAME_TYPE_LABELS = { party:'파티·친목', mystery:'추리·미스터리', strategy:'전략·유로', thematic:'테마·몰입', cooperative:'협력', social_deduction:'마피아·블러핑', card_deckbuilding:'카드·덱빌딩', puzzle_abstract:'퍼즐·추상', campaign_legacy:'캠페인·레거시', any:'장르 무관' };
@@ -531,14 +532,28 @@
       // profiles.avoid_tags는 꺼리는 게임 유형의 기존 SSOT다.
       const userIds = [...new Set(data.map(r => r.user_id).filter(Boolean))];
       let profileByUser = {};
+      let likedCountByUser = {};
+      let curiousCountByUser = {};
       if (userIds.length) {
-        const { data: profilesData } = await db.from('profiles').select('user_id, bio, avoid_tags, rep_achievement_id').in('user_id', userIds);
-        profileByUser = Object.fromEntries((profilesData || []).map(p => [p.user_id, p]));
+        const [profilesRes, likedRes, curiousRes] = await Promise.all([
+          db.from('profiles').select('user_id, bio, avoid_tags, rep_achievement_id, preferred_game_depths').in('user_id', userIds),
+          db.from('game_likes').select('user_id').in('user_id', userIds),
+          db.from('game_curious').select('user_id').in('user_id', userIds),
+        ]);
+        if (profilesRes.error) console.error('[club-intro:profiles]', profilesRes.error);
+        if (likedRes.error) console.error('[club-intro:game_likes]', likedRes.error);
+        if (curiousRes.error) console.error('[club-intro:game_curious]', curiousRes.error);
+        profileByUser = Object.fromEntries((profilesRes.data || []).map(p => [p.user_id, p]));
+        (likedRes.data || []).forEach(row => { likedCountByUser[row.user_id] = (likedCountByUser[row.user_id] || 0) + 1; });
+        (curiousRes.data || []).forEach(row => { curiousCountByUser[row.user_id] = (curiousCountByUser[row.user_id] || 0) + 1; });
       }
       data.forEach(r => {
         r._bio = r.user_id ? (profileByUser[r.user_id]?.bio || '') : '';
         r._avoid_tags = r.user_id ? (profileByUser[r.user_id]?.avoid_tags || []) : [];
         r._rep_achievement_id = r.user_id ? (profileByUser[r.user_id]?.rep_achievement_id || null) : null;
+        r._preferred_game_depths = r.user_id ? (profileByUser[r.user_id]?.preferred_game_depths || []) : [];
+        r._liked_game_count = r.user_id ? (likedCountByUser[r.user_id] || 0) : 0;
+        r._curious_game_count = r.user_id ? (curiousCountByUser[r.user_id] || 0) : 0;
       });
       addSharedCustomOptions(data);
 
@@ -566,6 +581,13 @@
         const repAvatar = repPath
           ? `<img class="profile-panel-avatar" src="${escHtml(repPath)}" alt="">`
           : `<span class="profile-panel-avatar profile-panel-avatar--empty">🐾</span>`;
+        const gameTypes = labelList(r.preferred_game_types, GAME_TYPE_LABELS);
+        const depthSummary = (r._preferred_game_depths || []).map(value => DEPTH_SUMMARY_LABELS[value]).filter(Boolean).join(' · ');
+        const gameTaste = [gameTypes, depthSummary].filter(Boolean).join(' · ');
+        const usualPlay = [
+          r.average_play_frequency != null ? FREQUENCY_LABELS[r.average_play_frequency] : '',
+          labelList(r.companion_types, COMPANION_LABELS),
+        ].filter(Boolean).join(' · ');
         return `
         <div class="intro-card-news${clickable ? ' intro-card-news--clickable' : ''}" data-id="${r.id}" data-user-id="${escHtml(r.user_id || '')}" data-color="${escHtml(r.card_color||'')}" data-idx="${idx}"${clickable ? ` role="button" tabindex="0" aria-label="${escHtml(r.nickname)} 내 보드 열기"` : ''}>
           <div class="intro-card-news-head">
@@ -573,10 +595,11 @@
             ${actions}
           </div>
           <div class="intro-card-news-body">
-            ${r.preferred_game_types?.length ? `<div class="intro-card-news-summary" aria-label="좋아하는 게임 유형: ${escHtml(labelList(r.preferred_game_types, GAME_TYPE_LABELS))}"><span aria-hidden="true">🎲</span><span>${escHtml(labelList(r.preferred_game_types, GAME_TYPE_LABELS))}</span></div>` : ''}
-            ${r.average_play_frequency != null ? `<div class="intro-card-news-summary" aria-label="평균 플레이 빈도: ${escHtml(FREQUENCY_LABELS[r.average_play_frequency])}"><span aria-hidden="true">🎮</span><span>평균 ${escHtml(FREQUENCY_LABELS[r.average_play_frequency])}</span></div>` : ''}
-            ${r.available_days?.length ? `<div class="intro-card-news-summary" aria-label="가능한 요일과 시간: ${escHtml(formatAvailability(r.available_days, r.available_times))}"><span aria-hidden="true">🗓</span><span>${escHtml(formatAvailability(r.available_days, r.available_times))}</span></div>` : (r.available ? `<div class="intro-card-news-summary" aria-label="가능한 요일과 시간: ${escHtml(r.available)}"><span aria-hidden="true">🗓</span><span>${escHtml(r.available)}</span></div>` : '')}
             ${r.expectation || r._bio ? `<p class="intro-card-news-message">${escHtml(r.expectation || r._bio)}</p>` : ''}
+            ${gameTaste ? `<div class="intro-card-news-summary" aria-label="게임 취향: ${escHtml(gameTaste)}"><span aria-hidden="true">🎲</span><span>${escHtml(gameTaste)}</span></div>` : ''}
+            ${usualPlay ? `<div class="intro-card-news-summary" aria-label="평소 플레이: ${escHtml(usualPlay)}"><span aria-hidden="true">🎮</span><span>${escHtml(usualPlay)}</span></div>` : ''}
+            ${r.available_days?.length ? `<div class="intro-card-news-summary" aria-label="가능한 요일과 시간: ${escHtml(formatAvailability(r.available_days, r.available_times))}"><span aria-hidden="true">🗓</span><span>${escHtml(formatAvailability(r.available_days, r.available_times))}</span></div>` : (r.available ? `<div class="intro-card-news-summary" aria-label="가능한 요일과 시간: ${escHtml(r.available)}"><span aria-hidden="true">🗓</span><span>${escHtml(r.available)}</span></div>` : '')}
+            <div class="intro-card-news-games">좋아하는 게임 ${r._liked_game_count} · 해보고 싶은 게임 ${r._curious_game_count}</div>
             ${clickable ? '<span class="intro-card-news-link" aria-hidden="true">프로필 자세히 보기 ›</span>' : ''}
           </div>
         </div>`;
