@@ -8,7 +8,6 @@
 
 - 현재 작업: 모임원보드 개편
 - 상세 기획: [docs/plans/member-board-plan.md](plans/member-board-plan.md)
-- 별도 작업: 동호회 중첩 메뉴의 시각 위계 수정 — 상세 Plan: [club-navigation-visual-hierarchy-plan.md](plans/club-navigation-visual-hierarchy-plan.md). `코티지 이용 > 동호회 > 동호회 홈·모임 플래너·모임원 프로필·모임 기록 & 사진` 구조에서 CSS만 조정하며, 열림·활성 로직은 보존한다.
 - 작업 순서: 1. 모임보드 미리보기 수정 → 2. 모임보드 내부 내용 수정 → 3. 동호회 > 모임원 프로필 게시판 수정 → 4. 모임원 프로필 작성하기 양식 점검
 - 현재 단계: 4. 모임원 프로필 작성하기 양식 점검 준비
 - 다음 작업: 4번을 시작할 때 현재 양식의 실제 단계·필드·저장 동선부터 조사하고, 사용자 확정 전에는 수정하지 않는다.
