@@ -2954,7 +2954,7 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
       </div>
     </section>
     <section class="meeting-board-section meeting-plan-section">
-      <div class="taste-section-label">참여 계획</div>
+      <div class="taste-section-label">참여 페이스</div>
       <div class="meeting-profile-display">
         ${_meetingProfileRowHtml('참여 가능 빈도', _introFrequencyRange(_meeting.possibleFrequencyMin, _meeting.possibleFrequencyMax))}
         ${_meetingProfileRowHtml('참여 희망 빈도', _introFrequencyRange(_meeting.desiredFrequencyMin, _meeting.desiredFrequencyMax))}

@@ -29,7 +29,7 @@ check('다음 주 게임도 가까운 미래 목록에 포함', load.includes('_
   && load.includes('_weekData.myVotes = _weekData.upcomingVotes'));
 check('날짜 선택은 실제 가까운 참여 일정에서 생성', src.includes('new Set(_weekData.myVotes.map(v => v.vote_date))')
   && !src.includes('const _mbWeek ='));
-check('모임 보드는 세 가지 주요 섹션으로 단순화', ['다가오는 모임', '참여 계획', '최근 참여']
+check('모임 보드는 세 가지 주요 섹션으로 단순화', ['다가오는 모임', '참여 페이스', '최근 참여']
   .every(label => build.includes(label))
   && build.includes('meeting-upcoming-section')
   && build.includes('meeting-plan-section')
@@ -51,7 +51,7 @@ check('플래너 진입 날짜 컨텍스트를 전달하고 날짜 카드를 강
   && src.includes('.mb-date-card[data-date=') && src.includes('is-focused'));
 check('타인 readOnly 편집 가드 유지', src.includes("${_ro('<button class=\"taste-add-btn")
   && src.includes("const cond = readOnly") && src.includes("const action = _ro("));
-const cardStart = src.indexOf('// 모임 카드도 모임 보드와 같은 가까운 미래 범위를 쓴다.');
+const cardStart = src.indexOf('const _myUpcomingVotes = (_upcomingCardVotes || [])');
 const cardEnd = src.indexOf('// 그룹 요약용 카운트 추출', cardStart);
 const card = src.slice(cardStart, cardEnd);
 check('메인 모임 카드도 같은 가까운 미래 범위 사용', src.includes('const [_upcomingStart, _upcomingEnd] = _upcomingRange()')
@@ -59,8 +59,8 @@ check('메인 모임 카드도 같은 가까운 미래 범위 사용', src.inclu
   && src.includes('getMeetingVoteGames?.(_upcomingStart, _upcomingEnd)')
   && !src.includes('_monthStart'));
 check('메인 카드는 예정 날짜와 당일 참여 정보를 압축해 요약', card.includes('_meetingDateLabels')
-  && card.includes('_dateLimit') && card.includes('외 ${_extraDates}회')
-  && card.includes('다가오는 참여') && card.includes('_meetingStyles')
+  && card.includes('_dateLimit') && card.includes('${_extraDates}회')
+  && card.includes('다가오는 모임') && card.includes('_meetingStyles')
   && card.includes('_meetingGamesByType') && card.includes('recruitment_message')
   && !card.includes('가까운 일정 준비하기') && !card.includes('다가오는 일정 ${_myVoteDates.length}건')
   && !card.includes('_profileSummaryItems'));
