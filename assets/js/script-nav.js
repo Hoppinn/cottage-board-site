@@ -140,6 +140,10 @@ function closeMenuGroupBranch(group){
   group.querySelectorAll('.menu-group').forEach(child => setMenuGroupOpen(child, false));
 }
 
+function isNestedMenuLeaf(link){
+  return !!link?.closest('.menu-group--nested > .menu-group-body');
+}
+
 function resetMenuGroups(){
   // 잔류 inline style 및 preview-active 초기화
   document.querySelectorAll('.header-menu a').forEach(l => {
@@ -198,7 +202,7 @@ function resetMenuGroups(){
   }
 
   const currentLink = document.querySelector('.header-menu a.is-current');
-  if(currentLink){
+  if(currentLink && !isNestedMenuLeaf(currentLink)){
     currentLink.style.setProperty('background', '#7a4828', 'important');
     currentLink.style.setProperty('color', '#fff', 'important');
     currentLink.style.setProperty('font-weight', '900', 'important');
@@ -262,7 +266,7 @@ function refreshMenuActive() {
 
   // 현재 페이지 is-current 링크 — 그룹 유지 + 인라인 스타일 동기화
   const currentLink = document.querySelector('.header-menu a.is-current');
-  if (currentLink) {
+  if (currentLink && !isNestedMenuLeaf(currentLink)) {
     document.querySelectorAll('.header-menu a').forEach(l => {
       if (l !== currentLink && l !== recommendLink) {
         l.style.removeProperty('background');
@@ -392,7 +396,7 @@ document.querySelectorAll('.menu-group-header').forEach(btn=>{
   });
 
   // 정확한 매칭 없으면 같은 디렉토리 링크를 current로 표시 (서브페이지 지원)
-  if(!document.querySelector('.header-menu a.is-current')){
+  if(!document.querySelector('.header-menu a.is-current') && !currentPath.includes('/club/')){
     const currentDir = currentPath.replace(/\/[^/]+$/, '/');
     allLinks.forEach(link=>{
       const rawHref = link.getAttribute('href') || '';
@@ -405,6 +409,13 @@ document.querySelectorAll('.menu-group-header').forEach(btn=>{
         openMenuGroupAncestors(link);
       }
     });
+  }
+
+  // 메뉴에 등록되지 않은 동호회 하위 페이지도 부모 그룹은 펼친 상태로 둔다.
+  // leaf 활성 상태는 실제 메뉴 링크가 정확히 매칭될 때만 부여한다.
+  if(currentPath.includes('/club/') && !document.querySelector('.menu-group--nested a.is-current')){
+    const clubGroup = document.querySelector('.menu-group--nested');
+    if(clubGroup) openMenuGroupAncestors(clubGroup.querySelector('.menu-group-header'));
   }
 })();
 
