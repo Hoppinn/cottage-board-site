@@ -50,12 +50,6 @@
       padding: 12px 20px;
       display: flex; justify-content: center; gap: 8px;
     }
-    .dd-meeting-modal .dd-close-row {
-      justify-content: stretch;
-      padding: 10px 20px 12px;
-      border-top: 1px solid var(--line, #e5ddd2);
-      background: #f5ede3;
-    }
     .dd-meeting-header {
       display: flex; align-items: center; justify-content: space-between;
       flex: 0 0 48px;
@@ -65,16 +59,16 @@
       background: var(--paper, #fffaf0);
     }
     .dd-meeting-header-title { font-size: 14px; line-height: 1.25; font-weight: 700; color: var(--text); }
-    .dd-meeting-header .dd-close-btn {
-      padding: 2px 4px;
+    .dd-meeting-header .dd-x-btn {
+      position: static; z-index: auto;
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 32px; height: 32px; padding: 0; margin-right: -4px;
       background: none;
       border-radius: 4px;
-      font-size: 12px;
+      font-size: 18px;
       color: var(--muted);
     }
-    .dd-meeting-header .dd-close-btn:hover { color: var(--green); background: #f5ede3; }
-    .dd-meeting-modal .dd-planner-btn { flex: 1; }
-    .dd-meeting-modal .dd-close-row .dd-close-btn { padding-inline: 18px; }
+    .dd-meeting-header .dd-x-btn:hover { color: var(--green); background: #f5ede3; }
     .dd-meeting-modal { display: flex; flex-direction: column; height: auto; }
     .dd-meeting-modal .dd-modal-scroll { flex: 0 1 auto; min-height: 0; max-height: none; }
     .dd-close-btn {
@@ -422,6 +416,7 @@
       margin-top: 14px; padding-top: 10px;
       border-top: 1px solid var(--line, #e5ddd2);
     }
+    .game-coordination-summary .dd-planner-btn { display: block; width: 100%; margin-top: 14px; }
     .dd-roulette-open-btn:active { background: #ede5d8; }
     .dd-roulette-panel {
       flex: 1; min-height: 0;
@@ -1474,14 +1469,14 @@
     el.innerHTML = `<div class="dd-modal dd-meeting-modal planner-modal-box" role="dialog" aria-modal="true">
       <div class="dd-meeting-header">
         <div class="dd-meeting-header-title">${fmtDate(voteDate)} 모임 상세</div>
-        <button class="dd-close-btn" type="button">닫기</button>
+        <button class="dd-x-btn" type="button" aria-label="닫기">✕</button>
       </div>
       <div class="dd-modal-scroll"><div class="dd-loading">불러오는 중...</div></div>
     </div>`;
     document.body.appendChild(el);
     _ensureDdViewToken();
     const closeModal = () => { _popDdViewToken(); el.remove(); };
-    el.querySelector('.dd-close-btn').addEventListener('click', closeModal);
+    el.querySelector('.dd-x-btn').addEventListener('click', closeModal);
     el.addEventListener('click', e => { if (e.target === el) closeModal(); });
 
     void (async () => {
@@ -1496,11 +1491,11 @@
     el.innerHTML = `<div class="dd-modal dd-meeting-modal planner-modal-box" role="dialog" aria-modal="true">
       <div class="dd-meeting-header">
         <div class="dd-meeting-header-title">${fmtDate(voteDate)} 모임 상세</div>
-        <button class="dd-close-btn" type="button">닫기</button>
+        <button class="dd-x-btn" type="button" aria-label="닫기">✕</button>
       </div>
       <div class="dd-modal-scroll" id="__ddMainScroll">
         <section class="dd-meeting-section">
-          ${_buildGameCoordinationSummaryHtml(votes, voteGames, false, meetingSummary, rouletteBtnHtml)}
+          ${_buildGameCoordinationSummaryHtml(votes, voteGames, false, meetingSummary, `${plannerBtnHtml}${rouletteBtnHtml}`)}
         </section>
         <section class="dd-meeting-section" aria-labelledby="dd-participants-title">
           <h2 class="dd-meeting-section-title" id="dd-participants-title">참여자별</h2>
@@ -1508,13 +1503,9 @@
         </section>
       </div>
       ${roulettePanelHtml}
-      <div class="dd-close-row">
-        ${plannerBtnHtml}
-        <button class="dd-close-btn" type="button">닫기</button>
-      </div>
     </div>`;
 
-    el.querySelectorAll('.dd-close-btn').forEach(button => button.addEventListener('click', closeModal));
+    el.querySelectorAll('.dd-x-btn').forEach(button => button.addEventListener('click', closeModal));
 
     // 참여자별 카드는 이 모달 안에서 필요한 정보를 모두 보여 주며, 게임 항목만 게임시트로 연다.
     // 게임 행 클릭 → 게임시트. 게임시트(--z-sheet 9500)가 이 모달 위에 겹쳐 뜨므로 닫지 않는다
