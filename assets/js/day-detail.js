@@ -57,8 +57,24 @@
       border-top: 1px solid var(--line, #e5ddd2);
       background: #f5ede3;
     }
+    .dd-meeting-header {
+      display: flex; align-items: center; justify-content: space-between;
+      flex-shrink: 0;
+      padding: 9px 12px;
+      border-bottom: 1px solid var(--line, #e5ddd2);
+      background: var(--paper, #fffaf0);
+    }
+    .dd-meeting-header-title { font-size: 14px; line-height: 1.25; font-weight: 700; color: var(--text); }
+    .dd-meeting-header .dd-close-btn {
+      padding: 2px 4px;
+      background: none;
+      border-radius: 4px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .dd-meeting-header .dd-close-btn:hover { color: var(--green); background: #f5ede3; }
     .dd-meeting-modal .dd-planner-btn { flex: 1; }
-    .dd-meeting-modal .dd-close-btn { padding-inline: 18px; }
+    .dd-meeting-modal .dd-close-row .dd-close-btn { padding-inline: 18px; }
     .dd-close-btn {
       background: #ede8e0; border: none; border-radius: 20px;
       padding: 6px 24px; font-size: 13px; cursor: pointer;
@@ -103,13 +119,6 @@
       font-size: 13px; font-weight: 700;
       color: var(--text, #3b2f2f);
       margin-bottom: 4px;
-    }
-    .dd-meeting-summary {
-      padding-bottom: 0;
-    }
-    .dd-meeting-summary .dd-date {
-      margin-bottom: 0;
-      font-size: 18px; line-height: 1.25;
     }
     .dd-time {
       font-size: 13px; color: var(--muted, #9e8e7e);
@@ -183,24 +192,39 @@
     .dd-meeting-section-title { margin: 0 0 8px; font-size: 14px; font-weight: 800; color: var(--text); }
     .dd-participant-list { display: grid; gap: 8px; }
     .dd-participant-card {
-      padding: 12px;
+      padding: 11px 12px;
       border: 1px solid var(--line, #e5ddd2);
       border-radius: 10px;
-      background: var(--bg, #fffdf8);
+      background: #f8f4ee;
     }
     .dd-participant-card .dd-modal-nick { margin-bottom: 3px; }
-    .dd-participant-card .dd-time { margin-bottom: 10px; }
-    .dd-participant-card .dd-context-block { margin-bottom: 8px; }
-    .dd-participant-card .dd-context-block:last-child { margin-bottom: 0; }
-    .dd-participant-edit { margin-top: 9px; border-top: 1px solid var(--line, #e5ddd2); padding-top: 8px; }
+    .dd-participant-card .dd-time { margin-bottom: 8px; }
+    .dd-participant-card .dd-context-block {
+      margin: 0;
+      padding: 0;
+      border: 0;
+      border-radius: 0;
+      background: transparent;
+    }
+    .dd-participant-card .dd-context-block + .dd-context-block {
+      margin-top: 8px;
+      padding-top: 8px;
+      border-top: 1px solid rgba(229, 221, 210, .8);
+    }
+    .dd-participant-card .dd-context-title { margin-bottom: 4px; font-size: 11px; }
+    .dd-participant-card .dd-context-chips { gap: 3px; }
+    .dd-participant-card .dd-context-chip { min-height: 20px; padding: 2px 6px; font-size: 10.5px; }
+    .dd-participant-card .dd-section { margin-bottom: 4px; }
+    .dd-participant-card .dd-section-label { margin-bottom: 2px; }
+    .dd-participant-edit { margin-top: 8px; border-top: 1px solid rgba(229, 221, 210, .8); padding-top: 7px; }
     .dd-participant-edit > summary {
-      display: inline-flex; align-items: center; min-height: 28px;
-      padding: 3px 8px; border-radius: 7px;
-      background: #f5ede3; color: var(--green); font-size: 12px; font-weight: 700;
+      display: inline-flex; align-items: center;
+      padding: 0;
+      background: none; color: var(--green); font-size: 12px; font-weight: 700;
       cursor: pointer; list-style: none;
     }
     .dd-participant-edit > summary::-webkit-details-marker { display: none; }
-    .dd-participant-edit-body { padding-top: 9px; }
+    .dd-participant-edit-body { padding-top: 7px; }
     .dd-participant-edit-help { margin: 7px 0 0; font-size: 11px; line-height: 1.45; color: var(--muted); }
 
     /* ── 막대 공용 CSS (주간 카드 + 홈 미리보기) ── */
@@ -374,7 +398,7 @@
       background: #f8f4ee;
     }
     .game-coordination-summary > strong { display:block; margin-bottom:8px; font-size:13px; color:var(--text); }
-    .game-coordination-summary-meta { margin:-4px 0 8px; font-size:12px; color:var(--muted); }
+    .game-coordination-summary-meta { margin:-3px 0 8px; font-size:11px; color:var(--muted); }
     .game-coordination-summary > div + div { margin-top:7px; }
     .game-coordination-summary span { display:block; font-size:10px; color:var(--muted); }
     .game-coordination-summary p { margin:2px 0 0; font-size:12px; line-height:1.55; color:var(--text); overflow-wrap:anywhere; }
@@ -1202,7 +1226,7 @@
       const todayGamesHtml = readOnlyGamesHtml;
       const editHtml = isMine
         ? `<details class="dd-participant-edit">
-            <summary>조율 수정</summary>
+            <summary>조율 수정 ›</summary>
             <div class="dd-participant-edit-body">
               ${editableGamesHtml || '<p class="dd-context-empty">선택한 게임이 없어요.</p>'}
               <p class="dd-star-notice" style="display:none"></p>
@@ -1461,8 +1485,11 @@
       : '';
 
     el.innerHTML = `<div class="dd-modal dd-meeting-modal" role="dialog" aria-modal="true">
+      <div class="dd-meeting-header">
+        <div class="dd-meeting-header-title">${fmtDate(voteDate)} 모임 상세</div>
+        <button class="dd-close-btn" type="button">닫기</button>
+      </div>
       <div class="dd-modal-scroll"><div class="dd-loading">불러오는 중...</div></div>
-      <div class="dd-close-row"><button class="dd-close-btn" type="button">닫기</button></div>
     </div>`;
     document.body.appendChild(el);
     _ensureDdViewToken();
@@ -1480,10 +1507,11 @@
     const participantsBody = _buildParticipantsHtml(uniqueVotes, voteGames, profileByUserId, user?.id);
 
     el.innerHTML = `<div class="dd-modal dd-meeting-modal" role="dialog" aria-modal="true">
+      <div class="dd-meeting-header">
+        <div class="dd-meeting-header-title">${fmtDate(voteDate)} 모임 상세</div>
+        <button class="dd-close-btn" type="button">닫기</button>
+      </div>
       <div class="dd-modal-scroll" id="__ddMainScroll">
-        <section class="dd-meeting-summary">
-          <div class="dd-date">${fmtDate(voteDate)}</div>
-        </section>
         <section class="dd-meeting-section">
           ${_buildGameCoordinationSummaryHtml(votes, voteGames, false, meetingSummary, rouletteBtnHtml)}
         </section>
@@ -1499,8 +1527,7 @@
       </div>
     </div>`;
 
-    const closeBtn = el.querySelector('.dd-close-btn');
-    closeBtn.addEventListener('click', closeModal);
+    el.querySelectorAll('.dd-close-btn').forEach(button => button.addEventListener('click', closeModal));
 
     // 참여자별 카드는 이 모달 안에서 필요한 정보를 모두 보여 주며, 게임 항목만 게임시트로 연다.
     // 게임 행 클릭 → 게임시트. 게임시트(--z-sheet 9500)가 이 모달 위에 겹쳐 뜨므로 닫지 않는다
