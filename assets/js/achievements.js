@@ -704,6 +704,13 @@
       const gameName = esc(getGameName(gameId));
       return `<li><button class="profile-codex-game-item" type="button" data-game-id="${esc(gameId)}" aria-label="${gameName} 게임 정보 열기">✅ <span>${gameName}</span></button></li>`;
     };
+    const gameListHtml = games => {
+      const splitAt = Math.ceil(games.length / 2);
+      return `<div class="profile-codex-game-columns">` +
+        `<ul class="profile-codex-game-list">${games.slice(0, splitAt).map(gameItemHtml).join('')}</ul>` +
+        `<ul class="profile-codex-game-list">${games.slice(splitAt).map(gameItemHtml).join('')}</ul>` +
+        `</div>`;
+    };
 
     const _recentGames = codexGames.slice(0, 4);
     const _codexPreviewHtml = `<div class="profile-codex-preview">` +
@@ -712,11 +719,11 @@
       `<span class="profile-codex-grade">${grade}</span>` +
       `</div>` +
       (_recentGames.length
-        ? `<ul class="profile-codex-game-list">${_recentGames.map(gameItemHtml).join('')}</ul>`
+        ? gameListHtml(_recentGames)
         : `<p class="profile-codex-empty">아직 수집한 게임이 없어요.</p>`) +
       `</div>`;
     const _fullListHtml = playedCount > 4
-      ? `<ul class="profile-codex-game-list">${codexGames.slice(4).map(gameItemHtml).join('')}</ul>`
+      ? gameListHtml(codexGames.slice(4))
       : '';
 
     const html = `<div class="profile-codex-section">
