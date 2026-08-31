@@ -2945,9 +2945,11 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
         <div class="profile-panel-profile-info">
           <div class="profile-panel-nick-row">
             <button class="profile-panel-nick" type="button">${escH(user.nickname || (readOnly ? '회원' : '손님'))} ${_ro('<span class="profile-nick-edit">✏️</span>')}</button>
-            ${_ro(`<button class="profile-panel-notif-btn${_newCount === 0 ? ' is-zero' : ''}" data-subsheet="notif" type="button">${_newCount > 0 ? '<span class="notif-red-dot"></span>' : ''}🔔 ${_newCount > 0 ? `새 알림 ${_newCount}건` : '알림'}</button>`)}
+            ${_ro(`<span class="profile-panel-account-actions">
+              <button class="profile-panel-notif-btn${_newCount === 0 ? ' is-zero' : ''}" data-subsheet="notif" type="button">${_newCount > 0 ? '<span class="notif-red-dot"></span>' : ''}🔔 ${_newCount > 0 ? `새 알림 ${_newCount}건` : '알림'}</button>
+              <button class="profile-panel-voucher-btn" data-subsheet="voucher" type="button">🎫 음료교환권 ${voucherBalance}장 ›</button>
+            </span>`)}
           </div>
-          ${_ro(`<button class="profile-panel-voucher-btn" data-subsheet="voucher" type="button">🎫 음료교환권 ${voucherBalance}장</button>`)}
           <span class="profile-panel-rep-name">${_repLabel}</span>
           <button class="profile-panel-title-name${_validRepTitle ? '' : ' is-empty'}" type="button">${_validRepTitle ? `${_validRepTitle.emoji} ${escH(_validRepTitle.name)} ${_ro('<span class="profile-title-edit">⚙</span>')}` : `칭호 없음 ${_ro('<span class="profile-title-edit">⚙</span>')}`}</button>
           ${readOnly ? '<span class="profile-panel-readonly-hint">읽기 전용으로 보고 있어요</span>' : ''}

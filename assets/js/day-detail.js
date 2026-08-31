@@ -253,6 +253,7 @@
       display: flex; align-items: center; gap: 5px;
       min-width: 0; margin-bottom: 5px;
     }
+    .sched-bar-nick-actions { display: flex; align-items: center; gap: 3px; flex: 1 1 auto; min-width: 0; }
     .sched-bar-actions { display: flex; gap: 0; margin-left: 1px; }
     .sched-bar-edit-btn,
     .sched-bar-del-btn {
@@ -268,7 +269,7 @@
     .sched-bar-del-btn:hover,
     .sched-bar-del-btn:active { background: #fdecea; color: #d94f4f; }
     .sched-bar-name {
-      flex: 1 1 auto; min-width: 0; max-width: none;
+      flex: 0 1 auto; min-width: 0; max-width: 100%;
       font-size: 11px; font-weight: 700;
       color: var(--text);
       overflow: hidden;
@@ -1696,9 +1697,11 @@
         : '';
       return `<div class="sched-bar-item" data-date="${esc(v.vote_date)}" data-uid="${esc(v.user_id)}" role="button" tabindex="0">
         <div class="sched-bar-left">
-          <span class="sched-bar-name" data-uid="${esc(v.user_id)}" role="link" tabindex="0">${esc(v.nickname)}</span>
-          ${guestN > 0 ? `<span class="sched-bar-guest" title="동반 인원 ${guestN}명">+${guestN}</span>` : ''}
-          ${actions}
+          <span class="sched-bar-nick-actions">
+            <span class="sched-bar-name" data-uid="${esc(v.user_id)}" role="link" tabindex="0">${esc(v.nickname)}</span>
+            ${guestN > 0 ? `<span class="sched-bar-guest" title="동반 인원 ${guestN}명">+${guestN}</span>` : ''}
+            ${actions}
+          </span>
           <span class="sched-bar-time-text">${window.formatVoteHour(v.time_start)}~${window.formatVoteHour(v.time_end)}</span>
         </div>
         <div class="sched-bar-track" data-date="${esc(v.vote_date)}" data-uid="${esc(v.user_id)}" style="cursor:pointer">
