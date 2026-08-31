@@ -42,9 +42,6 @@
       color: var(--green, #7a4828);
       margin-bottom: 8px;
     }
-    /* 참여자별 보기 닉네임만 클릭 가능 — 다른 모달의 .dd-modal-nick은 uid가 없어 제외 */
-    .dd-nick-link { display: inline-block; cursor: pointer; }
-    .dd-nick-link:hover { text-decoration: underline; }
     .dd-preview-head {
       font-size: 15px; font-weight: 700;
       color: var(--green, #7a4828);
@@ -181,36 +178,30 @@
     .dd-cond-select { appearance: none; -webkit-appearance: none; -moz-appearance: none; font-size: 11px; padding: 1px 14px 1px 5px; border-radius: 10px; border: 1px solid #ede8e0; background: #f0ece6 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='7' height='7' viewBox='0 0 8 8'%3E%3Cpath d='M1 2l3 3 3-3' stroke='%239e8e7e' stroke-width='1.3' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") no-repeat right 3px center; background-size: 7px 7px; color: var(--muted, #9e8e7e); cursor: pointer; flex-shrink: 0; }
     .dd-cond-tag { font-size: 11px; color: var(--muted, #9e8e7e); font-weight: 400; }
 
-    /* ── 날짜 상세 모달 — 참여자 토글 ── */
-    .dd-participants-toggle {
-      margin-top: 12px;
-      border-top: 1px solid var(--line, #e5ddd2);
-      padding-top: 11px;
+    /* ── 날짜 전체 모임 상세 — 게임 조율 + 참여자별 ── */
+    .dd-meeting-section { margin-top: 16px; }
+    .dd-meeting-section-title { margin: 0 0 8px; font-size: 14px; font-weight: 800; color: var(--text); }
+    .dd-participant-list { display: grid; gap: 8px; }
+    .dd-participant-card {
+      padding: 12px;
+      border: 1px solid var(--line, #e5ddd2);
+      border-radius: 10px;
+      background: var(--bg, #fffdf8);
     }
-    .dd-participants-toggle > summary {
-      width: 100%; box-sizing: border-box;
-      font-size: 13px; font-weight: 700; color: var(--text);
+    .dd-participant-card .dd-modal-nick { margin-bottom: 3px; }
+    .dd-participant-card .dd-time { margin-bottom: 10px; }
+    .dd-participant-card .dd-context-block { margin-bottom: 8px; }
+    .dd-participant-card .dd-context-block:last-child { margin-bottom: 0; }
+    .dd-participant-edit { margin-top: 9px; border-top: 1px solid var(--line, #e5ddd2); padding-top: 8px; }
+    .dd-participant-edit > summary {
+      display: inline-flex; align-items: center; min-height: 28px;
+      padding: 3px 8px; border-radius: 7px;
+      background: #f5ede3; color: var(--green); font-size: 12px; font-weight: 700;
       cursor: pointer; list-style: none;
-      padding: 0 2px 8px;
-      display: inline-flex; align-items: center; gap: 4px;
-      user-select: none;
     }
-    .dd-participants-toggle > summary::after { content: '▼'; margin-left: auto; font-size: 9px; color: var(--muted); }
-    .dd-participants-toggle[open] > summary::after { content: '▲'; }
-    .dd-participants-toggle > summary::-webkit-details-marker { display: none; }
-    .dd-participants-body { border-top: 1px solid var(--line, #e5ddd2); }
-    .dd-my-games-editor { margin-bottom: 10px; }
-    .dd-my-games-editor > summary { color: var(--green); }
-    .dd-my-games-body { padding: 10px 2px 4px; }
-    .dd-my-games-help { margin: 7px 0 0; font-size: 11px; line-height: 1.45; color: var(--muted); }
-    .dd-participant-block { position:relative; padding:10px 24px 9px 2px; cursor:pointer; }
-    .dd-participant-block + .dd-participant-block { border-top: 1px solid var(--line, #e5ddd2); }
-    .dd-participant-block::after { content:'›'; position:absolute; right:4px; top:50%; transform:translateY(-50%); font-size:22px; line-height:1; color:var(--muted); }
-    .dd-participant-block:hover { background:#f8f4ee; }
-    .dd-participant-block:focus-visible { outline:2px solid var(--green); outline-offset:-2px; }
-    .dd-participant-block .dd-modal-nick { margin-bottom: 3px; }
-    .dd-participant-block .dd-time { margin-bottom: 6px; }
-    .dd-participant-block .dd-section:last-child { margin-bottom: 0; }
+    .dd-participant-edit > summary::-webkit-details-marker { display: none; }
+    .dd-participant-edit-body { padding-top: 9px; }
+    .dd-participant-edit-help { margin: 7px 0 0; font-size: 11px; line-height: 1.45; color: var(--muted); }
 
     /* ── 막대 공용 CSS (주간 카드 + 홈 미리보기) ── */
     .sched-bar-axis {
@@ -406,6 +397,10 @@
       background: none; border: none;
       padding: 5px 0 3px; font-size: 13px; font-weight: 700;
       color: var(--green, #7a4828); cursor: pointer; text-align: left;
+    }
+    .game-coordination-summary .dd-roulette-open-btn {
+      margin-top: 10px; padding-top: 9px;
+      border-top: 1px solid var(--line, #e5ddd2);
     }
     .dd-roulette-open-btn:active { background: #ede5d8; }
     .dd-roulette-panel {
@@ -1172,10 +1167,11 @@
     return rouletteGames;
   }
 
-  /** 참여자별 보기 블록 HTML (닉네임 · 시간 · 하고싶은/배우고싶은 게임) */
-  function _buildParticipantsHtml(uniqueVotes, voteGames, voteDate) {
+  /** 참여자별 카드 HTML — 날짜 상세 안에서 필요한 평소·오늘 정보만 바로 보여 준다. */
+  function _buildParticipantsHtml(uniqueVotes, voteGames, profileByUserId, myUserId) {
     const participantsBody = uniqueVotes.map(v => {
       const myGames = voteGames.filter(g => String(g.user_id) === String(v.user_id));
+      const isMine = String(v.user_id) === String(myUserId);
       // 참여자별 게임 옆에 그 사람이 설정한 인원조건 표시(읽기전용). 무관 포함 — 어떤 게임이 특정 인원 필요한지 한눈에.
       const _li = g => {
         const c = g.player_condition || 'any';
@@ -1195,39 +1191,34 @@
       };
       const wantGames  = myGames.filter(g => g.list_type === 'want');
       const learnGames = myGames.filter(g => g.list_type === 'learn');
-      const wantHtml  = wantGames.length  ? `<ul class="dd-game-list">${wantGames.map(_li).join('')}</ul>` : '';
-      const learnHtml = learnGames.length ? `<ul class="dd-game-list">${learnGames.map(_li).join('')}</ul>` : '';
-      return `<section class="dd-participant-block" data-uid="${esc(v.user_id)}" data-date="${esc(voteDate)}" role="button" tabindex="0">
+      const readOnlyGamesHtml = [
+        _buildSchedGameSection(wantGames, '🎲', '하고 싶은 게임', false),
+        _buildSchedGameSection(learnGames, '📖', '배우고 싶은 게임', false),
+      ].join('');
+      const editableGamesHtml = [
+        _buildSchedGameSection(wantGames, '🎲', '하고 싶은 게임', true),
+        _buildSchedGameSection(learnGames, '📖', '배우고 싶은 게임', true),
+      ].join('');
+      const todayGamesHtml = readOnlyGamesHtml;
+      const editHtml = isMine
+        ? `<details class="dd-participant-edit">
+            <summary>조율 수정</summary>
+            <div class="dd-participant-edit-body">
+              ${editableGamesHtml || '<p class="dd-context-empty">선택한 게임이 없어요.</p>'}
+              <p class="dd-star-notice" style="display:none"></p>
+              <p class="dd-participant-edit-help">별은 대표 게임(최대 2개), 인원 메뉴는 희망 플레이 인원이에요.</p>
+            </div>
+          </details>`
+        : '';
+      return `<article class="dd-participant-card">
         <div class="dd-modal-nick">${esc(v.nickname)}</div>
         <div class="dd-time">${window.formatVoteHour(v.time_start)}~${window.formatVoteHour(v.time_end)}${partyCount([v]) > 1 ? ` · ${partyCount([v]) - 1}명 동반` : ''}</div>
-        ${wantGames.length  ? `<div class="dd-section"><span class="dd-section-label">🎲 하고 싶은 게임</span>${wantHtml}</div>`  : ''}
-        ${learnGames.length ? `<div class="dd-section"><span class="dd-section-label">📖 배우고 싶은 게임</span>${learnHtml}</div>` : ''}
-      </section>`;
+        ${_buildUsualContextHtml(profileByUserId.get(String(v.user_id)))}
+        ${_buildTodayContextHtml(v, todayGamesHtml, '')}
+        ${editHtml}
+      </article>`;
     }).join('');
     return participantsBody;
-  }
-
-  /** 이날 모임 상세의 본인 전용 게임 조율. 전원 목록과 분리해 편집 UI가 참여자 수만큼 반복되지 않게 한다. */
-  function _buildMyMeetingGameEditorHtml(myVote, myGames, voteDate) {
-    if (!myVote) return '';
-    const wantGames = myGames.filter(g => g.list_type === 'want');
-    const learnGames = myGames.filter(g => g.list_type === 'learn');
-    const gameSections = [
-      _buildSchedGameSection(wantGames, '🎲', '하고 싶은 게임', true),
-      _buildSchedGameSection(learnGames, '📖', '배우고 싶은 게임', true),
-    ].join('');
-    const plannerHelp = voteDate >= _todayStr()
-      ? '<p class="dd-my-games-help">게임 추가·삭제와 오늘 상태 변경은 아래 ‘내 참여 수정하기’에서 할 수 있어요.</p>'
-      : '';
-    return `<details class="dd-participants-toggle dd-my-games-editor">
-      <summary>내 게임 조율</summary>
-      <div class="dd-participants-body dd-my-games-body">
-        ${gameSections || '<p class="dd-context-empty">선택한 게임이 없어요.</p>'}
-        <p class="dd-star-notice" style="display:none"></p>
-        <p class="dd-my-games-help">별은 대표 게임(최대 2개), 인원 메뉴는 희망 플레이 인원이에요.</p>
-        ${plannerHelp}
-      </div>
-    </details>`;
   }
 
   /**
@@ -1398,7 +1389,7 @@
       });
   }
 
-  function _buildGameCoordinationSummaryHtml(votes, voteGames, compact = false, meetingSummary = '') {
+  function _buildGameCoordinationSummaryHtml(votes, voteGames, compact = false, meetingSummary = '', actionHtml = '') {
     const styles = { strategy: 0, party: 0, any: 0 };
     const participants = [...new Map((votes || []).map(vote => [String(vote.user_id), vote])).values()];
     participants.forEach(vote => {
@@ -1424,6 +1415,7 @@
       ${meetingSummary ? `<p class="game-coordination-summary-meta">${esc(meetingSummary)}</p>` : ''}
       <div><span>\uC120\uD638 \uC720\uD615</span><p>${styleText}</p></div>
       <div><span>\uACB9\uCE58\uB294 \uAC8C\uC784</span><p>${gameText}</p></div>
+      ${actionHtml}
     </section>`;
   }
 
@@ -1437,7 +1429,6 @@
 
     const meetingSummary = _buildMeetingSummaryText(votes, uniqueVotes);
     const rouletteGames = _buildRouletteGames(voteGames);
-    const participantsBody = _buildParticipantsHtml(uniqueVotes, voteGames, voteDate);
 
     // 등록/수정 진입 버튼 — 지난 날짜엔 등록 행동을 렌더하지 않는다(A-10, 판정은
     // 이 한 곳에서). 로그인 안 했으면 어차피 등록할 수 없으니 숨긴다.
@@ -1446,9 +1437,8 @@
     const myGames = myVote
       ? voteGames.filter(g => String(g.user_id) === String(myVote.user_id))
       : [];
-    const myGameEditorHtml = _buildMyMeetingGameEditorHtml(myVote, myGames, voteDate);
-    const plannerBtnHtml = (user && voteDate >= _todayStr())
-      ? `<button class="dd-planner-btn" type="button">${myVote ? '내 참여 수정하기' : '플래너에서 등록하기'}</button>`
+    const plannerBtnHtml = (user && !myVote && voteDate >= _todayStr())
+      ? '<button class="dd-planner-btn" type="button">플래너에서 등록하기</button>'
       : '';
 
     const rouletteBtnHtml = rouletteGames.length >= 2
@@ -1471,25 +1461,36 @@
       : '';
 
     el.innerHTML = `<div class="dd-modal dd-meeting-modal" role="dialog" aria-modal="true">
+      <div class="dd-modal-scroll"><div class="dd-loading">불러오는 중...</div></div>
+      <div class="dd-close-row"><button class="dd-close-btn" type="button">닫기</button></div>
+    </div>`;
+    document.body.appendChild(el);
+    _ensureDdViewToken();
+    const closeModal = () => { _popDdViewToken(); el.remove(); };
+    el.querySelector('.dd-close-btn').addEventListener('click', closeModal);
+    el.addEventListener('click', e => { if (e.target === el) closeModal(); });
+
+    void (async () => {
+    const profileEntries = await Promise.all(uniqueVotes.map(async vote => {
+      const profile = await (window.CottageDB?.getProfileBoardData?.(String(vote.user_id)) || Promise.resolve(null)).catch(() => null);
+      return [String(vote.user_id), profile];
+    }));
+    if (!document.body.contains(el)) return;
+    const profileByUserId = new Map(profileEntries);
+    const participantsBody = _buildParticipantsHtml(uniqueVotes, voteGames, profileByUserId, user?.id);
+
+    el.innerHTML = `<div class="dd-modal dd-meeting-modal" role="dialog" aria-modal="true">
       <div class="dd-modal-scroll" id="__ddMainScroll">
         <section class="dd-meeting-summary">
           <div class="dd-date">${fmtDate(voteDate)}</div>
         </section>
-        ${_buildGameCoordinationSummaryHtml(votes, voteGames, false, meetingSummary)}
-        ${rouletteBtnHtml
-          ? `<section class="dd-roulette-cta" aria-label="모임 전체 룰렛">
-              <span class="dd-roulette-context">모임 전체</span>
-              ${rouletteBtnHtml}
-            </section>`
-          : ''}
-        ${myGameEditorHtml}
-        ${participantsBody
-          ? `<details class="dd-participants-toggle" open>
-              <summary>참여자별 보기</summary>
-              <div class="dd-participants-body">${participantsBody}</div>
-            </details>`
-          : '<div class="dd-empty">참여자가 없습니다.</div>'
-        }
+        <section class="dd-meeting-section">
+          ${_buildGameCoordinationSummaryHtml(votes, voteGames, false, meetingSummary, rouletteBtnHtml)}
+        </section>
+        <section class="dd-meeting-section" aria-labelledby="dd-participants-title">
+          <h2 class="dd-meeting-section-title" id="dd-participants-title">참여자별</h2>
+          ${participantsBody ? `<div class="dd-participant-list">${participantsBody}</div>` : '<div class="dd-empty">참여자가 없습니다.</div>'}
+        </section>
       </div>
       ${roulettePanelHtml}
       <div class="dd-close-row">
@@ -1498,26 +1499,10 @@
       </div>
     </div>`;
 
-    document.body.appendChild(el);
-    _ensureDdViewToken();
     const closeBtn = el.querySelector('.dd-close-btn');
-    closeBtn.addEventListener('click', () => { _popDdViewToken(); el.remove(); });
-    el.addEventListener('click', e => { if (e.target === el) { _popDdViewToken(); el.remove(); } });
+    closeBtn.addEventListener('click', closeModal);
 
-    // 참여자 블록 일반 영역 → 그 사람의 그날 개인 상세. 내부 액션은 부모로 전파하지 않는다.
-    el.querySelectorAll('.dd-participant-block[data-uid][data-date]').forEach(block => {
-      const openParticipant = e => {
-        if (e.type === 'keydown' && !['Enter', ' '].includes(e.key)) return;
-        if (e.type === 'keydown' && e.target !== block) return;
-        if (e.target.closest('button, a, input, select, textarea, .dd-game-hit')) return;
-        e.preventDefault();
-        e.stopPropagation();
-        window.openDateScheduleModal?.(block.dataset.uid, block.dataset.date);
-      };
-      block.addEventListener('click', openParticipant);
-      block.addEventListener('keydown', openParticipant);
-    });
-
+    // 참여자별 카드는 이 모달 안에서 필요한 정보를 모두 보여 주며, 게임 항목만 게임시트로 연다.
     // 게임 행 클릭 → 게임시트. 게임시트(--z-sheet 9500)가 이 모달 위에 겹쳐 뜨므로 닫지 않는다
     // (시트를 닫으면 이 모달로 복귀 — 닉네임→보드와 같은 레이어 방식).
     _bindDdGameHitClicks(el);
@@ -1565,6 +1550,7 @@
 
     // 룰렛 로직
     if (rouletteGames.length >= 2) _initRouletteWidget(el, rouletteGames);
+    })();
   };
 
   /**
