@@ -2783,8 +2783,8 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
     </div>
     </section>`}
     <div class="profile-board-action-row">
-      ${_ro('<a class="profile-board-edit-link" href="/pages/club/club-intro.html">프로필 수정</a>')}
-      <a class="profile-board-page-link" href="/pages/club/club-intro.html">모임원 프로필 페이지 가기</a>
+      ${_ro('<a class="profile-board-edit-link" href="/pages/club/club-intro.html?edit=1">프로필 수정</a>')}
+      <a class="profile-board-page-link" href="/pages/club/club-intro.html">프로필 페이지 보기 ›</a>
     </div>`;
   }
   // 기록 보드: 플레이기록/게임평/사진 3섹션 토글 (항상 표시, 기본 열림)
