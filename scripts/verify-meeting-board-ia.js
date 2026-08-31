@@ -6,6 +6,7 @@ const path = require('path');
 const NEG = process.argv.includes('--negctl');
 const src = fs.readFileSync(path.join(__dirname, '..', 'assets/js/kakao-auth.js'), 'utf8');
 const daySrc = fs.readFileSync(path.join(__dirname, '..', 'assets/js/day-detail.js'), 'utf8');
+const scheduleSrc = fs.readFileSync(path.join(__dirname, '..', 'pages/club/club-schedule.html'), 'utf8');
 let failures = 0;
 function check(label, condition, detail = '') {
   const ok = NEG && label === '가까운 미래 범위만 사용' ? !condition : condition;
@@ -74,6 +75,8 @@ check('메인 카드는 예정 날짜와 당일 참여 정보를 압축해 요�
   && card.includes('_meetingGamesByType') && card.includes('recruitment_message')
   && !card.includes('가까운 일정 준비하기') && !card.includes('다가오는 일정 ${_myVoteDates.length}건')
   && !card.includes('_profileSummaryItems'));
+check('날짜 상세 진입 시 최신 게임 목록을 재조회', scheduleSrc.includes('getMeetingVoteGames(ds, ds)')
+  && scheduleSrc.includes('getMeetingVotes(ds, ds)'));
 
 console.log(failures ? `\nFAIL ${failures}` : (NEG ? '\nNEGATIVE CONTROL PASS' : '\nALL PASS'));
 process.exit(failures ? 1 : 0);

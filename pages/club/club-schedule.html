@@ -2755,11 +2755,17 @@
 
       // 이날 모임 한눈에 보기 → 집계 모달 (홈 미리보기와 동일 모달)
       el.querySelectorAll('.sched-card-detail-btn[data-date]').forEach(btn => {
-        btn.addEventListener('click', e => {
+        btn.addEventListener('click', async e => {
           e.stopPropagation();
           const ds = btn.dataset.date;
-          const dv = allVotes.filter(v => v.vote_date === ds);
-          const dg = allVoteGames.filter(g => g.vote_date === ds);
+          // 이 페이지의 주간 캐시보다 최신인 게임 등록(모임보드/다른 탭)을 반영해
+          // 이날 상세의 참여자 카드·룰렛 후보를 최신 상태로 연다.
+          const [freshVotes, freshGames] = await Promise.all([
+            window.CottageDB?.getMeetingVotes(ds, ds) || Promise.resolve([]),
+            window.CottageDB?.getMeetingVoteGames(ds, ds) || Promise.resolve([]),
+          ]);
+          const dv = Array.isArray(freshVotes) ? freshVotes : allVotes.filter(v => v.vote_date === ds);
+          const dg = Array.isArray(freshGames) ? freshGames : allVoteGames.filter(g => g.vote_date === ds);
           window.openDateMeetingModal?.(ds, dv, dg, {});
         });
       });
