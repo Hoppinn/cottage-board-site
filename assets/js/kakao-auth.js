@@ -2866,7 +2866,7 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
     const el = body.querySelector('.profile-card[data-subsheet="taste"] .profile-card-summary');
     if (el) el.innerHTML = _tasteCardSummaryHtml(_boardData);
   };
-  const _recordCardSummary = `플레이 기록 ${stats.plays.length}건\n게임평 ${_allReviews.length}개\n사진 ${userStats?.photoCount || 0}장`;
+  const _recordCardSummary = `게임평 ${_allReviews.length}개\n사진 ${userStats?.photoCount || 0}장\n플레이 기록 ${stats.plays.length}건`;
   const _usageCardSummary = _statsSummary;
 
   // ── 메인 패널: 프로필 영역 + 4축 레이아웃 ──────────────────
