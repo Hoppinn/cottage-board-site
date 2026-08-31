@@ -344,26 +344,6 @@ textarea{
   font-size:12px;
 }
 
-.menu-group--nested > .menu-group-body a.is-current{
-  position:relative;
-  padding:6px 12px 6px 22px;
-  background:transparent;
-  color:#8a5e42;
-  border-radius:0;
-  font-weight:700;
-}
-
-.menu-group--nested > .menu-group-body a.is-current::before{
-  content:'●';
-  position:absolute;
-  left:10px;
-  color:#8a5e42;
-  font-size:7px;
-  line-height:1;
-  top:50%;
-  transform:translateY(-50%);
-}
-
 /* 현재 페이지 메뉴 active */
 .header-menu a.is-current{
   background:#f0e4d4;
@@ -8478,18 +8458,6 @@ body.is-embedded .inner-page{padding-top:0;}
     padding:8px 14px;
     color:var(--muted);
     font-size:14px;
-  }
-
-  .menu-group--nested > .menu-group-body a.is-current{
-    padding:8px 14px 8px 26px;
-    background:transparent;
-    color:#8a5e42;
-    border-radius:0;
-    font-weight:700;
-  }
-
-  .menu-group--nested > .menu-group-body a.is-current::before{
-    left:14px;
   }
 
   /* 로그인/프로필 버튼 */

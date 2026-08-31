@@ -140,10 +140,6 @@ function closeMenuGroupBranch(group){
   group.querySelectorAll('.menu-group').forEach(child => setMenuGroupOpen(child, false));
 }
 
-function isNestedMenuLeaf(link){
-  return !!link?.closest('.menu-group--nested > .menu-group-body');
-}
-
 function resetMenuGroups(){
   // 잔류 inline style 및 preview-active 초기화
   document.querySelectorAll('.header-menu a').forEach(l => {
@@ -202,7 +198,7 @@ function resetMenuGroups(){
   }
 
   const currentLink = document.querySelector('.header-menu a.is-current');
-  if(currentLink && !isNestedMenuLeaf(currentLink)){
+  if(currentLink){
     currentLink.style.setProperty('background', '#7a4828', 'important');
     currentLink.style.setProperty('color', '#fff', 'important');
     currentLink.style.setProperty('font-weight', '900', 'important');
@@ -266,7 +262,7 @@ function refreshMenuActive() {
 
   // 현재 페이지 is-current 링크 — 그룹 유지 + 인라인 스타일 동기화
   const currentLink = document.querySelector('.header-menu a.is-current');
-  if (currentLink && !isNestedMenuLeaf(currentLink)) {
+  if (currentLink) {
     document.querySelectorAll('.header-menu a').forEach(l => {
       if (l !== currentLink && l !== recommendLink) {
         l.style.removeProperty('background');
