@@ -560,7 +560,7 @@
         const canEdit = !!currentUser && String(r.user_id) === String(currentUser.id);
         const edit   = canEdit ? `<button class="intro-card-edit"      data-id="${r.id}" type="button" title="수정" aria-label="모임원 프로필 수정">✎</button>` : '';
         const color  = canAct ? `<button class="intro-card-color-btn" data-id="${r.id}" type="button" title="색상 변경" aria-label="카드 색상 변경">🎨</button>` : '';
-        const actions = canAct ? `<div class="intro-card-news-actions">${color}${edit}${del}</div>` : '';
+        const actions = canAct ? `<div class="intro-card-news-actions">${edit}${del}${color}</div>` : '';
         const clickable = !!r.user_id;
         const repPath = r._rep_achievement_id ? (window.CottageAchievements?.getCharacterPath?.(r._rep_achievement_id) || null) : null;
         const repAvatar = repPath
@@ -574,9 +574,10 @@
           </div>
           <div class="intro-card-news-body">
             ${r.preferred_game_types?.length ? `<div class="intro-card-news-summary" aria-label="좋아하는 게임 유형: ${escHtml(labelList(r.preferred_game_types, GAME_TYPE_LABELS))}"><span aria-hidden="true">🎲</span><span>${escHtml(labelList(r.preferred_game_types, GAME_TYPE_LABELS))}</span></div>` : ''}
+            ${r.average_play_frequency != null ? `<div class="intro-card-news-summary" aria-label="평균 플레이 빈도: ${escHtml(FREQUENCY_LABELS[r.average_play_frequency])}"><span aria-hidden="true">🎮</span><span>평균 ${escHtml(FREQUENCY_LABELS[r.average_play_frequency])}</span></div>` : ''}
             ${r.available_days?.length ? `<div class="intro-card-news-summary" aria-label="가능한 요일과 시간: ${escHtml(formatAvailability(r.available_days, r.available_times))}"><span aria-hidden="true">🗓</span><span>${escHtml(formatAvailability(r.available_days, r.available_times))}</span></div>` : (r.available ? `<div class="intro-card-news-summary" aria-label="가능한 요일과 시간: ${escHtml(r.available)}"><span aria-hidden="true">🗓</span><span>${escHtml(r.available)}</span></div>` : '')}
             ${r.expectation || r._bio ? `<p class="intro-card-news-message">${escHtml(r.expectation || r._bio)}</p>` : ''}
-            ${clickable ? '<span class="intro-card-news-link" aria-hidden="true">내 보드 ›</span>' : ''}
+            ${clickable ? '<span class="intro-card-news-link" aria-hidden="true">프로필 자세히 보기 ›</span>' : ''}
           </div>
         </div>`;
       }).join('');

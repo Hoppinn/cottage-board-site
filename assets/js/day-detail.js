@@ -1431,11 +1431,17 @@
   function _buildGameCoordinationSummaryHtml(votes, voteGames, compact = false, meetingSummary = '', showTitle = true) {
     const styles = { strategy: 0, party: 0, any: 0 };
     const participants = [...new Map((votes || []).map(vote => [String(vote.user_id), vote])).values()];
+    const participantIds = new Set(participants.map(vote => String(vote.user_id)));
+    const voteDates = new Set(participants.map(vote => String(vote.vote_date || '')).filter(Boolean));
     participants.forEach(vote => {
       if (Object.prototype.hasOwnProperty.call(styles, vote.game_style)) styles[vote.game_style] += 1;
     });
     const games = new Map();
-    (voteGames || []).forEach(game => {
+    // buildBarsInCard은 주간 게임 캐시를 함께 받는다. 모임 현황은 반드시 현재 카드의
+    // 참여자와 그 참여 날짜에 한정해야 다른 날짜의 공통 게임이 섞이지 않는다.
+    (voteGames || []).filter(game =>
+      participantIds.has(String(game.user_id)) && voteDates.has(String(game.vote_date || ''))
+    ).forEach(game => {
       const key = game.game_id ? `id:${game.game_id}` : `name:${String(game.custom_name || '').trim().toLowerCase()}`;
       if (key === 'name:') return;
       if (!games.has(key)) games.set(key, { name: resolveGameName(game), users: new Set() });
