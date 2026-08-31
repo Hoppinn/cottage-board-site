@@ -69,7 +69,7 @@
       color: var(--muted);
     }
     .dd-meeting-header .dd-x-btn:hover { color: var(--green); background: #f5ede3; }
-    .dd-meeting-modal { display: flex; flex-direction: column; height: min(78dvh, 480px); max-height: calc(100dvh - 32px); }
+    .dd-meeting-modal { display: flex; flex-direction: column; width: min(88vw, 440px); height: min(72dvh, 440px); max-height: calc(100dvh - 32px); }
     .dd-meeting-modal .dd-modal-scroll { flex: 1 1 auto; min-height: 0; max-height: none; }
     .dd-close-btn {
       background: #ede8e0; border: none; border-radius: 20px;
@@ -1673,11 +1673,13 @@
       </div>`;
     }
 
+    const uniqueVotes = [...new Map(dayVotes.map(v => [String(v.user_id), v])).values()];
+    const meetingSummary = _buildMeetingSummaryText(dayVotes, uniqueVotes);
     return `<div class="sched-card-bars">
       <div class="sched-bar-axis">
         <span>${MIN_H}시</span><span>${window.formatVoteHour((MIN_H + MAX_H) / 2)}</span><span>${MAX_H}시</span>
       </div>
       ${dayVotes.map(barRow).join('')}
-    </div>${includeCoordinationSummary ? _buildGameCoordinationSummaryHtml(dayVotes, voteGames, true) : ''}`;
+    </div>${includeCoordinationSummary ? _buildGameCoordinationSummaryHtml(dayVotes, voteGames, true, meetingSummary) : ''}`;
   };
 })();

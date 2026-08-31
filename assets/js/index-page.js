@@ -1838,7 +1838,7 @@ window.addEventListener('cottage-meeting-changed', () => { _meetingReload?.(); }
         </div>`;
 
     previewEl.innerHTML = `<div class="meeting-preview-card" role="button" tabindex="0">
-      ${window.buildBarsInCard(dayVotes, dayGames, myVote)}
+      ${window.buildBarsInCard(dayVotes, dayGames, myVote, true)}
       ${actionsHtml}
     </div>`;
 
