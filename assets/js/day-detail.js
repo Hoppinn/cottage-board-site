@@ -108,14 +108,12 @@
       margin-bottom: 4px;
     }
     .dd-meeting-summary {
-      padding-bottom: 12px;
-      border-bottom: 1px solid var(--line, #e5ddd2);
+      padding-bottom: 0;
     }
     .dd-meeting-summary .dd-date {
-      margin-bottom: 6px;
+      margin-bottom: 0;
       font-size: 18px; line-height: 1.25;
     }
-    .dd-meeting-summary .dd-stats-row { margin-bottom: 0; }
     .dd-time {
       font-size: 13px; color: var(--muted, #9e8e7e);
       margin-bottom: 8px;
@@ -205,8 +203,11 @@
     .dd-my-games-editor > summary { color: var(--green); }
     .dd-my-games-body { padding: 10px 2px 4px; }
     .dd-my-games-help { margin: 7px 0 0; font-size: 11px; line-height: 1.45; color: var(--muted); }
-    .dd-participant-block { padding: 10px 2px 9px; }
+    .dd-participant-block { position:relative; padding:10px 24px 9px 2px; cursor:pointer; }
     .dd-participant-block + .dd-participant-block { border-top: 1px solid var(--line, #e5ddd2); }
+    .dd-participant-block::after { content:'›'; position:absolute; right:4px; top:50%; transform:translateY(-50%); font-size:22px; line-height:1; color:var(--muted); }
+    .dd-participant-block:hover { background:#f8f4ee; }
+    .dd-participant-block:focus-visible { outline:2px solid var(--green); outline-offset:-2px; }
     .dd-participant-block .dd-modal-nick { margin-bottom: 3px; }
     .dd-participant-block .dd-time { margin-bottom: 6px; }
     .dd-participant-block .dd-section:last-child { margin-bottom: 0; }
@@ -382,6 +383,7 @@
       background: #f8f4ee;
     }
     .game-coordination-summary > strong { display:block; margin-bottom:8px; font-size:13px; color:var(--text); }
+    .game-coordination-summary-meta { margin:-4px 0 8px; font-size:12px; color:var(--muted); }
     .game-coordination-summary > div + div { margin-top:7px; }
     .game-coordination-summary span { display:block; font-size:10px; color:var(--muted); }
     .game-coordination-summary p { margin:2px 0 0; font-size:12px; line-height:1.55; color:var(--text); overflow-wrap:anywhere; }
@@ -1106,8 +1108,8 @@
    * @param {Array}  voteGames — 해당 날짜의 meeting_vote_games 배열 (사전 패치)
    * @param {Object} [opts] — 현재 미사용, 재오픈(onDirtyClose) 시 그대로 다시 넘겨주기 위해 보존
    */
-  /** 모임 상세 통계 칩 HTML (참여 인원 · 최대 동시 겹침 · 공통 게임 수) */
-  function _buildMeetingStatsHtml(votes, uniqueVotes, voteGames) {
+  /** 모임 전체 요약 텍스트 (참여 인원 · 최대 동시 겹침) */
+  function _buildMeetingSummaryText(votes, uniqueVotes) {
     const count = partyCount(uniqueVotes);
     // 최대 동시 참여 가능 인원 (1시간 단위 슬롯) — 동반 인원 포함
     const MIN_H = 10, MAX_H = 28; // 등록 상한 27시(익일 새벽 3시)까지 슬롯을 포함하려면 28이 필요(h<MAX_H)
@@ -1117,20 +1119,7 @@
       if (c > peakCnt) peakCnt = c;
     }
 
-    // 공통 게임 수 (통계 칩용 — count ≥ 2인 게임만)
-    const gkCount = {};
-    voteGames.forEach(g => {
-      const k = g.game_id ? `id:${g.game_id}` : `name:${(g.custom_name || '').trim().toLowerCase()}`;
-      gkCount[k] = (gkCount[k] || 0) + 1;
-    });
-    const sharedGameCnt = Object.values(gkCount).filter(c => c >= 2).length;
-
-    const statsHtml = `<div class="dd-stats-row">
-      <span class="dd-stat-chip">👥 ${count}명 참여</span>
-      ${peakCnt >= 2 ? `<span class="dd-stat-chip is-match">⏱ 최대 ${peakCnt}명 겹침</span>` : ''}
-      ${sharedGameCnt ? `<span class="dd-stat-chip is-match">🎲 공통 게임 ${sharedGameCnt}종</span>` : ''}
-    </div>`;
-    return statsHtml;
+    return `${count}명 참여${peakCnt >= 2 ? ` · 최대 ${peakCnt}명 겹침` : ''}`;
   }
 
   // .dd-game-hit(게임 썸네일) 클릭 → 게임시트. openDateMeetingModal·openDateScheduleModal·
@@ -1209,7 +1198,7 @@
       const wantHtml  = wantGames.length  ? `<ul class="dd-game-list">${wantGames.map(_li).join('')}</ul>` : '';
       const learnHtml = learnGames.length ? `<ul class="dd-game-list">${learnGames.map(_li).join('')}</ul>` : '';
       return `<section class="dd-participant-block" data-uid="${esc(v.user_id)}" data-date="${esc(voteDate)}" role="button" tabindex="0">
-        <div class="dd-modal-nick dd-nick-link" data-uid="${esc(v.user_id)}" role="link" tabindex="0">${esc(v.nickname)}</div>
+        <div class="dd-modal-nick">${esc(v.nickname)}</div>
         <div class="dd-time">${window.formatVoteHour(v.time_start)}~${window.formatVoteHour(v.time_end)}${partyCount([v]) > 1 ? ` · ${partyCount([v]) - 1}명 동반` : ''}</div>
         ${wantGames.length  ? `<div class="dd-section"><span class="dd-section-label">🎲 하고 싶은 게임</span>${wantHtml}</div>`  : ''}
         ${learnGames.length ? `<div class="dd-section"><span class="dd-section-label">📖 배우고 싶은 게임</span>${learnHtml}</div>` : ''}
@@ -1409,7 +1398,7 @@
       });
   }
 
-  function _buildGameCoordinationSummaryHtml(votes, voteGames, compact = false) {
+  function _buildGameCoordinationSummaryHtml(votes, voteGames, compact = false, meetingSummary = '') {
     const styles = { strategy: 0, party: 0, any: 0 };
     const participants = [...new Map((votes || []).map(vote => [String(vote.user_id), vote])).values()];
     participants.forEach(vote => {
@@ -1432,6 +1421,7 @@
       : '\uACF5\uD1B5 \uAD00\uC2EC \uAC8C\uC784\uC774 \uC544\uC9C1 \uC5C6\uC5B4\uC694.';
     return `<section class="game-coordination-summary${compact ? ' game-coordination-summary--compact' : ''}" aria-label="\uAC8C\uC784 \uC870\uC728 \uC694\uC57D">
       <strong>\uAC8C\uC784 \uC870\uC728</strong>
+      ${meetingSummary ? `<p class="game-coordination-summary-meta">${esc(meetingSummary)}</p>` : ''}
       <div><span>\uC120\uD638 \uC720\uD615</span><p>${styleText}</p></div>
       <div><span>\uACB9\uCE58\uB294 \uAC8C\uC784</span><p>${gameText}</p></div>
     </section>`;
@@ -1445,7 +1435,7 @@
 
     const uniqueVotes = [...new Map(votes.map(v => [String(v.user_id), v])).values()];
 
-    const statsHtml = _buildMeetingStatsHtml(votes, uniqueVotes, voteGames);
+    const meetingSummary = _buildMeetingSummaryText(votes, uniqueVotes);
     const rouletteGames = _buildRouletteGames(voteGames);
     const participantsBody = _buildParticipantsHtml(uniqueVotes, voteGames, voteDate);
 
@@ -1484,9 +1474,8 @@
       <div class="dd-modal-scroll" id="__ddMainScroll">
         <section class="dd-meeting-summary">
           <div class="dd-date">${fmtDate(voteDate)}</div>
-          ${statsHtml}
         </section>
-        ${_buildGameCoordinationSummaryHtml(votes, voteGames)}
+        ${_buildGameCoordinationSummaryHtml(votes, voteGames, false, meetingSummary)}
         ${rouletteBtnHtml
           ? `<section class="dd-roulette-cta" aria-label="모임 전체 룰렛">
               <span class="dd-roulette-context">모임 전체</span>
@@ -1520,27 +1509,13 @@
       const openParticipant = e => {
         if (e.type === 'keydown' && !['Enter', ' '].includes(e.key)) return;
         if (e.type === 'keydown' && e.target !== block) return;
-        if (e.target.closest('button, a, input, select, textarea, .dd-game-hit, .dd-nick-link')) return;
+        if (e.target.closest('button, a, input, select, textarea, .dd-game-hit')) return;
         e.preventDefault();
         e.stopPropagation();
         window.openDateScheduleModal?.(block.dataset.uid, block.dataset.date);
       };
       block.addEventListener('click', openParticipant);
       block.addEventListener('keydown', openParticipant);
-    });
-
-    // 참여자 닉네임 클릭 → 그 사람 내 보드 메인
-    // 보드는 이 모달 위에 겹쳐 뜬다(--z-profile 9100 > .dd-overlay--under-board 9050) —
-    // 전환이 아니라 레이어를 쌓는 것이므로 모달을 닫지 않는다. 보드를 닫으면 이 모달이 그대로 보인다.
-    el.querySelectorAll('.dd-nick-link').forEach(n => {
-      const openMember = e => {
-        if (e.type === 'keydown' && !['Enter', ' '].includes(e.key)) return;
-        e.preventDefault();
-        e.stopPropagation();
-        window.openOtherProfileSheet?.(n.dataset.uid);
-      };
-      n.addEventListener('click', openMember);
-      n.addEventListener('keydown', openMember);
     });
 
     // 게임 행 클릭 → 게임시트. 게임시트(--z-sheet 9500)가 이 모달 위에 겹쳐 뜨므로 닫지 않는다
