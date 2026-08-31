@@ -3103,13 +3103,11 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
         <div class="profile-card-summary">${_scheduleHtml}</div>
       </button>
       <button class="profile-card" data-subsheet="records" type="button">
-        <span class="profile-card-icon">📝</span>
-        <span class="profile-card-label">기록 보드 <span class="profile-card-label-chevron" aria-hidden="true">›</span></span>
+        <span class="profile-card-heading"><span class="profile-card-icon">📝</span><span class="profile-card-label">기록 보드 <span class="profile-card-label-chevron" aria-hidden="true">›</span></span></span>
         <span class="profile-card-summary">${escH(_recordCardSummary)}</span>
       </button>
       ${_ro(`<button class="profile-card" data-subsheet="usage" type="button">
-        <span class="profile-card-icon">📊</span>
-        <span class="profile-card-label">함께한 시간 <span class="profile-card-label-chevron" aria-hidden="true">›</span></span>
+        <span class="profile-card-heading"><span class="profile-card-icon">📊</span><span class="profile-card-label">함께한 시간 <span class="profile-card-label-chevron" aria-hidden="true">›</span></span></span>
         <span class="profile-card-summary">${escH(_statsSummary)}</span>
       </button>`)}
       ${_adminOnly(`<button class="profile-card profile-card--span2 profile-card--admin" data-subsheet="adminboard" type="button">
