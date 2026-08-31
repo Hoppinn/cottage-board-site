@@ -1232,7 +1232,7 @@
       const participantActions = isMine
         ? `<span class="dd-participant-actions" aria-label="내 참여 관리">
             <button class="dd-participant-action" data-dd-participant-action="edit" type="button" aria-label="참여 시간 수정">✎</button>
-            <button class="dd-participant-action dd-participant-action--delete" data-dd-participant-action="delete" type="button" aria-label="참여 삭제">🗑️</button>
+            <button class="dd-participant-action dd-participant-action--delete" data-dd-participant-action="delete" type="button" aria-label="참여 취소">✕</button>
           </span>`
         : '';
       return `<article class="dd-participant-card">
