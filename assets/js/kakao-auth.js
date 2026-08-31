@@ -2929,7 +2929,7 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
   }
 
   body.innerHTML = `
-    ${!backTo ? `<div class="profile-panel-compact-header" aria-hidden="true">
+    ${!backTo ? `<div class="profile-panel-compact-header profile-fixed-header" aria-hidden="true">
       <div class="profile-panel-compact-header-inner">
         <div class="profile-panel-compact-identity">
           <span class="profile-panel-compact-avatar">${_repAvatarHtml}</span>
@@ -2981,7 +2981,7 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
         <span class="profile-card-label">함께한 시간 <span class="profile-card-label-chevron" aria-hidden="true">›</span></span>
         <span class="profile-card-summary">${escH(_statsSummary)}</span>
       </button>`)}
-      ${_ro(`<button class="profile-card profile-card--span2" data-subsheet="voucher" type="button">
+      ${_ro(`<button class="profile-card profile-card--span2 profile-card--voucher" data-subsheet="voucher" type="button">
         <span class="profile-card-icon">🎫</span>
         <span class="profile-card-label">음료교환권 <span class="profile-card-label-chevron" aria-hidden="true">›</span></span>
         <span class="profile-card-summary">${escH(_voucherCardSummary)}</span>
@@ -3034,7 +3034,7 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
     const backLabel = backTo?.label || (isBoardSubsheet ? '내 보드' : `${escH(user.nickname || (readOnly ? '회원' : '손님'))}의 ${_boardLabel}`);
     sub.innerHTML = `
       <div class="profile-subsheet-box">
-        <div class="profile-subsheet-header">
+        <div class="profile-subsheet-header profile-fixed-header">
           <button class="profile-subsheet-back" type="button">${isBoardSubsheet
             ? `<span class="profile-subsheet-back-identity"><span class="profile-subsheet-back-arrow">‹</span><span class="profile-subsheet-back-avatar">${_repIdentityHtml}</span><span class="profile-subsheet-back-name">${escH(user.nickname || (readOnly ? '회원' : '손님'))}</span></span>`
             : `‹ ${backLabel}`}</button>

@@ -178,7 +178,7 @@ sticky·scroll·bottom sheet·fixed header·iframe sheet·border-radius·overflo
 4. **같은 선택자를 2번 이상 건드려도 안 되면 값 추측을 멈춘다.** DevTools 런타임 값으로 확인 후 수정.
 5. **커밋 전 diff에서 의도 밖 선택자가 바뀌었는지 선택자 이름까지 확인한다.**
 
-6. **2026-08-31 사례 — 수치 변경이 화면에 반영되지 않는 경우에는 box model과 cascade를 먼저 대조한다.** 하위 보드 헤더는 `min-height`에 세로 `padding`이 더해지는 `content-box`라 목표값보다 실제 높이가 컸고, 참여자 카드 간격은 뒤에서 더 구체적인 `.dd-participant-card .dd-context-block { margin: 0; }`에 덮였다. 모달 시작 여백도 섹션 margin 하나가 아니라 스크롤 컨테이너 padding과 첫 조율 박스 margin이 합쳐진 값이었다. 따라서 반복 패치 전 `box-sizing`, 계산된 `height/padding/margin`, 매칭 규칙 순서를 확인하고, 필요한 경우 컨테이너·자식의 실제 합산 경계를 함께 수정한다.
+6. **시각 수정은 선언값·정적 검사·완료 판정을 분리한다.** 수치가 코드에 들어갔거나 문법 검사가 통과한 것만으로 화면이 해결됐다고 판정하지 않는다. 반복 보고가 있으면 대상 URL·뷰포트·DOM 요소·매칭 규칙·계산된 `height/padding/margin`을 같은 화면에서 대조하고, 사용자 실화면 확인 또는 동일 뷰포트의 런타임 값/스크린샷 확인 전에는 사례 기록을 남기지 않는다.
 
 ## 10. 닫기 애니메이션·show-then-hide 깜빡임 (2026-07-18 교훈)
 

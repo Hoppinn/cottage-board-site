@@ -53,8 +53,10 @@
     .dd-meeting-header {
       display: flex; align-items: center; justify-content: space-between;
       flex: 0 0 44px;
+      height: 44px;
+      min-height: 44px;
       box-sizing: border-box;
-      padding: 8px 16px;
+      padding: 6px 16px;
       border-bottom: 1px solid var(--line, #e5ddd2);
       background: var(--paper, #fffaf0);
     }
@@ -207,7 +209,7 @@
       border-radius: 0;
       background: transparent;
     }
-    .dd-participant-card .dd-participant-head + .dd-context-block { margin-top: 12px; }
+    .dd-participant-card .dd-participant-head + .dd-context-block { margin-top: 6px; }
     .dd-participant-card .dd-context-block + .dd-context-block {
       margin-top: 8px;
       padding-top: 8px;
