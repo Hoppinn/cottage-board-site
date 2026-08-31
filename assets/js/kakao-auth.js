@@ -3086,22 +3086,20 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
         </div>
       </div>
       <button class="profile-growth-link" type="button">
+        <span class="profile-growth-card-heading"><span class="profile-card-icon">🏆</span><span class="profile-card-label">수집 보드 <span class="profile-card-label-chevron" aria-hidden="true">›</span></span></span>
         <span class="profile-growth-summary-row">
           <span class="profile-growth-summary-text">${escH(_growthLine)}</span>
-          <span class="profile-growth-summary-arrow">›</span>
         </span>
         ${_growthBadge}
       </button>
     </div>
     <div class="profile-card-grid">
       <button class="profile-card" data-subsheet="taste" type="button">
-        <span class="profile-card-icon">👤</span>
-        <span class="profile-card-label">프로필 보드 <span class="profile-card-label-chevron" aria-hidden="true">›</span></span>
+        <span class="profile-card-heading"><span class="profile-card-icon">👤</span><span class="profile-card-label">프로필 보드 <span class="profile-card-label-chevron" aria-hidden="true">›</span></span></span>
         <span class="profile-card-summary">${_tasteCardSummaryHtml(_boardData)}</span>
       </button>
       <button class="profile-card" data-subsheet="meeting" type="button">
-        <span class="profile-card-icon">📅</span>
-        <span class="profile-card-label">모임 보드 <span class="profile-card-label-chevron" aria-hidden="true">›</span></span>
+        <span class="profile-card-heading"><span class="profile-card-icon">📅</span><span class="profile-card-label">모임 보드 <span class="profile-card-label-chevron" aria-hidden="true">›</span></span></span>
         <div class="profile-card-summary">${_scheduleHtml}</div>
       </button>
       <button class="profile-card" data-subsheet="records" type="button">
