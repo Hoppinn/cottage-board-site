@@ -146,7 +146,7 @@ function resetMenuGroups(){
   if (isIndex) {
     [
       { id: 'recent-play', match: 'game-reviews.html' },
-      { id: 'meeting',     match: 'club.html' },
+      { id: 'meeting',     match: 'club-schedule.html' },
     ].forEach(({ id, match }) => {
       const el = document.getElementById(id);
       if (!el) return;
@@ -216,7 +216,7 @@ function refreshMenuActive() {
   if (isIndex) {
     [
       { id: 'recent-play', match: 'game-reviews.html' },
-      { id: 'meeting',     match: 'club.html' },
+      { id: 'meeting',     match: 'club-schedule.html' },
     ].forEach(({ id, match }) => {
       const el = document.getElementById(id);
       if (!el) return;
