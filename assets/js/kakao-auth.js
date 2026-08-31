@@ -2931,12 +2931,12 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
   body.innerHTML = `
     ${!backTo ? `<div class="profile-panel-compact-header profile-fixed-header" aria-hidden="true">
       <div class="profile-panel-compact-header-inner">
-        <div class="profile-panel-compact-identity">
+          <div class="profile-panel-compact-identity profile-fixed-header-left">
           <span class="profile-panel-compact-avatar">${_repAvatarHtml}</span>
           <span class="profile-panel-compact-nickname">${escH(user.nickname || (readOnly ? '회원' : '손님'))}</span>
         </div>
         <span class="profile-panel-compact-title">내 보드</span>
-        <button aria-label="내 보드 닫기" class="profile-panel-close profile-panel-compact-close" type="button">✕</button>
+        <button aria-label="내 보드 닫기" class="profile-panel-close profile-panel-compact-close profile-fixed-header-close" type="button">✕</button>
       </div>
     </div>` : ''}
     <div class="profile-panel-profile">
@@ -3035,11 +3035,11 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
     sub.innerHTML = `
       <div class="profile-subsheet-box">
         <div class="profile-subsheet-header profile-fixed-header">
-          <button class="profile-subsheet-back" type="button">${isBoardSubsheet
+          <button class="profile-subsheet-back profile-fixed-header-left" type="button">${isBoardSubsheet
             ? `<span class="profile-subsheet-back-identity"><span class="profile-subsheet-back-arrow">‹</span><span class="profile-subsheet-back-avatar">${_repIdentityHtml}</span><span class="profile-subsheet-back-name">${escH(user.nickname || (readOnly ? '회원' : '손님'))}</span></span>`
             : `‹ ${backLabel}`}</button>
           <span class="profile-subsheet-title">${title}</span>
-          <button aria-label="닫기" class="profile-subsheet-close" type="button">✕</button>
+          <button aria-label="닫기" class="profile-subsheet-close profile-fixed-header-close" type="button">✕</button>
         </div>
         <div class="profile-subsheet-body${bodyClass ? ' ' + bodyClass : ''}">${contentHtml}</div>
       </div>`;

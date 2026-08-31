@@ -4437,6 +4437,8 @@ html:has(body.embed-mode) { scroll-padding-top: 0; }
 .profile-panel-compact-nickname{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:14px;font-weight:800;color:var(--text-dark);}
 .profile-panel-compact-title{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:14px;font-weight:700;color:var(--text);text-align:center;}
 .profile-panel-compact-close{justify-self:end;}
+.profile-fixed-header-left{justify-self:start;display:flex;align-items:center;min-width:0;max-width:100%;padding:2px 8px 2px 0;box-sizing:border-box;}
+.profile-fixed-header-close{justify-self:end;display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;padding:2px 6px;box-sizing:border-box;}
 .profile-panel-back{justify-self:start;min-width:0;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;background:none;border:none;font-size:13px;font-weight:600;color:var(--green);cursor:pointer;padding:2px 8px 2px 0;}
 .profile-panel-profile{display:flex;flex-direction:column;padding:14px 0 16px;}
 .profile-panel--main .profile-panel-profile{padding-top:24px;}
