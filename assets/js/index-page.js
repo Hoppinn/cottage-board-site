@@ -1842,11 +1842,16 @@ window.addEventListener('cottage-meeting-changed', () => { _meetingReload?.(); }
       ${actionsHtml}
     </div>`;
 
-    function openMeetingDetail() {
+    async function openMeetingDetail() {
       window.CottageDB?.trackEvent('home_meeting_preview_card_click');
-      // 등록/수정 진입 버튼은 이제 openDateMeetingModal이 자체적으로 그려서 처리한다
-      // (day-detail.js — 저장 후 이 모달로 복귀하는 onDirtyClose까지 자체 완결).
-      window.openDateMeetingModal?.(dateStr, dayVotes, dayGames, { fromHome: true });
+      // 미리보기 캐시보다 최신인 모임보드 게임 추가를 반영해 이날 상세를 연다.
+      const [freshVotes, freshGames] = await Promise.all([
+        window.CottageDB?.getMeetingVotes(dateStr, dateStr) || Promise.resolve([]),
+        window.CottageDB?.getMeetingVoteGames(dateStr, dateStr) || Promise.resolve([]),
+      ]);
+      const currentVotes = Array.isArray(freshVotes) ? freshVotes : dayVotes;
+      const currentGames = Array.isArray(freshGames) ? freshGames : dayGames;
+      window.openDateMeetingModal?.(dateStr, currentVotes, currentGames, { fromHome: true });
     }
 
     previewEl.querySelector('.mpc-detail-btn')?.addEventListener('click', e => {
