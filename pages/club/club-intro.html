@@ -154,12 +154,6 @@
       cardEl.style.setProperty('--intro-border', color.border);
     }
 
-    function formatDate(iso) {
-      const d = new Date(iso);
-      const kst = new Date(d.getTime() + 9 * 3600000);
-      return `${kst.getUTCFullYear()}.${String(kst.getUTCMonth()+1).padStart(2,'0')}.${String(kst.getUTCDate()).padStart(2,'0')}`;
-    }
-
     function isAdmin() { return window.isOwner?.() || false; }
     function getCurrentUser() { return window.getKakaoUser?.() || null; }
 
@@ -562,28 +556,28 @@
 
       el.innerHTML = data.map((r, idx) => {
         const canAct = canDelete(r);
-        const del    = canAct ? `<button class="intro-card-del"       data-id="${r.id}" type="button" title="삭제">✕</button>` : '';
+        const del    = canAct ? `<button class="intro-card-del"       data-id="${r.id}" type="button" title="삭제" aria-label="모임원 프로필 삭제">✕</button>` : '';
         const canEdit = !!currentUser && String(r.user_id) === String(currentUser.id);
-        const edit   = canEdit ? `<button class="intro-card-edit"      data-id="${r.id}" type="button" title="수정">✎</button>` : '';
-        const color  = canAct ? `<button class="intro-card-color-btn" data-id="${r.id}" type="button" title="색상 변경">🎨</button>` : '';
+        const edit   = canEdit ? `<button class="intro-card-edit"      data-id="${r.id}" type="button" title="수정" aria-label="모임원 프로필 수정">✎</button>` : '';
+        const color  = canAct ? `<button class="intro-card-color-btn" data-id="${r.id}" type="button" title="색상 변경" aria-label="카드 색상 변경">🎨</button>` : '';
         const clickable = !!r.user_id;
         const repPath = r._rep_achievement_id ? (window.CottageAchievements?.getCharacterPath?.(r._rep_achievement_id) || null) : null;
         const repAvatar = repPath
           ? `<img class="profile-panel-avatar" src="${escHtml(repPath)}" alt="">`
           : `<span class="profile-panel-avatar profile-panel-avatar--empty">🐾</span>`;
         return `
-        <div class="intro-card-news${clickable ? ' intro-card-news--clickable' : ''}" data-id="${r.id}" data-user-id="${escHtml(r.user_id || '')}" data-color="${escHtml(r.card_color||'')}" data-idx="${idx}">
-          <div class="intro-card-news-head" style="position:relative">
+        <div class="intro-card-news${clickable ? ' intro-card-news--clickable' : ''}${canAct ? ' intro-card-news--has-actions' : ''}" data-id="${r.id}" data-user-id="${escHtml(r.user_id || '')}" data-color="${escHtml(r.card_color||'')}" data-idx="${idx}"${clickable ? ` role="button" tabindex="0" aria-label="${escHtml(r.nickname)} 내 보드 열기"` : ''}>
+          <div class="intro-card-news-head">
             ${color}${edit}${del}
-            ${clickable ? `<div class="intro-card-news-identity"><button class="intro-card-news-avatar" type="button" aria-label="내보드 메인 열기">${repAvatar}</button><button class="intro-card-news-name" type="button" aria-label="내보드 메인 열기">${escHtml(r.nickname)}</button></div>` : `<div class="intro-card-news-nickname">${escHtml(r.nickname)}</div>`}
-            <div class="intro-card-news-date">${formatDate(r.created_at)}</div>
+            <div class="intro-card-news-identity"><span class="intro-card-news-avatar">${repAvatar}</span><strong class="intro-card-news-name">${escHtml(r.nickname)}</strong></div>
           </div>
-          <div class="intro-card-news-body"${clickable ? ' role="button" tabindex="0" aria-label="프로필 보드 보기"' : ''}>
-            ${r.average_play_frequency != null ? `<div class="intro-card-news-row"><span class="intro-card-news-label">🎲</span><span class="intro-card-news-val">평균 ${escHtml(FREQUENCY_LABELS[r.average_play_frequency])}</span></div>` : (r.favorite_games ? `<div class="intro-card-news-row"><span class="intro-card-news-label">🎲</span><span class="intro-card-news-val">${escHtml(r.favorite_games)}</span></div>` : '')}
-            ${r.available_days?.length ? `<div class="intro-card-news-row"><span class="intro-card-news-label">📅</span><span class="intro-card-news-val">${escHtml(formatAvailability(r.available_days, r.available_times))}</span></div>` : (r.available ? `<div class="intro-card-news-row"><span class="intro-card-news-label">📅</span><span class="intro-card-news-val">${escHtml(r.available)}</span></div>` : '')}
-            ${r.preferred_game_types?.length ? `<div class="intro-card-news-row"><span class="intro-card-news-label">❤️</span><span class="intro-card-news-val">${escHtml(labelList(r.preferred_game_types, GAME_TYPE_LABELS))}</span></div>` : ''}
-            ${r.expectation ? `<div class="intro-card-news-row"><span class="intro-card-news-label">💬</span><span class="intro-card-news-val">${escHtml(r.expectation.length > 52 ? `${r.expectation.slice(0, 52)}…` : r.expectation)}</span></div>` : ''}
-            ${clickable ? '<div class="intro-card-news-cta">프로필 보드 보기 ›</div>' : ''}
+          <div class="intro-card-news-body">
+            ${r.preferred_game_types?.length ? `<div class="intro-card-news-taste"><span class="intro-card-news-label">좋아하는 게임 유형</span><span class="intro-card-news-val">${escHtml(labelList(r.preferred_game_types, GAME_TYPE_LABELS))}</span></div>` : ''}
+            ${(r.average_play_frequency != null || r.favorite_games || r.available_days?.length || r.available) ? `<div class="intro-card-news-meta">
+              ${r.average_play_frequency != null ? `<div class="intro-card-news-row"><span class="intro-card-news-label">평균 플레이 빈도</span><span class="intro-card-news-val">${escHtml(FREQUENCY_LABELS[r.average_play_frequency])}</span></div>` : (r.favorite_games ? `<div class="intro-card-news-row"><span class="intro-card-news-label">평소 플레이</span><span class="intro-card-news-val">${escHtml(r.favorite_games)}</span></div>` : '')}
+              ${r.available_days?.length ? `<div class="intro-card-news-row"><span class="intro-card-news-label">가능한 요일·시간</span><span class="intro-card-news-val">${escHtml(formatAvailability(r.available_days, r.available_times))}</span></div>` : (r.available ? `<div class="intro-card-news-row"><span class="intro-card-news-label">가능한 요일·시간</span><span class="intro-card-news-val">${escHtml(r.available)}</span></div>` : '')}
+            </div>` : ''}
+            ${r.expectation || r._bio ? `<div class="intro-card-news-message"><span class="intro-card-news-label">한마디</span><p>${escHtml(r.expectation || r._bio)}</p></div>` : ''}
           </div>
         </div>`;
       }).join('');
@@ -593,30 +587,20 @@
         applyCardColor(card, card.dataset.color, Number(card.dataset.idx));
       });
 
-      // identity → 내보드, 프로필 내용 → 프로필 보드. 두 영역은 독립적으로 동작한다.
+      // 카드 전체는 읽기 전용 내보드 메인으로 통일한다. 카드 안 보조 액션은 아래 각 핸들러가 전파를 막는다.
       el.querySelectorAll('.intro-card-news--clickable').forEach(card => {
         const uid = card.dataset.userId;
-        const openProfileBoard = e => {
-          e?.stopPropagation?.();
+        const openBoard = e => {
+          if (e?.target?.closest?.('button, a')) return;
           if (!uid) return;
-          const self = getCurrentUser();
-          const isSelf = self && String(self.id) === String(uid);
-          window.openProfilePanel?.('taste', { userId: String(uid), readOnly: !isSelf });
-        };
-        card.querySelectorAll('.intro-card-news-avatar, .intro-card-news-name').forEach(identity => identity.addEventListener('click', e => {
-          e.stopPropagation();
           window.openOtherProfileSheet?.(uid);
-        }));
-        const content = card.querySelector('.intro-card-news-body');
-        content?.addEventListener('click', e => {
-          if (e.target.closest?.('button, a')) return;
-          openProfileBoard(e);
-        });
-        content?.addEventListener('keydown', e => {
+        };
+        card.addEventListener('click', openBoard);
+        card.addEventListener('keydown', e => {
           if (e.key === 'Enter' || e.key === ' ') {
+            if (e.target !== card) return;
             e.preventDefault();
-            if (e.target.closest?.('button, a')) return;
-            openProfileBoard(e);
+            openBoard(e);
           }
         });
       });

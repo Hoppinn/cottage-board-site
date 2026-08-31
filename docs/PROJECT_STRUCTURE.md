@@ -499,9 +499,8 @@ game-reviews.html — 기록 입력 탭
     월~일 경계에서 다음 주 데이터가 빠지지 않는다. 회원 자기소개(club-intro.html)와
     동일 테이블/컬럼을 읽고 써서 한쪽 수정이 다른 쪽에 즉시 반영된다. `taste`는 레거시 내부 키다.
   - 자기소개 작성은 로그인 필수(member_intros.user_id 기준 upsert, 유저당 1행)
-  - 회원 자기소개 카드 클릭 → openOtherProfileSheet(userId) → openProfilePanel('taste', {userId, readOnly:true}).
-    본인 내 보드와 동일한 통합 패널을 편집
-    컨트롤 없이·비공개 섹션(알림/교환권/함께한시간) 제외하고 표시. 본인 카드 클릭 시 openProfilePanel('taste')로 위임
+  - 회원 자기소개 카드 전체 클릭 → `openOtherProfileSheet(userId)` → 읽기전용 내 보드 메인. 본인이면 내 보드 메인으로 열고,
+    타회원이면 편집 컨트롤·비공개 섹션(알림/교환권/함께한시간)을 제외한다. 카드 안 수정·삭제·색상 버튼은 이 진입과 독립적으로 동작한다.
     (구 별도 otherMainPanel/_openOtherMeetingSubSheet 구조는 폐지)
   - 닉네임 클릭 진입점은 두 갈래다. **특정 일정의 모임 참여자**(`.sched-bar-name`)는
     openOtherMeetingSheet(모임 보드 직행), **그 외 전부**(게임시트 좋아요/궁금해요 아바타, 게임평·플레이기록 닉네임/리뷰어 이름)는

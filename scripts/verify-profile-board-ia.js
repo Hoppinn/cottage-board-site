@@ -119,12 +119,13 @@ check('legacy depth labels remain separate from new ranges', boardSrc.includes('
   && boardSrc.includes('기존 선택:'));
 check('intro has no travel range UI residue', !introHtml.includes('이동 가능 범위') && !introHtml.includes('travel_range'));
 check('failed game save cannot paint a false added state', (boardSrc.match(/if \(saved === false\) return;/g) || []).length === 2);
-check('member intro card opens Profile Board', introHtml.includes('프로필 보드 보기 ›')
+check('member intro card opens member board main', !introHtml.includes('프로필 보드 보기 ›')
   && introHtml.includes('window.openOtherProfileSheet?.(uid)') && !introHtml.includes('window.openOtherMeetingSheet?.(uid)'));
-check('member intro identity/profile areas have separate destinations', introHtml.includes('intro-card-news-avatar')
-  && introHtml.includes('intro-card-news-name')
-  && introHtml.includes("window.openProfilePanel?.('taste'")
-  && introHtml.includes('e.stopPropagation()'));
+check('member intro card has one destination and keeps owner actions separate', introHtml.includes("card.addEventListener('click', openBoard)")
+  && !introHtml.includes("window.openProfilePanel?.('taste'")
+  && introHtml.includes("e.stopPropagation(); deleteIntro")
+  && introHtml.includes("e.stopPropagation(); editIntro")
+  && introHtml.includes('intro-card-color-btn'));
 check('subboards share compact identity back header, including collection board', boardSrc.includes("'수집 보드'].includes(title)")
   && boardSrc.includes('profile-subsheet-back-identity')
   && boardSrc.includes('profile-subsheet-back-avatar')
