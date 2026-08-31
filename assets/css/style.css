@@ -6715,10 +6715,12 @@ html.intro-wizard-embed .club-breadcrumb,html.intro-wizard-embed .page-mini-hero
 .intro-wizard{
   display:flex;
   flex-direction:column;
-  width:min(100%,560px);
-  max-height:min(720px,calc(100dvh - 32px));
+  width:100%;
+  max-width:480px;
+  height:88dvh;
+  max-height:88dvh;
   overflow:hidden;
-  border-radius:18px;
+  border-radius:16px;
   background:var(--paper);
   box-shadow:0 12px 38px rgba(0,0,0,.28);
 }
@@ -6886,8 +6888,8 @@ html.intro-wizard-embed .club-breadcrumb,html.intro-wizard-embed .page-mini-hero
   text-align:center;
 }
 @media(max-width:600px){
-  .intro-wizard-overlay{align-items:stretch;padding:8px;}
-  .intro-wizard{width:100%;max-height:none;height:calc(100dvh - 16px);border-radius:16px;}
+  .intro-wizard-overlay{align-items:center;padding:16px;}
+  .intro-wizard{width:100%;max-height:88dvh;height:88dvh;border-radius:16px;}
   .intro-wizard-head{padding:14px 16px 12px;}
   .intro-wizard-body{padding:18px 16px;}
   .intro-wizard-nav{padding:10px 16px 14px;}
@@ -9444,7 +9446,8 @@ body.is-embedded .inner-page{padding-top:0;}
   }
   .planner-modal-box,
   .record-iframe-panel,
-  .planner-sheet-panel {
+  .planner-sheet-panel,
+  .intro-wizard {
     max-width: 650px;
     height: 92dvh;
     max-height: 92dvh;
