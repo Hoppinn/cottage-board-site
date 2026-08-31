@@ -766,7 +766,7 @@
   }
 
   function _restoreViewState(panel, _openSess, _openSub, _sy, _openMonth) {
-    const embeddedDateView = currentView === 'date' && isEmbeddedRecordHub();
+    const embeddedDateView = currentView === 'date';
     if (embeddedDateView) {
       // 과거에는 여러 달이 열린 상태도 저장될 수 있었다. 모달 날짜별 보기로 복원할 땐
       // 가장 최근 DOM 순서의 한 달만 되살려 single-open 계약을 넘기지 않는다.
@@ -1018,7 +1018,7 @@
     panel.innerHTML = toggleHtml + contentHtml;
     // The first asynchronous data render must settle the default month after
     // records exist. Restored editing state remains authoritative on later renders.
-    if (!_restoreState && currentView === 'date' && isEmbeddedRecordHub()) {
+    if (!_restoreState && currentView === 'date') {
       const months = [...panel.querySelectorAll('.pr-session--bydate')];
       if (months.length) {
         months.forEach(session => session.classList.remove('is-open'));
@@ -1145,7 +1145,7 @@
           }
           return;
         }
-        if (currentView !== 'date' || !isEmbeddedRecordHub() || !month) {
+        if (currentView !== 'date' || !month) {
           sub.classList.toggle('is-open');
           getPressedTop();
           return;
@@ -1496,7 +1496,7 @@
       const totalGames = [...dateMap.values()].reduce((s, gm) => s + [...gm.values()].reduce((s2, recs) => s2 + recs.length, 0), 0);
       const isLatestMonth = ym === latestYm;
 
-      html += `<div class="pr-session pr-session--bydate${isEmbeddedRecordHub() && isLatestMonth ? ' is-open' : ''}">
+      html += `<div class="pr-session pr-session--bydate${isLatestMonth ? ' is-open' : ''}">
         <button class="pr-session-hd" type="button">
           <span class="pr-session-date">${monthLabel}</span>
           <span class="pr-session-summary">${dateMap.size}일 · ${totalGames}게임</span>

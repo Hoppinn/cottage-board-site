@@ -189,6 +189,7 @@
       const totalGames = clubRecords.length;
 
       let html = tipHtml;
+      const sortedDates = Object.entries(byDate).sort((a, b) => b[0].localeCompare(a[0]));
       html += `<div class="pr-session is-open" data-history-group="코티지보드 동호회">
         <button class="pr-session-hd" type="button">
           <span class="pr-session-date">코티지보드 동호회</span>
@@ -197,14 +198,15 @@
         </button>
         <div class="pr-session-body">`;
 
-      for (const [dateStr, recs] of Object.entries(byDate).sort((a, b) => b[0].localeCompare(a[0]))) {
+      for (const [dateIndex, [dateStr, recs]] of sortedDates.entries()) {
         // 캡션복사는 날짜 헤더에서 각 기록의 ⋯ 메뉴로 옮겼다(2026-07-22) —
         // 모든 날짜에 버튼이 깔려 목록이 시끄러웠고, 플레이기록 게시판과 자리도 달랐다
-        html += `<div class="pr-sub-session">
-          <div class="pr-sub-hd">
+        html += `<div class="pr-sub-session${dateIndex === 0 ? ' is-open' : ''}" data-date="${escH(dateStr)}">
+          <button class="pr-sub-hd" type="button">
             <span class="pr-sub-date">${formatKstDate(dateStr)}</span>
+            <span class="pr-sub-summary">${recs.length}게임</span>
             <span class="pr-sub-arrow">▾</span>
-          </div>
+          </button>
           <div class="pr-sub-body">${buildBody(byEntryOrderAsc(recs))}</div>
         </div>`;
       }
@@ -225,7 +227,13 @@
         hd.addEventListener('click', () => hd.closest('.pr-session').classList.toggle('is-open'));
       });
       root.querySelectorAll('.pr-sub-hd').forEach(hd => {
-        hd.addEventListener('click', () => hd.closest('.pr-sub-session').classList.toggle('is-open'));
+        hd.addEventListener('click', () => {
+          const session = hd.closest('.pr-sub-session');
+          if (!session) return;
+          const wasOpen = session.classList.contains('is-open');
+          root.querySelectorAll('.pr-sub-session.is-open').forEach(openSession => openSession.classList.remove('is-open'));
+          if (!wasOpen) session.classList.add('is-open');
+        });
       });
       root.querySelectorAll('.pr-rec-more-btn').forEach(btn => {
         btn.addEventListener('click', e => {

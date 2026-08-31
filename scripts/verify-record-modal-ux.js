@@ -33,9 +33,9 @@ check('별도 센터모달 탭 헤더를 만들지 않고 기존 탭을 재사�
   reviews.includes('<div class="pr-tabs">') && !page.includes('record-modal-tabs'));
 check('활성 탭 재클릭은 iframe document scroller만 최상단 이동',
   reviews.includes("document.scrollingElement?.scrollTo({ top: 0, behavior: 'smooth' })"));
-check('날짜별 최근 실제 데이터 월만 embed에서 기본 OPEN',
-  reviews.includes("pr-session--bydate${isEmbeddedRecordHub() && isLatestMonth ? ' is-open' : ''}")
-  && reviews.includes("if (!_restoreState && currentView === 'date' && isEmbeddedRecordHub())")
+check('날짜별 최근 실제 데이터 월만 모든 보기에서 기본 OPEN',
+  reviews.includes("pr-session--bydate${isLatestMonth ? ' is-open' : ''}")
+  && reviews.includes("if (!_restoreState && currentView === 'date')")
   && reviews.includes("months[0].classList.add('is-open')"));
 check('최신 월의 최신 일도 기본 OPEN',
   reviews.includes("pr-sub-session${isLatestDate ? ' is-open' : ''}")
@@ -46,7 +46,7 @@ check('같은 월의 날짜 accordion은 single-open',
 check('날짜별 월 클릭은 열린 월을 먼저 모두 닫아 single-open 유지',
   reviews.includes("panel.querySelectorAll('.pr-session--bydate.is-open').forEach(el => el.classList.remove('is-open'))"));
 check('기존 다중 월 펼침 상태를 다시 렌더해도 한 달만 복원',
-  reviews.includes('const embeddedDateView = currentView === \'date\' && isEmbeddedRecordHub();')
+  reviews.includes("const embeddedDateView = currentView === 'date';")
   && reviews.includes('const restoredMonth = [...panel.querySelectorAll(\'.pr-session--bydate\')]'));
 check('월 상태 변경은 월 헤더 클릭 바인딩에만 있고 scroll 이벤트가 없음',
   !/addEventListener\(['"]scroll['"]/.test(reviews));
