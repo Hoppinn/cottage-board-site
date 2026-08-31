@@ -151,9 +151,11 @@ function resetMenuGroups(){
       const el = document.getElementById(id);
       if (!el) return;
       const r = el.getBoundingClientRect();
-      const inView = r.top < window.innerHeight && r.bottom > 0;
       if (r.top < halfH && r.bottom > 0) previewShown = true; // recommend 해제는 상단 50% 진입 시만
-      if (inView) {
+      // 화면에 걸쳐 있기만 한 이전 섹션은 활성으로 보지 않는다. 화면 중앙을
+      // 지나는 섹션 하나만 점을 표시해, 모임으로 내려갔을 때 플레이 기록 점이
+      // 함께 남지 않게 한다.
+      if (r.top < halfH && r.bottom > halfH) {
         const link = document.querySelector(`.header-menu a[href*="${match}"]`);
         if (link) {
           link.classList.add('preview-active');
@@ -219,9 +221,8 @@ function refreshMenuActive() {
       const el = document.getElementById(id);
       if (!el) return;
       const r = el.getBoundingClientRect();
-      const inView = r.top < window.innerHeight && r.bottom > 0;
       if (r.top < halfH && r.bottom > 0) previewShown = true; // recommend 해제는 상단 50% 진입 시만
-      if (inView) {
+      if (r.top < halfH && r.bottom > halfH) {
         const link = document.querySelector(`.header-menu a[href*="${match}"]`);
         if (link) {
           link.classList.add('preview-active');

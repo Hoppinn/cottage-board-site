@@ -4416,7 +4416,7 @@ html:has(body.embed-mode) { scroll-padding-top: 0; }
 .profile-panel-box{background:#fff;border-radius:18px;width:100%;max-width:480px;padding:0 20px 0;height:calc(100vh - 48px);height:calc(100dvh - 48px);max-height:calc(100vh - 48px);max-height:calc(100dvh - 48px);overflow:hidden;display:flex;flex-direction:column;margin:0 10px 16px;}
 .profile-panel-box{position:relative;}
 .profile-panel-body{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;padding-bottom:32px;margin-right:-20px;padding-right:20px;}
-.profile-panel-header{display:flex;align-items:center;justify-content:space-between;margin:0 -20px 0;position:sticky;top:0;z-index:5;background:#fff;padding:10px 20px;min-height:48px;border-bottom:1px solid var(--border);cursor:pointer;}
+.profile-panel-header{display:flex;align-items:center;justify-content:space-between;margin:0 -20px 0;position:sticky;top:0;z-index:5;background:#fff;padding:8px 20px;min-height:44px;border-bottom:1px solid var(--border);cursor:pointer;}
 .profile-panel-title{font-size:14px;font-weight:700;color:var(--text);}
 .profile-panel-close{background:none;border:none;font-size:18px;color:var(--muted);cursor:pointer;padding:2px 6px;}
 .profile-panel-main-close{position:absolute;top:8px;right:14px;z-index:7;transition:opacity .16s ease,visibility .16s ease;}
@@ -5042,7 +5042,7 @@ html:has(body.embed-mode) { scroll-padding-top: 0; }
 /* 서브시트 (profile-subsheet) — profile 전용, gameSheet 계열과 무관 */
 .profile-subsheet{position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:var(--z-subsheet);display:flex;align-items:flex-end;justify-content:center;}
 .profile-subsheet-box{background:#fff;border-radius:18px;width:100%;max-width:480px;height:calc(100vh - 48px);height:calc(100dvh - 48px);display:flex;flex-direction:column;overflow:hidden;margin:0 10px 16px;}
-.profile-subsheet-header{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;padding:10px 20px;min-height:48px;border-bottom:1px solid var(--border);flex-shrink:0;background:#fff;cursor:pointer;}
+.profile-subsheet-header{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;padding:8px 20px;min-height:44px;border-bottom:1px solid var(--border);flex-shrink:0;background:#fff;cursor:pointer;}
 .profile-subsheet-back{justify-self:start;min-width:0;max-width:100%;overflow:visible;text-overflow:ellipsis;white-space:nowrap;background:none;border:none;font-size:13px;font-weight:600;color:var(--green);cursor:pointer;padding:2px 8px 2px 0;}
 .profile-subsheet-back-identity{display:flex;align-items:center;gap:6px;width:100%;min-width:0;max-width:100%;overflow:visible;}
 .profile-subsheet-back-arrow{font-size:18px;line-height:1;flex-shrink:0;}
@@ -9392,15 +9392,15 @@ body.is-embedded .inner-page{padding-top:0;}
     to   { opacity: 1; transform: translateX(-50%) translateY(0); }
   }
 
-  /* ── PC 센터모달·바텀시트 폭·높이 통일 (2026-07-27 사용자 결정: 650px+, 상하 여백도 축소) ──
-     .game-sheet-panel만 PC 전용 크기가 있었고 나머지는 max-width:480px 그대로라 화면 대비
-     작아 보인다는 지적. 앵커 방식(센터/바텀)과 등장 애니메이션은 그대로 두고 폭·높이만 키운다. */
+  /* ── PC 센터모달·바텀시트 폭·높이 통일 (2026-08-31 compact 기준) ──
+     내 보드와 하위 보드는 같은 compact 패널 규격을 쓰고, 게임시트·플래너처럼
+     내용 자체가 긴 화면만 별도 대형 규격을 유지한다. */
   .profile-panel-box,
   .profile-subsheet-box {
-    max-width: 650px;
-    height: calc(100dvh - 24px);
-    max-height: calc(100dvh - 24px);
-    margin: 0 10px 8px;
+    max-width: 440px;
+    height: calc(100dvh - 64px);
+    max-height: calc(100dvh - 64px);
+    margin: 0 10px 16px;
   }
   .planner-modal-box,
   .record-iframe-panel,

@@ -52,9 +52,9 @@
     }
     .dd-meeting-header {
       display: flex; align-items: center; justify-content: space-between;
-      flex: 0 0 48px;
+      flex: 0 0 44px;
       box-sizing: border-box;
-      padding: 10px 16px;
+      padding: 8px 16px;
       border-bottom: 1px solid var(--line, #e5ddd2);
       background: var(--paper, #fffaf0);
     }
@@ -70,7 +70,7 @@
     }
     .dd-meeting-header .dd-x-btn:hover { color: var(--green); background: #f5ede3; }
     .dd-meeting-modal { display: flex; flex-direction: column; width: min(88vw, 440px); height: min(72dvh, 440px); max-height: calc(100dvh - 32px); }
-    .dd-meeting-modal .dd-modal-scroll { flex: 1 1 auto; min-height: 0; max-height: none; }
+    .dd-meeting-modal .dd-modal-scroll { flex: 1 1 auto; min-height: 0; max-height: none; padding-bottom: 32px; }
     .dd-close-btn {
       background: #ede8e0; border: none; border-radius: 20px;
       padding: 6px 24px; font-size: 13px; cursor: pointer;
@@ -187,16 +187,18 @@
 
     /* ── 날짜 전체 모임 상세 — 인원 조율 + 참여자별 ── */
     .dd-meeting-section { margin-top: 16px; }
+    .dd-meeting-modal .dd-modal-scroll > .dd-meeting-section:first-child { margin-top: 8px; }
     .dd-meeting-section-title { margin: 0 0 8px; font-size: 14px; font-weight: 800; color: var(--text); }
     .dd-participant-list { display: grid; gap: 8px; }
+    .dd-participant-head { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
     .dd-participant-card {
       padding: 11px 12px;
       border: 1px solid var(--line, #e5ddd2);
       border-radius: 10px;
       background: #f8f4ee;
     }
-    .dd-participant-card .dd-modal-nick { margin-bottom: 3px; }
-    .dd-participant-card .dd-time { margin-bottom: 8px; }
+    .dd-participant-card .dd-modal-nick { margin-bottom: 3px; min-width: 0; }
+    .dd-participant-card .dd-time { margin-bottom: 0; text-align: right; flex-shrink: 0; }
     .dd-participant-card .dd-context-block {
       margin: 0;
       padding: 0;
@@ -1218,8 +1220,10 @@
           ].join('')
         : readOnlyGamesHtml;
       return `<article class="dd-participant-card">
-        <div class="dd-modal-nick">${esc(v.nickname)}</div>
-        <div class="dd-time">${window.formatVoteHour(v.time_start)}~${window.formatVoteHour(v.time_end)}${partyCount([v]) > 1 ? ` · ${partyCount([v]) - 1}명 동반` : ''}</div>
+        <div class="dd-participant-head">
+          <div class="dd-modal-nick">${esc(v.nickname)}</div>
+          <div class="dd-time">${window.formatVoteHour(v.time_start)}~${window.formatVoteHour(v.time_end)}${partyCount([v]) > 1 ? ` · ${partyCount([v]) - 1}명 동반` : ''}</div>
+        </div>
         ${_buildUsualContextHtml(profileByUserId.get(String(v.user_id)))}
         ${_buildTodayContextHtml(v, todayGamesHtml, '')}
       </article>`;
