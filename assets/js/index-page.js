@@ -1700,7 +1700,7 @@ window.addEventListener('cottage-meeting-changed', () => { _meetingReload?.(); }
   }
 
   // 🚨 e.source가 이 iframe(frame)이 맞는지 반드시 먼저 확인한다 — day-detail.js가
-  // 「이날 모임 상세」 등록 버튼용으로 club-schedule.html?embed=true를 여는 **별도의
+  // 「모임 조율」 등록 버튼용으로 club-schedule.html?embed=true를 여는 **별도의
   // 독립 iframe**(window.openPlannerModal, #__plannerModal)을 똑같이 띄우는데, 그쪽도
   // 똑같은 cottage-planner-ready/cottage-sheet-shown을 window.parent로 쏜다. 이 검사가
   // 없으면 그 iframe이 준비됐다는 신호에 **이 홈 전용 미리로드 패널(#plannerSheetModal)이
@@ -1831,10 +1831,10 @@ window.addEventListener('cottage-meeting-changed', () => { _meetingReload?.(); }
     const myVote  = _me ? dayVotes.find(v => String(v.user_id) === String(_me.id)) ?? null : null;
 
     const actionsHtml = (myVote || isPastDate)
-      ? `<button class="mpc-detail-btn" type="button">이날 모임 상세 ›</button>`
+      ? `<button class="mpc-detail-btn" type="button">모임 조율 ›</button>`
       : `<div class="mpc-actions-split">
           <button class="mpc-register-btn" type="button">+ 이날 함께하기</button>
-          <button class="mpc-detail-btn" type="button">이날 모임 상세 ›</button>
+          <button class="mpc-detail-btn" type="button">모임 조율 ›</button>
         </div>`;
 
     previewEl.innerHTML = `<div class="meeting-preview-card" role="button" tabindex="0">

@@ -187,10 +187,10 @@
     .dd-cond-select { appearance: none; -webkit-appearance: none; -moz-appearance: none; font-size: 11px; padding: 2px 14px 2px 5px; border-radius: 10px; border: 1px solid #ede8e0; background: #f0ece6 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='7' height='7' viewBox='0 0 8 8'%3E%3Cpath d='M1 2l3 3 3-3' stroke='%239e8e7e' stroke-width='1.3' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") no-repeat right 3px center; background-size: 7px 7px; color: var(--muted, #9e8e7e); cursor: pointer; flex-shrink: 0; white-space: nowrap; }
     .dd-cond-tag { font-size: 11px; color: var(--muted, #9e8e7e); font-weight: 400; flex-shrink: 0; align-self: center; white-space: nowrap; }
 
-    /* ── 날짜 전체 모임 상세 — 인원 조율 + 참여자별 ── */
+    /* ── 모임 조율 — 모임 현황 + 인원 조율 + 참여자별 상세 ── */
     .dd-meeting-section { margin-top: 16px; }
     .dd-meeting-modal .dd-modal-scroll > .dd-meeting-section:first-child { margin-top: 0; }
-    .dd-meeting-modal .dd-modal-scroll > .dd-meeting-section:first-child .game-coordination-summary { margin-top: 6px; }
+    .dd-meeting-modal .dd-modal-scroll > .dd-meeting-section:first-child .game-coordination-summary { margin-top: 0; }
     .dd-meeting-section-title { margin: 0 0 8px; font-size: 14px; font-weight: 800; color: var(--text); }
     .dd-participant-list { display: grid; gap: 8px; }
     .dd-participant-head { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
@@ -425,11 +425,11 @@
       padding: 5px 0 3px; font-size: 13px; font-weight: 700;
       color: var(--green, #7a4828); cursor: pointer; text-align: left;
     }
-    .game-coordination-summary .dd-roulette-open-btn {
+    .dd-meeting-actions .dd-roulette-open-btn {
       margin-top: 14px; padding-top: 10px;
       border-top: 1px solid var(--line, #e5ddd2);
     }
-    .game-coordination-summary .dd-planner-btn { display: block; width: 100%; margin-top: 14px; }
+    .dd-meeting-actions .dd-planner-btn { display: block; width: 100%; margin-top: 0; }
     .dd-roulette-open-btn:active { background: #ede5d8; }
     .dd-roulette-panel {
       flex: 1; min-height: 0;
@@ -518,7 +518,7 @@
   // 활성 뷰 체류시간 추적(PLAN_active_view_tracking.md 3차) — openDateScheduleModal·
   // openDayDetailModal·openDatePreviewModal·openDateMeetingModal 4개가 전부 같은 #__ddModal
   // 오버레이를 공유한다(한쪽이 열리면 위쪽 document.getElementById('__ddModal')?.remove()로
-  // 다른 쪽을 대체). "이날 모임 상세" 한 뷰로 보고, 넷 중 아무거나로 전환돼도 재-push 안
+  // 다른 쪽을 대체). "모임 조율" 한 뷰로 보고, 넷 중 아무거나로 전환돼도 재-push 안
   // 하게 가드한다(game-sheet.js `_ensureGameSheetViewToken`과 같은 패턴).
   let _ddViewToken = null;
   let _ddViewActive = false;
@@ -1423,7 +1423,7 @@
       });
   }
 
-  function _buildGameCoordinationSummaryHtml(votes, voteGames, compact = false, meetingSummary = '', actionHtml = '') {
+  function _buildGameCoordinationSummaryHtml(votes, voteGames, compact = false, meetingSummary = '', showTitle = true) {
     const styles = { strategy: 0, party: 0, any: 0 };
     const participants = [...new Map((votes || []).map(vote => [String(vote.user_id), vote])).values()];
     participants.forEach(vote => {
@@ -1444,12 +1444,11 @@
     const gameText = shared.length
       ? shared.map(game => `${esc(game.name)} ${game.users.size}\uBA85`).join(' \u00B7 ')
       : '\uACF5\uD1B5 \uAD00\uC2EC \uAC8C\uC784\uC774 \uC544\uC9C1 \uC5C6\uC5B4\uC694.';
-    return `<section class="game-coordination-summary${compact ? ' game-coordination-summary--compact' : ''}" aria-label="\uC778\uC6D0 \uC870\uC728 \uC694\uC57D">
-      <strong>\uC778\uC6D0 \uC870\uC728</strong>
+    return `<section class="game-coordination-summary${compact ? ' game-coordination-summary--compact' : ''}" aria-label="\uBAA8\uC784 \uD604\uD669">
+      ${showTitle ? '<strong>\uBAA8\uC784 \uD604\uD669</strong>' : ''}
       ${meetingSummary ? `<p class="game-coordination-summary-meta">${esc(meetingSummary)}</p>` : ''}
       <div><span>\uC120\uD638 \uC720\uD615</span><p>${styleText}</p></div>
       <div><span>\uACB9\uCE58\uB294 \uAC8C\uC784</span><p>${gameText}</p></div>
-      ${actionHtml}
     </section>`;
   }
 
@@ -1492,7 +1491,7 @@
 
     el.innerHTML = `<div class="dd-modal dd-meeting-modal planner-modal-box" role="dialog" aria-modal="true">
       <div class="dd-meeting-header">
-        <div class="dd-meeting-header-title">${fmtDate(voteDate)} 모임 상세</div>
+        <div class="dd-meeting-header-title">${fmtDate(voteDate)} 모임 조율</div>
         <button class="dd-x-btn" type="button" aria-label="닫기">✕</button>
       </div>
       <div class="dd-modal-scroll"><div class="dd-loading">불러오는 중...</div></div>
@@ -1514,15 +1513,20 @@
 
     el.innerHTML = `<div class="dd-modal dd-meeting-modal planner-modal-box" role="dialog" aria-modal="true">
       <div class="dd-meeting-header">
-        <div class="dd-meeting-header-title">${fmtDate(voteDate)} 모임 상세</div>
+        <div class="dd-meeting-header-title">${fmtDate(voteDate)} 모임 조율</div>
         <button class="dd-x-btn" type="button" aria-label="닫기">✕</button>
       </div>
       <div class="dd-modal-scroll" id="__ddMainScroll">
         <section class="dd-meeting-section">
-          ${_buildGameCoordinationSummaryHtml(votes, voteGames, false, meetingSummary, `${plannerBtnHtml}${rouletteBtnHtml}`)}
+          <h2 class="dd-meeting-section-title">모임 현황</h2>
+          ${_buildGameCoordinationSummaryHtml(votes, voteGames, false, meetingSummary, false)}
+        </section>
+        <section class="dd-meeting-section" aria-labelledby="dd-coordination-title">
+          <h2 class="dd-meeting-section-title" id="dd-coordination-title">인원 조율</h2>
+          <div class="dd-meeting-actions">${plannerBtnHtml}${rouletteBtnHtml}</div>
         </section>
         <section class="dd-meeting-section" aria-labelledby="dd-participants-title">
-          <h2 class="dd-meeting-section-title" id="dd-participants-title">참여자별</h2>
+          <h2 class="dd-meeting-section-title" id="dd-participants-title">참여자별 상세</h2>
           ${participantsBody ? `<div class="dd-participant-list">${participantsBody}</div>` : '<div class="dd-empty">참여자가 없습니다.</div>'}
         </section>
       </div>

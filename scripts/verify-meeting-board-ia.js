@@ -83,6 +83,14 @@ check('홈 날짜 상세도 최신 게임 목록을 재조회', homeSrc.includes
 check('룰렛은 want·learn 후보와 빈 상태 레이아웃을 지원', daySrc.includes("g.list_type !== 'want' && g.list_type !== 'learn'")
   && daySrc.includes('const rouletteBtnHtml') && daySrc.includes('dd-roulette-open-btn')
   && daySrc.includes('dd-roulette-empty') && daySrc.includes('active.length < 2'));
+check('플래너와 모임 조율의 최신 용어·정보 계층을 사용', scheduleSrc.includes('모임 조율 ›')
+  && homeSrc.includes('모임 조율 ›')
+  && daySrc.includes('<h2 class="dd-meeting-section-title">모임 현황</h2>')
+  && daySrc.includes('<h2 class="dd-meeting-section-title" id="dd-coordination-title">인원 조율</h2>')
+  && daySrc.includes('<h2 class="dd-meeting-section-title" id="dd-participants-title">참여자별 상세</h2>')
+  && daySrc.includes('_buildGameCoordinationSummaryHtml(votes, voteGames, false, meetingSummary, false)'));
+check('인원 조율은 기존 룰렛만 사용하고 게임 투표 UI를 만들지 않음', daySrc.includes('dd-roulette-open-btn')
+  && !daySrc.includes('dd-game-vote') && !daySrc.includes('dd-vote-option'));
 
 console.log(failures ? `\nFAIL ${failures}` : (NEG ? '\nNEGATIVE CONTROL PASS' : '\nALL PASS'));
 process.exit(failures ? 1 : 0);
