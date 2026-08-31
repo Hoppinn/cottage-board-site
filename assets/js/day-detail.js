@@ -263,7 +263,7 @@
     .sched-bar-del-btn:hover,
     .sched-bar-del-btn:active { background: #fdecea; color: #d94f4f; }
     .sched-bar-name {
-      min-width: 0; max-width: 42%;
+      flex: 1 1 auto; min-width: 0; max-width: none;
       font-size: 11px; font-weight: 700;
       color: var(--text);
       overflow: hidden;
@@ -1663,15 +1663,15 @@
       const actions = (mine && v.vote_date >= today)
         ? `<div class="sched-bar-actions">
             <button class="sched-bar-edit-btn" type="button" aria-label="참여 시간 수정">✎</button>
-            <button class="sched-bar-del-btn" type="button" aria-label="참여 취소">✕</button>
+            <button class="sched-bar-del-btn" type="button" aria-label="참여 삭제">🗑️</button>
           </div>`
         : '';
       return `<div class="sched-bar-item" data-date="${esc(v.vote_date)}" data-uid="${esc(v.user_id)}" role="button" tabindex="0">
         <div class="sched-bar-left">
           <span class="sched-bar-name" data-uid="${esc(v.user_id)}" role="link" tabindex="0">${esc(v.nickname)}</span>
           ${guestN > 0 ? `<span class="sched-bar-guest" title="동반 인원 ${guestN}명">+${guestN}</span>` : ''}
-          <span class="sched-bar-time-text">${window.formatVoteHour(v.time_start)}~${window.formatVoteHour(v.time_end)}</span>
           ${actions}
+          <span class="sched-bar-time-text">${window.formatVoteHour(v.time_start)}~${window.formatVoteHour(v.time_end)}</span>
         </div>
         <div class="sched-bar-track" data-date="${esc(v.vote_date)}" data-uid="${esc(v.user_id)}" style="cursor:pointer">
           <div class="sched-bar-fill${mine ? ' is-mine' : ''}" style="left:${left}%;width:${width}%"></div>

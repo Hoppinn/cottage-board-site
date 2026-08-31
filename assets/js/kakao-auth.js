@@ -2947,6 +2947,7 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
             <button class="profile-panel-nick" type="button">${escH(user.nickname || (readOnly ? '회원' : '손님'))} ${_ro('<span class="profile-nick-edit">✏️</span>')}</button>
             ${_ro(`<button class="profile-panel-notif-btn${_newCount === 0 ? ' is-zero' : ''}" data-subsheet="notif" type="button">${_newCount > 0 ? '<span class="notif-red-dot"></span>' : ''}🔔 ${_newCount > 0 ? `새 알림 ${_newCount}건` : '알림'}</button>`)}
           </div>
+          ${_ro(`<button class="profile-panel-voucher-btn" data-subsheet="voucher" type="button">🎫 음료교환권 ${voucherBalance}장</button>`)}
           <span class="profile-panel-rep-name">${_repLabel}</span>
           <button class="profile-panel-title-name${_validRepTitle ? '' : ' is-empty'}" type="button">${_validRepTitle ? `${_validRepTitle.emoji} ${escH(_validRepTitle.name)} ${_ro('<span class="profile-title-edit">⚙</span>')}` : `칭호 없음 ${_ro('<span class="profile-title-edit">⚙</span>')}`}</button>
           ${readOnly ? '<span class="profile-panel-readonly-hint">읽기 전용으로 보고 있어요</span>' : ''}
@@ -2980,11 +2981,6 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
         <span class="profile-card-icon">📊</span>
         <span class="profile-card-label">함께한 시간 <span class="profile-card-label-chevron" aria-hidden="true">›</span></span>
         <span class="profile-card-summary">${escH(_statsSummary)}</span>
-      </button>`)}
-      ${_ro(`<button class="profile-card profile-card--span2 profile-card--voucher" data-subsheet="voucher" type="button">
-        <span class="profile-card-icon">🎫</span>
-        <span class="profile-card-label">음료교환권 <span class="profile-card-label-chevron" aria-hidden="true">›</span></span>
-        <span class="profile-card-summary">${escH(_voucherCardSummary)}</span>
       </button>`)}
       ${_adminOnly(`<button class="profile-card profile-card--span2 profile-card--admin" data-subsheet="adminboard" type="button">
         <span class="profile-card-icon">🛠️</span>
@@ -3220,7 +3216,7 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
   }
 
   // ── 카드 클릭 → 서브시트 ─────────────────────────────────────
-  body.querySelectorAll('.profile-card, .profile-panel-notif-btn').forEach(card => {
+  body.querySelectorAll('.profile-card, .profile-panel-notif-btn, .profile-panel-voucher-btn').forEach(card => {
     card.addEventListener('click', () => {
       const type = card.dataset.subsheet;
 
