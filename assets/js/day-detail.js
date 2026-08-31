@@ -1692,7 +1692,7 @@
       const actions = (mine && v.vote_date >= today)
         ? `<div class="sched-bar-actions">
             <button class="sched-bar-edit-btn" type="button" aria-label="참여 시간 수정">✎</button>
-            <button class="sched-bar-del-btn" type="button" aria-label="참여 삭제">🗑️</button>
+            <button class="sched-bar-del-btn" type="button" aria-label="참여 취소">✕</button>
           </div>`
         : '';
       return `<div class="sched-bar-item" data-date="${esc(v.vote_date)}" data-uid="${esc(v.user_id)}" role="button" tabindex="0">
