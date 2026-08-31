@@ -6756,6 +6756,7 @@ html.intro-wizard-embed .club-breadcrumb,html.intro-wizard-embed .page-mini-hero
 .intro-wizard-nav .intro-submit-msg{grid-column:1/-1;margin:0;}
 .intro-wizard-prev{min-height:42px;border:1px solid var(--line-soft);border-radius:10px;background:#fff;color:var(--text-dark);}
 .intro-wizard-next,.intro-wizard-save{min-height:42px;padding:8px;}
+.intro-wizard-nav:has(.intro-wizard-prev[hidden]) .intro-wizard-next{grid-column:2;}
 .intro-wizard-save{grid-column:2;}
 .intro-reward-note{
   display:flex;
