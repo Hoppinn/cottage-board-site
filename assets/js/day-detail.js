@@ -70,7 +70,7 @@
     }
     .dd-meeting-header .dd-x-btn:hover { color: var(--green); background: #f5ede3; }
     .dd-meeting-modal { display: flex; flex-direction: column; width: min(88vw, 440px); height: min(72dvh, 440px); max-height: calc(100dvh - 32px); }
-    .dd-meeting-modal .dd-modal-scroll { flex: 1 1 auto; min-height: 0; max-height: none; padding-bottom: 32px; }
+    .dd-meeting-modal .dd-modal-scroll { flex: 1 1 auto; min-height: 0; max-height: none; padding: 10px 20px 32px; }
     .dd-close-btn {
       background: #ede8e0; border: none; border-radius: 20px;
       padding: 6px 24px; font-size: 13px; cursor: pointer;
@@ -187,7 +187,8 @@
 
     /* ── 날짜 전체 모임 상세 — 인원 조율 + 참여자별 ── */
     .dd-meeting-section { margin-top: 16px; }
-    .dd-meeting-modal .dd-modal-scroll > .dd-meeting-section:first-child { margin-top: 4px; }
+    .dd-meeting-modal .dd-modal-scroll > .dd-meeting-section:first-child { margin-top: 0; }
+    .dd-meeting-modal .dd-modal-scroll > .dd-meeting-section:first-child .game-coordination-summary { margin-top: 6px; }
     .dd-meeting-section-title { margin: 0 0 8px; font-size: 14px; font-weight: 800; color: var(--text); }
     .dd-participant-list { display: grid; gap: 8px; }
     .dd-participant-head { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
@@ -199,7 +200,6 @@
     }
     .dd-participant-card .dd-modal-nick { margin-bottom: 3px; min-width: 0; }
     .dd-participant-card .dd-time { margin-bottom: 0; text-align: right; flex-shrink: 0; }
-    .dd-participant-head + .dd-context-block { margin-top: 8px; }
     .dd-participant-card .dd-context-block {
       margin: 0;
       padding: 0;
@@ -207,6 +207,7 @@
       border-radius: 0;
       background: transparent;
     }
+    .dd-participant-card .dd-participant-head + .dd-context-block { margin-top: 12px; }
     .dd-participant-card .dd-context-block + .dd-context-block {
       margin-top: 8px;
       padding-top: 8px;

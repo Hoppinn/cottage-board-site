@@ -178,6 +178,8 @@ sticky·scroll·bottom sheet·fixed header·iframe sheet·border-radius·overflo
 4. **같은 선택자를 2번 이상 건드려도 안 되면 값 추측을 멈춘다.** DevTools 런타임 값으로 확인 후 수정.
 5. **커밋 전 diff에서 의도 밖 선택자가 바뀌었는지 선택자 이름까지 확인한다.**
 
+6. **2026-08-31 사례 — 수치 변경이 화면에 반영되지 않는 경우에는 box model과 cascade를 먼저 대조한다.** 하위 보드 헤더는 `min-height`에 세로 `padding`이 더해지는 `content-box`라 목표값보다 실제 높이가 컸고, 참여자 카드 간격은 뒤에서 더 구체적인 `.dd-participant-card .dd-context-block { margin: 0; }`에 덮였다. 모달 시작 여백도 섹션 margin 하나가 아니라 스크롤 컨테이너 padding과 첫 조율 박스 margin이 합쳐진 값이었다. 따라서 반복 패치 전 `box-sizing`, 계산된 `height/padding/margin`, 매칭 규칙 순서를 확인하고, 필요한 경우 컨테이너·자식의 실제 합산 경계를 함께 수정한다.
+
 ## 10. 닫기 애니메이션·show-then-hide 깜빡임 (2026-07-18 교훈)
 
 "열 땐 멀쩡한데 **닫을 때 뭔가 한 프레임 켜졌다 꺼지는**" 깜빡임의 두 원인. 실제 사고: 홈 플래너 빠른진입 모달을 닫으면 플래너가 순간 떴다 사라짐(1차 수정 실패 후 2차에 규명, 커밋 511c15e).

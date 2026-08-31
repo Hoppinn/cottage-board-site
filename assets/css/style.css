@@ -4416,7 +4416,7 @@ html:has(body.embed-mode) { scroll-padding-top: 0; }
 .profile-panel-box{background:#fff;border-radius:18px;width:100%;max-width:480px;padding:0 20px 0;height:calc(100vh - 48px);height:calc(100dvh - 48px);max-height:calc(100vh - 48px);max-height:calc(100dvh - 48px);overflow:hidden;display:flex;flex-direction:column;margin:0 10px 16px;}
 .profile-panel-box{position:relative;}
 .profile-panel-body{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;padding-bottom:32px;margin-right:-20px;padding-right:20px;}
-.profile-panel-header{display:flex;align-items:center;justify-content:space-between;margin:0 -20px 0;position:sticky;top:0;z-index:5;background:#fff;padding:8px 20px;min-height:44px;border-bottom:1px solid var(--border);cursor:pointer;}
+.profile-panel-header{display:flex;align-items:center;justify-content:space-between;margin:0 -20px 0;position:sticky;top:0;z-index:5;background:#fff;padding:8px 20px;min-height:44px;box-sizing:border-box;border-bottom:1px solid var(--border);cursor:pointer;}
 .profile-panel-title{font-size:14px;font-weight:700;color:var(--text);}
 .profile-panel-close{background:none;border:none;font-size:18px;color:var(--muted);cursor:pointer;padding:2px 6px;}
 .profile-panel-main-close{position:absolute;top:8px;right:14px;z-index:7;transition:opacity .16s ease,visibility .16s ease;}
@@ -4710,7 +4710,7 @@ html:has(body.embed-mode) { scroll-padding-top: 0; }
 /* 이번달 참여일정 / 모임 보드 카드 */
 .profile-card-schedule{display:block;font-size:10px;color:var(--green,#3a7d44);margin-top:4px;line-height:1.6;}
 .profile-card--span2{grid-column:span 2;}
-.profile-card-grid .profile-card--span2{flex-direction:row;align-items:center;gap:9px;min-height:0;padding:6px 14px;}
+.profile-card-grid .profile-card--span2{flex-direction:row;align-items:center;gap:9px;min-height:0;padding:3px 14px;}
 .profile-card-grid .profile-card--span2 .profile-card-icon{font-size:16px;}
 .profile-card-grid .profile-card--span2 .profile-card-label{flex-shrink:0;}
 .profile-card-grid .profile-card--span2 .profile-card-summary{margin-top:0;margin-left:auto;text-align:right;}
@@ -5042,7 +5042,7 @@ html:has(body.embed-mode) { scroll-padding-top: 0; }
 /* 서브시트 (profile-subsheet) — profile 전용, gameSheet 계열과 무관 */
 .profile-subsheet{position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:var(--z-subsheet);display:flex;align-items:flex-end;justify-content:center;}
 .profile-subsheet-box{background:#fff;border-radius:18px;width:100%;max-width:480px;height:calc(100vh - 48px);height:calc(100dvh - 48px);display:flex;flex-direction:column;overflow:hidden;margin:0 10px 16px;}
-.profile-subsheet-header{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;padding:8px 20px;min-height:44px;border-bottom:1px solid var(--border);flex-shrink:0;background:#fff;cursor:pointer;}
+.profile-subsheet-header{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;padding:8px 20px;min-height:44px;box-sizing:border-box;border-bottom:1px solid var(--border);flex-shrink:0;background:#fff;cursor:pointer;}
 .profile-subsheet-back{justify-self:start;min-width:0;max-width:100%;overflow:visible;text-overflow:ellipsis;white-space:nowrap;background:none;border:none;font-size:13px;font-weight:600;color:var(--green);cursor:pointer;padding:2px 8px 2px 0;}
 .profile-subsheet-back-identity{display:flex;align-items:center;gap:6px;width:100%;min-width:0;max-width:100%;overflow:visible;}
 .profile-subsheet-back-arrow{font-size:18px;line-height:1;flex-shrink:0;}
