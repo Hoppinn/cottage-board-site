@@ -7,10 +7,9 @@
     /* ── 모달 오버레이 ── */
     .dd-overlay {
       position: fixed; inset: 0; z-index: 9200;
-      background: rgba(0,0,0,0.45);
       display: flex; align-items: center; justify-content: center;
-      padding: 20px;
     }
+    .dd-overlay--compact { background: rgba(0,0,0,0.45); padding: 20px; }
     /* 이날모임 상세 전용 — 보드(--z-profile 9100)가 이 위에 겹쳐 뜨고 보드를 닫으면
        이 모달이 그대로 남아야 하므로 9100 아래에 둔다. 헤더(1000)·게임시트(9500)·
        플래너(--z-shelf 9600)는 전부 위라 영향 없음. .dd-overlay 뒤에 와야 이긴다.
@@ -20,10 +19,10 @@
     .dd-modal {
       background: var(--paper, #fffaf0);
       border-radius: 16px;
-      width: 100%; max-width: 300px;
       overflow: hidden;             /* border-radius 클리핑 */
       position: relative;           /* 우상단 ✕ 앵커 */
     }
+    .dd-modal--compact { width: 100%; max-width: 300px; }
     .dd-x-btn {
       position: absolute; top: 8px; right: 10px; z-index: 2;
       background: none; border: none; padding: 4px 6px;
@@ -59,8 +58,9 @@
     }
     .dd-meeting-header {
       display: flex; align-items: center; justify-content: space-between;
-      flex-shrink: 0;
-      padding: 9px 12px;
+      flex: 0 0 48px;
+      box-sizing: border-box;
+      padding: 10px 16px;
       border-bottom: 1px solid var(--line, #e5ddd2);
       background: var(--paper, #fffaf0);
     }
@@ -75,6 +75,8 @@
     .dd-meeting-header .dd-close-btn:hover { color: var(--green); background: #f5ede3; }
     .dd-meeting-modal .dd-planner-btn { flex: 1; }
     .dd-meeting-modal .dd-close-row .dd-close-btn { padding-inline: 18px; }
+    .dd-meeting-modal { display: flex; flex-direction: column; }
+    .dd-meeting-modal .dd-modal-scroll { flex: 1; min-height: 0; max-height: none; }
     .dd-close-btn {
       background: #ede8e0; border: none; border-radius: 20px;
       padding: 6px 24px; font-size: 13px; cursor: pointer;
@@ -176,16 +178,17 @@
     }
 
     /* ── 개인 일정 — want 게임 ⭐ 토글 ── */
-    .dd-game-list--editable li { display: flex; align-items: center; justify-content: space-between; }
+    .dd-game-list--editable li { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; }
+    .dd-game-row--readonly { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; }
     /* 아이콘+이름을 한 flex item으로, select+별을 한 flex item으로 — 이름이 텍스트 노드로
        li에 바로 들어가면 아이콘과 별개 item이 돼 justify-content:space-between이 넷을
        흩어놓는다(2026-07-28 실측). min-width:0로 긴 이름도 컨트롤 폭을 안 밀어내게. */
-    .dd-game-name-wrap { min-width: 0; }
-    .dd-game-controls { display: flex; align-items: center; gap: 2px; flex-shrink: 0; }
+    .dd-game-name-wrap { flex: 1 1 auto; min-width: 0; line-height: 1.45; overflow-wrap: anywhere; }
+    .dd-game-controls { display: flex; align-items: center; gap: 2px; flex-shrink: 0; align-self: center; }
     .dd-star-btn { background: none; border: none; font-size: 14px; cursor: pointer; padding: 0 2px; flex-shrink: 0; }
     .dd-star-notice { font-size: 11px; color: var(--muted, #9e8e7e); margin: 4px 0 0; }
-    .dd-cond-select { appearance: none; -webkit-appearance: none; -moz-appearance: none; font-size: 11px; padding: 1px 14px 1px 5px; border-radius: 10px; border: 1px solid #ede8e0; background: #f0ece6 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='7' height='7' viewBox='0 0 8 8'%3E%3Cpath d='M1 2l3 3 3-3' stroke='%239e8e7e' stroke-width='1.3' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") no-repeat right 3px center; background-size: 7px 7px; color: var(--muted, #9e8e7e); cursor: pointer; flex-shrink: 0; }
-    .dd-cond-tag { font-size: 11px; color: var(--muted, #9e8e7e); font-weight: 400; }
+    .dd-cond-select { appearance: none; -webkit-appearance: none; -moz-appearance: none; font-size: 11px; padding: 2px 14px 2px 5px; border-radius: 10px; border: 1px solid #ede8e0; background: #f0ece6 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='7' height='7' viewBox='0 0 8 8'%3E%3Cpath d='M1 2l3 3 3-3' stroke='%239e8e7e' stroke-width='1.3' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") no-repeat right 3px center; background-size: 7px 7px; color: var(--muted, #9e8e7e); cursor: pointer; flex-shrink: 0; white-space: nowrap; }
+    .dd-cond-tag { font-size: 11px; color: var(--muted, #9e8e7e); font-weight: 400; flex-shrink: 0; align-self: center; white-space: nowrap; }
 
     /* ── 날짜 전체 모임 상세 — 게임 조율 + 참여자별 ── */
     .dd-meeting-section { margin-top: 16px; }
@@ -216,16 +219,7 @@
     .dd-participant-card .dd-context-chip { min-height: 20px; padding: 2px 6px; font-size: 10.5px; }
     .dd-participant-card .dd-section { margin-bottom: 4px; }
     .dd-participant-card .dd-section-label { margin-bottom: 2px; }
-    .dd-participant-edit { margin-top: 8px; border-top: 1px solid rgba(229, 221, 210, .8); padding-top: 7px; }
-    .dd-participant-edit > summary {
-      display: inline-flex; align-items: center;
-      padding: 0;
-      background: none; color: var(--green); font-size: 12px; font-weight: 700;
-      cursor: pointer; list-style: none;
-    }
-    .dd-participant-edit > summary::-webkit-details-marker { display: none; }
-    .dd-participant-edit-body { padding-top: 7px; }
-    .dd-participant-edit-help { margin: 7px 0 0; font-size: 11px; line-height: 1.45; color: var(--muted); }
+    .dd-participant-card .dd-game-list--editable li { padding: 2px 0; }
 
     /* ── 막대 공용 CSS (주간 카드 + 홈 미리보기) ── */
     .sched-bar-axis {
@@ -428,7 +422,8 @@
     }
     .dd-roulette-open-btn:active { background: #ede5d8; }
     .dd-roulette-panel {
-      overflow-y: auto; max-height: 80svh;
+      flex: 1; min-height: 0;
+      overflow-y: auto; max-height: none;
       padding: 16px 20px 4px;
     }
     .dd-roulette-wheel-wrap {
@@ -716,8 +711,8 @@
     return statsHtml;
   }
 
-  /** 게임 섹션 HTML — isMine이면 ⭐/인원조건 select 편집 컨트롤 포함, 아니면 읽기전용 */
-  function _buildSchedGameSection(gameObjs, icon, label, isMine) {
+  /** 게임 섹션 HTML — 본인 일정은 대표/인원 편집, 이날 상세 본인 카드는 인원만 편집한다. */
+  function _buildSchedGameSection(gameObjs, icon, label, isMine, conditionOnly = false) {
         if (!gameObjs.length) return '';
         const items = gameObjs.map(g => {
           const name = esc(resolveGameName(g));
@@ -731,7 +726,6 @@
             ? `<span class="dd-game-hit" data-game-id="${esc(String(g.game_id))}">${hitTarget}</span>${rest}`
             : `${thumb}${name}`;
           if (isMine) {
-            const star = g.is_priority ? '⭐' : '☆';
             const curCond = g.player_condition || 'any';
             // 옵션 텍스트 자체를 게임별 해석 라벨로(베스트→"베스트 3인", 3인→"3인") → 별도 태그 없이 select 하나로 통합
             const _optLabel = (v) => v === 'any' ? '무관' : (window.formatCondLabel?.(v, g.game_id) || COND_LABELS[v]);
@@ -744,12 +738,13 @@
             //    이름 뒤에 큰 빈 칸이 생기고 select가 오른쪽 끝으로 쏠려 짧은 이름일수록
             //    "가운데 떠 있는" 것처럼 보였다(2026-07-28 사용자 스크린샷으로 확인).
             //    이름·아이콘을 한 덩어리로, select·별을 한 덩어리로 묶어 flex item을 2개로 줄인다.
-            return `<li><span class="dd-game-name-wrap">${hit}</span><span class="dd-game-controls"><select class="dd-cond-select" style="width:${selWidth}" data-key="${esc(key)}" data-listtype="${g.list_type}" data-gameid="${esc(String(g.game_id ?? ''))}" aria-label="인원 조건">${selectOpts}</select><button class="dd-star-btn" data-key="${esc(key)}" data-listtype="${g.list_type}" data-priority="${g.is_priority}" type="button" aria-label="대표 게임 지정">${star}</button></span></li>`;
+            const priorityHtml = conditionOnly ? '' : `<button class="dd-star-btn" data-key="${esc(key)}" data-listtype="${g.list_type}" data-priority="${g.is_priority}" type="button" aria-label="대표 게임 지정">${g.is_priority ? '⭐' : '☆'}</button>`;
+            return `<li><span class="dd-game-name-wrap">${hit}</span><span class="dd-game-controls"><select class="dd-cond-select" style="width:${selWidth}" data-key="${esc(key)}" data-listtype="${g.list_type}" data-gameid="${esc(String(g.game_id ?? ''))}" aria-label="희망 플레이 인원">${selectOpts}</select>${priorityHtml}</span></li>`;
           }
           const cond = g.player_condition || 'any';
           const cgEntry = g.game_id ? window.COTTAGE_GAMES?.find(c => c.bggId === String(g.game_id)) : null;
           const cl = condLabel(cond, cgEntry);
-          return `<li>${hit}${cl ? ` <span class="dd-cond-tag">(${esc(cl)})</span>` : ''}</li>`;
+          return `<li class="dd-game-row--readonly"><span class="dd-game-name-wrap">${hit}</span>${cl ? `<span class="dd-cond-tag">${esc(cl)}</span>` : ''}</li>`;
         }).join('');
         const ulCls = isMine ? 'dd-game-list dd-game-list--editable' : 'dd-game-list';
         return `<div class="dd-section">
@@ -830,7 +825,7 @@
     document.getElementById('__ddModal')?.remove();
     const el = document.createElement('div');
     el.id = '__ddModal';
-    el.className = 'dd-overlay';
+    el.className = 'dd-overlay dd-overlay--compact';
 
     let _schedDirty = false;
     let _latestMyGames = null;
@@ -841,7 +836,7 @@
     };
 
     const renderModal = (bodyHtml) => {
-      el.innerHTML = `<div class="dd-modal" role="dialog" aria-modal="true">
+      el.innerHTML = `<div class="dd-modal dd-modal--compact" role="dialog" aria-modal="true">
         <div class="dd-modal-scroll">${bodyHtml}</div>
         <div class="dd-close-row">
           <button class="dd-close-btn" type="button">닫기</button>
@@ -906,8 +901,8 @@
     document.getElementById('__ddModal')?.remove();
     const el = document.createElement('div');
     el.id = '__ddModal';
-    el.className = 'dd-overlay';
-    el.innerHTML = `<div class="dd-modal" role="dialog" aria-modal="true">
+    el.className = 'dd-overlay dd-overlay--compact';
+    el.innerHTML = `<div class="dd-modal dd-modal--compact" role="dialog" aria-modal="true">
       <div class="dd-modal-scroll">
         <div class="dd-modal-nick">${esc(opts.nickname)}</div>
         ${window.renderDayDetailHTML(opts)}
@@ -936,7 +931,7 @@
     document.getElementById('__ddModal')?.remove();
     const el = document.createElement('div');
     el.id = '__ddModal';
-    el.className = 'dd-overlay';
+    el.className = 'dd-overlay dd-overlay--compact';
     const dObj = new Date(dateStr + 'T00:00:00');
     const DOW = ['일', '월', '화', '수', '목', '금', '토'];
     const dateLabel = `${dObj.getMonth() + 1}/${dObj.getDate()}(${DOW[dObj.getDay()]})`;
@@ -944,7 +939,7 @@
     const barsHtml = (window.buildBarsInCard && dayVotes && dayVotes.length)
       ? window.buildBarsInCard(dayVotes, dayGames || [], myVote || null)
       : '<p class="dd-loading">이 날 등록된 일정이 없어요.</p>';
-    el.innerHTML = `<div class="dd-modal dd-preview" role="dialog" aria-modal="true">
+    el.innerHTML = `<div class="dd-modal dd-modal--compact dd-preview" role="dialog" aria-modal="true">
       <button class="dd-x-btn" type="button" aria-label="닫기">✕</button>
       <div class="dd-modal-scroll">
         <div class="dd-preview-head">📅 ${esc(dateLabel)} · ${count}명</div>
@@ -1219,27 +1214,17 @@
         _buildSchedGameSection(wantGames, '🎲', '하고 싶은 게임', false),
         _buildSchedGameSection(learnGames, '📖', '배우고 싶은 게임', false),
       ].join('');
-      const editableGamesHtml = [
-        _buildSchedGameSection(wantGames, '🎲', '하고 싶은 게임', true),
-        _buildSchedGameSection(learnGames, '📖', '배우고 싶은 게임', true),
-      ].join('');
-      const todayGamesHtml = readOnlyGamesHtml;
-      const editHtml = isMine
-        ? `<details class="dd-participant-edit">
-            <summary>조율 수정 ›</summary>
-            <div class="dd-participant-edit-body">
-              ${editableGamesHtml || '<p class="dd-context-empty">선택한 게임이 없어요.</p>'}
-              <p class="dd-star-notice" style="display:none"></p>
-              <p class="dd-participant-edit-help">별은 대표 게임(최대 2개), 인원 메뉴는 희망 플레이 인원이에요.</p>
-            </div>
-          </details>`
-        : '';
+      const todayGamesHtml = isMine
+        ? [
+            _buildSchedGameSection(wantGames, '🎲', '하고 싶은 게임', true, true),
+            _buildSchedGameSection(learnGames, '📖', '배우고 싶은 게임', true, true),
+          ].join('')
+        : readOnlyGamesHtml;
       return `<article class="dd-participant-card">
         <div class="dd-modal-nick">${esc(v.nickname)}</div>
         <div class="dd-time">${window.formatVoteHour(v.time_start)}~${window.formatVoteHour(v.time_end)}${partyCount([v]) > 1 ? ` · ${partyCount([v]) - 1}명 동반` : ''}</div>
         ${_buildUsualContextHtml(profileByUserId.get(String(v.user_id)))}
         ${_buildTodayContextHtml(v, todayGamesHtml, '')}
-        ${editHtml}
       </article>`;
     }).join('');
     return participantsBody;
@@ -1447,7 +1432,7 @@
     document.getElementById('__ddModal')?.remove();
     const el = document.createElement('div');
     el.id = '__ddModal';
-    el.className = 'dd-overlay dd-overlay--under-board';
+    el.className = 'dd-overlay dd-overlay--under-board planner-modal-overlay is-open';
 
     const uniqueVotes = [...new Map(votes.map(v => [String(v.user_id), v])).values()];
 
@@ -1484,7 +1469,7 @@
         </div>`
       : '';
 
-    el.innerHTML = `<div class="dd-modal dd-meeting-modal" role="dialog" aria-modal="true">
+    el.innerHTML = `<div class="dd-modal dd-meeting-modal planner-modal-box" role="dialog" aria-modal="true">
       <div class="dd-meeting-header">
         <div class="dd-meeting-header-title">${fmtDate(voteDate)} 모임 상세</div>
         <button class="dd-close-btn" type="button">닫기</button>
@@ -1506,7 +1491,7 @@
     const profileByUserId = new Map(profileEntries);
     const participantsBody = _buildParticipantsHtml(uniqueVotes, voteGames, profileByUserId, user?.id);
 
-    el.innerHTML = `<div class="dd-modal dd-meeting-modal" role="dialog" aria-modal="true">
+    el.innerHTML = `<div class="dd-modal dd-meeting-modal planner-modal-box" role="dialog" aria-modal="true">
       <div class="dd-meeting-header">
         <div class="dd-meeting-header-title">${fmtDate(voteDate)} 모임 상세</div>
         <button class="dd-close-btn" type="button">닫기</button>
