@@ -58,9 +58,11 @@ check('메인 모임 카드도 같은 가까운 미래 범위 사용', src.inclu
   && src.includes('getMeetingVotes?.(_upcomingStart, _upcomingEnd)')
   && src.includes('getMeetingVoteGames?.(_upcomingStart, _upcomingEnd)')
   && !src.includes('_monthStart'));
-check('메인 카드는 날짜와 distinct 게임 수만 안전하게 요약', card.includes("_countCardGames('want')")
-  && card.includes("_countCardGames('learn')") && card.includes('다가오는 일정 ${_myVoteDates.length}건')
-  && !card.includes('game_style') && !card.includes('game_depth'));
+check('메인 카드는 예정 참여와 당일 참여 정보를 압축해 요약', card.includes('_meetingWeekLabel')
+  && card.includes('다가오는 참여') && card.includes('_meetingStyles')
+  && card.includes('_meetingGamesByType') && card.includes('recruitment_message')
+  && !card.includes('가까운 일정 준비하기') && !card.includes('다가오는 일정 ${_myVoteDates.length}건')
+  && !card.includes('_profileSummaryItems'));
 
 console.log(failures ? `\nFAIL ${failures}` : (NEG ? '\nNEGATIVE CONTROL PASS' : '\nALL PASS'));
 process.exit(failures ? 1 : 0);

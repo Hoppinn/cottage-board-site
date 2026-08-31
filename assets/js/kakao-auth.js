@@ -2465,27 +2465,74 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
   ].filter(Boolean);
   const _statsSummary = _summaryParts.length ? _summaryParts.join(' · ') : '활동 없음';
 
-  // 모임 카드도 모임 보드와 같은 가까운 미래 범위를 쓴다. 날짜별 판 성향은 서로 다를 수
-  // 있으므로 하나로 합성하지 않고 일정 날짜와 날짜별 게임의 distinct 개수만 요약한다.
-  const _myVoteDates = [...new Set((_upcomingCardVotes || [])
+  // 모임 카드도 모임 보드와 같은 가까운 미래 범위를 쓴다. 날짜별 vote의 실제 참여
+  // 정보(meeting_votes)와 날짜별 게임(meeting_vote_games)을 한 장의 짧은 요약으로 압축한다.
+  // 평소 프로필 값은 여기서 읽지 않는다 — 프로필 보드의 다른 영역과 중복되기 때문이다.
+  const _myUpcomingVotes = (_upcomingCardVotes || [])
     .filter(v => String(v.user_id) === String(user.id))
-    .map(v => v.vote_date))].sort();
-  const _myCardGames = (_upcomingCardGames || []).filter(g => String(g.user_id) === String(user.id));
-  const _countCardGames = listType => new Set(_myCardGames
-    .filter(g => g.list_type === listType)
-    .map(g => g.game_id != null ? `id:${g.game_id}` : `cn:${String(g.custom_name || '').toLocaleLowerCase('ko-KR')}`))
-    .size;
-  const _wantCardCount = _countCardGames('want');
-  const _learnCardCount = _countCardGames('learn');
-  let _scheduleHtml = '';
-  if (_myVoteDates.length) {
-    const _days = '일월화수목금토';
-    const _fmtDate = ds => { const d = new Date(`${ds}T00:00:00`); return `${d.getMonth()+1}/${d.getDate()}(${_days[d.getDay()]})`; };
-    const _showDates = _myVoteDates.slice(0, 2).map(_fmtDate);
-    const _extra = _myVoteDates.length - 2;
-    const _dateLine = `${_showDates.join(' · ')}${_extra > 0 ? ` 외 ${_extra}건` : ''} 참여 가능`;
-    const _gameLine = [`하고 싶은 게임 ${_wantCardCount}`, `배우고 싶은 게임 ${_learnCardCount}`].join(' · ');
-    _scheduleHtml = `<span class="profile-card-schedule">다가오는 일정 ${_myVoteDates.length}건<br>${escH(_dateLine)}<br>${escH(_gameLine)}</span>`;
+    .sort((a, b) => String(a.vote_date).localeCompare(String(b.vote_date)));
+  const _myUpcomingGames = (_upcomingCardGames || [])
+    .filter(g => String(g.user_id) === String(user.id));
+  const _meetingStyleLabels = { party: '파티', strategy: '전략', any: '게임 유형 무관', other: '기타' };
+  const _meetingDepthLabels = { light: '가볍게', medium: '적당히', deep: '깊게' };
+  const _meetingTraitLabels = { beginner_welcome: '초보 환영', new_game_ok: '새 게임 가능', hard_game_learning_ok: '어려운 게임도 배워보고 싶어요' };
+  const _meetingGameName = game => {
+    const rawId = game?.game_id != null ? String(game.game_id).replace(/^#/, '') : '';
+    const cottageGame = rawId && window.COTTAGE_GAMES?.find(g => String(g.bggId) === rawId || String(g.id) === rawId);
+    if (cottageGame) return cottageGame.display;
+    const gameKey = rawId ? (_getGameKeyById(rawId) || rawId) : '';
+    const gameData = gameKey ? window.gameData?.[gameKey] : null;
+    return gameData ? (gameData.title?.display || gameData.title?.owned || gameData.title?.bgg || gameKey) : (game?.custom_name || rawId);
+  };
+  const _meetingWeekLabel = dateStr => {
+    const date = new Date(`${dateStr}T00:00:00`);
+    const today = new Date(); today.setHours(0, 0, 0, 0);
+    const monday = new Date(today);
+    const day = monday.getDay();
+    monday.setDate(monday.getDate() - (day === 0 ? 6 : day - 1));
+    const diffWeeks = Math.floor((date.getTime() - monday.getTime()) / (7 * 86400000));
+    return diffWeeks <= 0 ? '이번 주' : diffWeeks === 1 ? '다음 주' : `${diffWeeks}주 후`;
+  };
+  const _upcomingWeekCounts = [];
+  const _weekCountMap = new Map();
+  _myUpcomingVotes.forEach(v => {
+    const key = _meetingWeekLabel(v.vote_date);
+    _weekCountMap.set(key, (_weekCountMap.get(key) || 0) + 1);
+  });
+  _weekCountMap.forEach((count, label) => _upcomingWeekCounts.push(`${label} ${count}회`));
+  const _uniqueMeetingValues = values => [...new Set(values.filter(Boolean))];
+  const _meetingStyles = _uniqueMeetingValues(_myUpcomingVotes.flatMap(v => [
+    v.game_style === 'other' ? v.game_style_custom : _meetingStyleLabels[v.game_style],
+    _meetingDepthLabels[v.game_depth],
+    ...(v.play_traits || []).map(trait => _meetingTraitLabels[trait]),
+  ])).slice(0, 4);
+  const _meetingGamesByType = listType => {
+    const seen = new Set();
+    return _myUpcomingGames.filter(g => g.list_type === listType).filter(g => {
+      const key = g.game_id != null ? `id:${g.game_id}` : `cn:${String(g.custom_name || '').trim().toLocaleLowerCase('ko-KR')}`;
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    });
+  };
+  const _meetingGameLine = (listType, label) => {
+    const games = _meetingGamesByType(listType);
+    if (!games.length) return '';
+    const shown = games.slice(0, 3).map(_meetingGameName).filter(Boolean);
+    const extra = games.length - shown.length;
+    return `<div class="profile-card-meeting-line"><span class="profile-card-meeting-label">${label}</span><span class="profile-card-meeting-games">${shown.map(escH).join(' · ')}${extra > 0 ? ` 외 ${extra}개` : ''}</span></div>`;
+  };
+  const _meetingMessages = _uniqueMeetingValues(_myUpcomingVotes.map(v => String(v.recruitment_message || '').trim()));
+  let _scheduleHtml = '<span class="profile-card-meeting-empty">아직 예정된 모임이 없어요</span>';
+  if (_myUpcomingVotes.length) {
+    const _styleHtml = _meetingStyles.length
+      ? `<div class="profile-card-meeting-tags">${_meetingStyles.map(label => `<span>${escH(label)}</span>`).join('')}</div>`
+      : '';
+    const _gameHtml = [_meetingGameLine('want', '하고 싶은 게임'), _meetingGameLine('learn', '배우고 싶은 게임')].filter(Boolean).join('');
+    const _messageHtml = _meetingMessages.length
+      ? `<div class="profile-card-meeting-line"><span class="profile-card-meeting-label">한마디</span><span class="profile-card-meeting-games">${escH(_meetingMessages[0].length > 28 ? `${_meetingMessages[0].slice(0, 28)}…` : _meetingMessages[0])}</span></div>`
+      : '';
+    _scheduleHtml = `<span class="profile-card-schedule"><span class="profile-card-meeting-heading">다가오는 참여</span><span class="profile-card-meeting-weeks">${escH(_upcomingWeekCounts.join(' · '))}</span>${_styleHtml}${_gameHtml}${_messageHtml}</span>`;
   }
 
   // 그룹 요약용 카운트 추출 — regex 실패 시 0 fallback
@@ -2972,7 +3019,7 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
       <button class="profile-card" data-subsheet="meeting" type="button">
         <span class="profile-card-icon">📅</span>
         <span class="profile-card-label">모임 보드 <span class="profile-card-label-chevron" aria-hidden="true">›</span></span>
-        <span class="profile-card-summary">${_ro('<span class="profile-card-meeting-cta">가까운 일정 준비하기</span>')}${_scheduleHtml || `<span class="profile-card-meeting-empty">아직 등록한 일정이 없어요</span>`}</span>
+        <div class="profile-card-summary">${_scheduleHtml}</div>
       </button>
       <button class="profile-card" data-subsheet="records" type="button">
         <span class="profile-card-icon">📝</span>
