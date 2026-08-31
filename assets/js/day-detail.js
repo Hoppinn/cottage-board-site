@@ -452,6 +452,7 @@
       box-shadow: 0 2px 8px rgba(0,0,0,0.12);
       overflow: hidden;
     }
+    .dd-roulette-empty { display:flex; align-items:center; justify-content:center; width:100%; height:100%; padding:16px; box-sizing:border-box; text-align:center; font-size:12px; color:var(--muted,#9e8e7e); }
     .dd-roulette-chips {
       display: flex; flex-wrap: wrap; gap: 6px;
       justify-content: center; margin-bottom: 12px;
@@ -1173,13 +1174,14 @@
     return window.COTTAGE_GAME_ABBR_BY_NAME?.[pureName] || pureName.slice(0, 2);
   }
 
-  /** 룰렛 후보 목록: want 게임 중복 제거 + 약칭 해석 → [{key, name, abbr}] */
+  /** 룰렛 후보 목록: want/learn 게임 중복 제거 + 약칭 해석 → [{key, name, abbr}] */
   function _buildRouletteGames(voteGames) {
-    const wantGameMap = new Map();
+    const gameMap = new Map();
     voteGames.forEach(g => {
-      if (g.list_type !== 'want') return;
-      const key = g.game_id ? `id:${g.game_id}` : `n:${g.custom_name}`;
-      if (!wantGameMap.has(key)) {
+      if (g.list_type !== 'want' && g.list_type !== 'learn') return;
+      const key = g.game_id ? `id:${g.game_id}` : `n:${String(g.custom_name || '').trim()}`;
+      if (key === 'n:') return;
+      if (!gameMap.has(key)) {
         const name = resolveGameName(g);
         const pureName = name.replace(/^#/, '');
         let abbr = _resolveNameAbbr(pureName);
@@ -1190,10 +1192,10 @@
           const cg = window.COTTAGE_GAMES.find(c => c.display === pureName || c.titleKo === pureName);
           if (cg) abbr = cg.abbr || (cg.titleKo || cg.display || pureName).slice(0, 2);
         }
-        wantGameMap.set(key, { name, abbr });
+        gameMap.set(key, { name, abbr });
       }
     });
-    const rouletteGames = [...wantGameMap.entries()].map(([key, { name, abbr }]) => ({ key, name, abbr }));
+    const rouletteGames = [...gameMap.entries()].map(([key, { name, abbr }]) => ({ key, name, abbr }));
     return rouletteGames;
   }
 
@@ -1273,7 +1275,11 @@
       function buildWheel() {
         const active = state.filter(g => g.active);
         const n = active.length;
-        if (!n) return;
+        if (!n) {
+          wheelEl.innerHTML = '<span class="dd-roulette-empty">게임을 추가하면 룰렛을 돌릴 수 있어요.</span>';
+          wheelEl.style.background = '';
+          return;
+        }
         const cx = 70, cy = 70, r = 70, textR = 45;
         const toRad = deg => (deg - 90) * Math.PI / 180;
         const fs = n <= 3 ? 11 : n <= 6 ? 9 : 7;
@@ -1469,11 +1475,8 @@
       ? '<button class="dd-planner-btn" type="button">플래너에서 등록하기</button>'
       : '';
 
-    const rouletteBtnHtml = rouletteGames.length >= 2
-      ? '<button class="dd-roulette-open-btn" type="button">🎡 룰렛으로 정하기 ›</button>'
-      : '';
-    const roulettePanelHtml = rouletteGames.length >= 2
-      ? `<div class="dd-roulette-panel" id="__ddRoulettePanel" style="display:none">
+    const rouletteBtnHtml = '<button class="dd-roulette-open-btn" type="button">🎡 룰렛으로 정하기 ›</button>';
+    const roulettePanelHtml = `<div class="dd-roulette-panel" id="__ddRoulettePanel" style="display:none">
           <div class="dd-roulette-wheel-wrap">
             <div class="dd-roulette-ptr">▼</div>
             <div class="dd-roulette-wheel" id="__rrWheel"></div>
@@ -1485,8 +1488,7 @@
           <div class="dd-roulette-result" id="__rrResult"></div>
           <button class="dd-roulette-spin-btn" id="__rrSpin" type="button">돌리기 🎡</button>
           <button class="dd-roulette-back-btn" id="__rrBack" type="button">← 목록으로</button>
-        </div>`
-      : '';
+        </div>`;
 
     el.innerHTML = `<div class="dd-modal dd-meeting-modal planner-modal-box" role="dialog" aria-modal="true">
       <div class="dd-meeting-header">
@@ -1592,8 +1594,8 @@
       });
     });
 
-    // 룰렛 로직
-    if (rouletteGames.length >= 2) _initRouletteWidget(el, rouletteGames);
+    // 룰렛 로직 — 후보가 없어도 추가 입력이 가능한 동일 레이아웃을 유지한다.
+    _initRouletteWidget(el, rouletteGames);
     })();
   };
 

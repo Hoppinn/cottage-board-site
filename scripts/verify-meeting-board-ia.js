@@ -80,6 +80,9 @@ check('날짜 상세 진입 시 최신 게임 목록을 재조회', scheduleSrc.
   && scheduleSrc.includes('getMeetingVotes(ds, ds)'));
 check('홈 날짜 상세도 최신 게임 목록을 재조회', homeSrc.includes('getMeetingVoteGames(dateStr, dateStr)')
   && homeSrc.includes('getMeetingVotes(dateStr, dateStr)'));
+check('룰렛은 want·learn 후보와 빈 상태 레이아웃을 지원', daySrc.includes("g.list_type !== 'want' && g.list_type !== 'learn'")
+  && daySrc.includes('const rouletteBtnHtml') && daySrc.includes('dd-roulette-open-btn')
+  && daySrc.includes('dd-roulette-empty') && daySrc.includes('active.length < 2'));
 
 console.log(failures ? `\nFAIL ${failures}` : (NEG ? '\nNEGATIVE CONTROL PASS' : '\nALL PASS'));
 process.exit(failures ? 1 : 0);
