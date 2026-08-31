@@ -101,8 +101,8 @@ check('weight options and hardest-games editors are wired', boardSrc.includes('O
 check('single profile edit entry uses owner-only wrapper', boardSrc.includes('profile-board-edit-link')
   && !boardSrc.includes('평소 생활 수정 →')
   && boardSrc.includes("${_ro(`<button class=\"profile-hardest-add\"")
-  && boardSrc.includes('_openProfileIntroEditor')
-  && boardSrc.includes('?embed=1&edit=1#embed=1&edit=1'));
+  && boardSrc.includes("${_ro('<a class=\"profile-board-edit-link\" href=\"/pages/club/club-intro.html\">프로필 수정 →</a>')}")
+  && !boardSrc.includes('_openProfileIntroEditor'));
 check('profile weight editor uses a four-column responsive grid', styleSrc.includes('.profile-depth-options{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));')
   && styleSrc.includes('.profile-depth-chip{display:grid;grid-template-columns:minmax(0,1fr);')
   && styleSrc.includes('min-height:54px;'));

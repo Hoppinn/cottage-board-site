@@ -695,43 +695,10 @@ function _bindRecordSubsheet(subBody, ctx) {
           }
         }
 
-// 기존 회원소개 wizard 페이지를 iframe 센터모달로 바로 연다. 폼·저장·validation은
-// club-intro.html의 기존 구현을 그대로 쓰고, 저장 성공만 부모 보드에 알린다.
-function _openProfileIntroEditor(onSaved) {
-  document.getElementById('__profileIntroEditor')?.remove();
-  const overlay = document.createElement('div');
-  overlay.id = '__profileIntroEditor';
-  overlay.className = 'planner-modal-overlay is-open';
-  overlay.innerHTML = `<div class="planner-modal-box">
-    <button class="planner-modal-close" type="button" aria-label="닫기">✕</button>
-    <iframe class="planner-modal-frame" title="프로필 수정"></iframe>
-  </div>`;
-  const close = () => { window.removeEventListener('message', onMessage); overlay.remove(); };
-  const frame = overlay.querySelector('iframe');
-  const onMessage = event => {
-    if (event.source !== frame.contentWindow || event.data?.type !== 'cottage-profile-intro-saved') return;
-    close(); onSaved?.();
-  };
-  window.addEventListener('message', onMessage);
-  overlay.querySelector('.planner-modal-close').addEventListener('click', close);
-  overlay.addEventListener('click', event => { if (event.target === overlay) close(); });
-  const path = location.pathname.includes('/pages/') ? '../club/club-intro.html' : 'pages/club/club-intro.html';
-  frame.src = `${path}?embed=1&edit=1#embed=1&edit=1`;
-}
-
 // ── 프로필 보드 서브시트 afterRender (레거시 내부 이름 taste 유지) ──
 function _bindTasteSubsheet(subBody, ctx) {
-  const { user, readOnly, panel, _emitLikesChanged, allBioSuggestions, _BIO_PREDEFINED, _ruleSet, onBioSaved, onProfileDataSaved, resolveGameName } = ctx;
+  const { user, readOnly, _emitLikesChanged, allBioSuggestions, _BIO_PREDEFINED, _ruleSet, onBioSaved, onProfileDataSaved, resolveGameName } = ctx;
           const userId = String(user.id);
-
-          subBody.querySelector('.profile-board-edit-link')?.addEventListener('click', () => {
-            _openProfileIntroEditor(() => {
-              document.getElementById('profileSubSheet')?.remove();
-              window.popActiveView?.(panel._viewToken);
-              panel.remove();
-              openProfilePanel('taste');
-            });
-          });
 
           // ── 평소 즐기는 게임 깊이 (profiles.preferred_game_depths) ──
           subBody.querySelectorAll('.profile-depth-chip[data-depth]').forEach(btn => {
@@ -2801,7 +2768,7 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
       </div>
     </div>
     </section>`}
-    ${_ro('<button class="profile-board-edit-link" type="button">프로필 수정</button>')}`;
+    ${_ro('<a class="profile-board-edit-link" href="/pages/club/club-intro.html">프로필 수정 →</a>')}`;
   }
   // 기록 보드: 플레이기록/게임평/사진 3섹션 토글 (항상 표시, 기본 열림)
   const _openActivityList = html => html.replace('class="profile-activity-list is-collapsed"', 'class="profile-activity-list"');
