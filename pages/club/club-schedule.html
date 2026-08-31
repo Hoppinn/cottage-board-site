@@ -894,6 +894,7 @@
     let _openMultiSheet = null; // initMultiSheet에서 주입되는 외부 진입점
     let _initDone       = false;
     let _pendingRegister = null; // 홈 등록하기 버튼 → init 완료 전 도착한 date
+    let _pendingRegisterOpen = false; // 날짜 없는 참여 등록 → init 완료 전 도착한 open 요청
     let _pendingEdit     = null; // 「모임 조율」 등록/수정 버튼 → init 완료 전 도착한 date (_pendingRegister와 동일한 이유)
     // 실제 Live Server 환경에서 .html/?embed=true가 정리된 URL로 iframe이 이동할 수 있다.
     // 부모 프레임 안에서 실행 중이라는 사실 자체도 embed 판정에 포함해야 ready/date 전달이 멈추지 않는다.
@@ -2979,7 +2980,12 @@
       document.getElementById('viewWeek').style.display = '';
       renderWeekView(0);
       _initDone = true;
-      if (_pendingRegister) {
+      if (_pendingRegisterOpen) {
+        _pendingRegisterOpen = false;
+        document.body.classList.add('is-quick-entry');
+        _openMultiSheet?.({ startStep: 1 });
+        _notifySheetShown();
+      } else if (_pendingRegister) {
         const ds = _pendingRegister;
         _pendingRegister = null;
         if (ds >= toDateStr(TODAY)) {
@@ -3065,6 +3071,10 @@
           document.body.classList.add('is-quick-entry');
           _openMultiSheet?.({ startStep: 1 });
           _notifySheetShown();
+        } else {
+          // iframe은 init()의 비동기 조회가 끝나기 전에 ready를 보낸다. 날짜 없는
+          // 참여 등록도 날짜 지정 등록/수정처럼 보관하지 않으면 첫 클릭 요청이 사라진다.
+          _pendingRegisterOpen = true;
         }
         return;
       }

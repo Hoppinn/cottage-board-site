@@ -57,6 +57,9 @@ check('타인 readOnly 편집 가드 유지', src.includes("${_ro('<button class
 check('모임 등록은 등록 시트로 열고 게임 추가 버튼은 노출하지 않음', src.includes('register: true')
   && daySrc.includes('cottage-register-open') && src.includes('＋ 참여 등록')
   && !src.includes('id="meetinglikedAddBtn"') && !src.includes('id="meetingcuriousAddBtn"'));
+check('첫 참여 등록도 플래너 초기화 전 요청을 보존', scheduleSrc.includes('let _pendingRegisterOpen = false')
+  && scheduleSrc.includes('if (_pendingRegisterOpen)')
+  && scheduleSrc.includes('_pendingRegisterOpen = true'));
 check('날짜 카드별 수정·삭제 액션과 기존 삭제 API 유지', src.includes('mb-date-edit')
   && src.includes('mb-date-delete') && src.includes('deleteMeetingVote')
   && src.includes('edit: btn.dataset.date'));
