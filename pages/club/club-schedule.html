@@ -43,8 +43,10 @@
       position: sticky;
       top: 0;
       z-index: 1;
-      padding-top: 10px;
-      padding-bottom: 8px;
+      height: 49px;
+      min-height: 49px;
+      box-sizing: border-box;
+      padding: 8px 20px;
       background: var(--bg);
       border-bottom: 1px solid var(--border);
     }
@@ -839,7 +841,7 @@
 
         <!-- 주간 뷰 (Phase 1) ─ 기본 화면 -->
         <div id="viewWeek" style="display:none">
-          <div class="sched-week-nav">
+          <div class="sched-week-nav profile-fixed-header">
             <button class="sched-week-nav-btn" id="btnPrevWeek">← 이전주</button>
             <span class="sched-week-title" id="weekTitle"></span>
             <button class="sched-week-nav-btn" id="btnNextWeek">다음주 →</button>
