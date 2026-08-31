@@ -116,6 +116,7 @@ async function runLive() {
     check(firstVouchers.length === 1 && firstVouchers[0].delta === 1, '최초 쿠폰 원장 행 수/증분 불일치');
 
     const secondAnswers = {...firstAnswers, expectation:'같은 계정의 재저장과 쿠폰 중복 방지를 확인합니다.', preferredGameTypes:['party','재저장 유형']};
+    secondAnswers.availableDays = ['sat','sun','holiday','flexible'];
     const second = await db.rpc('submit_member_intro', rpcPayload(userId, secondAnswers));
     if (second.error) throw second.error;
     const secondRow = second.data?.[0];
@@ -124,11 +125,16 @@ async function runLive() {
     const { data:secondVouchers, error:secondVoucherError } = await db.from('voucher_log')
       .select('id').eq('user_id', userId).eq('reason', 'intro_complete');
     if (secondVoucherError) throw secondVoucherError;
+    const { data:holidaySaved, error:holidaySavedError } = await db.from('member_intros')
+      .select('available_days').eq('user_id', userId).single();
+    if (holidaySavedError) throw holidaySavedError;
+    check(holidaySaved.available_days.includes('sat') && holidaySaved.available_days.includes('sun')
+      && holidaySaved.available_days.includes('holiday') && holidaySaved.available_days.includes('flexible'), 'holiday save/readback mismatch');
     check(secondVouchers.length === 1, '재저장 후 intro_complete 원장 행이 1개가 아니다.');
 
     console.log(JSON.stringify({
       passed:true, introId:firstRow.intro_id, firstVoucherGranted:true, secondVoucherGranted:false,
-      stored:{availableDays:saved.available_days, availableTimes:saved.available_times, preferredGameTypes:saved.preferred_game_types},
+      stored:{legacyAvailableDays:saved.available_days, holidayAvailableDays:holidaySaved.available_days, availableTimes:saved.available_times, preferredGameTypes:saved.preferred_game_types},
     }, null, 2));
   } finally {
     if (intro) {

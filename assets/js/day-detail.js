@@ -374,6 +374,19 @@
       text-align: center;
     }
     .sched-card-detail-btn:hover { color: var(--green); background: #f0ece6; }
+    .game-coordination-summary {
+      margin: 12px 0;
+      padding: 11px 12px;
+      border: 1px solid var(--line, #e5ddd2);
+      border-radius: 10px;
+      background: #f8f4ee;
+    }
+    .game-coordination-summary > strong { display:block; margin-bottom:8px; font-size:13px; color:var(--text); }
+    .game-coordination-summary > div + div { margin-top:7px; }
+    .game-coordination-summary span { display:block; font-size:10px; color:var(--muted); }
+    .game-coordination-summary p { margin:2px 0 0; font-size:12px; line-height:1.55; color:var(--text); overflow-wrap:anywhere; }
+    .game-coordination-summary--compact { margin:10px 0 8px; padding:10px; }
+    .game-coordination-summary--compact > strong { font-size:12px; }
     /* ── 룰렛 패널 ── */
     .dd-roulette-cta {
       margin-top: 10px;
@@ -1396,6 +1409,34 @@
       });
   }
 
+  function _buildGameCoordinationSummaryHtml(votes, voteGames, compact = false) {
+    const styles = { strategy: 0, party: 0, any: 0 };
+    const participants = [...new Map((votes || []).map(vote => [String(vote.user_id), vote])).values()];
+    participants.forEach(vote => {
+      if (Object.prototype.hasOwnProperty.call(styles, vote.game_style)) styles[vote.game_style] += 1;
+    });
+    const games = new Map();
+    (voteGames || []).forEach(game => {
+      const key = game.game_id ? `id:${game.game_id}` : `name:${String(game.custom_name || '').trim().toLowerCase()}`;
+      if (key === 'name:') return;
+      if (!games.has(key)) games.set(key, { name: resolveGameName(game), users: new Set() });
+      games.get(key).users.add(String(game.user_id));
+    });
+    const shared = [...games.values()]
+      .filter(game => game.users.size >= 2)
+      .sort((a, b) => b.users.size - a.users.size || a.name.localeCompare(b.name, 'ko'))
+      .slice(0, compact ? 3 : 5);
+    const styleText = `\uC804\uB7B5 ${styles.strategy}\uBA85 \u00B7 \uD30C\uD2F0 ${styles.party}\uBA85 \u00B7 \uBB34\uAD00 ${styles.any}\uBA85`;
+    const gameText = shared.length
+      ? shared.map(game => `${esc(game.name)} ${game.users.size}\uBA85`).join(' \u00B7 ')
+      : '\uACF5\uD1B5 \uAD00\uC2EC \uAC8C\uC784\uC774 \uC544\uC9C1 \uC5C6\uC5B4\uC694.';
+    return `<section class="game-coordination-summary${compact ? ' game-coordination-summary--compact' : ''}" aria-label="\uAC8C\uC784 \uC870\uC728 \uC694\uC57D">
+      <strong>\uAC8C\uC784 \uC870\uC728</strong>
+      <div><span>\uC120\uD638 \uC720\uD615</span><p>${styleText}</p></div>
+      <div><span>\uACB9\uCE58\uB294 \uAC8C\uC784</span><p>${gameText}</p></div>
+    </section>`;
+  }
+
   window.openDateMeetingModal = function (voteDate, votes, voteGames, opts = {}) {
     document.getElementById('__ddModal')?.remove();
     const el = document.createElement('div');
@@ -1445,6 +1486,7 @@
           <div class="dd-date">${fmtDate(voteDate)}</div>
           ${statsHtml}
         </section>
+        ${_buildGameCoordinationSummaryHtml(votes, voteGames)}
         ${rouletteBtnHtml
           ? `<section class="dd-roulette-cta" aria-label="모임 전체 룰렛">
               <span class="dd-roulette-context">모임 전체</span>
@@ -1557,7 +1599,7 @@
    * @param {Object|null} myVote    — 내 vote (is-mine 강조·수정삭제 버튼), 홈에서는 null
    * @returns {string} HTML string
    */
-  window.buildBarsInCard = function (dayVotes, voteGames, myVote) {
+  window.buildBarsInCard = function (dayVotes, voteGames, myVote, includeCoordinationSummary = false) {
     if (!dayVotes.length) return '';
     // 고정 9~27시 축 대신 그날 실제 등록된 범위로 확대(반응형, 2026-08-18 사용자 스크린샷 리포트).
     // 등록 상한이 23시→27시로 넓어지며(range 14→18h) 흔한 8~9시간짜리 등록이 막대 폭의 절반도
@@ -1670,6 +1712,6 @@
         <span>${MIN_H}시</span><span>${window.formatVoteHour((MIN_H + MAX_H) / 2)}</span><span>${MAX_H}시</span>
       </div>
       ${dayVotes.map(barRow).join('')}
-    </div>`;
+    </div>${includeCoordinationSummary ? _buildGameCoordinationSummaryHtml(dayVotes, voteGames, true) : ''}`;
   };
 })();

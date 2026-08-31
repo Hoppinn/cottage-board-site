@@ -687,10 +687,43 @@ function _bindRecordSubsheet(subBody, ctx) {
           }
         }
 
+// 기존 회원소개 wizard 페이지를 iframe 센터모달로 바로 연다. 폼·저장·validation은
+// club-intro.html의 기존 구현을 그대로 쓰고, 저장 성공만 부모 보드에 알린다.
+function _openProfileIntroEditor(onSaved) {
+  document.getElementById('__profileIntroEditor')?.remove();
+  const overlay = document.createElement('div');
+  overlay.id = '__profileIntroEditor';
+  overlay.className = 'planner-modal-overlay is-open';
+  overlay.innerHTML = `<div class="planner-modal-box">
+    <button class="planner-modal-close" type="button" aria-label="닫기">✕</button>
+    <iframe class="planner-modal-frame" title="프로필 수정"></iframe>
+  </div>`;
+  const close = () => { window.removeEventListener('message', onMessage); overlay.remove(); };
+  const frame = overlay.querySelector('iframe');
+  const onMessage = event => {
+    if (event.source !== frame.contentWindow || event.data?.type !== 'cottage-profile-intro-saved') return;
+    close(); onSaved?.();
+  };
+  window.addEventListener('message', onMessage);
+  overlay.querySelector('.planner-modal-close').addEventListener('click', close);
+  overlay.addEventListener('click', event => { if (event.target === overlay) close(); });
+  const path = location.pathname.includes('/pages/') ? '../club/club-intro.html' : 'pages/club/club-intro.html';
+  frame.src = `${path}?embed=1&edit=1#embed=1&edit=1`;
+}
+
 // ── 프로필 보드 서브시트 afterRender (레거시 내부 이름 taste 유지) ──
 function _bindTasteSubsheet(subBody, ctx) {
   const { user, readOnly, panel, _emitLikesChanged, allBioSuggestions, _BIO_PREDEFINED, _ruleSet, onBioSaved, onProfileDataSaved, resolveGameName } = ctx;
           const userId = String(user.id);
+
+          subBody.querySelector('.profile-board-edit-link')?.addEventListener('click', () => {
+            _openProfileIntroEditor(() => {
+              document.getElementById('profileSubSheet')?.remove();
+              window.popActiveView?.(panel._viewToken);
+              panel.remove();
+              openProfilePanel('taste');
+            });
+          });
 
           // ── 평소 즐기는 게임 깊이 (profiles.preferred_game_depths) ──
           subBody.querySelectorAll('.profile-depth-chip[data-depth]').forEach(btn => {
@@ -2533,6 +2566,7 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
   const _INTRO_DAY_LABELS = { mon:'월', tue:'화', wed:'수', thu:'목', fri:'금', sat:'토', sun:'일', flexible:'유동적' };
   const _INTRO_GAME_TYPE_LABELS = { party:'파티·친목', mystery:'추리·미스터리', strategy:'전략·유로', thematic:'테마·몰입', cooperative:'협력', social_deduction:'마피아·블러핑', card_deckbuilding:'카드·덱빌딩', puzzle_abstract:'퍼즐·추상', campaign_legacy:'캠페인·레거시', any:'장르 무관' };
   const _INTRO_CLOCKTOWER_LABELS = { love:'매우 좋아함', interested:'기회가 되면 참여하고 싶음', curious:'아직 모르지만 해보고 싶음', not_preferred:'별로 선호하지 않음', no:'참여하고 싶지 않음' };
+  const _INTRO_DAY_LABELS_EXTENDED = { ..._INTRO_DAY_LABELS, holiday:'공휴일' };
   const _PROFILE_WEIGHT_OPTIONS = {
     weight_intro: { name:'입문', range:'1.00~1.50' },
     weight_light: { name:'라이트', range:'1.51~2.50' },
@@ -2639,8 +2673,8 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
     const curiousGames = d.curiousGames || [];
     const depthCodes = d.preferredGameDepths || [];
     const hardestGames = d.hardestGames || [];
-    const availableStructured = [
-      _introLabels(d.availableDays, _INTRO_DAY_LABELS),
+    const availableStructured = window.CottageDB?.formatMemberIntroAvailability?.(d.availableDays, d.availableTimes) || [
+      _introLabels(d.availableDays, _INTRO_DAY_LABELS_EXTENDED),
       window.CottageDB?.formatMemberIntroTimes?.(d.availableTimes) || _introLabels(d.availableTimes, {}),
     ].filter(Boolean).join(' · ');
     const legacyDepthCodes = depthCodes.filter(code => _PROFILE_LEGACY_DEPTH_LABELS[code]);
@@ -2648,28 +2682,33 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
     const selectedWeightChips = selectedWeightCodes.map(code => `<span class="profile-depth-chip is-selected">${_PROFILE_WEIGHT_OPTIONS[code].name} · ${_PROFILE_WEIGHT_OPTIONS[code].range}</span>`).join('');
     const legacyDepthText = legacyDepthCodes.map(code => _PROFILE_LEGACY_DEPTH_LABELS[code]).join(' · ');
     return `
-    ${_ro('<a class="profile-board-edit-link" href="/pages/club/club-intro.html">프로필 수정 →</a>')}
     ${d.expectation
       ? `<section class="profile-info-section profile-expectation-section">
-      <div class="taste-section-label">코티지에서 함께 게임할 때</div>
+      <div class="profile-main-title">코티지에서 함께 게임할 때</div>
       <p class="profile-expectation-text">${escH(d.expectation)}</p>
     </section>`
       : (readOnly ? '' : `<section class="profile-info-section profile-expectation-section">
-      <div class="taste-section-label">코티지에서 함께 게임할 때</div>
+      <div class="profile-main-title">코티지에서 함께 게임할 때</div>
       <p class="profile-info-value is-empty">아직 작성하지 않았어요</p>
     </section>`)}
     <section class="profile-info-section profile-usual-play-section">
-      <div class="taste-section-label">평소 플레이</div>
+      <div class="profile-main-title">평소 플레이</div>
       <div class="profile-info-list">
         ${_profileInfoRowHtml('평균 플레이 빈도', d.averagePlayFrequency != null ? _INTRO_FREQUENCY_LABELS[d.averagePlayFrequency] : '')}
         ${_profileInfoRowHtml('주로 함께하는 사람', _introLabels(d.companionTypes, _INTRO_COMPANION_LABELS))}
         ${_profileInfoRowHtml('가능한 요일·시간', availableStructured || d.available || '')}
-        ${_profileInfoRowHtml('활동 지역', d.location || '')}
+        ${_profileInfoRowHtml('거주 지역', d.location || '')}
       </div>
     </section>
-    <section class="profile-info-section profile-depth-section">
-      <div class="taste-section-label">선호 웨이트</div>
-      <div class="profile-info-list">
+    <section class="profile-info-section profile-taste-section">
+      <div class="profile-main-title">게임 취향</div>
+      <div class="profile-info-list profile-taste-fields">
+        ${_profileInfoRowHtml('선호 유형', _introLabels(d.preferredGameTypes, _INTRO_GAME_TYPE_LABELS))}
+      ${d.clocktowerPreference ? _profileInfoRowHtml('시계탑 선호', _INTRO_CLOCKTOWER_LABELS[d.clocktowerPreference] || d.clocktowerPreference) : ''}
+      </div>
+      <div class="profile-taste-subsection profile-taste-weight-block">
+        <div class="profile-taste-subtitle">선호 웨이트</div>
+        <div class="profile-info-list">
         <div class="profile-info-row profile-depth-row">
           <span class="profile-depth-options${readOnly ? ' is-readonly' : ''}">
             ${readOnly
@@ -2680,24 +2719,20 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
           </span>
         </div>
       </div>
+      </div>
+      <div class="profile-taste-subsection profile-taste-hardest-block">
       <div class="profile-experience-block">
         <div class="profile-experience-head"><span>가장 어려웠던 게임</span>${_ro(`<button class="profile-hardest-add" type="button"${hardestGames.length >= 2 ? ' disabled' : ''}>+ 게임 추가</button>`)}</div>
         <div class="profile-hardest-list">${_buildHardestGamesHtml(hardestGames)}</div>
         <p class="profile-experience-hint">실제로 플레이해본 범위를 보여줘요.</p>
       </div>
-    </section>
-    <section class="profile-info-section profile-taste-section">
-      <div class="taste-section-label">게임 취향</div>
-      <div class="profile-info-list">
-        ${_profileInfoRowHtml('선호 유형', _introLabels(d.preferredGameTypes, _INTRO_GAME_TYPE_LABELS))}
-      ${d.clocktowerPreference ? _profileInfoRowHtml('시계탑 선호', _INTRO_CLOCKTOWER_LABELS[d.clocktowerPreference] || d.clocktowerPreference) : ''}
       </div>
     <div class="taste-game-section profile-taste-games-section">
-      <div class="taste-section-label">❤️ 좋아하는 게임 <span class="taste-count" id="tastelikedCount">${likedGames.length}개</span> ${_ro('<button class="taste-add-btn taste-add-btn--inline" id="tastelikedAddBtn" type="button">+ 게임 추가</button>')}</div>
+      <div class="profile-taste-subtitle">❤️ 좋아하는 게임 <span class="taste-count" id="tastelikedCount">${likedGames.length}개</span> ${_ro('<button class="taste-add-btn taste-add-btn--inline" id="tastelikedAddBtn" type="button">+ 게임 추가</button>')}</div>
       <div class="taste-game-list" id="tastelikedList">${_buildTasteGameItems(likedGames, _ruleSet)}</div>
     </div>
     <div class="taste-game-section">
-      <div class="taste-section-label">👀 해보고 싶은 게임 <span class="taste-count" id="tastecuriousCount">${curiousGames.length}개</span> ${_ro('<button class="taste-add-btn taste-add-btn--inline" id="tastecuriousAddBtn" type="button">+ 게임 추가</button>')}</div>
+      <div class="profile-taste-subtitle">👀 해보고 싶은 게임 <span class="taste-count" id="tastecuriousCount">${curiousGames.length}개</span> ${_ro('<button class="taste-add-btn taste-add-btn--inline" id="tastecuriousAddBtn" type="button">+ 게임 추가</button>')}</div>
       <div class="taste-game-list" id="tastecuriousList">${_buildTasteGameItems(curiousGames, _ruleSet)}</div>
     </div>
     ${readOnly
@@ -2719,7 +2754,8 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
         <button aria-label="직접 입력한 것 추가" class="taste-avoid-custom-add" type="button">+</button>
       </div>
     </div>
-    </section>`}`;
+    </section>`}
+    ${_ro('<button class="profile-board-edit-link" type="button">프로필 수정</button>')}`;
   }
   // 기록 보드: 플레이기록/게임평/사진 3섹션 토글 (항상 표시, 기본 열림)
   const _openActivityList = html => html.replace('class="profile-activity-list is-collapsed"', 'class="profile-activity-list"');
@@ -2765,16 +2801,27 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
   // 카드는 옛 개수 그대로였다(들어가면 4개, 나오면 3개). 이제 _boardData(취향·모임 공용
   // 단일 소스)를 받는 함수이고, 변경이 일어난 자리에서 _syncTasteCard()로 다시 그린다.
   const _tasteCardSummaryHtml = (d) => {
-    const types = (d.preferredGameTypes || []).filter(value => value !== 'any').map(value => _INTRO_GAME_TYPE_LABELS[value] || value).slice(0, 2);
-    const depths = (d.preferredGameDepths || []).map(value => _PROFILE_DEPTH_SUMMARY_LABELS[value]).filter(Boolean);
-    const line1 = [types.join(' · '), depths.length ? depths.join(' · ') : ''].filter(Boolean).join(' · ');
+    const types = (d.preferredGameTypes || []).filter(value => value !== 'any').map(value => _INTRO_GAME_TYPE_LABELS[value] || value);
+    const depthCodes = d.preferredGameDepths || [];
+    const depthLabels = depthCodes.map(value => _PROFILE_DEPTH_SUMMARY_LABELS[value]).filter(Boolean);
+    const weightOrder = Object.keys(_PROFILE_WEIGHT_OPTIONS);
+    const selectedWeights = weightOrder.filter(code => depthCodes.includes(code));
+    const depthSummary = selectedWeights.length >= 2
+      ? `${_PROFILE_WEIGHT_OPTIONS[selectedWeights[0]].name}~${_PROFILE_WEIGHT_OPTIONS[selectedWeights[selectedWeights.length - 1]].name}`
+      : depthLabels.join(' · ');
+    const taste = [types.join(' · '), depthSummary].filter(Boolean).join(' · ');
     const frequency = d.averagePlayFrequency != null ? _INTRO_FREQUENCY_LABELS[d.averagePlayFrequency] : '';
-    const companions = (d.companionTypes || []).map(value => _INTRO_COMPANION_LABELS[value] || value).slice(0, 2).join(' · ');
-    const hardest = (d.hardestGames || []).map(_profileGameName).filter(Boolean).join(' · ');
-    return `${line1 ? `<span class="profile-card-bio-row">${escH(line1)}</span>` : ''}
-      ${(frequency || companions) ? `<span class="profile-card-profile-row">${escH([frequency, companions].filter(Boolean).join(' · '))}</span>` : ''}
-      ${hardest ? `<span class="profile-card-experience-row">경험: ${escH(hardest)}</span>` : ''}
-      <span class="profile-card-games-row">좋아하는 게임 ${(d.likedGames || []).length} · 해보고 싶은 게임 ${(d.curiousGames || []).length} · 룰 설명 ${(d.ruleGames || []).length}</span>`;
+    const companions = (d.companionTypes || []).map(value => _INTRO_COMPANION_LABELS[value] || value).join(' · ');
+    const available = window.CottageDB?.formatMemberIntroAvailability?.(d.availableDays, d.availableTimes)
+      || [_introLabels(d.availableDays, _INTRO_DAY_LABELS_EXTENDED), window.CottageDB?.formatMemberIntroTimes?.(d.availableTimes)].filter(Boolean).join(' · ')
+      || d.available
+      || '';
+    const bio = d.expectation || d.bio || '';
+    return `${bio ? `<span class="profile-card-bio-row">${escH(bio)}</span>` : ''}
+      ${taste ? `<span class="profile-card-detail-row"><b>게임 취향:</b> ${escH(taste)}</span>` : ''}
+      ${(frequency || companions) ? `<span class="profile-card-detail-row"><b>평소 플레이:</b> ${escH([frequency, companions].filter(Boolean).join(' · '))}</span>` : ''}
+      ${available ? `<span class="profile-card-detail-row"><b>가능한 요일·시간:</b> ${escH(available)}</span>` : ''}
+      <span class="profile-card-games-row">좋아하는 게임 ${(d.likedGames || []).length} · 해보고 싶은 게임 ${(d.curiousGames || []).length} · 설명 가능 ${(d.ruleGames || []).length}</span>`;
   };
   const _syncTasteCard = () => {
     const el = body.querySelector('.profile-card[data-subsheet="taste"] .profile-card-summary');

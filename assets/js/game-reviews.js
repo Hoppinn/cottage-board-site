@@ -1006,6 +1006,15 @@
         : renderGameView(data, user);
 
     panel.innerHTML = toggleHtml + contentHtml;
+    // The first asynchronous data render must settle the default month after
+    // records exist. Restored editing state remains authoritative on later renders.
+    if (!_restoreState && currentView === 'date' && isEmbeddedRecordHub()) {
+      const months = [...panel.querySelectorAll('.pr-session--bydate')];
+      if (months.length) {
+        months.forEach(session => session.classList.remove('is-open'));
+        months[0].classList.add('is-open');
+      }
+    }
     bindToggle(panel);
 
     panel.querySelectorAll('.pr-session-hd').forEach(hd => {

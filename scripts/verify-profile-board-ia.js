@@ -55,8 +55,12 @@ const tasteStart = boardSrc.indexOf('function _buildTasteInnerHtml(d) {');
 const tasteEnd = boardSrc.indexOf('  // 기록 보드', tasteStart);
 const tasteBuilder = tasteStart >= 0 && tasteEnd > tasteStart
   ? [boardSrc.slice(tasteStart, tasteEnd)] : null;
-check('profile information flow has four sections', ['코티지에서 함께 게임할 때', '평소 플레이', '선호 웨이트', '게임 취향']
-  .every(label => tasteBuilder?.[0].includes(label)));
+const tasteSection = tasteBuilder?.[0].match(/<section class="profile-info-section profile-taste-section">[\s\S]*?<\/section>/)?.[0] || '';
+check('profile hierarchy has three main sections and taste subblocks', ['코티지에서 함께 게임할 때', '평소 플레이', '게임 취향']
+  .every(label => tasteBuilder?.[0].includes(label))
+  && !tasteBuilder?.[0].includes('profile-depth-section')
+  && ['선호 웨이트', '가장 어려웠던 게임', '좋아하는 게임', '해보고 싶은 게임'].every(label => tasteSection.includes(label))
+  && tasteSection.includes('profile-taste-subtitle'));
 check('legacy split sections are removed', !!tasteBuilder
   && !tasteBuilder[0].includes('이런 플레이어예요')
   && !tasteBuilder[0].includes('플레이 환경')
@@ -77,13 +81,12 @@ check('structured player fields appear once in their sections', !!tasteBuilder
   && (tasteBuilder[0].match(/평균 플레이 빈도/g) || []).length === 1
   && (tasteBuilder[0].match(/주로 함께하는 사람/g) || []).length === 1
   && (tasteBuilder[0].match(/가능한 요일·시간/g) || []).length === 1
-  && (tasteBuilder[0].match(/활동 지역/g) || []).length === 1
+  && (tasteBuilder[0].match(/거주 지역/g) || []).length === 1
   && !tasteBuilder[0].includes('이동 가능 범위'));
 check('location remains and travel range is hidden', !!tasteBuilder
-  && tasteBuilder[0].includes('활동 지역')
+  && tasteBuilder[0].includes('거주 지역')
   && !tasteBuilder[0].includes('이동 가능 범위')
   && !tasteBuilder[0].includes('travelRange'));
-const tasteSection = tasteBuilder?.[0].match(/<section class="profile-info-section profile-taste-section">[\s\S]*?<\/section>/)?.[0] || '';
 check('avoid types and preferred types stay in game taste', !!tasteBuilder
   && tasteSection.includes('선호 유형')
   && tasteSection.includes('taste-avoid-section'));
@@ -95,9 +98,22 @@ check('expectation uses normal body typography', styleSrc.includes('.profile-exp
 check('weight options and hardest-games editors are wired', boardSrc.includes('Object.entries(_PROFILE_WEIGHT_OPTIONS)')
   && ['weight_intro', 'weight_light', 'weight_heavy', 'weight_hardcore'].every(code => boardSrc.includes(code))
   && boardSrc.includes('replaceProfileHardestGames') && boardSrc.includes('hardestGames.length >= 2'));
-check('single profile edit entry uses owner-only wrapper', boardSrc.includes("${_ro('<a class=\"profile-board-edit-link\"")
+check('single profile edit entry uses owner-only wrapper', boardSrc.includes('profile-board-edit-link')
   && !boardSrc.includes('평소 생활 수정 →')
-  && boardSrc.includes("${_ro(`<button class=\"profile-hardest-add\""));
+  && boardSrc.includes("${_ro(`<button class=\"profile-hardest-add\"")
+  && boardSrc.includes('_openProfileIntroEditor')
+  && boardSrc.includes('?embed=1&edit=1#embed=1&edit=1'));
+check('profile weight editor uses a four-column responsive grid', styleSrc.includes('.profile-depth-options{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));')
+  && styleSrc.includes('.profile-depth-chip{display:grid;grid-template-columns:minmax(0,1fr);')
+  && styleSrc.includes('min-height:54px;'));
+check('usual-play values stay normal-weight and denser without changing row spacing',
+  styleSrc.includes('.profile-usual-play-section .profile-info-value,.profile-taste-section > .profile-info-list .profile-info-value{font-weight:400;line-height:1.33;}')
+  && styleSrc.includes('.profile-info-row{display:grid;grid-template-columns:112px minmax(0,1fr);gap:10px;padding:10px 2px;font-size:12px;'));
+check('liked games begin after a distinct taste section gap', styleSrc.includes('.profile-taste-games-section{margin-top:26px;}'));
+check('profile key-value rows use spacing while game list dividers remain',
+  styleSrc.includes('.profile-info-row{display:grid;grid-template-columns:112px minmax(0,1fr);gap:10px;padding:10px 2px;font-size:12px;')
+  && !styleSrc.includes('.profile-info-row:last-child{border-bottom:none;}')
+  && styleSrc.includes('.taste-game-item{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid var(--border);}'));
 check('legacy depth labels remain separate from new ranges', boardSrc.includes('_PROFILE_LEGACY_DEPTH_LABELS')
   && boardSrc.includes("light:'가볍게'") && boardSrc.includes("medium:'적당히'") && boardSrc.includes("deep:'깊게'")
   && boardSrc.includes('기존 선택:'));
@@ -132,6 +148,16 @@ check('subboard character keeps glow room at 32px', styleSrc.includes('.profile-
   && styleSrc.includes('.profile-subsheet-back-avatar{display:flex;align-items:center;justify-content:center;width:32px;height:32px;')
   && styleSrc.includes('.profile-subsheet-back-avatar .profile-panel-avatar{width:32px;height:32px;}'));
 check('stable analytics key displays Profile Board label', pageLabels.includes("'my-board-taste': '내 보드 > 프로필 보드'"));
+const tasteCardStart = boardSrc.indexOf('const _tasteCardSummaryHtml = (d) => {');
+const tasteCardEnd = boardSrc.indexOf('  const _syncTasteCard', tasteCardStart);
+const tasteCard = tasteCardStart >= 0 && tasteCardEnd > tasteCardStart ? boardSrc.slice(tasteCardStart, tasteCardEnd) : '';
+check('profile summary card uses requested information hierarchy', tasteCard.includes('d.expectation || d.bio')
+  && tasteCard.includes('게임 취향:') && tasteCard.includes('평소 플레이:')
+  && tasteCard.includes('가능한 요일·시간:') && tasteCard.includes('설명 가능')
+  && tasteCard.includes('formatMemberIntroAvailability'));
+check('profile summary card hides hardest-game experience', !tasteCard.includes('hardestGames')
+  && !tasteCard.includes('profile-card-experience-row'));
+check('profile summary metadata has lower emphasis', styleSrc.includes('.profile-card-games-row{display:block;margin-top:8px;font-size:10px;color:var(--muted);'));
 
 new vm.Script(clientSrc, {filename:'assets/js/supabase-client.js'});
 

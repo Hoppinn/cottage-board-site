@@ -4694,9 +4694,9 @@ html:has(body.embed-mode) { scroll-padding-top: 0; }
 .profile-card-label{display:block;font-size:13px;font-weight:700;color:var(--text);}
 .profile-card-summary{display:block;font-size:11px;color:var(--muted);margin-top:4px;line-height:1.5;word-break:keep-all;white-space:pre-line;}
 .profile-card-bio-row{display:block;}
-.profile-card-profile-row,.profile-card-experience-row{display:block;margin-top:3px;}
-.profile-card-experience-row{color:var(--text);font-weight:600;}
-.profile-card-games-row{display:block;margin-top:6px;white-space:pre-line;}
+.profile-card-profile-row,.profile-card-detail-row{display:block;margin-top:4px;}
+.profile-card-detail-row b{color:var(--text);font-weight:700;}
+.profile-card-games-row{display:block;margin-top:8px;font-size:10px;color:var(--muted);white-space:pre-line;}
 .profile-card-arrow{font-size:16px;color:var(--muted);flex-shrink:0;margin-left:auto;}
 .profile-card.has-badge{position:relative;}
 .profile-card.has-badge::after{content:'';position:absolute;top:10px;right:32px;width:7px;height:7px;background:#e53935;border-radius:50%;}
@@ -4734,13 +4734,17 @@ html:has(body.embed-mode) { scroll-padding-top: 0; }
 .profile-summary-chips{display:flex;flex-wrap:wrap;gap:6px;}
 .profile-summary-chip{display:inline-flex;align-items:center;min-height:28px;padding:4px 10px;box-sizing:border-box;border-radius:16px;background:var(--paper);border:1px solid var(--border);font-size:12px;font-weight:650;color:var(--text);line-height:1.35;}
 .profile-summary-empty,.profile-hardest-empty{font-size:12px;color:var(--muted);margin:0;line-height:1.6;}
-.profile-expectation-text{margin:0;color:var(--text);font-size:13px;line-height:1.7;white-space:pre-wrap;word-break:break-word;}
-.profile-info-list{border-bottom:1px solid var(--border);}
+.profile-expectation-text{margin:0;color:var(--text);font-size:13px;font-weight:400;line-height:1.7;white-space:pre-wrap;word-break:break-word;}
+.profile-expectation-section{margin-top:6px;padding:12px;border:1px solid var(--border);border-radius:10px;background:var(--paper);}
+.profile-expectation-section,.profile-usual-play-section,.profile-taste-section{margin-bottom:18px;}
+.profile-info-list{border:0;padding-bottom:0;}
 .profile-info-row{display:grid;grid-template-columns:112px minmax(0,1fr);gap:10px;padding:10px 2px;font-size:12px;line-height:1.5;align-items:start;}
 .profile-info-label{color:var(--muted);}
 .profile-info-value{color:var(--text);font-weight:600;word-break:keep-all;}
 .profile-info-value.is-empty{color:var(--muted);font-weight:400;font-style:italic;}
-.profile-usual-play-section .profile-info-value{font-weight:500;line-height:1.33;}
+.profile-usual-play-section .profile-info-value,.profile-taste-section > .profile-info-list .profile-info-value{font-weight:400;line-height:1.33;}
+.profile-usual-play-section .profile-info-label,.profile-taste-section > .profile-info-list .profile-info-label{line-height:1.33;}
+.profile-usual-play-section .profile-info-row,.profile-taste-section > .profile-info-list .profile-info-row{min-height:25px;box-sizing:border-box;padding:1px 2px;}
 .profile-source-edit{margin-left:auto;font-size:10px;color:var(--text-info,#6b8cba);font-weight:500;text-decoration:none;white-space:nowrap;}
 .profile-board-edit-link{display:block;width:100%;margin:0;border:1px solid var(--border);border-radius:9px;background:var(--card-bg);color:var(--text-info,#6b8cba);font:inherit;font-size:12px;font-weight:700;padding:10px;cursor:pointer;}
 .profile-depth-row{grid-template-columns:1fr;}
@@ -4759,12 +4763,19 @@ html:has(body.embed-mode) { scroll-padding-top: 0; }
 .profile-hardest-list{display:flex;flex-direction:column;gap:5px;}
 .profile-hardest-item{display:grid;grid-template-columns:22px minmax(0,1fr) 24px;align-items:center;gap:7px;min-height:34px;padding:4px 6px;border-radius:8px;background:var(--card-bg);}
 .profile-hardest-order{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:var(--border);color:var(--text);font-size:11px;font-weight:800;}
-.profile-hardest-name{font-size:12px;font-weight:650;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.profile-hardest-name{font-size:12px;font-weight:400;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .profile-hardest-item[data-game-id]:not([data-game-id=""]) .profile-hardest-name{cursor:pointer;}
 .profile-hardest-remove{border:none;background:none;color:var(--muted);cursor:pointer;font-size:12px;padding:3px;}
 .profile-experience-hint{font-size:10px;color:var(--muted);margin:6px 0 0;line-height:1.5;}
 .profile-rule-summary{font-size:12px;color:var(--text);line-height:1.65;margin:0;word-break:keep-all;}
-.profile-taste-section .profile-info-row{border-top:1px solid var(--border);border-bottom:1px solid var(--border);}
+.profile-taste-games-section{margin-top:26px;}
+.profile-taste-section > .profile-info-list,.profile-taste-section .profile-taste-subsection .profile-info-list{border-bottom:none;}
+.profile-taste-subsection{margin-top:18px;}
+.profile-taste-hardest-block .profile-experience-block,.profile-taste-hardest-block .profile-experience-block:last-child{padding:0;border-bottom:none;}
+.profile-taste-subtitle{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:var(--text);margin-bottom:8px;}
+.profile-taste-weight-block .profile-taste-subtitle{margin-bottom:2px;}
+.profile-main-title{display:flex;align-items:center;min-height:32px;box-sizing:border-box;border:1px solid color-mix(in srgb,var(--border) 58%,var(--bg2,#f5f1eb));border-radius:8px;background:color-mix(in srgb,var(--bg2,#f5f1eb) 72%,var(--paper));padding:7px 10px;color:var(--text);font-size:13px;font-weight:700;margin-bottom:8px;}
+.profile-expectation-section .profile-main-title{min-height:0;border:0;background:none;padding:0;margin-bottom:7px;}
 .taste-section-label{font-size:13px;font-weight:700;color:var(--text);margin-bottom:8px;display:flex;align-items:center;gap:6px;}
 .taste-count{font-weight:400;color:var(--muted);}
 .taste-bio-row{display:flex;align-items:flex-start;gap:8px;}
@@ -6748,6 +6759,9 @@ html:has(body.embed-mode) { scroll-padding-top: 0; }
   font-size:10px;
   font-weight:600;
 }
+.intro-day-presets{display:flex;gap:6px;margin:-1px 0 8px;}
+.intro-day-presets button{border:1px solid var(--border);border-radius:999px;background:var(--paper);color:var(--muted);font:inherit;font-size:11px;font-weight:600;line-height:1;padding:6px 9px;cursor:pointer;}
+.intro-day-presets button[aria-pressed="true"]{border-color:var(--green);background:#f1f7ef;color:var(--green-2);}
 .intro-choice-grid{
   display:grid;
   grid-template-columns:repeat(2,minmax(0,1fr));
@@ -7675,7 +7689,11 @@ body.embed-mode #reviewRoot .pr-tabs {
   margin:0 -18px 20px;
   padding:0 52px 0 18px;
   background:var(--bg);
+  box-sizing:border-box;
+  min-height:45px;
+  align-items:stretch;
 }
+body.embed-mode #reviewRoot .pr-tab{box-sizing:border-box;min-height:45px;}
 body.embed-mode .pr-session--bydate > .pr-session-hd { scroll-margin-top:48px; }
 
 /* 이전 embed=true iframe 캐시와의 호환: game-reviews.js 초기화 뒤에도 같은 compact 규칙을 유지한다. */

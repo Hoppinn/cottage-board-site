@@ -54,6 +54,9 @@ async function verify(browser, width, height) {
     if (url.hostname === 'cdn.jsdelivr.net' && url.pathname.includes('/@supabase/supabase-js@')) {
       await route.fulfill({status:200, contentType:'text/javascript', body:fs.readFileSync(path.join(ROOT, 'node_modules/@supabase/supabase-js/dist/umd/supabase.js'))}); return;
     }
+    if (url.hostname.endsWith('.supabase.co') && url.pathname.endsWith('/rest/v1/rpc/member_intro_holiday_supported')) {
+      await route.fulfill({status:200, contentType:'application/json', body:'true'}); return;
+    }
     if (url.hostname.endsWith('.supabase.co') && !['GET','HEAD','OPTIONS'].includes(req.method())) {
       await route.abort('blockedbyclient'); return;
     }
@@ -78,7 +81,7 @@ async function verify(browser, width, height) {
   });
 
   await page.goto(`${BASE}/pages/club/club-intro.html`, {waitUntil:'networkidle'});
-  await page.waitForFunction(() => window.CottageDB?.formatMemberIntroTimes);
+  await page.waitForFunction(() => window.CottageDB?.formatMemberIntroAvailability);
   await page.evaluate(() => {
     window.__introNavCalls = [];
     window.openOtherProfileSheet = userId => window.__introNavCalls.push({type:'board', userId:String(userId)});
@@ -112,6 +115,18 @@ async function verify(browser, width, height) {
     && await page.locator('[data-group="availableDays"] input[value="flexible"]').isChecked());
   check(`${width}px: 시간대 유동적+막대 동시 표시`, await page.locator('#introTimeFlexible').isChecked()
     && (await page.locator('#introTimeResult').textContent()) === '06시~12시 · 시간대 유동적');
+
+  check(`${width}px: holiday option activates after migration capability`, await page.locator('[data-group="availableDays"] input[value="holiday"]').isVisible()
+    && await page.locator('[data-group="availableDays"] input[value="holiday"]').isEnabled());
+  await page.locator('[data-day-preset="weekday"]').click();
+  check(`${width}px: weekday preset synchronizes Mon-Fri`, await page.locator('[data-group="availableDays"] input[value="mon"]').isChecked()
+    && await page.locator('[data-group="availableDays"] input[value="fri"]').isChecked()
+    && !(await page.locator('[data-group="availableDays"] input[value="sat"]').isChecked()));
+  await page.evaluate(() => {
+    const selected = new Set(['sat', 'flexible']);
+    document.querySelectorAll('[data-group="availableDays"] input').forEach(input => { input.checked = selected.has(input.value); });
+    document.querySelector('[data-group="availableDays"]').dispatchEvent(new Event('change', { bubbles:true }));
+  });
 
   await page.locator('.intro-time-slot.is-selected').evaluateAll(nodes => nodes.forEach(node => node.click()));
   if (width >= 720) {
@@ -147,6 +162,7 @@ async function verify(browser, width, height) {
   await page.locator('#introWizardNextBtn').click();
   await page.locator('#introWizardNextBtn').click();
   await page.locator('#introSubmitBtn').click();
+  await page.waitForFunction(() => !document.getElementById('introWizardComplete').hidden);
   check(`${width}px: 최종 저장 payload 시간 손실 없음`, submitted?.availableTimes?.length === 17
     && submitted.availableTimes.includes('22:30') && submitted.availableTimes.includes('00:30') && submitted.availableTimes.includes('flexible'));
   check(`${width}px: 커스텀 유형 저장 payload 포함`, submitted?.preferredGameTypes?.includes('워게임') && submitted?.avoidGameTypes?.includes('복잡한 계산'));

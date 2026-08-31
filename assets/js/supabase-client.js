@@ -948,6 +948,37 @@ window._cottageSess = (function () {
     } catch (e) { return { error: e }; }
   }
 
+  const MEMBER_INTRO_DAY_CODES = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
+  const MEMBER_INTRO_DAY_LABELS = { mon:'월', tue:'화', wed:'수', thu:'목', fri:'금', sat:'토', sun:'일' };
+
+  function formatMemberIntroDays(values) {
+    const selected = new Set((values || []).map(value => String(value)));
+    const days = MEMBER_INTRO_DAY_CODES.filter(code => selected.has(code));
+    const hasHoliday = selected.has('holiday');
+    let dayLabel = '';
+    if (days.length === 7) dayLabel = '매일';
+    else if (days.join(',') === 'mon,tue,wed,thu,fri') dayLabel = '평일';
+    else if (days.join(',') === 'sat,sun') dayLabel = '주말';
+    else {
+      const labels = [];
+      for (let index = 0; index < days.length;) {
+        let end = index;
+        while (end + 1 < days.length && MEMBER_INTRO_DAY_CODES.indexOf(days[end + 1]) === MEMBER_INTRO_DAY_CODES.indexOf(days[end]) + 1) end += 1;
+        labels.push(index === end ? MEMBER_INTRO_DAY_LABELS[days[index]] : `${MEMBER_INTRO_DAY_LABELS[days[index]]}~${MEMBER_INTRO_DAY_LABELS[days[end]]}`);
+        index = end + 1;
+      }
+      dayLabel = labels.join('·');
+    }
+    const labels = [dayLabel];
+    if (hasHoliday && days.length !== 7) labels.push('공휴일');
+    return labels.filter(Boolean).join('·');
+  }
+
+  function formatMemberIntroAvailability(days, times) {
+    const scheduleFlexible = (days || []).some(value => String(value) === 'flexible');
+    return [formatMemberIntroDays(days), formatMemberIntroTimes(times), scheduleFlexible ? '일정 유동적' : ''].filter(Boolean).join(' · ');
+  }
+
   const MEMBER_INTRO_LEGACY_TIME_RANGES = {
     morning: [12, 24],
     afternoon: [24, 36],
@@ -1183,6 +1214,14 @@ window._cottageSess = (function () {
       console.error('[submitMemberIntro]', e);
       return { error: e };
     }
+  }
+
+  async function isMemberIntroHolidaySupported() {
+    try {
+      const { data, error } = await db.rpc('member_intro_holiday_supported');
+      if (error) return false;
+      return data === true;
+    } catch (e) { return false; }
   }
 
   async function getAllBioTagSuggestions() {
@@ -2193,7 +2232,10 @@ window._cottageSess = (function () {
     addNotifReadKeys,
     getNoticeAckKeys,
     normalizeMemberIntroTimes,
+    formatMemberIntroDays,
     formatMemberIntroTimes,
+    formatMemberIntroAvailability,
+    isMemberIntroHolidaySupported,
     getMeetingProfile,
     getProfileBoardData,
     getProfileHardestGames,
