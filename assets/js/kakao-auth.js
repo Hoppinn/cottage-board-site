@@ -614,15 +614,17 @@ function _bindActivityTogglesAndMore(subBody) {
 
 // ── '기록 보드' 서브시트 afterRender (R10a: openProfilePanel에서 추출) ──
 // ctx: _allPhotoData는 splice로 변형되지만 재할당은 없음 → 참조 전달 안전
-function _openBoardFrameModal({ src, title, tab = null }) {
+function _openBoardFrameModal({ src, title, tab = null, wizardOnly = false }) {
   const existing = document.querySelector('.board-frame-modal');
   existing?._closeBoardFrameModal?.();
   existing?.remove();
 
   const modal = document.createElement('div');
-  modal.className = 'record-iframe-modal board-frame-modal';
+  modal.className = `record-iframe-modal board-frame-modal${wizardOnly ? ' board-wizard-modal' : ''}`;
   modal.setAttribute('aria-hidden', 'true');
-  modal.innerHTML = `
+  modal.innerHTML = wizardOnly
+    ? `<iframe class="board-wizard-frame" src="${escH(src)}" title="${escH(title)}"></iframe>`
+    : `
     <div class="record-iframe-dim"></div>
     <div class="record-iframe-panel" role="dialog" aria-modal="true" aria-label="${escH(title)}">
       <button aria-label="${escH(title)} 닫기" class="record-iframe-close" type="button">✕</button>
@@ -631,20 +633,25 @@ function _openBoardFrameModal({ src, title, tab = null }) {
     </div>`;
   document.body.appendChild(modal);
 
-  const frame = modal.querySelector('.record-iframe-frame');
+  const frame = modal.querySelector('.record-iframe-frame, .board-wizard-frame');
   const loader = modal.querySelector('.record-iframe-loader');
   const previousOverflow = document.body.style.overflow;
   const onKeydown = e => { if (e.key === 'Escape') close(); };
+  const onMessage = e => {
+    if (e.source === frame.contentWindow && e.data?.type === 'cottage-close-profile-wizard') close();
+  };
   const close = () => {
     document.removeEventListener('keydown', onKeydown);
+    window.removeEventListener('message', onMessage);
     if (document.body.style.overflow === 'hidden') document.body.style.overflow = previousOverflow;
     modal.remove();
   };
   modal._closeBoardFrameModal = close;
 
-  modal.querySelector('.record-iframe-dim').addEventListener('click', close);
-  modal.querySelector('.record-iframe-close').addEventListener('click', close);
+  modal.querySelector('.record-iframe-dim')?.addEventListener('click', close);
+  modal.querySelector('.record-iframe-close')?.addEventListener('click', close);
   document.addEventListener('keydown', onKeydown);
+  window.addEventListener('message', onMessage);
   frame.addEventListener('load', () => {
     frame.classList.add('is-ready');
     loader?.remove();
@@ -756,6 +763,13 @@ function _bindRecordSubsheet(subBody, ctx) {
 // ── 프로필 보드 서브시트 afterRender (레거시 내부 이름 taste 유지) ──
 function _bindTasteSubsheet(subBody, ctx) {
   const { user, readOnly, _emitLikesChanged, allBioSuggestions, _BIO_PREDEFINED, _ruleSet, onBioSaved, onProfileDataSaved, resolveGameName } = ctx;
+          subBody.querySelectorAll('[data-board-frame-src]').forEach(button => {
+            button.addEventListener('click', () => _openBoardFrameModal({
+              src: button.dataset.boardFrameSrc,
+              title: button.dataset.boardFrameTitle,
+              wizardOnly: button.dataset.boardFrameWizard === 'true',
+            }));
+          });
           const userId = String(user.id);
 
           // ── 평소 즐기는 게임 깊이 (profiles.preferred_game_depths) ──
@@ -2834,7 +2848,7 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
     </div>
     </section>`}
     <div class="profile-board-action-row">
-      ${_ro('<a class="profile-board-edit-link" href="/pages/club/club-intro.html?edit=1">프로필 수정</a>')}
+      ${_ro('<button class="profile-board-edit-link" data-board-frame-src="/pages/club/club-intro.html?embed=1&wizard=1&edit=1" data-board-frame-title="프로필 수정" data-board-frame-wizard="true" type="button">프로필 수정</button>')}
       <a class="profile-board-page-link" href="/pages/club/club-intro.html">프로필 페이지 &gt;</a>
     </div>`;
   }

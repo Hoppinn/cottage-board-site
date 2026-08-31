@@ -6710,6 +6710,8 @@ html:has(body.embed-mode) { scroll-padding-top: 0; }
   background:rgba(0,0,0,.48);
 }
 .intro-wizard-overlay.is-open{display:flex;}
+html.intro-wizard-embed,html.intro-wizard-embed body{background:transparent!important;overflow:hidden;}
+html.intro-wizard-embed .club-breadcrumb,html.intro-wizard-embed .page-mini-hero,html.intro-wizard-embed .intro-form-card,html.intro-wizard-embed .intro-card-grid,html.intro-wizard-embed .site-footer{display:none!important;}
 .intro-wizard{
   display:flex;
   flex-direction:column;
@@ -7660,6 +7662,8 @@ button.home-section-more{background:none;border:none;cursor:pointer;padding:0;}
 .record-iframe-close{position:absolute;top:10px;right:12px;background:none;border:none;font-size:18px;line-height:1;cursor:pointer;color:var(--ink);padding:4px;z-index:2;}
 .record-iframe-frame{width:100%;flex:1;border:none;opacity:0;transition:opacity 0.2s;}
 .record-iframe-frame.is-ready{opacity:1;}
+.board-wizard-modal{padding:0;}
+.board-wizard-frame{width:100%;height:100%;border:0;background:transparent;}
 .record-iframe-loader{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:#fff;z-index:1;}
 .record-iframe-loader::after{content:'';width:28px;height:28px;border:3px solid #eee;border-top-color:var(--green);border-radius:50%;animation:ri-spin 0.7s linear infinite;}
 @keyframes ri-spin{to{transform:rotate(360deg);}}

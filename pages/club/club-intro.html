@@ -12,6 +12,11 @@
 </head>
 
 <body class="owned-page">
+  <script>
+    if (new URLSearchParams(location.search).get('wizard') === '1' && window.parent !== window) {
+      document.documentElement.classList.add('intro-wizard-embed');
+    }
+  </script>
   <script src="../../assets/js/header.js" data-index="false"></script>
 
   <main>
@@ -390,6 +395,9 @@
     function closeWizard() {
       wizard.classList.remove('is-open');
       wizard.setAttribute('aria-hidden', 'true');
+      if (document.documentElement.classList.contains('intro-wizard-embed')) {
+        window.parent.postMessage({ type: 'cottage-close-profile-wizard' }, '*');
+      }
     }
     function stepFail(text, target) {
       wizardMessage.textContent = text;
