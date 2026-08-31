@@ -187,7 +187,7 @@
 
     /* ── 날짜 전체 모임 상세 — 인원 조율 + 참여자별 ── */
     .dd-meeting-section { margin-top: 16px; }
-    .dd-meeting-modal .dd-modal-scroll > .dd-meeting-section:first-child { margin-top: 8px; }
+    .dd-meeting-modal .dd-modal-scroll > .dd-meeting-section:first-child { margin-top: 4px; }
     .dd-meeting-section-title { margin: 0 0 8px; font-size: 14px; font-weight: 800; color: var(--text); }
     .dd-participant-list { display: grid; gap: 8px; }
     .dd-participant-head { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
@@ -199,6 +199,7 @@
     }
     .dd-participant-card .dd-modal-nick { margin-bottom: 3px; min-width: 0; }
     .dd-participant-card .dd-time { margin-bottom: 0; text-align: right; flex-shrink: 0; }
+    .dd-participant-head + .dd-context-block { margin-top: 8px; }
     .dd-participant-card .dd-context-block {
       margin: 0;
       padding: 0;

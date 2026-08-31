@@ -2827,7 +2827,7 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
     const el = body.querySelector('.profile-card[data-subsheet="taste"] .profile-card-summary');
     if (el) el.innerHTML = _tasteCardSummaryHtml(_boardData);
   };
-  const _recordCardSummary = `플레이 기록 ${stats.plays.length}건\n게임평 ${stats.reviewCount}개\n사진 ${userStats?.photoCount || 0}장`;
+  const _recordCardSummary = `플레이 기록 ${stats.plays.length}건\n게임평 ${_allReviews.length}개\n사진 ${userStats?.photoCount || 0}장`;
   const _usageCardSummary = _statsSummary;
 
   // ── 메인 패널: 프로필 영역 + 4축 레이아웃 ──────────────────
@@ -3005,10 +3005,10 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
       mainClose?.setAttribute('aria-hidden', visible ? 'true' : 'false');
     };
     if ('IntersectionObserver' in window) {
-      panel._identityObserver = new IntersectionObserver(([entry]) => setCompactVisibility(!entry.isIntersecting), {
+      panel._identityObserver = new IntersectionObserver(([entry]) => setCompactVisibility(entry.intersectionRatio < 1), {
         root: body,
-        threshold: 0,
-        rootMargin: '-20px 0px 0px',
+        threshold: 1,
+        rootMargin: '0px',
       });
       panel._identityObserver.observe(largeIdentity);
     } else {
