@@ -3054,6 +3054,14 @@
         }
         return;
       }
+      if (e.data?.type === 'cottage-register-open') {
+        if (_initDone) {
+          document.body.classList.add('is-quick-entry');
+          _openMultiSheet?.({ startStep: 1 });
+          _notifySheetShown();
+        }
+        return;
+      }
       if (e.data?.type !== 'cottage-register') return;
       const ds = e.data.date;
       if (!ds) return;

@@ -1031,7 +1031,8 @@
     const w = _pmFrame?.contentWindow;
     if (!w) return;
     w.postMessage({ type: 'cottage-reset-week', offset: opts.weekOffset ?? 0 }, '*');
-    if (opts.register) w.postMessage({ type: 'cottage-register', date: opts.register }, '*');
+    if (opts.register === true) w.postMessage({ type: 'cottage-register-open' }, '*');
+    else if (opts.register) w.postMessage({ type: 'cottage-register', date: opts.register }, '*');
     else if (opts.edit) w.postMessage({ type: 'cottage-edit', date: opts.edit }, '*');
   }
   function _pmEsc(e) { if (e.key === 'Escape') _pmCloseModal(); }

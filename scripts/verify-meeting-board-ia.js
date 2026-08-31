@@ -5,6 +5,7 @@ const path = require('path');
 
 const NEG = process.argv.includes('--negctl');
 const src = fs.readFileSync(path.join(__dirname, '..', 'assets/js/kakao-auth.js'), 'utf8');
+const daySrc = fs.readFileSync(path.join(__dirname, '..', 'assets/js/day-detail.js'), 'utf8');
 let failures = 0;
 function check(label, condition, detail = '') {
   const ok = NEG && label === '가까운 미래 범위만 사용' ? !condition : condition;
@@ -51,6 +52,12 @@ check('플래너 진입 날짜 컨텍스트를 전달하고 날짜 카드를 강
   && src.includes('.mb-date-card[data-date=') && src.includes('is-focused'));
 check('타인 readOnly 편집 가드 유지', src.includes("${_ro('<button class=\"taste-add-btn")
   && src.includes("const cond = readOnly") && src.includes("const action = _ro("));
+check('모임 등록은 등록 시트로 열고 게임 추가 버튼은 노출하지 않음', src.includes('register: true')
+  && daySrc.includes('cottage-register-open') && src.includes('＋ 참여 등록')
+  && !src.includes('id="meetinglikedAddBtn"') && !src.includes('id="meetingcuriousAddBtn"'));
+check('날짜 카드별 수정·삭제 액션과 기존 삭제 API 유지', src.includes('mb-date-edit')
+  && src.includes('mb-date-delete') && src.includes('deleteMeetingVote')
+  && src.includes('edit: btn.dataset.date'));
 const cardStart = src.indexOf('const _myUpcomingVotes = (_upcomingCardVotes || [])');
 const cardEnd = src.indexOf('// 그룹 요약용 카운트 추출', cardStart);
 const card = src.slice(cardStart, cardEnd);

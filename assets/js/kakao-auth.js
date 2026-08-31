@@ -1566,7 +1566,7 @@ function _bindMeetingSubsheet(subBody, ctx) {
                 ? `<div class="mb-date-games"><div class="mb-date-games-label">${label}</div>${games[type].map(game => _buildDateGameChipHtml(game, type, vote.vote_date)).join('')}</div>`
                 : '';
               return `<article class="mb-date-card${focusDate === vote.vote_date ? ' is-focused' : ''}" data-date="${escH(vote.vote_date)}" data-uid="${escH(userId)}" role="button" tabindex="0">
-                <div class="mb-date-card-head"><strong>${escH(_formatDateLabel(vote.vote_date))}</strong><span>${_formatVoteHour(vote.time_start)}~${_formatVoteHour(vote.time_end)}</span></div>
+                <div class="mb-date-card-head"><strong>${escH(_formatDateLabel(vote.vote_date))}</strong><span class="mb-date-card-time">${_formatVoteHour(vote.time_start)}~${_formatVoteHour(vote.time_end)}</span>${_ro(`<span class="mb-date-card-actions"><button class="mb-date-edit" type="button" data-date="${escH(vote.vote_date)}" aria-label="${escH(_formatDateLabel(vote.vote_date))} 참여 수정">수정</button><button class="mb-date-delete" type="button" data-date="${escH(vote.vote_date)}" aria-label="${escH(_formatDateLabel(vote.vote_date))} 참여 삭제">삭제</button></span>`)}</div>
                 ${intent.length ? `<div class="mb-date-intent">${intent.map(item => `<span>${escH(item)}</span>`).join('')}</div>` : ''}
                 ${renderGames('want', '하고 싶은 게임')}${renderGames('learn', '배우고 싶은 게임')}
                 ${vote.recruitment_message ? `<p class="mb-date-message"><span>한마디</span>${escH(vote.recruitment_message)}</p>` : ''}
@@ -1591,9 +1591,7 @@ function _bindMeetingSubsheet(subBody, ctx) {
             if (weekEl) {
               const bindMeetingDateInteractions = () => {
                 weekEl.querySelector('.mb-planner-edit')?.addEventListener('click', () =>
-                  window.openPlannerModal?.({ weekOffset: 0, onDirtyClose: _loadMeetingWeek }));
-                weekEl.querySelector('#meetinglikedAddBtn')?.addEventListener('click', () => _openMbAddModal('want'));
-                weekEl.querySelector('#meetingcuriousAddBtn')?.addEventListener('click', () => _openMbAddModal('learn'));
+                  window.openPlannerModal?.({ weekOffset: 0, register: true, onDirtyClose: _loadMeetingWeek }));
                 weekEl.querySelectorAll('.mb-date-card[data-date][data-uid]').forEach(entry => {
                   const openDate = e => {
                     if (e.type === 'keydown' && !['Enter', ' '].includes(e.key)) return;
@@ -1606,10 +1604,26 @@ function _bindMeetingSubsheet(subBody, ctx) {
                   entry.addEventListener('click', openDate);
                   entry.addEventListener('keydown', openDate);
                 });
+                weekEl.querySelectorAll('.mb-date-edit').forEach(btn => btn.addEventListener('click', e => {
+                  e.stopPropagation();
+                  window.openPlannerModal?.({ weekOffset: 0, edit: btn.dataset.date, onDirtyClose: _loadMeetingWeek });
+                }));
+                weekEl.querySelectorAll('.mb-date-delete').forEach(btn => btn.addEventListener('click', async e => {
+                  e.stopPropagation();
+                  const date = btn.dataset.date;
+                  if (!confirm(`${date} 모임 참여를 삭제할까요?`)) return;
+                  const result = await window.CottageDB?.deleteMeetingVote?.(String(userId), date);
+                  if (!result?.success) {
+                    window.showToast?.('삭제하지 못했어요. 다시 시도해 주세요.');
+                    return;
+                  }
+                  await _loadMeetingWeek();
+                  window.showToast?.('참여 등록을 삭제했어요.');
+                }));
               };
               _renderMeetingDates = () => {
                 const cards = _buildMeetingDateCardsHtml(_weekData.upcomingVotes, _weekData.myVoteGames);
-                weekEl.innerHTML = `<div class="taste-section-label">다가오는 모임 ${_ro('<button class="mb-planner-edit" type="button" title="모임 플래너 편집">✎ 편집</button><button class="taste-add-btn taste-add-btn--inline" id="meetinglikedAddBtn" type="button">＋ 하고 싶은 게임</button><button class="taste-add-btn taste-add-btn--inline" id="meetingcuriousAddBtn" type="button">＋ 배우고 싶은 게임</button>')}</div>${cards}`;
+                weekEl.innerHTML = `<div class="taste-section-label">다가오는 모임 ${_ro('<button class="mb-planner-edit" type="button" title="참여 등록">＋ 참여 등록</button>')}</div>${cards}`;
                 bindMeetingDateInteractions();
               };
               _renderMeetingDates();
