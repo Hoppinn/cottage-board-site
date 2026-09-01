@@ -500,6 +500,9 @@
 
     function showWizardStep(step) {
       wizardStep = step;
+      // 저장 완료 뒤 hidden 처리된 footer가 iframe 재진입에서도 남지 않게, 실제 단계가
+      // 열릴 때마다 navigation을 복구한다.
+      wizardNav.hidden = false;
       wizard.querySelectorAll('.intro-wizard-step').forEach(el => el.classList.toggle('is-active', Number(el.dataset.step) === step));
       wizardProgress.textContent = `${step} / 6`;
       wizardPrev.hidden = step === 1;
