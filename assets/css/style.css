@@ -6720,6 +6720,9 @@ html:has(body.embed-mode) { scroll-padding-top: 0; }
 .intro-wizard-overlay.is-open{display:flex;}
 html.intro-wizard-embed,html.intro-wizard-embed body{background:transparent!important;overflow:hidden;}
 html.intro-wizard-embed .club-breadcrumb,html.intro-wizard-embed .page-mini-hero,html.intro-wizard-embed .intro-form-card,html.intro-wizard-embed .intro-card-grid,html.intro-wizard-embed .site-footer{display:none!important;}
+/* 프로필 보드 iframe은 일반 페이지 요소만 숨긴다. 실제 6단계 wizard footer는
+   showWizardStep()이 hidden을 해제한 뒤 반드시 자체 grid를 유지해야 한다. */
+html.intro-wizard-embed .intro-wizard-nav:not([hidden]){display:grid!important;visibility:visible!important;}
 .intro-wizard{
   display:flex;
   flex-direction:column;

@@ -19,6 +19,7 @@
 1. 사진 전체보기는 `.profile-section-more-btn`의 별도 토글이라 일반 목록 sticky 복원 경로를 타지 않는다. 사진 접기 시 같은 sticky 헤더 측정·scroll 복원을 붙인다.
 2. 모임 보드의 `/?focus=meeting` 진입은 현재 `#meetingPreview`의 첫 카드로 double-rAF scroll하지만 사용자 화면에서는 중간에 머문다. 홈의 scroll restoration/후속 렌더를 실제 DOM 좌표로 다시 측정해 보정한다.
 3. 프로필 수정 iframe 위저드는 `introWizardPrevBtn`/`introWizardNextBtn` markup·click handler가 있으나 사용자 화면에 없다. embed/board-frame CSS 또는 hidden 상태를 실측해 footer navigation이 표시되도록 고친다.
+4. 후속 구조개선 후보: 내 보드의 프로필 수정 iframe/embed 진입과 모임원 프로필 페이지 직접 위저드 진입을 공용화할 수 있는지 별도 Plan에서 검토한다. 현재는 iframe/embed를 유지한다.
 
 ## 1. 사용자 확인 대기
 
