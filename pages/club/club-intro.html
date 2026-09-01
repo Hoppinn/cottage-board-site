@@ -210,10 +210,15 @@
         let primaryTypes = values('preferredGameTypes');
         if (primaryTypes.includes('any')) primaryTypes = ['any'];
         set('preferredGameTypes', primaryTypes);
-        let rangeTypes = values('gameTypeRange').filter(value => value !== 'any' || primaryTypes.includes('any'));
-        rangeTypes = primaryTypes.includes('any') ? ['any'] : [...new Set([...rangeTypes, ...primaryTypes])];
+        let rangeTypes = values('gameTypeRange');
+        rangeTypes = primaryTypes.includes('any')
+          ? ['any']
+          : (rangeTypes.includes('any') ? [...primaryTypes, 'any'] : [...new Set([...rangeTypes, ...primaryTypes])]);
         set('gameTypeRange', rangeTypes);
-        inputs('gameTypeRange').forEach(input => { input.disabled = primaryTypes.includes(input.value) || (input.value === 'any' && !primaryTypes.includes('any')); });
+        inputs('gameTypeRange').forEach(input => {
+          input.disabled = primaryTypes.includes(input.value)
+            || (rangeTypes.includes('any') && input.value !== 'any' && !primaryTypes.includes(input.value));
+        });
         let avoidTypes = values('avoidGameTypes');
         if (avoidTypes.includes('none')) avoidTypes = ['none'];
         if (rangeTypes.includes('party')) avoidTypes = avoidTypes.filter(value => value !== '파티게임');

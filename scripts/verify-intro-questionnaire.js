@@ -14,8 +14,9 @@ let sql = [
   read('docs/migrations/026_member_intro_time_slots_custom_types.sql'),
   read('docs/migrations/030_member_intro_available_days_holiday.sql'),
   read('docs/migrations/031_member_intro_preference_layers.sql'),
+  read('docs/migrations/032_member_intro_range_any.sql'),
 ].join('\n');
-const latestSql = read('docs/migrations/031_member_intro_preference_layers.sql');
+const latestSql = read('docs/migrations/032_member_intro_range_any.sql');
 const client = read('assets/js/supabase-client.js');
 const negctl = process.argv.includes('--negctl');
 
@@ -76,9 +77,10 @@ check(html.includes('desiredFrequencyMin > answers.desiredFrequencyMax'), '희�
 check(sql.includes(uniqueClause), 'intro_complete 사용자당 1회 unique index 누락');
 check(sql.includes("ON CONFLICT (user_id) WHERE reason = 'intro_complete' DO NOTHING"), '중복 지급 충돌 처리 누락');
 check(sql.includes('CREATE OR REPLACE FUNCTION public.submit_member_intro') || sql.includes('CREATE FUNCTION public.submit_member_intro'), '원자적 제출 RPC 누락');
-check(latestSql.includes('game_type_range') && latestSql.includes('avoid_game_depths'), '3단 취향 컬럼 누락');
-check(latestSql.includes('preferred_game_types <@ game_type_range') && latestSql.includes('preferred_game_depths <@ game_depth_range'), '주 취향 부분집합 DB 계약 누락');
-check(latestSql.includes('NOT (game_depth_range && avoid_game_depths)'), '난이도 범위·꺼림 충돌 방지 누락');
+check(sql.includes('game_type_range') && sql.includes('avoid_game_depths'), '3단 취향 컬럼 누락');
+check(sql.includes('preferred_game_types <@ game_type_range') && sql.includes('preferred_game_depths <@ game_depth_range'), '주 취향 부분집합 DB 계약 누락');
+check(sql.includes('NOT (game_depth_range && avoid_game_depths)'), '난이도 범위·꺼림 충돌 방지 누락');
+check(latestSql.includes("p_game_type_range <@ (p_preferred_game_types || ARRAY['any']::TEXT[])"), '범위 장르 무관의 주 취향 포함 계약 누락');
 check(latestSql.includes('RETURNS TABLE(intro_id UUID'), 'member_intros UUID 반환 계약 누락');
 check(latestSql.includes('v_intro_id UUID'), 'member_intros UUID 로컬 변수 누락');
 check(!latestSql.includes("'flexible' = ANY(p_available_days)"), '요일 유동적이 다른 요일과 여전히 배타적');
