@@ -583,7 +583,7 @@
         : `<p class="profile-title-empty">칭호를 획득하려면 업적을 달성해보세요 🏷</p>`;
       const html = `<div class="profile-title-section">` +
         `<div class="profile-title-header">🏷 칭호 <span class="profile-title-count">${earnedIds.size} / ${TITLE_DEFS.length}종</span>` +
-        `<button class="profile-title-toggle-btn" type="button">전체보기 ▾</button></div>` +
+        `<button class="profile-title-toggle-btn" type="button">전체보기 ▼</button></div>` +
         `${_titlePreviewHtml}` +
         `<div class="profile-title-body is-hidden">` +
         `<div class="profile-title-grid">${cardsAll.join('')}</div>` +
@@ -729,7 +729,7 @@
     const html = `<div class="profile-codex-section">
       <div class="profile-codex-header">
         🎲 게임 도감 <span class="profile-codex-summary">${playedCount} / ${totalGames}</span>
-        <button class="profile-codex-toggle-btn" type="button">전체보기 ▾</button>
+        <button class="profile-codex-toggle-btn" type="button">전체보기 ▼</button>
       </div>
       ${_codexPreviewHtml}
       <div class="profile-codex-body is-hidden">
@@ -820,7 +820,7 @@
         `</button>`;
     }).join('')}</div></div>`;
     const html = `<div class="profile-char-section">
-      <div class="profile-char-header">🐾 내 캐릭터 ${_repIconHtml}<span class="profile-char-count">${earnedCharCount} / ${CHAR_DEFS.length}종</span><button class="profile-char-toggle-btn" type="button">전체보기 ▾</button></div>
+      <div class="profile-char-header">🐾 내 캐릭터 ${_repIconHtml}<span class="profile-char-count">${earnedCharCount} / ${CHAR_DEFS.length}종</span><button class="profile-char-toggle-btn" type="button">전체보기 ▼</button></div>
       ${_charPreviewHtml}
       <div class="profile-char-body is-hidden">
         ${emptyHint}
@@ -952,7 +952,7 @@
     const html = `<div class="profile-ach-section">` +
       `<div class="profile-ach-header">` +
       `<span class="profile-ach-title">🏆 업적 <span class="profile-ach-count">${earnedIds.size} / ${ACH_DEFS.length}</span></span>` +
-      `<button class="profile-ach-toggle-btn" type="button">전체보기 ▾</button>` +
+      `<button class="profile-ach-toggle-btn" type="button">전체보기 ▼</button>` +
       `</div>` +
       `${_goalsDiv}` +
       `${_achListHtml}` +

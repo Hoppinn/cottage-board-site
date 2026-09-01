@@ -1615,20 +1615,21 @@ let _plannerPendingEdit = null; // 홈 수정 버튼 → 프레임 준비 전 �
 let _meetingDirty  = false;    // 플래너에서 저장 완료 신호 수신 → closeModal 시 재조회
 let _meetingReload = null;     // initMeetingSection이 loadWeek 참조를 주입
 
-// 보드의 「코티지 모임 미리보기로 가기」는 메인 진입 후 카드가 화면 시작점에 오게 한다.
-// fragment 기본 이동은 sticky header와 전역 smooth scroll의 영향을 함께 받아 위치가 흔들린다.
-(function focusMeetingPreviewFromBoard() {
-  if (new URLSearchParams(location.search).get('focus') !== 'meeting') return;
-  requestAnimationFrame(() => requestAnimationFrame(() => {
-    const section = document.getElementById('meeting');
-    if (!section) return;
-    const headerHeight = document.querySelector('.site-header')?.offsetHeight || 0;
-    const previousBehavior = document.documentElement.style.scrollBehavior;
-    document.documentElement.style.scrollBehavior = 'auto';
-    window.scrollTo(0, Math.max(0, section.offsetTop - headerHeight));
-    document.documentElement.style.scrollBehavior = previousBehavior;
-  }));
-})();
+// 모임 보드의 「코티지 모임 미리보기 페이지」 진입은 비동기 카드 렌더가 끝난 뒤에만
+// 초점을 맞춘다. 미리 렌더 전 section으로 이동하면 뒤이어 카드 높이가 확정되면서
+// 브라우저의 복원 위치가 남아 최근 플레이처럼 엉뚱한 곳에 보일 수 있다.
+let _meetingPreviewFocusPending = new URLSearchParams(location.search).get('focus') === 'meeting';
+function focusMeetingPreviewFromBoard() {
+  if (!_meetingPreviewFocusPending) return;
+  const target = document.getElementById('meetingPreview');
+  if (!target?.children.length) return;
+  _meetingPreviewFocusPending = false;
+  const headerHeight = document.querySelector('.site-header')?.offsetHeight || 0;
+  const previousBehavior = document.documentElement.style.scrollBehavior;
+  document.documentElement.style.scrollBehavior = 'auto';
+  window.scrollTo(0, Math.max(0, window.scrollY + target.getBoundingClientRect().top - headerHeight));
+  document.documentElement.style.scrollBehavior = previousBehavior;
+}
 
 // 모임보드 게임 목록 인원조건 select(kakao-auth.js)에서 바로 반영 — 홈 미리보기는
 // dayVotes/dayGames를 초기 로드 시점 값으로만 렌더해 별도 갱신 신호 없이는 갱신 안 됨.
@@ -2098,6 +2099,7 @@ window.addEventListener('cottage-meeting-changed', () => { _meetingReload?.(); }
         votes.filter(v => v.vote_date === selectedDate),
         voteGames.filter(g => g.vote_date === selectedDate),
       );
+      focusMeetingPreviewFromBoard();
     } catch (err) {
       console.error('[홈 이번주 모임 미리보기]', err);
       statusEl.textContent = '🎲 이번주, 함께할 사람을 기다려요';

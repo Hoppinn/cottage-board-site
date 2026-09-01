@@ -1030,7 +1030,11 @@
     const openLatestDate = month => {
       if (!month) return;
       month.querySelectorAll('.pr-sub-session.is-open').forEach(el => el.classList.remove('is-open'));
-      month.querySelector('.pr-sub-session')?.classList.add('is-open');
+      month.querySelectorAll('.pr-sub-toggle').forEach(btn => { btn.textContent = '전체보기 ▼'; btn.setAttribute('aria-expanded', 'false'); });
+      const latest = month.querySelector('.pr-sub-session');
+      latest?.classList.add('is-open');
+      const latestToggle = latest?.querySelector('.pr-sub-toggle');
+      if (latestToggle) { latestToggle.textContent = '접기 ▲'; latestToggle.setAttribute('aria-expanded', 'true'); }
     };
     const compensateHeaderPosition = (header, beforeTop) => {
       const scroller = document.scrollingElement;
@@ -1058,15 +1062,16 @@
         return top;
       };
     };
-    panel.querySelectorAll('.pr-session--bydate > .pr-session-hd').forEach(hd => {
-      hd.addEventListener('pointerdown', () => { hd._prPressedTop = hd.getBoundingClientRect().top; });
-      hd.addEventListener('mousedown', event => event.preventDefault());
+    panel.querySelectorAll('.pr-session--bydate > .pr-session-hd .pr-session-toggle').forEach(btn => {
+      btn.addEventListener('pointerdown', () => { btn.closest('.pr-session-hd')._prPressedTop = btn.closest('.pr-session-hd').getBoundingClientRect().top; });
+      btn.addEventListener('mousedown', event => event.preventDefault());
     });
 
     if (!panel.dataset.monthAccordionBound) {
       panel.dataset.monthAccordionBound = '1';
       panel.addEventListener('click', event => {
-        const hd = event.target.closest('.pr-session--bydate > .pr-session-hd');
+        const toggle = event.target.closest('.pr-session--bydate > .pr-session-hd .pr-session-toggle');
+        const hd = toggle?.closest('.pr-session-hd');
         if (!hd || !panel.contains(hd)) return;
         const session = hd.closest('.pr-session--bydate');
         if (currentView !== 'date' || !session) return;
@@ -1077,15 +1082,18 @@
         hd._prPressedTop = null;
         const shouldCompensate = hasOpenAbove('.pr-session--bydate.is-open', session, targetTopBefore);
         panel.querySelectorAll('.pr-session--bydate.is-open').forEach(el => el.classList.remove('is-open'));
-        if (wasOpen) return;
+        if (wasOpen) { toggle.textContent = '전체보기 ▼'; toggle.setAttribute('aria-expanded', 'false'); return; }
         if (shouldCompensate) compensateHeaderPosition(hd, targetTopBefore);
         session.classList.add('is-open');
+        toggle.textContent = '접기 ▲';
+        toggle.setAttribute('aria-expanded', 'true');
         requestAnimationFrame(() => openLatestDate(session));
       });
     }
-    panel.querySelectorAll('.pr-session:not(.pr-session--bydate) > .pr-session-hd').forEach(hd => {
-      const getPressedTop = bindViewportPress(hd);
-      hd.addEventListener('click', event => {
+    panel.querySelectorAll('.pr-session:not(.pr-session--bydate) > .pr-session-hd .pr-session-toggle').forEach(toggle => {
+      const hd = toggle.closest('.pr-session-hd');
+      const getPressedTop = bindViewportPress(toggle);
+      toggle.addEventListener('click', event => {
         event.preventDefault();
         hd.blur();
         const session = hd.closest('.pr-session');
@@ -1093,6 +1101,8 @@
         const wasOpen = session.classList.contains('is-open');
         if (wasOpen) {
           session.classList.remove('is-open');
+          toggle.textContent = '전체보기 ▼';
+          toggle.setAttribute('aria-expanded', 'false');
           getPressedTop();
           return;
         }
@@ -1102,6 +1112,8 @@
           .forEach(el => el.classList.remove('is-open'));
         if (shouldCompensate) compensateHeaderPosition(hd, targetTopBefore);
         session.classList.add('is-open');
+        toggle.textContent = '접기 ▲';
+        toggle.setAttribute('aria-expanded', 'true');
         const month = session.querySelector('.pr-month-session');
         if (month) {
           month.classList.add('is-open');
@@ -1109,9 +1121,10 @@
         }
       });
     });
-    panel.querySelectorAll('.pr-month-hd').forEach(hd => {
-      const getPressedTop = bindViewportPress(hd);
-      hd.addEventListener('click', event => {
+    panel.querySelectorAll('.pr-month-hd .pr-month-toggle').forEach(toggle => {
+      const hd = toggle.closest('.pr-month-hd');
+      const getPressedTop = bindViewportPress(toggle);
+      toggle.addEventListener('click', event => {
         event.preventDefault();
         hd.blur();
         const month = hd.closest('.pr-month-session');
@@ -1124,15 +1137,20 @@
         if (!wasOpen) {
           if (shouldCompensate) compensateHeaderPosition(hd, targetTopBefore);
           month.classList.add('is-open');
+          toggle.textContent = '접기 ▲';
+          toggle.setAttribute('aria-expanded', 'true');
           requestAnimationFrame(() => openLatestDate(month));
         } else {
+          toggle.textContent = '전체보기 ▼';
+          toggle.setAttribute('aria-expanded', 'false');
           getPressedTop();
         }
       });
     });
-    panel.querySelectorAll('.pr-sub-hd').forEach(hd => {
-      const getPressedTop = bindViewportPress(hd);
-      hd.addEventListener('click', event => {
+    panel.querySelectorAll('.pr-sub-hd .pr-sub-toggle').forEach(toggle => {
+      const hd = toggle.closest('.pr-sub-hd');
+      const getPressedTop = bindViewportPress(toggle);
+      toggle.addEventListener('click', event => {
         event.preventDefault();
         hd.blur();
         const sub = hd.closest('.pr-sub-session');
@@ -1147,13 +1165,20 @@
           if (!wasOpen) {
             if (shouldCompensate) compensateHeaderPosition(hd, targetTopBefore);
             requestAnimationFrame(() => sub.classList.add('is-open'));
+            toggle.textContent = '접기 ▲';
+            toggle.setAttribute('aria-expanded', 'true');
           } else {
+            toggle.textContent = '전체보기 ▼';
+            toggle.setAttribute('aria-expanded', 'false');
             getPressedTop();
           }
           return;
         }
         if (currentView !== 'date' || !month) {
           sub.classList.toggle('is-open');
+          const isOpen = sub.classList.contains('is-open');
+          toggle.textContent = isOpen ? '접기 ▲' : '전체보기 ▼';
+          toggle.setAttribute('aria-expanded', String(isOpen));
           getPressedTop();
           return;
         }
@@ -1166,6 +1191,8 @@
           if (shouldCompensate) compensateHeaderPosition(hd, targetTopBefore);
           // 2단계: 위치 보정이 끝난 다음 frame에 새 내용만 펼친다.
           requestAnimationFrame(() => sub.classList.add('is-open'));
+          toggle.textContent = '접기 ▲';
+          toggle.setAttribute('aria-expanded', 'true');
         }
       });
     });
@@ -1192,8 +1219,8 @@
         const wrap = btn.closest('.pr-dates-more');
         wrap.classList.toggle('is-open');
         btn.textContent = wrap.classList.contains('is-open')
-          ? btn.textContent.replace('더 보기 ▾', '접기 ▴')
-          : btn.textContent.replace('접기 ▴', '더 보기 ▾');
+          ? '접기 ▲'
+          : '전체보기 ▼';
       });
     });
     panel.querySelectorAll('.pr-rec-more-btn').forEach(btn => {
@@ -1386,11 +1413,11 @@
       const totalDates = [...ymMap.values()].reduce((s, dm) => s + dm.size, 0);
 
       html += `<div class="pr-session">
-        <button class="pr-session-hd" type="button">
+        <div class="pr-session-hd">
           <span class="pr-session-date">${escH(label)}</span>
           <span class="pr-session-summary">${totalDates}회 · ${totalGames}게임</span>
-          <span class="pr-session-arrow">▾</span>
-        </button>
+          <button class="pr-session-toggle" type="button" aria-expanded="false">전체보기 ▼</button>
+        </div>
         <div class="pr-session-body">`;
 
       const sortedYms = [...ymMap.entries()].sort((a, b) => b[0].localeCompare(a[0]));
@@ -1403,11 +1430,11 @@
         const isLatestYm = ym === latestYm;
 
         html += `<div class="pr-month-session">
-          <button class="pr-month-hd" type="button">
+          <div class="pr-month-hd">
             <span class="pr-month-label">${escH(ymLabel)}</span>
             <span class="pr-month-summary">${dateMap.size}회 · ${ymTotalGames}게임</span>
-            <span class="pr-month-arrow">▾</span>
-          </button>
+            <button class="pr-month-toggle" type="button" aria-expanded="false">전체보기 ▼</button>
+          </div>
           <div class="pr-month-body">`;
 
         const MAX_DATES = 3;
@@ -1423,11 +1450,11 @@
           const _dateCaptionMenu = _dateCaption ? `<div class="pr-rec-more pr-hd-caption-menu"><button class="pr-rec-more-btn" type="button" title="더보기">···</button><div class="pr-rec-more-menu"><button class="pr-rec-caption-action" data-caption="${_dateCaption}" type="button">📋 캡션 복사</button></div></div>` : '';
           return `<div class="pr-sub-session" data-date="${dateStr}">
             <div class="pr-sub-hd-row">
-              <button class="pr-sub-hd" type="button">
+              <div class="pr-sub-hd">
                 <span class="pr-sub-date">${escH(formatKstDate(dateStr))}</span>
                 <span class="pr-sub-summary">${recs.length}게임</span>
-                <span class="pr-sub-arrow">▾</span>
-              </button>
+                <button class="pr-sub-toggle" type="button" aria-expanded="false">전체보기 ▼</button>
+              </div>
               ${_dateCaptionMenu}
             </div>
             <div class="pr-sub-body">${buildSessionBody(orderedRecs, user, _orderMap)}</div>
@@ -1439,7 +1466,7 @@
         if (hiddenDates.length > 0) {
           html += `<div class="pr-dates-more">
             <div class="pr-dates-more-body">${hiddenDates.map(renderDateBlock).join('')}</div>
-            <button class="pr-dates-more-btn" type="button">이전 ${hiddenDates.length}회 더 보기 ▾</button>
+            <button class="pr-dates-more-btn" type="button">전체보기 ▼</button>
           </div>`;
         }
 
@@ -1504,11 +1531,11 @@
       const isLatestMonth = ym === latestYm;
 
       html += `<div class="pr-session pr-session--bydate${isLatestMonth ? ' is-open' : ''}">
-        <button class="pr-session-hd" type="button">
+        <div class="pr-session-hd">
           <span class="pr-session-date">${monthLabel}</span>
           <span class="pr-session-summary">${dateMap.size}일 · ${totalGames}게임</span>
-          <span class="pr-session-arrow">▾</span>
-        </button>
+          <button class="pr-session-toggle" type="button" aria-expanded="${isLatestMonth ? 'true' : 'false'}">${isLatestMonth ? '접기 ▲' : '전체보기 ▼'}</button>
+        </div>
         <div class="pr-session-body">`;
 
       const sortedDates = [...dateMap.entries()].sort((a, b) => b[0].localeCompare(a[0]));
@@ -1520,11 +1547,11 @@
         const dateLabel = formatKstDateWithDay(dateStr);
 
         html += `<div class="pr-sub-session${isLatestDate ? ' is-open' : ''}" data-date="${dateStr}">
-          <button class="pr-sub-hd" type="button">
+          <div class="pr-sub-hd">
             <span class="pr-sub-date">${escH(dateLabel)}</span>
             <span class="pr-sub-summary">${totalDateGames}게임</span>
-            <span class="pr-sub-arrow">▾</span>
-          </button>
+            <button class="pr-sub-toggle" type="button" aria-expanded="${isLatestDate ? 'true' : 'false'}">${isLatestDate ? '접기 ▲' : '전체보기 ▼'}</button>
+          </div>
           <div class="pr-sub-body">`;
 
         const sortedGroupEntries = [...groupMap.entries()].sort((a, b) => a[0].localeCompare(b[0], 'ko'));

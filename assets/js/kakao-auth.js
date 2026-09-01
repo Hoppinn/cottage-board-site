@@ -333,7 +333,7 @@ function _afterGrowthRender(subBody, expandChar = false, expandTitle = false, re
     if (expandChar) {
       charBody?.classList.remove('is-hidden');
       charPreview?.classList.add('is-hidden');
-      charToggleBtn.textContent = '접기 ▴';
+      charToggleBtn.textContent = '접기 ▲';
       setTimeout(() => {
         const sec = subBody.querySelector('.profile-char-section');
         if (sec) subBody.scrollTop = sec.getBoundingClientRect().top - subBody.getBoundingClientRect().top + subBody.scrollTop;
@@ -342,7 +342,7 @@ function _afterGrowthRender(subBody, expandChar = false, expandTitle = false, re
     charToggleBtn.addEventListener('click', () => {
       const hidden = charBody.classList.toggle('is-hidden');
       if (charPreview) charPreview.classList.toggle('is-hidden', !hidden);
-      charToggleBtn.textContent = hidden ? '전체보기 ▾' : '접기 ▴';
+      charToggleBtn.textContent = hidden ? '전체보기 ▼' : '접기 ▲';
     });
     subBody.querySelectorAll('.profile-char-preview .profile-char-card').forEach(card => {
       card.addEventListener('click', () => {
@@ -350,7 +350,7 @@ function _afterGrowthRender(subBody, expandChar = false, expandTitle = false, re
         if (!achId) return;
         charBody?.classList.remove('is-hidden');
         charPreview?.classList.add('is-hidden');
-        charToggleBtn.textContent = '접기 ▴';
+        charToggleBtn.textContent = '접기 ▲';
         charBody?.querySelector(`.profile-char-card[data-ach-id="${achId}"]`)?.click();
       });
     });
@@ -394,7 +394,7 @@ function _afterGrowthRender(subBody, expandChar = false, expandTitle = false, re
     if (expandTitle) {
       titleBody?.classList.remove('is-hidden');
       titlePreview?.classList.add('is-hidden');
-      titleToggleBtn.textContent = '접기 ▴';
+      titleToggleBtn.textContent = '접기 ▲';
       setTimeout(() => {
         const sec = subBody.querySelector('.profile-title-section');
         if (sec) subBody.scrollTop = sec.getBoundingClientRect().top - subBody.getBoundingClientRect().top + subBody.scrollTop;
@@ -403,7 +403,7 @@ function _afterGrowthRender(subBody, expandChar = false, expandTitle = false, re
     titleToggleBtn.addEventListener('click', () => {
       const hidden = titleBody.classList.toggle('is-hidden');
       if (titlePreview) titlePreview.classList.toggle('is-hidden', !hidden);
-      titleToggleBtn.textContent = hidden ? '전체보기 ▾' : '접기 ▴';
+      titleToggleBtn.textContent = hidden ? '전체보기 ▼' : '접기 ▲';
     });
     subBody.querySelectorAll('.profile-title-preview .profile-title-card').forEach(card => {
       card.addEventListener('click', () => {
@@ -411,7 +411,7 @@ function _afterGrowthRender(subBody, expandChar = false, expandTitle = false, re
         if (!titleId) return;
         titleBody?.classList.remove('is-hidden');
         titlePreview?.classList.add('is-hidden');
-        titleToggleBtn.textContent = '접기 ▴';
+        titleToggleBtn.textContent = '접기 ▲';
         titleBody?.querySelector(`.profile-title-card[data-title-id="${titleId}"]`)?.click();
       });
     });
@@ -424,7 +424,7 @@ function _afterGrowthRender(subBody, expandChar = false, expandTitle = false, re
       const beforeTop = codexToggleBtn.getBoundingClientRect().top;
       const hidden = codexBody.classList.toggle('is-hidden');
       codexPreviewList?.classList.toggle('is-hidden', !hidden);
-      codexToggleBtn.textContent = hidden ? '전체 보기 ▾' : '접기 ▴';
+      codexToggleBtn.textContent = hidden ? '전체보기 ▼' : '접기 ▲';
       void subBody.offsetHeight;
       const delta = codexToggleBtn.getBoundingClientRect().top - beforeTop;
       if (Math.abs(delta) > 0.5) {
@@ -448,7 +448,7 @@ function _afterGrowthRender(subBody, expandChar = false, expandTitle = false, re
     achToggleBtn.addEventListener('click', () => {
       const list = subBody.querySelector('.profile-ach-list');
       const hidden = list.classList.toggle('is-hidden');
-      achToggleBtn.textContent = hidden ? '전체보기 ▾' : '접기 ▴';
+      achToggleBtn.textContent = hidden ? '전체보기 ▼' : '접기 ▲';
     });
   }
   subBody.querySelectorAll('.profile-codex-more-btn').forEach(btn => {
@@ -456,8 +456,8 @@ function _afterGrowthRender(subBody, expandChar = false, expandTitle = false, re
       const wrap = btn.previousElementSibling;
       const isHidden = wrap.classList.toggle('is-hidden');
       btn.textContent = isHidden
-        ? `전체 보기 (${wrap.querySelectorAll('li').length}개 더) ▾`
-        : '접기 ▴';
+        ? '전체보기 ▼'
+        : '접기 ▲';
     });
   });
   subBody.querySelectorAll('.profile-more-btn').forEach(btn => {
@@ -465,7 +465,7 @@ function _afterGrowthRender(subBody, expandChar = false, expandTitle = false, re
       const wrap = btn.closest('.profile-more-btn-wrap')?.previousElementSibling;
       if (!wrap) return;
       const isHidden = wrap.classList.toggle('is-hidden');
-      btn.textContent = isHidden ? `더 보기 (${btn.dataset.moreCount}건 더)` : '접기';
+      btn.textContent = isHidden ? '전체보기 ▼' : '접기 ▲';
     });
   });
   // 🚨 `_growthInnerHtml`은 패널 오픈 시 **1회** 만들어진 문자열이라, 수집 보드에
@@ -512,7 +512,7 @@ function _buildGameListHtml(gameIds, emptyMsg) {
       </li>`;
   });
   const hasMore = allItems.length > PREV_GAME;
-  return `<ul class="profile-gamelist">${allItems.slice(0, PREV_GAME).join('')}${hasMore ? `<div class="profile-more-wrap is-hidden">${allItems.slice(PREV_GAME).join('')}</div><li class="profile-more-btn-wrap"><button class="profile-more-btn" data-more-count="${allItems.length - PREV_GAME}" type="button">더 보기 (${allItems.length - PREV_GAME}개 더)</button></li>` : ''}</ul>`;
+  return `<ul class="profile-gamelist">${allItems.slice(0, PREV_GAME).join('')}${hasMore ? `<div class="profile-more-wrap is-hidden">${allItems.slice(PREV_GAME).join('')}</div><li class="profile-more-btn-wrap"><button class="profile-more-btn" type="button">전체보기 ▼</button></li>` : ''}</ul>`;
 }
 
 // R2 DRY: _openTasteAddModal(취향보드)/_openBoxAddSearch(모임보드 취향박스) 공용 검색-추가 모달.
@@ -604,21 +604,22 @@ function _openGameAddSearchModal({ overlayId, title, inList, onAdd, onRemove }) 
 }
 
 function _bindActivityTogglesAndMore(subBody) {
-  subBody.querySelectorAll('.profile-activity-toggle, .profile-sub-toggle').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const list = btn.nextElementSibling;
-      const arrow = btn.querySelector('.profile-toggle-arrow');
-      const collapsed = list.classList.toggle('is-collapsed');
-      arrow.textContent = collapsed ? '▾' : '▴';
-    });
-  });
   subBody.querySelectorAll('.profile-more-btn').forEach(btn => {
     btn.addEventListener('click', () => {
-      const wrap = btn.closest('.profile-activity-list').querySelector('.profile-more-wrap');
+      const wrap = btn._profileMoreWrap || btn.closest('.profile-activity-list')?.querySelector('.profile-more-wrap');
+      if (!wrap) return;
       const isHidden = wrap.classList.toggle('is-hidden');
-      btn.textContent = isHidden
-        ? `더 보기 (${wrap.querySelectorAll('li').length}건 더)`
-        : '접기';
+      btn.textContent = isHidden ? '전체보기 ▼' : '접기 ▲';
+    });
+  });
+  subBody.querySelectorAll('.profile-section-more-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const group = btn.closest('.profile-activity-group');
+      const hidden = group?.querySelectorAll('[data-profile-section-more]') || [];
+      const isExpanded = btn.getAttribute('aria-expanded') === 'true';
+      hidden.forEach(el => el.classList.toggle('record-photo-hidden', isExpanded));
+      btn.setAttribute('aria-expanded', String(!isExpanded));
+      btn.textContent = isExpanded ? '전체보기 ▼' : '접기 ▲';
     });
   });
 }
@@ -687,6 +688,17 @@ window.openCottageGameAddSearchModal = _openGameAddSearchModal;
 
 function _bindRecordSubsheet(subBody, ctx) {
   const { _getGameKeyById, _allPhotoData, _PHOTO_SHOW, readOnly } = ctx;
+          // 콘텐츠 아래의 더보기는 수집 보드와 같은 섹션 헤더 컨트롤로 올린다.
+          // 원래 목록의 숨김 wrapper를 버튼에 보관해 위치를 옮겨도 기존 표시 개수·상태를 유지한다.
+          subBody.querySelectorAll('.profile-activity-group').forEach(group => {
+            const btn = group.querySelector('.profile-more-btn');
+            const header = group.querySelector('.profile-activity-header');
+            const wrap = group.querySelector('.profile-more-wrap');
+            if (!btn || !header || !wrap) return;
+            btn._profileMoreWrap = wrap;
+            btn.closest('.profile-more-btn-wrap')?.remove();
+            header.appendChild(btn);
+          });
           if (!subBody.querySelector('.profile-record-action-row')) {
             const actionRow = document.createElement('div');
             actionRow.className = 'profile-record-action-row';
@@ -709,12 +721,14 @@ function _bindRecordSubsheet(subBody, ctx) {
           // 게임평 텍스트: 2줄로 자르고 항목별 "더보기"를 붙이던 방식은 2026-07-30 제거 —
           // 대부분 짧은 글인데 거의 매 항목마다 잘려서 "더보기"가 반복되니 오히려 산만하고,
           // 텍스트와 떨어진 줄에 떠서 어느 리뷰 것인지도 헷갈렸다(사용자 지적). 그냥 전문 표시.
-          // 게임명 + 썸네일 클릭 → 게임 기록 시트
+          // 게임명 + 썸네일 클릭 → 플레이 기록 페이지와 같은 공통 game identity resolver를 거친 기록 시트
           subBody.querySelectorAll('.profile-activity-item[data-game-id]').forEach(li => {
             const gameId = li.dataset.gameId;
             if (!gameId) return;
             const openSheet = () => {
-              const key = _getGameKeyById(gameId);
+              // gameData에 없는 비보유 게임도 기록 페이지는 raw game_id로 연다.
+              // 플레이 기록 게시판과 같은 "해결된 key 또는 원본 ID" 계약이다.
+              const key = window.getGameKeyById?.(gameId) || gameId;
               if (!key) return;
               window.ensureGameSheet?.();
               window.openGameRecordSheet?.(key);
@@ -722,21 +736,6 @@ function _bindRecordSubsheet(subBody, ctx) {
             li.querySelector('.profile-game-link')?.addEventListener('click', openSheet);
             li.querySelector('.profile-record-thumb, .profile-record-thumb-empty')?.addEventListener('click', openSheet);
           });
-          // 더보기/접기 — 라이트박스 기능(play-records-utils.js) 유무와 무관하게 항상 동작
-          const _moreBadge = subBody.querySelector('.record-photo-more-badge');
-          if (_moreBadge) {
-            const _hiddenTotal = _allPhotoData.length - _PHOTO_SHOW;
-            let _photoExpanded = false;
-            _moreBadge.addEventListener('click', e => {
-              e.stopPropagation();
-              _photoExpanded = !_photoExpanded;
-              subBody.querySelectorAll('.record-photo-thumb').forEach(img => {
-                const idx = parseInt(img.dataset.photoIdx || '0', 10);
-                if (idx >= _PHOTO_SHOW) img.classList.toggle('record-photo-hidden', !_photoExpanded);
-              });
-              _moreBadge.textContent = _photoExpanded ? '접기' : `더 보기 (${_hiddenTotal}장 더)`;
-            });
-          }
           // 사진 클릭 → 라이트박스 (캡션+삭제 포함)
           if (window.openLightbox && _allPhotoData.length) {
             const _myId = String(window.getKakaoUser?.()?.id || '');
@@ -887,7 +886,7 @@ function _bindTasteSubsheet(subBody, ctx) {
                   const hidden = wrap.hidden;
                   wrap.hidden = !hidden;
                   const restCount = wrap.querySelectorAll('.taste-game-item').length;
-                  moreBtn.textContent = hidden ? '접기' : `더 보기 (${restCount}개 더)`;
+                  moreBtn.textContent = hidden ? '접기 ▲' : '전체보기 ▼';
                 }
                 return;
               }
@@ -2086,7 +2085,7 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
       ${preview}
       ${hasMore ? `<div class="profile-more-wrap is-hidden">${rest}</div>
         <li class="profile-more-btn-wrap">
-          <button class="profile-more-btn" type="button">더 보기 (${items.length - previewCount}건 더)</button>
+          <button class="profile-more-btn" type="button">전체보기 ▼</button>
         </li>` : ''}
     </ul>`;
   }
@@ -2131,9 +2130,7 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
       const sepHtml = (isFirst && newGroup) ? '<li class="profile-date-group-sep" aria-hidden="true"></li>' : '';
       const _thumbKey = _getGameThumbKey(r.game_id);
       const _thumbUrl = _thumbKey ? window.gameData[_thumbKey]?.images?.thumbnail : null;
-      const _thumbHtml = _thumbUrl
-        ? `<img class="profile-record-thumb" src="${escH(_thumbUrl)}" alt="" loading="lazy" onerror="this.style.display='none'">`
-        : `<span class="profile-record-thumb-empty"></span>`;
+      const _thumbHtml = `<img class="profile-record-thumb${_thumbUrl ? '' : ' profile-record-thumb--placeholder'}" src="${escH(_thumbUrl || '/assets/images/main/hero.png')}" alt="" loading="lazy" onerror="this.onerror=null;this.src='/assets/images/main/hero.png'">`;
       const itemHtml = `${sepHtml}<li class="profile-activity-item" data-game-id="${escH(String(r.game_id || ''))}">${_thumbHtml}<button class="profile-game-link profile-game-link--light" type="button">${escH(getGameName(r.game_id))}</button>${pLabel}${dateHtml}</li>`;
       if (_playVisCnt < PREVIEW) { _playVisHtml += itemHtml; _playVisCnt++; }
       else _playHidHtml += itemHtml;
@@ -2143,7 +2140,7 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
   const playListHtml = `<ul class="profile-activity-list is-collapsed">
     ${_playVisHtml}
     ${_playHasMore ? `<div class="profile-more-wrap is-hidden">${_playHidHtml}</div>
-      <li class="profile-more-btn-wrap"><button class="profile-more-btn" type="button">더 보기 (${stats.plays.length - PREVIEW}건 더)</button></li>` : ''}
+      <li class="profile-more-btn-wrap"><button class="profile-more-btn" type="button">전체보기 ▼</button></li>` : ''}
   </ul>`;
 
   const _playsWithReview = stats.plays.filter(r => r.review_text);
@@ -2161,9 +2158,7 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
     const pLabel = pn >= 2 ? ` <span class="pr-play-order">(${pn}번째 플레이)</span>` : '';
     const _thumbKey = _getGameThumbKey(r.game_id);
     const _thumbUrl = _thumbKey ? window.gameData[_thumbKey]?.images?.thumbnail : null;
-    const _thumbHtml = _thumbUrl
-      ? `<img class="profile-record-thumb profile-record-thumb--review" src="${escH(_thumbUrl)}" alt="" loading="lazy" onerror="this.style.display='none'">`
-      : `<span class="profile-record-thumb-empty profile-record-thumb--review"></span>`;
+    const _thumbHtml = `<img class="profile-record-thumb profile-record-thumb--review${_thumbUrl ? '' : ' profile-record-thumb--placeholder'}" src="${escH(_thumbUrl || '/assets/images/main/hero.png')}" alt="" loading="lazy" onerror="this.onerror=null;this.src='/assets/images/main/hero.png'">`;
     return `<li class="profile-activity-item profile-activity-item--review" data-game-id="${escH(String(r.game_id || ''))}"><div class="profile-review-header"><span class="profile-review-left">${_thumbHtml}<button class="profile-game-link" type="button">${escH(getGameName(r.game_id))}</button>${pLabel}</span><span class="profile-review-date">${fmtShort(r.played_at || r.created_at)}</span></div><p class="profile-review-text">${escH(r.review_text)}</p></li>`;
   }, 1);
 
@@ -2588,7 +2583,7 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
     };
     if (games.length <= maxInitial) return games.map(renderItem).join('');
     const restCount = games.length - maxInitial;
-    return `${games.slice(0, maxInitial).map(renderItem).join('')}<div class="taste-game-more-wrap" hidden>${games.slice(maxInitial).map(renderItem).join('')}</div><button class="taste-more-btn" type="button">더 보기 (${restCount}개 더)</button>`;
+    return `${games.slice(0, maxInitial).map(renderItem).join('')}<div class="taste-game-more-wrap" hidden>${games.slice(maxInitial).map(renderItem).join('')}</div><button class="taste-more-btn" type="button">전체보기 ▼</button>`;
   }
 
   const _profileGameName = game => {
@@ -2716,19 +2711,19 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
   const _photoCount = userStats?.photoCount || 0;
   const _PHOTO_SHOW = 3;
   const _recentPhotoHtml = _allPhotoData.length
-    ? `<ul class="profile-activity-list"><li style="display:block;padding:4px 0"><div class="record-photo-grid">${_allPhotoData.map((d, i) => `<img class="record-photo-thumb${i >= _PHOTO_SHOW ? ' record-photo-hidden' : ''}" src="${escH(d.url)}" alt="" data-photo-idx="${i}">`).join('')}${_allPhotoData.length > _PHOTO_SHOW ? `<button class="record-photo-more-badge" type="button">더 보기 (${_allPhotoData.length - _PHOTO_SHOW}장 더)</button>` : ''}</div></li></ul>`
+    ? `<ul class="profile-activity-list"><li style="display:block;padding:4px 0"><div class="record-photo-grid">${_allPhotoData.map((d, i) => `<img class="record-photo-thumb${i >= _PHOTO_SHOW ? ' record-photo-hidden' : ''}"${i >= _PHOTO_SHOW ? ' data-profile-section-more' : ''} src="${escH(d.url)}" alt="" data-photo-idx="${i}">`).join('')}</div></li></ul>`
     : _emptyList('아직 사진이 없어요');
   let _recordInnerHtml = `
     <div class="profile-activity-group profile-activity-group--review">
-      <button class="profile-activity-toggle" type="button">💬 게임평 <span class="profile-activity-count">${_allReviews.length}개</span><span class="profile-toggle-arrow">▴</span></button>
+      <div class="profile-activity-header">💬 게임평 <span class="profile-activity-count">${_allReviews.length}개</span></div>
       ${_allReviews.length ? _openActivityList(reviewListHtml) : _emptyList('아직 게임평이 없어요')}
     </div>
     <div class="profile-activity-group">
-      <button class="profile-activity-toggle" type="button">📸 사진 <span class="profile-activity-count">${_photoCount}장</span><span class="profile-toggle-arrow">▾</span></button>
+      <div class="profile-activity-header">📸 사진 <span class="profile-activity-count">${_photoCount}장</span>${_allPhotoData.length > _PHOTO_SHOW ? '<button class="profile-section-more-btn" type="button" aria-expanded="false">전체보기 ▼</button>' : ''}</div>
       ${_recentPhotoHtml}
     </div>
     <div class="profile-activity-group">
-      <button class="profile-activity-toggle" type="button">🎲 플레이 기록 <span class="profile-activity-count">${stats.plays.length}건</span><span class="profile-toggle-arrow">▴</span></button>
+      <div class="profile-activity-header">🎲 플레이 기록 <span class="profile-activity-count">${stats.plays.length}건</span></div>
       ${stats.plays.length ? _openActivityList(playListHtml) : _emptyList('아직 플레이 기록이 없어요')}
     </div>`;
   // 함께한 시간: 통계만 (플레이 기록·코멘트는 기록 보드에서 확인)
@@ -2745,7 +2740,7 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
   // 카드는 옛 개수 그대로였다(들어가면 4개, 나오면 3개). 이제 _boardData(취향·모임 공용
   // 단일 소스)를 받는 함수이고, 변경이 일어난 자리에서 _syncTasteCard()로 다시 그린다.
   const _profileCardDetailRowHtml = (label, value) => value
-    ? `<span class="profile-card-detail-row"><b>${escH(label)}:</b><span class="profile-card-detail-value">${escH(value)}</span></span>`
+    ? `<span class="profile-card-detail-row"><b>${escH(label)}:</b> <span class="profile-card-detail-value">${escH(value)}</span></span>`
     : '';
   const _tasteCardSummaryHtml = (d) => {
     const types = (d.preferredGameTypes || []).map(value => _INTRO_GAME_TYPE_LABELS[value] || value);
@@ -2822,9 +2817,7 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
   const _recentPlayItemHtml = r => {
     const _gk = _getGameKeyById(r.game_id);
     const _gd = _gk ? window.gameData?.[_gk] : null;
-    const _th = _gd?.images?.thumbnail
-      ? `<img class="profile-record-thumb" src="${escH(_gd.images.thumbnail)}" alt="">`
-      : `<span class="profile-record-thumb-empty"></span>`;
+    const _th = `<img class="profile-record-thumb${_gd?.images?.thumbnail ? '' : ' profile-record-thumb--placeholder'}" src="${escH(_gd?.images?.thumbnail || '/assets/images/main/hero.png')}" alt="" onerror="this.onerror=null;this.src='/assets/images/main/hero.png'">`;
     return `<li class="profile-activity-item profile-activity-item--thumb" data-game-id="${escH(String(r.game_id || ''))}">${_th}<button class="profile-game-link profile-game-link--light" type="button">${escH(getGameName(r.game_id))}</button><span class="profile-review-date">${_relDay(r.played_at || r.created_at)}</span></li>`;
   };
   // 5개 초과분은 buildActivityList의 더 보기 뒤로 — 기록 보드 3섹션과 같은 패턴(2026-07-30)
