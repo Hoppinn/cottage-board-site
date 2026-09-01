@@ -8,8 +8,8 @@
 
 - 현재 작업: 모임원 프로필 설문 — 평소 플레이·모임 참여 분리
 - 상세 Plan: [member-intro-play-pattern-plan.md](plans/member-intro-play-pattern-plan.md)
-- 현재 단계: 조사·Plan 완료, 구현과 033 migration은 아직 시작하지 않았다. `usual_play_days/times` 신규 필드가 필요하며 기존 `available_days/times`는 모임 참여 가능 일정 정본으로 보존한다.
-- 다음 작업: Plan 승인 후 033 migration 작성 → 운영 적용 → 새 프런트 배포 순서로 진행한다.
+- 현재 단계: 033 migration 파일 작성·정적 계약 검증 완료. 운영 DB 적용과 프런트 구현은 아직 시작하지 않았다. `usual_play_days/times` 신규 필드가 필요하며 기존 `available_days/times`는 모임 참여 가능 일정 정본으로 보존한다.
+- 다음 작업: 033 운영 적용은 새 프런트가 준비된 뒤 사용자에게 SQL 적용을 요청한다. 그 전까지 `pages/club/club-intro.html`의 위저드 2~4·6단계와 `kakao-auth.js` 출력, 공통 footer를 구현한다.
 - 인수인계: 가장 어려웠던 게임은 기존 `profile_hardest_games` 정본을 유지하고 위저드 편집으로 이동한다. 최초 작성 쿠폰 partial unique 보장은 변경하지 않는다.
 - 승인 대기: 033 DB/RPC 변경 및 구현 Plan 승인.
 - 현재 버그: 게임도감 전체보기 전환 시 시작줄이 살짝 위로 올라오는 증상은 상세 조건 설명 대기.

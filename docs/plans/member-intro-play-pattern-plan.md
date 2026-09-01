@@ -1,6 +1,6 @@
 # 모임원 프로필 설문: 평소 플레이·모임 참여 분리 Plan
 
-상태: **조사·Plan 확정, 구현/운영 migration 미시작**
+상태: **033 migration 작성·정적 검증 완료, 운영 적용·프런트 구현 미시작**
 
 ## 목표와 종료 조건
 
@@ -28,9 +28,9 @@
 읽을 파일: `docs/db-schema.md`, `docs/migrations/031_member_intro_preference_layers.sql`, `docs/migrations/032_member_intro_range_any.sql`
 
 - `member_intros.usual_play_days TEXT[] NOT NULL DEFAULT ARRAY[]::TEXT[]`, `usual_play_times TEXT[] NOT NULL DEFAULT ARRAY[]::TEXT[]`를 추가한다.
-- 허용값·중복·빈 배열 방지 CHECK를 추가한다. 기존 행은 빈 배열로 보존한다.
+- 컬럼 CHECK는 허용값·최대 개수만 보장하고, 기존 행은 빈 배열로 보존한다. 저장 RPC는 새 평소 요일/시간의 비어 있지 않은 값을 요구한다.
 - `submit_member_intro` 시그니처에 `p_usual_play_days`, `p_usual_play_times`를 추가하고 같은 검증·upsert 계약을 넣는다.
-- `p_hardest_games JSONB DEFAULT '[]'::JSONB`도 같은 RPC에 추가한다. 기존 `replace_profile_hardest_games(TEXT, JSONB)`를 RPC 내부에서 호출해, 자기소개 저장·가장 어려웠던 게임 교체·최초 쿠폰 판정을 하나의 트랜잭션으로 처리한다.
+- `p_hardest_games JSONB`도 같은 RPC에 추가한다. 기존 `replace_profile_hardest_games(TEXT, JSONB)`를 RPC 내부에서 호출해, 자기소개 저장·가장 어려웠던 게임 교체·최초 쿠폰 판정을 하나의 트랜잭션으로 처리한다.
 - `voucher_log`의 `intro_complete` partial unique 계약은 변경하지 않는다. 수정 저장에서 `voucher_granted=false`가 유지된다.
 
 롤백: 033과 새 프런트는 함께 되돌린다. 신규 평소 플레이 데이터만 제거 대상이며 기존 `member_intros`, `profile_hardest_games`, 쿠폰 행은 손대지 않는다.

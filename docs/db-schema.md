@@ -28,6 +28,7 @@
 | 030 자기소개 가능 요일 `holiday` 호환 확장 | ✅ **운영 적용 완료 (사용자 확인, 2026-09-01)** — `available_days` 허용값에 `holiday`를 추가하며 기존 값과 RPC 시그니처를 보존한다. |
 | 031 자기소개 취향 3단 구조 | ✅ **운영 적용 완료 (사용자 확인, 2026-09-01)** — `member_intros`의 유형·난이도 3단 필드와 `submit_member_intro` 부분집합/충돌 계약이 정본이다. 기존 취향 데이터만 초기화했고 무관한 자기소개 정보는 보존한다. |
 | 032 취향 범위 `any` 보정 | ✅ **운영 적용 완료 및 동작 확인 (사용자 확인, 2026-09-01)** — 일반 주 취향과 `장르를 가리지 않음(any)`의 취향 범위 동시 선택을 허용하도록 031 제약·RPC를 교체했다. |
+| 033 평소 플레이 습관 분리 | 📝 **파일 작성·정적 검증 완료, 운영 적용 대기** — `member_intros.usual_play_days/usual_play_times`와 `submit_member_intro` 새 시그니처를 추가한다. 기존 `available_days/times`는 모임 참여 가능 일정으로 보존하며, hardest game은 기존 `profile_hardest_games`를 같은 RPC 트랜잭션에서 교체한다. 새 프런트 배포 전에는 운영 DB에 적용하지 않는다. |
 | 024 `meeting_votes` 날짜별 판 의도 | ✅ **운영 DB 반영 + 검증 (2026-08-29)** — 적용 확인 쿼리 `total_rows=69`, REST `Content-Range 0-2/69`로 기존 행 보존과 신규 4컬럼을 확인했다. 격리된 2099년 테스트 행으로 신규 4필드 저장·되읽기, 기존 6인자 `upsertMeetingVote`가 판 의도를 보존하는 부분 갱신, 잘못된 성격·깊이·성향 및 31자 모집 문구의 DB 거부를 확인하고 행을 삭제·0행 재확인했다(`scripts/verify-meeting-play-intent.js --live`). |
 | 027 `meeting_votes.game_style_custom` | ✅ **운영 DB 반영 + 검증 (2026-08-30)** — 적용 확인 `total_rows=76`. `game_style` 허용 코드는 `party\|strategy\|any\|other`, `other`일 때만 공백 제외 1~30자의 `game_style_custom`을 요구한다. 격리된 2099년 테스트 행으로 `other + 협력게임` 저장·되읽기, 기존 인자 호출의 판 의도 보존, 빈 기타 문구 DB 거부를 확인한 뒤 테스트 행 삭제·0행 재확인(`scripts/verify-meeting-play-intent.js --live`). |
 | 028 프로필 보드 IA 데이터 | ✅ **운영 DB 반영 + 검증 (2026-08-31)** — `profile_hardest_games`(사용자별 순서 1~2), 원자 교체 RPC, `meeting_votes.play_traits`의 `hard_game_learning_ok` 확장을 포함한다. |
