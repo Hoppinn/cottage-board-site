@@ -2537,6 +2537,12 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
     const groups = []; ordered.forEach(code => { const item = _INTRO_DEPTH_OPTIONS[code]; const last = groups.at(-1); if (last && last.end === item.start) last.end = item.end; else groups.push({start:item.start,end:item.end}); });
     return groups.map(group => `${group.start.toFixed(1)}~${group.end.toFixed(1)}`).join(' · ');
   };
+  const _depthNames = values => (values || []).map(code => _INTRO_DEPTH_OPTIONS[code]?.name).filter(Boolean).join(' · ');
+  const _formatPrimaryDepthNames = values => {
+    const ordered = ['intro','light','strategy','hardcore'].filter(code => (values || []).includes(code));
+    if (ordered.length <= 1) return _depthNames(ordered);
+    return ordered.map(code => ({ intro:'입문', light:'라이트', strategy:'매니아', hardcore:'하드코어' })[code]).join(' · ');
+  };
   const _INTRO_CLOCKTOWER_LABELS = { love:'매우 좋아함', interested:'기회가 되면 참여하고 싶음', curious:'아직 모르지만 해보고 싶음', not_preferred:'별로 선호하지 않음', no:'참여하고 싶지 않음' };
   const _INTRO_DAY_LABELS_EXTENDED = { ..._INTRO_DAY_LABELS, holiday:'공휴일' };
   const _introLabels = (values, map) => (values || []).map(value => map[value] || value).join(', ');
@@ -2611,12 +2617,6 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
     const _ruleSet = _makeRuleSet(d);
     const likedGames = d.likedGames || [];
     const curiousGames = d.curiousGames || [];
-    const _depthNames = values => (values || []).map(code => _INTRO_DEPTH_OPTIONS[code]?.name).filter(Boolean).join(' · ');
-    const _rangeDepthNames = values => {
-      const ordered = ['intro','light','strategy','hardcore'].filter(code => (values || []).includes(code));
-      if (ordered.length <= 1) return _depthNames(ordered);
-      return ordered.map(code => ({ intro:'입문', light:'라이트', strategy:'매니아', hardcore:'하드코어' })[code]).join(' · ');
-    };
     const _gameRangeNames = values => (values || []).includes('any')
       ? _INTRO_GAME_TYPE_LABELS.any
       : _introLabels(values, _INTRO_GAME_TYPE_LABELS);
@@ -2674,8 +2674,8 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
       </div>
       <div class="profile-taste-group">
         <div class="profile-taste-subtitle">게임 난이도</div>
-        ${_tasteTier('주 난이도', _rangeDepthNames(d.preferredGameDepths), _formatDepthRanges(d.preferredGameDepths))}
-        ${_tasteTier('즐기는 범위', _rangeDepthNames(d.gameDepthRange), _formatDepthRanges(d.gameDepthRange))}
+        ${_tasteTier('주 난이도', _formatPrimaryDepthNames(d.preferredGameDepths), _formatDepthRanges(d.preferredGameDepths))}
+        ${_tasteTier('즐기는 범위', _formatPrimaryDepthNames(d.gameDepthRange), _formatDepthRanges(d.gameDepthRange))}
         ${_tasteTier('꺼림 난이도', avoidDepths.length ? _depthNames(avoidDepths) : '없음', _formatDepthRanges(avoidDepths))}
       </div>
       ${d.clocktowerPreference ? `<div class="profile-taste-clocktower">${_profileInfoRowHtml('시계탑 선호', _INTRO_CLOCKTOWER_LABELS[d.clocktowerPreference] || d.clocktowerPreference)}</div>` : ''}
@@ -2746,19 +2746,16 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
   // 단일 소스)를 받는 함수이고, 변경이 일어난 자리에서 _syncTasteCard()로 다시 그린다.
   const _tasteCardSummaryHtml = (d) => {
     const types = (d.preferredGameTypes || []).map(value => _INTRO_GAME_TYPE_LABELS[value] || value);
-    const depthLabels = (d.preferredGameDepths || []).map(value => _INTRO_DEPTH_OPTIONS[value]?.name).filter(Boolean);
-    const frequency = d.averagePlayFrequency != null ? _INTRO_FREQUENCY_LABELS[d.averagePlayFrequency] : '';
-    const companions = (d.companionTypes || []).map(value => _INTRO_COMPANION_LABELS[value] || value).join(' · ');
+    const depthLabel = _formatPrimaryDepthNames(d.preferredGameDepths);
+    const possibleFrequency = _introFrequencyRange(d.possibleFrequencyMin, d.possibleFrequencyMax);
     const available = window.CottageDB?.formatMemberIntroAvailability?.(d.availableDays, d.availableTimes)
       || [_introLabels(d.availableDays, _INTRO_DAY_LABELS_EXTENDED), window.CottageDB?.formatMemberIntroTimes?.(d.availableTimes)].filter(Boolean).join(' · ')
       || d.available
       || '';
     const bio = d.expectation || d.bio || '';
     return `${bio ? `<span class="profile-card-bio-row">${escH(bio)}</span>` : ''}
-      ${types.length ? `<span class="profile-card-detail-row"><b>주 취향:</b> ${escH(types.join(' · '))}</span>` : ''}
-      ${depthLabels.length ? `<span class="profile-card-detail-row"><b>주 난이도:</b> ${escH(depthLabels.join(' · '))}</span>` : ''}
-      ${(frequency || companions) ? `<span class="profile-card-detail-row"><b>평소 플레이:</b> ${escH([frequency, companions].filter(Boolean).join(' · '))}</span>` : ''}
-      ${available ? `<span class="profile-card-detail-row"><b>참여 가능한 때:</b> ${escH(available)}</span>` : ''}
+      ${(types.length || depthLabel) ? `<span class="profile-card-summary-group profile-card-summary-group--taste">${types.length ? `<span class="profile-card-detail-row"><b>주 취향:</b> ${escH(types.join(' · '))}</span>` : ''}${depthLabel ? `<span class="profile-card-detail-row"><b>주 난이도:</b> ${escH(depthLabel)}</span>` : ''}</span>` : ''}
+      ${(possibleFrequency || available) ? `<span class="profile-card-summary-group profile-card-summary-group--meeting">${possibleFrequency ? `<span class="profile-card-detail-row"><b>참여 가능 빈도:</b> ${escH(possibleFrequency)}</span>` : ''}${available ? `<span class="profile-card-detail-row"><b>참여 가능한 때:</b> ${escH(available)}</span>` : ''}</span>` : ''}
       <span class="profile-card-games-row">좋아하는 게임 ${(d.likedGames || []).length} · 해보고 싶은 게임 ${(d.curiousGames || []).length} · 설명 가능 ${(d.ruleGames || []).length}</span>`;
   };
   const _syncTasteCard = () => {

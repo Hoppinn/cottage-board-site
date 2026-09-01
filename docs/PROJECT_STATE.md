@@ -8,7 +8,7 @@
 
 - 현재 작업: 모임원 프로필 설문 — 평소 플레이·모임 참여 분리
 - 상세 Plan: [member-intro-play-pattern-plan.md](plans/member-intro-play-pattern-plan.md)
-- 현재 단계: 위저드·내 프로필 보드 정본·프로필 보드 미리보기 카드·모임 보드의 명칭 규칙을 동기화했다. `usual_play_days/times`는 평소 습관, 기존 `available_days/times`는 모임 참여 가능 일정 정본으로 분리했다.
+- 현재 단계: 위저드·내 프로필 보드 정본·프로필 보드 미리보기 카드·모임 보드의 명칭 규칙을 동기화했다. 프로필 보드 미리보기 카드는 게임 취향과 모임 참여 가능성만 압축하며, `usual_play_days/times`는 평소 습관, 기존 `available_days/times`는 모임 참여 가능 일정 정본으로 분리했다.
 - 다음 작업: 360px 실화면에서 위저드와 프로필 보드의 줄바꿈을 확인한 뒤, 모임원 목록 카드의 출력 밀도를 정리한다.
 - 인수인계: 가장 어려웠던 게임은 기존 `profile_hardest_games` 정본을 유지하고 위저드 편집으로 이동한다. 최초 작성 쿠폰 partial unique 보장은 변경하지 않는다.
 - 승인 대기: 없음.
