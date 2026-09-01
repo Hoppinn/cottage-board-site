@@ -1485,15 +1485,15 @@ window.addEventListener('cottage-record-changed', initRecentPlay);
   let _recordModalViewActive = false;
 
   function preloadIfLoggedIn() {
-    if (preloaded || !window.getKakaoUser?.()) return;
+  if (preloaded) return;
     preloaded = true;
     frame.src = './pages/game/game-reviews.html?embed=1&tab=input#embed=1&tab=input';
   }
   window.addEventListener('kakao-auth-ready', preloadIfLoggedIn);
   window.addEventListener('cottage-auth-changed', preloadIfLoggedIn);
 
-  function openModal(tab) {
-    if (!window.getKakaoUser?.()) { window.kakaoLogin?.(); return; }
+ function openModal(tab) {
+  if (tab === 'input' && !window.getKakaoUser?.()) { window.kakaoLogin?.(); return; }
     pendingTab = tab;
     modal.setAttribute('aria-hidden', 'false');
     modal.classList.add('is-open');

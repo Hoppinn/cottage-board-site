@@ -1030,11 +1030,11 @@
     const openLatestDate = month => {
       if (!month) return;
       month.querySelectorAll('.pr-sub-session.is-open').forEach(el => el.classList.remove('is-open'));
-      month.querySelectorAll('.pr-sub-toggle').forEach(btn => { btn.textContent = '전체보기 ▼'; btn.setAttribute('aria-expanded', 'false'); });
+      month.querySelectorAll('.pr-sub-toggle').forEach(btn => { btn.setAttribute('aria-expanded', 'false'); });
       const latest = month.querySelector('.pr-sub-session');
       latest?.classList.add('is-open');
       const latestToggle = latest?.querySelector('.pr-sub-toggle');
-      if (latestToggle) { latestToggle.textContent = '접기 ▲'; latestToggle.setAttribute('aria-expanded', 'true'); }
+      if (latestToggle) { latestToggle.setAttribute('aria-expanded', 'true'); }
     };
     const compensateHeaderPosition = (header, beforeTop) => {
       const scroller = document.scrollingElement;
@@ -1062,16 +1062,16 @@
         return top;
       };
     };
-    panel.querySelectorAll('.pr-session--bydate > .pr-session-hd .pr-session-toggle').forEach(btn => {
-      btn.addEventListener('pointerdown', () => { btn.closest('.pr-session-hd')._prPressedTop = btn.closest('.pr-session-hd').getBoundingClientRect().top; });
-      btn.addEventListener('mousedown', event => event.preventDefault());
-    });
+    panel.querySelectorAll('.pr-session--bydate > .pr-session-hd').forEach(hd => {
+  hd.addEventListener('pointerdown', () => { hd._prPressedTop = hd.getBoundingClientRect().top; });
+  hd.addEventListener('mousedown', event => event.preventDefault());
+});
 
     if (!panel.dataset.monthAccordionBound) {
       panel.dataset.monthAccordionBound = '1';
       panel.addEventListener('click', event => {
-        const toggle = event.target.closest('.pr-session--bydate > .pr-session-hd .pr-session-toggle');
-        const hd = toggle?.closest('.pr-session-hd');
+        const hd = event.target.closest('.pr-session--bydate > .pr-session-hd');
+const toggle = hd?.querySelector('.pr-session-toggle');
         if (!hd || !panel.contains(hd)) return;
         const session = hd.closest('.pr-session--bydate');
         if (currentView !== 'date' || !session) return;
@@ -1082,18 +1082,18 @@
         hd._prPressedTop = null;
         const shouldCompensate = hasOpenAbove('.pr-session--bydate.is-open', session, targetTopBefore);
         panel.querySelectorAll('.pr-session--bydate.is-open').forEach(el => el.classList.remove('is-open'));
-        if (wasOpen) { toggle.textContent = '전체보기 ▼'; toggle.setAttribute('aria-expanded', 'false'); return; }
+        if (wasOpen) { toggle.setAttribute('aria-expanded', 'false'); return; }
         if (shouldCompensate) compensateHeaderPosition(hd, targetTopBefore);
         session.classList.add('is-open');
-        toggle.textContent = '접기 ▲';
         toggle.setAttribute('aria-expanded', 'true');
         requestAnimationFrame(() => openLatestDate(session));
       });
     }
-    panel.querySelectorAll('.pr-session:not(.pr-session--bydate) > .pr-session-hd .pr-session-toggle').forEach(toggle => {
-      const hd = toggle.closest('.pr-session-hd');
-      const getPressedTop = bindViewportPress(toggle);
-      toggle.addEventListener('click', event => {
+    panel.querySelectorAll('.pr-session:not(.pr-session--bydate) > .pr-session-hd').forEach(hd => {
+  const toggle = hd.querySelector('.pr-session-toggle');
+  const getPressedTop = bindViewportPress(hd);
+
+  hd.addEventListener('click', event => {
         event.preventDefault();
         hd.blur();
         const session = hd.closest('.pr-session');
@@ -1101,7 +1101,6 @@
         const wasOpen = session.classList.contains('is-open');
         if (wasOpen) {
           session.classList.remove('is-open');
-          toggle.textContent = '전체보기 ▼';
           toggle.setAttribute('aria-expanded', 'false');
           getPressedTop();
           return;
@@ -1112,7 +1111,6 @@
           .forEach(el => el.classList.remove('is-open'));
         if (shouldCompensate) compensateHeaderPosition(hd, targetTopBefore);
         session.classList.add('is-open');
-        toggle.textContent = '접기 ▲';
         toggle.setAttribute('aria-expanded', 'true');
         const month = session.querySelector('.pr-month-session');
         if (month) {
@@ -1121,10 +1119,11 @@
         }
       });
     });
-    panel.querySelectorAll('.pr-month-hd .pr-month-toggle').forEach(toggle => {
-      const hd = toggle.closest('.pr-month-hd');
-      const getPressedTop = bindViewportPress(toggle);
-      toggle.addEventListener('click', event => {
+    panel.querySelectorAll('.pr-month-hd').forEach(hd => {
+  const toggle = hd.querySelector('.pr-month-toggle');
+  const getPressedTop = bindViewportPress(hd);
+
+  hd.addEventListener('click', event => {
         event.preventDefault();
         hd.blur();
         const month = hd.closest('.pr-month-session');
@@ -1137,20 +1136,19 @@
         if (!wasOpen) {
           if (shouldCompensate) compensateHeaderPosition(hd, targetTopBefore);
           month.classList.add('is-open');
-          toggle.textContent = '접기 ▲';
           toggle.setAttribute('aria-expanded', 'true');
           requestAnimationFrame(() => openLatestDate(month));
         } else {
-          toggle.textContent = '전체보기 ▼';
           toggle.setAttribute('aria-expanded', 'false');
           getPressedTop();
         }
       });
     });
-    panel.querySelectorAll('.pr-sub-hd .pr-sub-toggle').forEach(toggle => {
-      const hd = toggle.closest('.pr-sub-hd');
-      const getPressedTop = bindViewportPress(toggle);
-      toggle.addEventListener('click', event => {
+    panel.querySelectorAll('.pr-sub-hd').forEach(hd => {
+  const toggle = hd.querySelector('.pr-sub-toggle');
+  const getPressedTop = bindViewportPress(hd);
+
+  hd.addEventListener('click', event => {
         event.preventDefault();
         hd.blur();
         const sub = hd.closest('.pr-sub-session');
@@ -1165,10 +1163,8 @@
           if (!wasOpen) {
             if (shouldCompensate) compensateHeaderPosition(hd, targetTopBefore);
             requestAnimationFrame(() => sub.classList.add('is-open'));
-            toggle.textContent = '접기 ▲';
             toggle.setAttribute('aria-expanded', 'true');
           } else {
-            toggle.textContent = '전체보기 ▼';
             toggle.setAttribute('aria-expanded', 'false');
             getPressedTop();
           }
@@ -1177,7 +1173,6 @@
         if (currentView !== 'date' || !month) {
           sub.classList.toggle('is-open');
           const isOpen = sub.classList.contains('is-open');
-          toggle.textContent = isOpen ? '접기 ▲' : '전체보기 ▼';
           toggle.setAttribute('aria-expanded', String(isOpen));
           getPressedTop();
           return;
@@ -1186,12 +1181,14 @@
         const targetTopBefore = getPressedTop();
         const shouldCompensate = hasOpenAbove('.pr-session--bydate .pr-sub-session.is-open', sub, targetTopBefore);
         panel.querySelectorAll('.pr-session--bydate .pr-sub-session.is-open')
-          .forEach(el => el.classList.remove('is-open'));
+          .forEach(el => {
+            el.classList.remove('is-open');
+            el.querySelector('.pr-sub-toggle')?.setAttribute('aria-expanded', 'false');
+          });
         if (!wasOpen) {
           if (shouldCompensate) compensateHeaderPosition(hd, targetTopBefore);
           // 2단계: 위치 보정이 끝난 다음 frame에 새 내용만 펼친다.
           requestAnimationFrame(() => sub.classList.add('is-open'));
-          toggle.textContent = '접기 ▲';
           toggle.setAttribute('aria-expanded', 'true');
         }
       });
@@ -1416,7 +1413,7 @@
         <div class="pr-session-hd">
           <span class="pr-session-date">${escH(label)}</span>
           <span class="pr-session-summary">${totalDates}회 · ${totalGames}게임</span>
-          <button class="pr-session-toggle" type="button" aria-expanded="false">전체보기 ▼</button>
+          <button class="pr-session-toggle" type="button" aria-expanded="false"><span class="pr-session-arrow">▾</span></button>
         </div>
         <div class="pr-session-body">`;
 
@@ -1433,7 +1430,7 @@
           <div class="pr-month-hd">
             <span class="pr-month-label">${escH(ymLabel)}</span>
             <span class="pr-month-summary">${dateMap.size}회 · ${ymTotalGames}게임</span>
-            <button class="pr-month-toggle" type="button" aria-expanded="false">전체보기 ▼</button>
+            <button class="pr-month-toggle" type="button" aria-expanded="false"><span class="pr-month-arrow">▾</span></button>
           </div>
           <div class="pr-month-body">`;
 
@@ -1453,7 +1450,7 @@
               <div class="pr-sub-hd">
                 <span class="pr-sub-date">${escH(formatKstDate(dateStr))}</span>
                 <span class="pr-sub-summary">${recs.length}게임</span>
-                <button class="pr-sub-toggle" type="button" aria-expanded="false">전체보기 ▼</button>
+                <button class="pr-sub-toggle" type="button" aria-expanded="false"><span class="pr-sub-arrow">▾</span></button>
               </div>
               ${_dateCaptionMenu}
             </div>
@@ -1534,7 +1531,7 @@
         <div class="pr-session-hd">
           <span class="pr-session-date">${monthLabel}</span>
           <span class="pr-session-summary">${dateMap.size}일 · ${totalGames}게임</span>
-          <button class="pr-session-toggle" type="button" aria-expanded="${isLatestMonth ? 'true' : 'false'}">${isLatestMonth ? '접기 ▲' : '전체보기 ▼'}</button>
+          <button class="pr-session-toggle" type="button" aria-expanded="${isLatestMonth ? 'true' : 'false'}"><span class="pr-session-arrow">▾</span></button>
         </div>
         <div class="pr-session-body">`;
 
@@ -1550,7 +1547,7 @@
           <div class="pr-sub-hd">
             <span class="pr-sub-date">${escH(dateLabel)}</span>
             <span class="pr-sub-summary">${totalDateGames}게임</span>
-            <button class="pr-sub-toggle" type="button" aria-expanded="${isLatestDate ? 'true' : 'false'}">${isLatestDate ? '접기 ▲' : '전체보기 ▼'}</button>
+            <button class="pr-sub-toggle" type="button" aria-expanded="${isLatestDate ? 'true' : 'false'}"><span class="pr-sub-arrow">▾</span></button>
           </div>
           <div class="pr-sub-body">`;
 
