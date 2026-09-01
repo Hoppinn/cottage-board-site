@@ -798,25 +798,6 @@ function _bindTasteSubsheet(subBody, ctx) {
           });
           const userId = String(user.id);
 
-          // ── 평소 즐기는 게임 깊이 (profiles.preferred_game_depths) ──
-          subBody.querySelectorAll('.profile-depth-chip[data-depth]').forEach(btn => {
-            btn.addEventListener('click', async () => {
-              const chips = [...subBody.querySelectorAll('.profile-depth-chip[data-depth]')];
-              const next = chips
-                .filter(chip => chip === btn ? !chip.classList.contains('is-selected') : chip.classList.contains('is-selected'))
-                .map(chip => chip.dataset.depth);
-              chips.forEach(chip => { chip.disabled = true; });
-              const result = await window.CottageDB?.updatePreferredGameDepths?.(userId, next);
-              chips.forEach(chip => { chip.disabled = false; });
-              if (!result?.success) {
-                window.showToast?.('게임 깊이를 저장하지 못했어요. 다시 시도해 주세요.');
-                return;
-              }
-              btn.classList.toggle('is-selected');
-              onProfileDataSaved?.({ preferredGameDepths: next });
-            });
-          });
-
           // ── 가장 어려웠던 게임 최대 2개 (profile_hardest_games) ──
           let hardestGames = (ctx.hardestGames || []).map(game => ({
             game_id: game.game_id || null,
@@ -1029,76 +1010,6 @@ function _bindTasteSubsheet(subBody, ctx) {
           window.__tasteLikesHandler = _onTasteLikesChanged;
           window.addEventListener('cottage-likes-changed', _onTasteLikesChanged);
           }
-
-          // ── 피하는 유형 태그 ──
-          // 현재 DOM(is-active)에서 도출 — 서브시트 재진입(스냅샷 복원) 시에도 _avoidTags(패널 오픈값)와 어긋나지 않게
-          let currentAvoidTags = [...subBody.querySelectorAll('.taste-tag.is-active')].map(b => b.dataset.tag);
-          const _avoidCountEl = subBody.querySelector('.taste-avoid-count');
-          const _updateAvoidCount = () => {
-            if (_avoidCountEl) _avoidCountEl.textContent = currentAvoidTags.length > 0 ? `${currentAvoidTags.length}개 선택됨` : '';
-          };
-          subBody.querySelectorAll('.taste-tag').forEach(btn => {
-            btn.addEventListener('click', async () => {
-              const tag = btn.dataset.tag;
-              const idx = currentAvoidTags.indexOf(tag);
-              if (idx >= 0) {
-                currentAvoidTags.splice(idx, 1);
-                btn.classList.remove('is-active');
-                btn.textContent = tag;
-              } else {
-                currentAvoidTags.push(tag);
-                btn.classList.add('is-active');
-                btn.textContent = `🚫 ${tag}`;
-              }
-              _updateAvoidCount();
-              await window.CottageDB?.updateUserAvoidTags?.(userId, currentAvoidTags);
-            });
-          });
-          // 피하는 유형 더보기 버튼
-          subBody.querySelector('.taste-avoid-more-btn')?.addEventListener('click', function() {
-            const wrap = subBody.querySelector('.taste-avoid-more-wrap');
-            if (!wrap) return;
-            const isHidden = wrap.hasAttribute('hidden');
-            if (isHidden) { wrap.removeAttribute('hidden'); this.textContent = '접기'; }
-            else { wrap.setAttribute('hidden', ''); this.textContent = `더 보기 (${wrap.querySelectorAll('.taste-tag').length}개 더)`; }
-          });
-
-          // ── 피하는 유형 직접입력 ──
-          const avoidCustomInput = subBody.querySelector('.taste-avoid-custom-input');
-          function _attachAvoidTagBtn(btn, tag) {
-            btn.addEventListener('click', async () => {
-              const idx = currentAvoidTags.indexOf(tag);
-              if (idx >= 0) { currentAvoidTags.splice(idx, 1); btn.classList.remove('is-active'); btn.textContent = tag; }
-              else { currentAvoidTags.push(tag); btn.classList.add('is-active'); btn.textContent = `🚫 ${tag}`; }
-              _updateAvoidCount();
-              await window.CottageDB?.updateUserAvoidTags?.(userId, currentAvoidTags);
-            });
-          }
-          async function _addCustomAvoidTag() {
-            const val = avoidCustomInput.value.trim();
-            if (!val || subBody.querySelector(`.taste-tag[data-tag="${CSS.escape(val)}"]`)) { avoidCustomInput.value = ''; return; }
-            currentAvoidTags.push(val);
-            const btn = document.createElement('button');
-            btn.className = 'taste-tag is-active';
-            btn.dataset.tag = val;
-            btn.type = 'button';
-            btn.textContent = `🚫 ${val}`;
-            _attachAvoidTagBtn(btn, val);
-            let moreWrap = subBody.querySelector('.taste-avoid-more-wrap');
-            if (moreWrap) {
-              moreWrap.appendChild(btn);
-              moreWrap.removeAttribute('hidden');
-              const moreBtn = subBody.querySelector('.taste-avoid-more-btn');
-              if (moreBtn) moreBtn.textContent = '접기';
-            } else {
-              subBody.querySelector('.taste-tag-grid')?.appendChild(btn);
-            }
-            _updateAvoidCount();
-            await window.CottageDB?.updateUserAvoidTags?.(userId, currentAvoidTags);
-            avoidCustomInput.value = '';
-          }
-          avoidCustomInput?.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); _addCustomAvoidTag(); } });
-          subBody.querySelector('.taste-avoid-custom-add')?.addEventListener('click', _addCustomAvoidTag);
 
           // ── 커뮤니티 bio 칩 동적 추가 ──
           const _communityBioChips = (allBioSuggestions || []).filter(t => !_PREDEFINED_CHIPS.includes(t));
@@ -2692,21 +2603,6 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
   };
   const _INTRO_CLOCKTOWER_LABELS = { love:'매우 좋아함', interested:'기회가 되면 참여하고 싶음', curious:'아직 모르지만 해보고 싶음', not_preferred:'별로 선호하지 않음', no:'참여하고 싶지 않음' };
   const _INTRO_DAY_LABELS_EXTENDED = { ..._INTRO_DAY_LABELS, holiday:'공휴일' };
-  const _PROFILE_WEIGHT_OPTIONS = {
-    weight_intro: { name:'입문', range:'1.00~1.50' },
-    weight_light: { name:'라이트', range:'1.51~2.50' },
-    weight_heavy: { name:'헤비', range:'2.51~3.50' },
-    weight_hardcore: { name:'하드코어', range:'3.51~5.00' },
-  };
-  const _PROFILE_LEGACY_DEPTH_LABELS = { light:'가볍게', medium:'적당히', deep:'깊게' };
-  const _PROFILE_DEPTH_LABELS = Object.fromEntries([
-    ...Object.entries(_PROFILE_WEIGHT_OPTIONS).map(([code, value]) => [code, `${value.name} · ${value.range}`]),
-    ...Object.entries(_PROFILE_LEGACY_DEPTH_LABELS),
-  ]);
-  const _PROFILE_DEPTH_SUMMARY_LABELS = Object.fromEntries([
-    ...Object.entries(_PROFILE_WEIGHT_OPTIONS).map(([code, value]) => [code, value.name]),
-    ...Object.entries(_PROFILE_LEGACY_DEPTH_LABELS),
-  ]);
   const _introLabels = (values, map) => (values || []).map(value => map[value] || value).join(', ');
   // ── 취향·모임 보드 공용 데이터 (R10b: 진입 시 DB 재조회 = 단일 소스) ────────────
   // 두 보드는 좋아요·궁금해요·한줄소개·피하는유형·룰설명을 똑같이 보여준다. 예전엔 각자
@@ -2760,21 +2656,6 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
       : (game?.custom_name || game?.customName || String(gameId || ''));
   };
   const _profileInfoRowHtml = (label, value) => `<div class="profile-info-row"><span class="profile-info-label">${label}</span><span class="profile-info-value${value ? '' : ' is-empty'}">${value ? escH(value) : '미입력'}</span></div>`;
-  // 모임 보드의 짧은 평소 참고 요약용. 프로필 보드에서는 사용하지 않는다.
-  const _profileSummaryItems = d => {
-    const items = [];
-    const typeLabels = (d.preferredGameTypes || []).filter(value => value !== 'any').map(value => _INTRO_GAME_TYPE_LABELS[value] || value);
-    if (typeLabels.length) items.push(typeLabels.slice(0, 2).join(' · '));
-    const depthLabels = (d.preferredGameDepths || []).map(value => _PROFILE_DEPTH_SUMMARY_LABELS[value]).filter(Boolean);
-    if (depthLabels.length) items.push(`깊이 ${depthLabels.join(' · ')}`);
-    if (d.averagePlayFrequency != null) items.push(_INTRO_FREQUENCY_LABELS[d.averagePlayFrequency]);
-    const hardestNames = (d.hardestGames || []).map(_profileGameName).filter(Boolean);
-    if (hardestNames.length) items.push(`경험 ${hardestNames.join(' · ')}`);
-    const companions = (d.companionTypes || []).map(value => _INTRO_COMPANION_LABELS[value] || value);
-    if (companions.length) items.push(companions.slice(0, 2).join(' · '));
-    if (_bioTagsOf(d).some(tag => tag.includes('새로 해보는 게임'))) items.push('새 게임 도전 선호');
-    return items.slice(0, 6);
-  };
   const _buildHardestGamesHtml = games => {
     if (!games.length) return `<p class="profile-hardest-empty">${readOnly ? '등록된 게임이 없어요' : '해본 게임 중 어려웠던 게임을 추가해보세요'}</p>`;
     return games.map(game => {
@@ -2789,24 +2670,22 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
     }).join('');
   };
 
-  // 진입할 때마다 최신 데이터로 다시 빌드(R10b). 프로필 보드는
-  // 모임 한마디 → 평소 플레이 → 게임 깊이 → 게임 취향 순으로 표시한다.
+  // 내 프로필 보드 정본: 최신 데이터 전체를 3단 게임 취향까지 읽기 전용으로 보여준다.
   function _buildTasteInnerHtml(d) {
-    const _avoidTags = d.avoidTags || [];
     const _ruleSet = _makeRuleSet(d);
     const likedGames = d.likedGames || [];
     const curiousGames = d.curiousGames || [];
-    const depthCodes = d.preferredGameDepths || [];
     const _depthNames = values => (values || []).map(code => _INTRO_DEPTH_OPTIONS[code]?.name).filter(Boolean).join(' · ');
+    const _tasteTier = (label, value, range = '') => `
+      <div class="profile-taste-tier">
+        <span class="profile-taste-tier-label">${label}</span>
+        <span class="profile-taste-tier-value${value ? '' : ' is-empty'}">${value ? escH(value) : '미입력'}${range ? `<small>${escH(range)}</small>` : ''}</span>
+      </div>`;
     const hardestGames = d.hardestGames || [];
     const availableStructured = window.CottageDB?.formatMemberIntroAvailability?.(d.availableDays, d.availableTimes) || [
       _introLabels(d.availableDays, _INTRO_DAY_LABELS_EXTENDED),
       window.CottageDB?.formatMemberIntroTimes?.(d.availableTimes) || _introLabels(d.availableTimes, {}),
     ].filter(Boolean).join(' · ');
-    const legacyDepthCodes = depthCodes.filter(code => _PROFILE_LEGACY_DEPTH_LABELS[code]);
-    const selectedWeightCodes = depthCodes.filter(code => _PROFILE_WEIGHT_OPTIONS[code]);
-    const selectedWeightChips = selectedWeightCodes.map(code => `<span class="profile-depth-chip is-selected">${_PROFILE_WEIGHT_OPTIONS[code].name} · ${_PROFILE_WEIGHT_OPTIONS[code].range}</span>`).join('');
-    const legacyDepthText = legacyDepthCodes.map(code => _PROFILE_LEGACY_DEPTH_LABELS[code]).join(' · ');
     return `
     ${d.expectation
       ? `<section class="profile-info-section profile-expectation-section">
@@ -2829,33 +2708,19 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
     </section>
     <section class="profile-info-section profile-taste-section">
       <div class="profile-main-title">게임 취향</div>
-      <div class="profile-info-list profile-taste-fields">
+      <div class="profile-taste-group">
         <div class="profile-taste-subtitle">게임 유형</div>
-        ${_profileInfoRowHtml('주 취향', _introLabels(d.preferredGameTypes, _INTRO_GAME_TYPE_LABELS))}
-        ${_profileInfoRowHtml('취향 범위', _introLabels(d.gameTypeRange, _INTRO_GAME_TYPE_LABELS))}
-        ${_profileInfoRowHtml('꺼림', _introLabels(d.avoidGameTypes, {}))}
+        ${_tasteTier('주 취향', _introLabels(d.preferredGameTypes, _INTRO_GAME_TYPE_LABELS))}
+        ${_tasteTier('취향 범위', _introLabels(d.gameTypeRange, _INTRO_GAME_TYPE_LABELS))}
+        ${_tasteTier('꺼림', _introLabels(d.avoidGameTypes, {}))}
+      </div>
+      <div class="profile-taste-group">
         <div class="profile-taste-subtitle">게임 난이도</div>
-        ${_profileInfoRowHtml('주 취향', _depthNames(d.preferredGameDepths))}
-        ${d.preferredGameDepths?.length ? _profileInfoRowHtml('범위', _formatDepthRanges(d.preferredGameDepths)) : ''}
-        ${_profileInfoRowHtml('취향 범위', _depthNames(d.gameDepthRange))}
-        ${d.gameDepthRange?.length ? _profileInfoRowHtml('범위', _formatDepthRanges(d.gameDepthRange)) : ''}
-        ${_profileInfoRowHtml('꺼림', _depthNames(d.avoidGameDepths))}
-        ${d.avoidGameDepths?.length ? _profileInfoRowHtml('범위', _formatDepthRanges(d.avoidGameDepths)) : ''}
-      ${d.clocktowerPreference ? _profileInfoRowHtml('시계탑 선호', _INTRO_CLOCKTOWER_LABELS[d.clocktowerPreference] || d.clocktowerPreference) : ''}
+        ${_tasteTier('주 취향', _depthNames(d.preferredGameDepths), _formatDepthRanges(d.preferredGameDepths))}
+        ${_tasteTier('취향 범위', _depthNames(d.gameDepthRange), _formatDepthRanges(d.gameDepthRange))}
+        ${_tasteTier('꺼림', _depthNames(d.avoidGameDepths), _formatDepthRanges(d.avoidGameDepths))}
       </div>
-      <div class="profile-taste-subsection profile-taste-weight-block">
-        <div class="profile-taste-subtitle">선호 웨이트</div>
-        <div class="profile-info-list">
-        <div class="profile-info-row profile-depth-row">
-          <span class="profile-depth-options${readOnly ? ' is-readonly' : ''}">
-            ${readOnly
-              ? (selectedWeightChips || (legacyDepthText ? `<span class="profile-depth-chip is-selected">${escH(legacyDepthText)}</span>` : ''))
-              : Object.entries(_PROFILE_WEIGHT_OPTIONS).map(([code, value]) => `<button class="profile-depth-chip${depthCodes.includes(code) ? ' is-selected' : ''}" data-depth="${code}" type="button"><span>${value.name}</span><small>${value.range}</small></button>`).join('')}
-            ${!readOnly && legacyDepthText ? `<span class="profile-depth-legacy">기존 선택: ${escH(legacyDepthText)} · 새 웨이트를 선택하면 새 기준으로 저장됩니다.</span>` : ''}
-            ${readOnly && !selectedWeightChips && !legacyDepthText ? '<span class="profile-info-value is-empty">미입력</span>' : ''}
-          </span>
-        </div>
-      </div>
+      ${d.clocktowerPreference ? `<div class="profile-taste-clocktower">${_profileInfoRowHtml('시계탑 선호', _INTRO_CLOCKTOWER_LABELS[d.clocktowerPreference] || d.clocktowerPreference)}</div>` : ''}
       </div>
       <div class="profile-taste-subsection profile-taste-hardest-block">
       <div class="profile-experience-block">
@@ -2872,26 +2737,7 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
       <div class="profile-taste-subtitle">👀 해보고 싶은 게임 <span class="taste-count" id="tastecuriousCount">${curiousGames.length}개</span> ${_ro('<button class="taste-add-btn taste-add-btn--inline" id="tastecuriousAddBtn" type="button">+ 게임 추가</button>')}</div>
       <div class="taste-game-list" id="tastecuriousList">${_buildTasteGameItems(curiousGames, _ruleSet)}</div>
     </div>
-    ${readOnly
-      ? (_avoidTags.length ? `<div class="taste-avoid-section">
-      <div class="taste-section-label">🚫 피하는 유형</div>
-      <div class="taste-tag-grid">${_avoidTags.map(t => `<span class="taste-avoid-tag is-active" style="pointer-events:none">${escH(t)}</span>`).join('')}</div>
-    </div>` : '')
-      : `<div class="taste-avoid-section">
-      <div class="taste-section-label">🚫 피하는 유형 <span class="taste-avoid-count">${_avoidTags.length > 0 ? `${_avoidTags.length}개 선택됨` : ''}</span></div>
-      <p class="taste-avoid-desc">선택한 유형은 가급적 피하고 싶어요 <span class="taste-avoid-desc-hint">· 선택 안 하면 제한 없음</span></p>
-      ${(() => {
-        const _avoidRender = t => { const active = _avoidTags.includes(t); return `<button class="taste-tag${active ? ' is-active' : ''}" data-tag="${escH(t)}" type="button">${active ? '🚫 ' : ''}${escH(t)}</button>`; };
-        const _communityAvoid = (allAvoidSuggestions || []).filter(t => !AVOID_TAGS.includes(t));
-        const _overflow = [...AVOID_TAGS.slice(4), ..._communityAvoid];
-        return `<div class="taste-tag-grid">${AVOID_TAGS.slice(0, 4).map(_avoidRender).join('')}${_overflow.length ? `<div class="taste-avoid-more-wrap" hidden>${_overflow.map(_avoidRender).join('')}</div><button class="taste-more-btn taste-avoid-more-btn" type="button">더 보기 (${_overflow.length}개 더)</button>` : ''}</div>`;
-      })()}
-      <div class="taste-avoid-custom-wrap">
-        <input type="text" class="taste-avoid-custom-input" maxlength="15" placeholder="직접 입력 후 Enter">
-        <button aria-label="직접 입력한 것 추가" class="taste-avoid-custom-add" type="button">+</button>
-      </div>
-    </div>
-    </section>`}
+    </section>
     <div class="profile-board-action-row">
       ${_ro(`<button class="profile-board-edit-link" data-board-frame-src="/pages/club/club-intro.html?embed=1&wizard=1#embed=1&wizard=1" data-board-frame-title="${d.questionnaireCompletedAt ? '프로필 수정' : '프로필 작성'}" data-board-frame-wizard="true" type="button">${d.questionnaireCompletedAt ? '프로필 수정' : '프로필 작성'}</button>`)}
       <a class="profile-board-page-link" href="/pages/club/club-intro.html">모임원 프로필 페이지 &gt;</a>
@@ -2937,19 +2783,12 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
   // 알려진 열린 항목(PROJECT_STATE §3): 서브시트는 pull(진입 시 재조회), 카드는 push(나갈 때 갱신)라
   // 해법 방향이 반대여서 R10b 범위에서 제외.
   const _voucherCardSummary = `${voucherBalance}장 보유`;
-  // 취향 카드 요약: 예전엔 패널 오픈 시 1회 문자열이라 서브시트에서 게임을 추가해도
+  // 프로필 보드 미리보기 카드 요약: 주 취향만 빠르게 확인한다. 예전엔 패널 오픈 시 1회 문자열이라 서브시트에서 게임을 추가해도
   // 카드는 옛 개수 그대로였다(들어가면 4개, 나오면 3개). 이제 _boardData(취향·모임 공용
   // 단일 소스)를 받는 함수이고, 변경이 일어난 자리에서 _syncTasteCard()로 다시 그린다.
   const _tasteCardSummaryHtml = (d) => {
-    const types = (d.preferredGameTypes || []).filter(value => value !== 'any').map(value => _INTRO_GAME_TYPE_LABELS[value] || value);
-    const depthCodes = d.preferredGameDepths || [];
-    const depthLabels = depthCodes.map(value => _PROFILE_DEPTH_SUMMARY_LABELS[value]).filter(Boolean);
-    const weightOrder = Object.keys(_PROFILE_WEIGHT_OPTIONS);
-    const selectedWeights = weightOrder.filter(code => depthCodes.includes(code));
-    const depthSummary = selectedWeights.length >= 2
-      ? `${_PROFILE_WEIGHT_OPTIONS[selectedWeights[0]].name}~${_PROFILE_WEIGHT_OPTIONS[selectedWeights[selectedWeights.length - 1]].name}`
-      : depthLabels.join(' · ');
-    const taste = [types.join(' · '), depthSummary].filter(Boolean).join(' · ');
+    const types = (d.preferredGameTypes || []).map(value => _INTRO_GAME_TYPE_LABELS[value] || value);
+    const depthLabels = (d.preferredGameDepths || []).map(value => _INTRO_DEPTH_OPTIONS[value]?.name).filter(Boolean);
     const frequency = d.averagePlayFrequency != null ? _INTRO_FREQUENCY_LABELS[d.averagePlayFrequency] : '';
     const companions = (d.companionTypes || []).map(value => _INTRO_COMPANION_LABELS[value] || value).join(' · ');
     const available = window.CottageDB?.formatMemberIntroAvailability?.(d.availableDays, d.availableTimes)
@@ -2958,7 +2797,8 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
       || '';
     const bio = d.expectation || d.bio || '';
     return `${bio ? `<span class="profile-card-bio-row">${escH(bio)}</span>` : ''}
-      ${taste ? `<span class="profile-card-detail-row"><b>게임 취향:</b> ${escH(taste)}</span>` : ''}
+      ${types.length ? `<span class="profile-card-detail-row"><b>주 취향 유형:</b> ${escH(types.join(' · '))}</span>` : ''}
+      ${depthLabels.length ? `<span class="profile-card-detail-row"><b>주 취향 난이도:</b> ${escH(depthLabels.join(' · '))}</span>` : ''}
       ${(frequency || companions) ? `<span class="profile-card-detail-row"><b>평소 플레이:</b> ${escH([frequency, companions].filter(Boolean).join(' · '))}</span>` : ''}
       ${available ? `<span class="profile-card-detail-row"><b>가능한 요일·시간:</b> ${escH(available)}</span>` : ''}
       <span class="profile-card-games-row">좋아하는 게임 ${(d.likedGames || []).length} · 해보고 싶은 게임 ${(d.curiousGames || []).length} · 설명 가능 ${(d.ruleGames || []).length}</span>`;
