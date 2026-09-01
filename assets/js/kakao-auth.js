@@ -2654,7 +2654,7 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
       </div>
     </section>
     <section class="profile-info-section profile-meeting-play-section">
-      <div class="profile-main-title">모임 플레이</div>
+      <div class="profile-main-title">모임 참여 페이스</div>
       <div class="profile-info-list">
         ${_profileInfoRowHtml('참여 가능 빈도', _introFrequencyRange(d.possibleFrequencyMin, d.possibleFrequencyMax))}
         ${_profileInfoRowHtml('참여 희망 빈도', _introFrequencyRange(d.desiredFrequencyMin, d.desiredFrequencyMax))}
@@ -2671,7 +2671,7 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
       </div>
       <div class="profile-taste-group">
         <div class="profile-taste-subtitle">게임 난이도</div>
-        ${_tasteTier('주 취향', _depthNames(d.preferredGameDepths), _formatDepthRanges(d.preferredGameDepths))}
+        ${_tasteTier('주 취향', _rangeDepthNames(d.preferredGameDepths), _formatDepthRanges(d.preferredGameDepths))}
         ${_tasteTier('취향 범위', _rangeDepthNames(d.gameDepthRange), _formatDepthRanges(d.gameDepthRange))}
         ${avoidDepths.length ? _tasteTier('꺼림', _depthNames(avoidDepths), _formatDepthRanges(avoidDepths)) : _tasteTier('꺼림 난이도', '없음')}
       </div>
