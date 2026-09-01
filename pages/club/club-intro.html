@@ -398,7 +398,7 @@
       const avoided = new Set();
       (intros || []).forEach(row => {
         (row.preferred_game_types || []).forEach(value => { if (!BUILTIN_GAME_TYPES.has(value)) preferred.add(value); });
-        (row._avoid_tags || []).forEach(value => { if (!BUILTIN_AVOID_TYPES.has(value)) avoided.add(value); });
+        (row.avoid_game_types || []).forEach(value => { if (!BUILTIN_AVOID_TYPES.has(value)) avoided.add(value); });
       });
       preferred.forEach(value => addCustomOption('preferredGameTypes', value));
       avoided.forEach(value => addCustomOption('avoidGameTypes', value));
@@ -613,14 +613,13 @@
         return;
       }
 
-      // profiles.avoid_tags는 꺼리는 게임 유형의 기존 SSOT다.
       const userIds = [...new Set(data.map(r => r.user_id).filter(Boolean))];
       let profileByUser = {};
       let likedCountByUser = {};
       let curiousCountByUser = {};
       if (userIds.length) {
         const [profilesRes, likedRes, curiousRes] = await Promise.all([
-          db.from('profiles').select('user_id, bio, avoid_tags, rep_achievement_id, preferred_game_depths').in('user_id', userIds),
+          db.from('profiles').select('user_id, bio, rep_achievement_id').in('user_id', userIds),
           db.from('game_likes').select('user_id').in('user_id', userIds),
           db.from('game_curious').select('user_id').in('user_id', userIds),
         ]);
@@ -633,9 +632,7 @@
       }
       data.forEach(r => {
         r._bio = r.user_id ? (profileByUser[r.user_id]?.bio || '') : '';
-        r._avoid_tags = r.user_id ? (profileByUser[r.user_id]?.avoid_tags || []) : [];
         r._rep_achievement_id = r.user_id ? (profileByUser[r.user_id]?.rep_achievement_id || null) : null;
-        r._preferred_game_depths = r.user_id ? (profileByUser[r.user_id]?.preferred_game_depths || []) : [];
         r._liked_game_count = r.user_id ? (likedCountByUser[r.user_id] || 0) : 0;
         r._curious_game_count = r.user_id ? (curiousCountByUser[r.user_id] || 0) : 0;
       });

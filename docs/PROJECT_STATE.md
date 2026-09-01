@@ -6,12 +6,12 @@
 
 ## 0. 현재 상태
 
-- 현재 작업: 모임원 프로필 출력 3화면 실화면 확인
-- 상세 기획: 기존 [docs/plans/member-board-plan.md](plans/member-board-plan.md) 4단계. 상세 Plan 신설 및 Red 구현 승인 대기.
-- 현재 단계: `내 프로필 보드 정본=전체 / 프로필 보드 미리보기 카드=요약1 / 모임원 목록 카드=요약2` 역할로 출력 개편 코드를 완료했다. 이 세션에는 연결된 브라우저가 없어 실화면 검수는 미실행이다.
-- 다음 작업: 360px에서 정본의 게임 유형·난이도 3단 출력, 미리보기 카드의 주 취향 요약, 모임원 목록 카드의 주 취향·꺼림·참여 정보 밀도를 확인한다.
-- 인수인계: 닉네임·가입 경로·참여 시간/빈도·시계탑 선호·서술은 보존한다. 취향 유형·난이도만 초기화 가능하며, 최초 작성 쿠폰의 partial unique 보장은 유지한다.
-- 승인 대기: 없음. 운영 DB 적용은 사용자 실행 대기이며 030 이전에는 031·새 코드 배포를 하지 않는다.
+- 현재 작업: 화면·용어·데이터 정본 지도 정리 완료
+- 상세 기획: [member-board-plan.md](plans/member-board-plan.md)와 [member-intro-preference-plan.md](plans/member-intro-preference-plan.md)는 완료된 구현 의도를 보존한다.
+- 현재 단계: `member_intros`가 회원 공개 프로필과 게임 취향의 정본이다. 내 프로필 보드 정본·프로필 보드 미리보기 카드·모임원 목록 카드는 모두 이 값을 읽으며, `profiles.avoid_tags`·`profiles.preferred_game_depths`는 레거시 데이터 보존용이다. 화면·용어 탐색은 [UI_MAP.md](UI_MAP.md)를 따른다.
+- 다음 작업: 새 기능 작업을 시작할 때 대상 화면명과 정본을 UI_MAP에서 먼저 확정한다.
+- 인수인계: 닉네임·가입 경로·거주 지역·참여 시간/빈도·시계탑 선호·서술은 보존한다. 최초 작성 쿠폰의 partial unique 보장은 유지한다.
+- 승인 대기: 없음.
 - 현재 버그: 게임도감 전체보기 전환 시 시작줄이 살짝 위로 올라오는 증상은 상세 조건 설명 대기.
 
 ### 다음 시작점
@@ -24,7 +24,7 @@
 
 | 항목 | 남은 확인 | 재개·판정 경로 |
 |---|---|---|
-| 프로필 선호 웨이트 | 신규 `weight_*`를 저장한 뒤 보드를 다시 열어 값이 유지되는지 | [db-schema.md](db-schema.md) 029, [js-api.md](js-api.md) `updatePreferredGameDepths`. 로그인 실계정 왕복만 미확인. |
+| 레거시 프로필 취향 | `profiles.preferred_game_depths`·`profiles.avoid_tags`가 새 설문 출력에 다시 섞이지 않는지 | 새 설문 정본은 `member_intros`; [UI_MAP.md](UI_MAP.md)와 [db-schema.md](db-schema.md)의 계약을 따른다. |
 | 자기소개 제출·교환권 | 최초 제출 1회 지급, 재수정 미지급, PC/모바일 입력 화면 | [db-schema.md](db-schema.md) 023과 [js-api.md](js-api.md) `submitMemberIntro`. 기존 자동 검사는 통과했으나 실사용 경로 확인이 남음. |
 | 사진 연동 | 내 미연동 기록이 정확히 1건인 게임에서 사진 추가 후 `연동하기`가 기존 기록에 병합되는지 | [js-api.md](js-api.md) `_confirmLinkOrPlain`. 실제 파일 선택·업로드 클릭만 미확인. |
 | 플래너 다른 날짜 동기화 | 실제 폰에서 토글이 반응하는지, 수정 진입 시 노출 조건이 이해되는지 | 등록일 2개 선택 → ON → 기존 게임 보존·신규 반영 → 삭제 시 사본 제거. 수정 화면에서는 Step1에서 날짜를 추가해야 토글이 보이는 것이 정상. |

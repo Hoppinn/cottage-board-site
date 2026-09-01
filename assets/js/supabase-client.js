@@ -1050,7 +1050,7 @@ window._cottageSess = (function () {
     if (!userId) return null;
     try {
       const [profileRes, introRes, likedGames, curiousGames, ruleGames] = await Promise.all([
-        db.from('profiles').select('bio, avoid_tags').eq('user_id', userId).maybeSingle(),
+        db.from('profiles').select('bio').eq('user_id', userId).maybeSingle(),
         db.from('member_intros').select('*').eq('user_id', userId).maybeSingle(),
         getUserLikedGamesAll(userId),
         getUserCuriousGamesAll(userId),
@@ -1062,9 +1062,6 @@ window._cottageSess = (function () {
       const intro = introRes.data || {};
       return {
         bio: profileRes.data?.bio || '',
-        // 취향보드 '피하는 유형'. 모임보드도 비선호 칩으로 같은 값을 표시하므로 여기서 함께 반환
-        // → 두 보드가 이 함수 하나만 보면 되는 단일 소스가 됨(R10b)
-        avoidTags: intro.avoid_game_types || [],
         nickname: intro.nickname || '',
         location: intro.location || '',
         available: intro.available || '',
@@ -1097,19 +1094,6 @@ window._cottageSess = (function () {
     } catch (err) { console.error('[getMeetingProfile]', err); return null; }
   }
 
-  // 새 선호 웨이트 코드는 legacy light/medium/deep와 의미가 다르다.
-  // legacy 값은 기존 회원 데이터 호환을 위해 계속 허용하되 자동 변환하지 않는다.
-  const PROFILE_GAME_DEPTH_CODES = new Set([
-    'weight_intro', 'weight_light', 'weight_heavy', 'weight_hardcore',
-    'light', 'medium', 'deep',
-  ]);
-
-  function normalizeProfileGameDepths(depths) {
-    if (!Array.isArray(depths)) return null;
-    const normalized = [...new Set(depths.map(value => String(value).trim()).filter(Boolean))];
-    return normalized.every(value => PROFILE_GAME_DEPTH_CODES.has(value)) ? normalized : null;
-  }
-
   async function getProfileHardestGames(userId) {
     if (!userId) return [];
     try {
@@ -1122,36 +1106,21 @@ window._cottageSess = (function () {
     } catch (err) { console.error('[getProfileHardestGames]', err); return []; }
   }
 
-  // 프로필 보드 전용 통합 읽기. 기존 평소 생활 SSOT(getMeetingProfile)를 복사하지 않고
-  // 신규 깊이/경험만 합친다. 신규 스키마 조회가 실패해도 기존·readOnly 보드는 base로 유지된다.
+  // 프로필 보드 전용 통합 읽기. 게임 취향 3단 값은 getMeetingProfile의 member_intros 정본을
+  // 그대로 유지하고, 프로필 보드 전용 경험만 합친다.
   async function getProfileBoardData(userId) {
     if (!userId) return null;
     try {
-      const [base, depthRes, hardestGames] = await Promise.all([
+      const [base, hardestGames] = await Promise.all([
         getMeetingProfile(userId),
-        db.from('profiles').select('preferred_game_depths').eq('user_id', String(userId)).maybeSingle(),
         getProfileHardestGames(userId),
       ]);
-      if (depthRes.error) console.error('[getProfileBoardData:profiles]', depthRes.error);
       if (!base) return null;
       return {
         ...base,
-        preferredGameDepths: depthRes.data?.preferred_game_depths || [],
         hardestGames,
       };
     } catch (err) { console.error('[getProfileBoardData]', err); return null; }
-  }
-
-  async function updatePreferredGameDepths(userId, depths) {
-    if (!userId) return { error: 'invalid' };
-    const normalized = normalizeProfileGameDepths(depths);
-    if (!normalized) return { error: 'invalid' };
-    try {
-      const { error } = await db.from('profiles')
-        .update({ preferred_game_depths: normalized })
-        .eq('user_id', String(userId));
-      return error ? { error } : { success: true };
-    } catch (e) { return { error: e }; }
   }
 
   async function replaceProfileHardestGames(userId, games) {
@@ -1242,23 +1211,6 @@ window._cottageSess = (function () {
       const allTags = (data || []).flatMap(r => (r.bio || '').split(',').map(t => t.trim()).filter(Boolean));
       return [...new Set(allTags)].sort();
     } catch (err) { console.error('[getAllBioTagSuggestions]', err); return []; }
-  }
-
-  async function getAllAvoidTagSuggestions() {
-    try {
-      const { data, error } = await db.from('profiles').select('avoid_tags').not('avoid_tags', 'is', null);
-      if (error) console.error('[getAllAvoidTagSuggestions]', error);
-      const allTags = (data || []).flatMap(r => r.avoid_tags || []);
-      return [...new Set(allTags)].sort();
-    } catch (err) { console.error('[getAllAvoidTagSuggestions]', err); return []; }
-  }
-
-  async function updateUserAvoidTags(userId, tags) {
-    if (!userId) return { error: 'invalid' };
-    try {
-      const { error } = await db.from('profiles').update({ avoid_tags: tags }).eq('user_id', userId);
-      return error ? { error } : { success: true };
-    } catch (e) { return { error: e }; }
   }
 
   // ── 방문자 통계 ─────────────────────────────────────
@@ -2230,9 +2182,7 @@ window._cottageSess = (function () {
     removeGamePref,
     getCustomPrefSuggestions,
     updateUserBio,
-    updateUserAvoidTags,
     getAllBioTagSuggestions,
-    getAllAvoidTagSuggestions,
     getMeetingVotes,
     getPartySize,
     sumPartySize,
@@ -2250,7 +2200,6 @@ window._cottageSess = (function () {
     getMeetingProfile,
     getProfileBoardData,
     getProfileHardestGames,
-    updatePreferredGameDepths,
     replaceProfileHardestGames,
     upsertMeetingIntro,
     submitMemberIntro,

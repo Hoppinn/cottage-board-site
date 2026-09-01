@@ -57,8 +57,11 @@ Codex를 포함한 코딩 에이전트가 이 프로젝트에서 따라야 할 �
 | 게임 데이터·파이프라인 | `docs/PROJECT_STRUCTURE.md` §7~8 |
 | BGG ID 수정 / `fetch:bgg` / 번역 파이프라인 | 작업 전 `npm run check`로 필요한 단계 확인 |
 | UI/CSS·sticky·깜빡임 | `docs/DESIGN_RULES.md` |
+| 여러 화면·보드·정본이 걸린 작업 | `docs/UI_MAP.md` |
 | 업적·칭호·캐릭터·교환권·성장보드 | `docs/achievement-system.md` (SSOT) |
 | 관리자 분석·방문/이용 집계·퍼널 | `docs/admin-analytics.md` (SSOT) |
+
+`UI_MAP.md`에 정의된 영역의 기능 수정·버그 조사는 작업 시작 전에 **해당 영역만** 읽어 공식 화면명·역할·진입점/렌더 위치·데이터 정본을 확인한다. 전체 지도를 매번 읽을 필요는 없다. 다만 UI_MAP과 실제 코드가 다르면 어느 한쪽을 자동으로 정답으로 보지 말고 최신 Plan, DB/API 계약, 실제 동작, 코드, UI_MAP을 대조해 의도된 구조를 판정한다. 판정 후 코드를 정리하고, 완료 시 UI_MAP도 최종 구현과 동기화한다.
 
 ---
 

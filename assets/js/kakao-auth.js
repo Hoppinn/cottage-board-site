@@ -2055,7 +2055,7 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
   // likedGames/curiousGames를 따로 조회하지 않는다 — getMeetingProfile이 내부에서 같은
   // getUserLikedGamesAll/getUserCuriousGamesAll를 부르므로 예전엔 같은 쿼리를 한 Promise.all에서
   // 두 번 쏘고 결과를 별도 배열로 들고 있었다. 그 중복이 크로스보드 stale의 실체였다(R10b).
-  const [stats, notifs, _codexResult, userStats, voucherBalance, voucherProducts, voucherHistory, allBioSuggestions, allAvoidSuggestions, _upcomingCardVotes, _upcomingCardGames, meetingProfile, _noticeAckKeys] = await Promise.all([
+  const [stats, notifs, _codexResult, userStats, voucherBalance, voucherProducts, voucherHistory, allBioSuggestions, _upcomingCardVotes, _upcomingCardGames, meetingProfile, _noticeAckKeys] = await Promise.all([
     window.CottageDB.getMyStats(String(user.id), user.nickname || null),
     // 알림·교환권은 비공개 → 읽기전용에서는 조회하지 않음(개인정보)
     readOnly ? Promise.resolve([]) : (window.CottageDB.getMyNotifications?.(String(user.id), user.nickname || null, _sessForNotif.notifSeenAt || null, _sessForNotif.newGameSeenAt || null) || Promise.resolve([])),
@@ -2065,7 +2065,6 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
     readOnly ? Promise.resolve([]) : (window.CottageDB?.getVoucherProducts?.() || Promise.resolve([])).catch(() => []),
     readOnly ? Promise.resolve([]) : (window.CottageDB?.getVoucherHistory?.(String(user.id), 5) || Promise.resolve([])).catch(() => []),
     (window.CottageDB?.getAllBioTagSuggestions?.() || Promise.resolve([])).catch(() => []),
-    (window.CottageDB?.getAllAvoidTagSuggestions?.() || Promise.resolve([])).catch(() => []),
     (window.CottageDB?.getMeetingVotes?.(_upcomingStart, _upcomingEnd) || Promise.resolve([])).catch(() => []),
     (window.CottageDB?.getMeetingVoteGames?.(_upcomingStart, _upcomingEnd) || Promise.resolve([])).catch(() => []),
     (window.CottageDB?.getProfileBoardData?.(String(user.id)) || window.CottageDB?.getMeetingProfile?.(String(user.id)) || Promise.resolve(null)).catch(() => null),
@@ -2588,7 +2587,6 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
   const _voucherInnerHtml = voucherHtml;
 
   // 프로필 보드(레거시 내부 키 taste 유지)
-  const AVOID_TAGS = ['마피아류', '실시간', '협상', '파티게임', '긴 플레이타임', '고난도 전략', '운 비중 높음', '공격/견제 강함'];
   const _BIO_PREDEFINED = ['전략게임을 좋아해요', '가벼운 파티게임 선호해요', '협력게임 팬이에요', '무거운 유로게임 마니아', '보드게임 처음 시작했어요', '코티지보드 단골이에요', '새로 해보는 게임이 좋아요', '한 게임을 진득하게 파는 걸 좋아해요', '전략을 분석하는 게 좋아요', '창의적인 플레이가 좋아요', '함께 교류하는 걸 좋아해요'];
   const _INTRO_FREQUENCY_LABELS = ['몇 달에 1회 이하','월 1회','월 2~3회','주 1회','주 2회','주 3회','주 4회 이상'];
   const _INTRO_COMPANION_LABELS = { friends:'친구·지인', partner:'연인·배우자', family:'가족', boardgame_group:'보드게임 모임·동호회', various:'상황에 따라 다양함' };
@@ -2608,7 +2606,7 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
   // 두 보드는 좋아요·궁금해요·한줄소개·피하는유형·룰설명을 똑같이 보여준다. 예전엔 각자
   // 사본을 들고 있어 한쪽 편집이 반대편에 새로고침 전까지 안 보였다(크로스보드 stale).
   // 이제 서브시트에 들어갈 때마다 getMeetingProfile 하나를 다시 읽어 양쪽에 넘긴다.
-  const _emptyBoardData = { bio: '', avoidTags: [], nickname: '', location: '', joinSources: [], gameTypeRange: [], avoidGameTypes: [], gameDepthRange: [], avoidGameDepths: [], available: '', travelRange: '', meetingStyle: [], companionTypes: [], averagePlayFrequency: null, possibleFrequencyMin: null, possibleFrequencyMax: null, desiredFrequencyMin: null, desiredFrequencyMax: null, availableDays: [], availableTimes: [], preferredGameTypes: [], preferredGameDepths: [], hardestGames: [], clocktowerPreference: '', expectation: '', questionnaireCompletedAt: null, likedGames: [], curiousGames: [], ruleGames: [] };
+  const _emptyBoardData = { bio: '', nickname: '', location: '', joinSources: [], gameTypeRange: [], avoidGameTypes: [], gameDepthRange: [], avoidGameDepths: [], available: '', travelRange: '', meetingStyle: [], companionTypes: [], averagePlayFrequency: null, possibleFrequencyMin: null, possibleFrequencyMax: null, desiredFrequencyMin: null, desiredFrequencyMax: null, availableDays: [], availableTimes: [], preferredGameTypes: [], preferredGameDepths: [], hardestGames: [], clocktowerPreference: '', expectation: '', questionnaireCompletedAt: null, likedGames: [], curiousGames: [], ruleGames: [] };
   // 재조회하는 동안 잠깐 보이는 자리(모임보드가 이미 쓰던 클래스 재사용 — 신규 CSS 없음)
   const _SUBSHEET_LOADING_HTML = '<p class="taste-game-empty">불러오는 중…</p>';
   let _boardData = meetingProfile || _emptyBoardData; // 패널 오픈 시 값이 최초의 '직전 값'
