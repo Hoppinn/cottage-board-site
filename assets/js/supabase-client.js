@@ -1064,7 +1064,7 @@ window._cottageSess = (function () {
         bio: profileRes.data?.bio || '',
         // 취향보드 '피하는 유형'. 모임보드도 비선호 칩으로 같은 값을 표시하므로 여기서 함께 반환
         // → 두 보드가 이 함수 하나만 보면 되는 단일 소스가 됨(R10b)
-        avoidTags: profileRes.data?.avoid_tags || [],
+        avoidTags: intro.avoid_game_types || [],
         nickname: intro.nickname || '',
         location: intro.location || '',
         available: intro.available || '',
@@ -1081,6 +1081,12 @@ window._cottageSess = (function () {
         availableDays: intro.available_days || [],
         availableTimes: intro.available_times || [],
         preferredGameTypes: intro.preferred_game_types || [],
+        gameTypeRange: intro.game_type_range || [],
+        avoidGameTypes: intro.avoid_game_types || [],
+        preferredGameDepths: intro.preferred_game_depths || [],
+        gameDepthRange: intro.game_depth_range || [],
+        avoidGameDepths: intro.avoid_game_depths || [],
+        joinSources: intro.join_sources || [],
         clocktowerPreference: intro.clocktower_preference || '',
         expectation: intro.expectation || '',
         questionnaireCompletedAt: intro.questionnaire_completed_at || null,
@@ -1190,6 +1196,7 @@ window._cottageSess = (function () {
       const { data, error } = await db.rpc('submit_member_intro', {
         p_user_id: String(userId),
         p_nickname: answers.nickname,
+        p_location: answers.location || '',
         p_join_sources: answers.joinSources,
         p_companion_types: answers.companionTypes,
         p_average_play_frequency: answers.averagePlayFrequency,
@@ -1200,7 +1207,11 @@ window._cottageSess = (function () {
         p_available_days: answers.availableDays,
         p_available_times: answers.availableTimes,
         p_preferred_game_types: answers.preferredGameTypes,
+        p_game_type_range: answers.gameTypeRange,
         p_avoid_game_types: answers.avoidGameTypes,
+        p_preferred_game_depths: answers.preferredGameDepths,
+        p_game_depth_range: answers.gameDepthRange,
+        p_avoid_game_depths: answers.avoidGameDepths,
         p_clocktower_preference: answers.clocktowerPreference,
         p_expectation: answers.expectation,
       });

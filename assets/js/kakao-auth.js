@@ -2683,6 +2683,13 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
   const _INTRO_COMPANION_LABELS = { friends:'친구·지인', partner:'연인·배우자', family:'가족', boardgame_group:'보드게임 모임·동호회', various:'상황에 따라 다양함' };
   const _INTRO_DAY_LABELS = { mon:'월', tue:'화', wed:'수', thu:'목', fri:'금', sat:'토', sun:'일', flexible:'유동적' };
   const _INTRO_GAME_TYPE_LABELS = { party:'파티·친목', mystery:'추리·미스터리', strategy:'전략·유로', thematic:'테마·몰입', cooperative:'협력', social_deduction:'마피아·블러핑', card_deckbuilding:'카드·덱빌딩', puzzle_abstract:'퍼즐·추상', campaign_legacy:'캠페인·레거시', any:'장르 무관' };
+  const _INTRO_JOIN_SOURCE_LABELS = { store_visit:'매장 방문', friend_referral:'지인 추천', cottage_homepage:'코티지 홈페이지', open_chat_search:'오픈카톡 검색', daangn:'당근 동호회·광고', naver_place:'네이버(플레이스) 검색', social_media:'인스타그램·기타 SNS' };
+  const _INTRO_DEPTH_OPTIONS = { intro:{name:'입문 · 추천',start:1,end:1.5}, light:{name:'라이트 · 패밀리',start:1.5,end:2.5}, strategy:{name:'전략 · 매니아',start:2.5,end:3.5}, hardcore:{name:'하드코어',start:3.5,end:5} };
+  const _formatDepthRanges = values => {
+    const ordered = ['intro','light','strategy','hardcore'].filter(code => (values || []).includes(code));
+    const groups = []; ordered.forEach(code => { const item = _INTRO_DEPTH_OPTIONS[code]; const last = groups.at(-1); if (last && last.end === item.start) last.end = item.end; else groups.push({start:item.start,end:item.end}); });
+    return groups.map(group => `${group.start.toFixed(1)}~${group.end.toFixed(1)}`).join(' · ');
+  };
   const _INTRO_CLOCKTOWER_LABELS = { love:'매우 좋아함', interested:'기회가 되면 참여하고 싶음', curious:'아직 모르지만 해보고 싶음', not_preferred:'별로 선호하지 않음', no:'참여하고 싶지 않음' };
   const _INTRO_DAY_LABELS_EXTENDED = { ..._INTRO_DAY_LABELS, holiday:'공휴일' };
   const _PROFILE_WEIGHT_OPTIONS = {
@@ -2705,7 +2712,7 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
   // 두 보드는 좋아요·궁금해요·한줄소개·피하는유형·룰설명을 똑같이 보여준다. 예전엔 각자
   // 사본을 들고 있어 한쪽 편집이 반대편에 새로고침 전까지 안 보였다(크로스보드 stale).
   // 이제 서브시트에 들어갈 때마다 getMeetingProfile 하나를 다시 읽어 양쪽에 넘긴다.
-  const _emptyBoardData = { bio: '', avoidTags: [], nickname: '', location: '', available: '', travelRange: '', meetingStyle: [], companionTypes: [], averagePlayFrequency: null, possibleFrequencyMin: null, possibleFrequencyMax: null, desiredFrequencyMin: null, desiredFrequencyMax: null, availableDays: [], availableTimes: [], preferredGameTypes: [], preferredGameDepths: [], hardestGames: [], clocktowerPreference: '', expectation: '', questionnaireCompletedAt: null, likedGames: [], curiousGames: [], ruleGames: [] };
+  const _emptyBoardData = { bio: '', avoidTags: [], nickname: '', location: '', joinSources: [], gameTypeRange: [], avoidGameTypes: [], gameDepthRange: [], avoidGameDepths: [], available: '', travelRange: '', meetingStyle: [], companionTypes: [], averagePlayFrequency: null, possibleFrequencyMin: null, possibleFrequencyMax: null, desiredFrequencyMin: null, desiredFrequencyMax: null, availableDays: [], availableTimes: [], preferredGameTypes: [], preferredGameDepths: [], hardestGames: [], clocktowerPreference: '', expectation: '', questionnaireCompletedAt: null, likedGames: [], curiousGames: [], ruleGames: [] };
   // 재조회하는 동안 잠깐 보이는 자리(모임보드가 이미 쓰던 클래스 재사용 — 신규 CSS 없음)
   const _SUBSHEET_LOADING_HTML = '<p class="taste-game-empty">불러오는 중…</p>';
   let _boardData = meetingProfile || _emptyBoardData; // 패널 오픈 시 값이 최초의 '직전 값'
@@ -2790,6 +2797,7 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
     const likedGames = d.likedGames || [];
     const curiousGames = d.curiousGames || [];
     const depthCodes = d.preferredGameDepths || [];
+    const _depthNames = values => (values || []).map(code => _INTRO_DEPTH_OPTIONS[code]?.name).filter(Boolean).join(' · ');
     const hardestGames = d.hardestGames || [];
     const availableStructured = window.CottageDB?.formatMemberIntroAvailability?.(d.availableDays, d.availableTimes) || [
       _introLabels(d.availableDays, _INTRO_DAY_LABELS_EXTENDED),
@@ -2816,12 +2824,23 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
         ${_profileInfoRowHtml('주로 함께하는 사람', _introLabels(d.companionTypes, _INTRO_COMPANION_LABELS))}
         ${_profileInfoRowHtml('가능한 요일·시간', availableStructured || d.available || '')}
         ${_profileInfoRowHtml('거주 지역', d.location || '')}
+        ${_profileInfoRowHtml('가입 경로', _introLabels(d.joinSources, _INTRO_JOIN_SOURCE_LABELS))}
       </div>
     </section>
     <section class="profile-info-section profile-taste-section">
       <div class="profile-main-title">게임 취향</div>
       <div class="profile-info-list profile-taste-fields">
-        ${_profileInfoRowHtml('선호 유형', _introLabels(d.preferredGameTypes, _INTRO_GAME_TYPE_LABELS))}
+        <div class="profile-taste-subtitle">게임 유형</div>
+        ${_profileInfoRowHtml('주 취향', _introLabels(d.preferredGameTypes, _INTRO_GAME_TYPE_LABELS))}
+        ${_profileInfoRowHtml('취향 범위', _introLabels(d.gameTypeRange, _INTRO_GAME_TYPE_LABELS))}
+        ${_profileInfoRowHtml('꺼림', _introLabels(d.avoidGameTypes, {}))}
+        <div class="profile-taste-subtitle">게임 난이도</div>
+        ${_profileInfoRowHtml('주 취향', _depthNames(d.preferredGameDepths))}
+        ${d.preferredGameDepths?.length ? _profileInfoRowHtml('범위', _formatDepthRanges(d.preferredGameDepths)) : ''}
+        ${_profileInfoRowHtml('취향 범위', _depthNames(d.gameDepthRange))}
+        ${d.gameDepthRange?.length ? _profileInfoRowHtml('범위', _formatDepthRanges(d.gameDepthRange)) : ''}
+        ${_profileInfoRowHtml('꺼림', _depthNames(d.avoidGameDepths))}
+        ${d.avoidGameDepths?.length ? _profileInfoRowHtml('범위', _formatDepthRanges(d.avoidGameDepths)) : ''}
       ${d.clocktowerPreference ? _profileInfoRowHtml('시계탑 선호', _INTRO_CLOCKTOWER_LABELS[d.clocktowerPreference] || d.clocktowerPreference) : ''}
       </div>
       <div class="profile-taste-subsection profile-taste-weight-block">

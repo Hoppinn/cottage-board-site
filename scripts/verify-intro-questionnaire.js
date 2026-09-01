@@ -13,8 +13,9 @@ let sql = [
   read('docs/migrations/025_fix_member_intro_uuid_return.sql'),
   read('docs/migrations/026_member_intro_time_slots_custom_types.sql'),
   read('docs/migrations/030_member_intro_available_days_holiday.sql'),
+  read('docs/migrations/031_member_intro_preference_layers.sql'),
 ].join('\n');
-const latestSql = read('docs/migrations/030_member_intro_available_days_holiday.sql');
+const latestSql = read('docs/migrations/031_member_intro_preference_layers.sql');
 const client = read('assets/js/supabase-client.js');
 const negctl = process.argv.includes('--negctl');
 
@@ -35,7 +36,7 @@ check(html.includes('openWizard({ edit: !!r.questionnaire_completed_at })'), 'Wi
 check(html.includes("document.getElementById('introWizardReward').hidden = !result.voucherGranted"), 'Voucher completion branch missing');
 const cardRenderer = html.slice(html.indexOf("el.innerHTML = data.map"), html.indexOf('// 카드 색상 적용'));
 check(cardRenderer.includes('r._bio') && cardRenderer.includes('r.companion_types')
-  && cardRenderer.includes('r._preferred_game_depths') && cardRenderer.includes('r._liked_game_count')
+  && cardRenderer.includes('r.preferred_game_depths') && cardRenderer.includes('r._liked_game_count')
   && cardRenderer.includes('r._curious_game_count') && !cardRenderer.includes('r.clocktower_preference'),
   'Profile card matches the profile-preview summary fields');
 check(html.includes("myRow?.questionnaire_completed_at ? '모임원 프로필 수정하기' : '모임원 프로필 작성하기'"), 'Existing profile start label missing');
@@ -64,7 +65,7 @@ check(html.includes("holidayOption.hidden = true") && html.includes('isMemberInt
 check(html.includes('data-day-preset="weekday"') && html.includes('data-day-preset="weekend"') && html.includes('data-day-preset="daily"'), '요일 빠른 선택 누락');
 check(groupOptionCount('availableTimes') === 1, '시간대 유동적 선택지 누락');
 check(html.includes('const rows = [[12,24], [24,36], [36,48], [48,60]]'), '30분 시간 막대 48슬롯 구성 누락');
-check(groupOptionCount('preferredGameTypes') === 10, '선호 게임 유형 선택지 개수 불일치');
+check(html.includes('const GAME_TYPE_OPTIONS') && html.includes('const DEPTH_OPTIONS'), '유형·난이도 선택지 정본 누락');
 check(groupOptionCount('avoidGameTypes') === 9, '비선호 게임 유형 선택지 개수 불일치');
 check(groupOptionCount('clocktowerPreference') === 5, '시계탑 선호도 선택지 개수 불일치');
 check(html.includes('submitMemberIntro?.(String(u.id), answers)'), '전체 제출 API 연결 누락');
@@ -75,13 +76,14 @@ check(html.includes('desiredFrequencyMin > answers.desiredFrequencyMax'), '희�
 check(sql.includes(uniqueClause), 'intro_complete 사용자당 1회 unique index 누락');
 check(sql.includes("ON CONFLICT (user_id) WHERE reason = 'intro_complete' DO NOTHING"), '중복 지급 충돌 처리 누락');
 check(sql.includes('CREATE OR REPLACE FUNCTION public.submit_member_intro') || sql.includes('CREATE FUNCTION public.submit_member_intro'), '원자적 제출 RPC 누락');
-check(sql.includes('UPDATE public.profiles SET avoid_tags = v_avoid_tags'), 'avoid_tags SSOT 갱신 누락');
-check(sql.includes('IF NOT FOUND THEN'), '프로필 미존재 전체 롤백 가드 누락');
+check(latestSql.includes('game_type_range') && latestSql.includes('avoid_game_depths'), '3단 취향 컬럼 누락');
+check(latestSql.includes('preferred_game_types <@ game_type_range') && latestSql.includes('preferred_game_depths <@ game_depth_range'), '주 취향 부분집합 DB 계약 누락');
+check(latestSql.includes('NOT (game_depth_range && avoid_game_depths)'), '난이도 범위·꺼림 충돌 방지 누락');
 check(latestSql.includes('RETURNS TABLE(intro_id UUID'), 'member_intros UUID 반환 계약 누락');
 check(latestSql.includes('v_intro_id UUID'), 'member_intros UUID 로컬 변수 누락');
 check(!latestSql.includes("'flexible' = ANY(p_available_days)"), '요일 유동적이 다른 요일과 여전히 배타적');
 check(latestSql.includes("'mon','tue','wed','thu','fri','sat','sun','holiday','flexible'"), '공휴일 허용값 호환 확장 누락');
-check(latestSql.includes('member_intro_holiday_supported') && latestSql.includes('GRANT EXECUTE ON FUNCTION public.member_intro_holiday_supported() TO anon'), '공휴일 migration 적용 확인 RPC 누락');
+check(sql.includes('member_intro_holiday_supported') && sql.includes('GRANT EXECUTE ON FUNCTION public.member_intro_holiday_supported() TO anon'), '공휴일 migration 적용 확인 RPC 누락');
 check(!latestSql.includes("'flexible' = ANY(p_available_times)"), '시간대 유동적이 시간 슬롯과 여전히 배타적');
 check(latestSql.includes("item !~ '^([01][0-9]|2[0-3]):(00|30)$'"), '30분 슬롯 DB 검증 누락');
 check(sql.includes("'any' = ANY(p_preferred_game_types)"), '장르 무관 배타 검증 누락');
@@ -91,7 +93,7 @@ check(client.includes('normalizeMemberIntroTimes,') && client.includes('formatMe
 check(client.includes('isMemberIntroHolidaySupported,'), '공휴일 적용 확인 API export 누락');
 check(html.includes('data-add-custom="preferredGameTypes"') && html.includes('data-add-custom="avoidGameTypes"'), '게임 유형 기타 입력 누락');
 check(adminHtml.includes("join_sources').not('user_id','is',null)"), '관리자 가입 경로 조회 누락');
-check(!/joinSources: intro\.join_sources/.test(client), '공개 모임 보드에 가입 경로가 노출됨');
+check(/joinSources: intro\.join_sources/.test(client), '공개 프로필 가입 경로 전달 누락');
 
 const memory = new Map();
 const clientWindow = {
@@ -127,5 +129,5 @@ if (failures.length) {
   failures.forEach(message => console.error(`- ${message}`));
   process.exitCode = 1;
 } else {
-  console.log(`✅ 통과 — 가입 경로 ${joinSources.length}개, 동반 유형 ${companionTypes.length}개, 저장+지급 단일 RPC, 공개 보드 가입 경로 제외`);
+  console.log(`✅ 통과 — 가입 경로 ${joinSources.length}개, 동반 유형 ${companionTypes.length}개, 저장+지급 단일 RPC, 상세 프로필 가입 경로 공개`);
 }

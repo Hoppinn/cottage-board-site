@@ -63,6 +63,10 @@
                     <label class="intro-label" for="introNickname">닉네임 <span class="intro-required">*</span></label>
                     <input class="intro-input" id="introNickname" type="text" placeholder="단톡방 닉네임" maxlength="20">
                   </div>
+                  <div class="intro-field">
+                    <label class="intro-label" for="introLocation">거주 지역</label>
+                    <input class="intro-input" id="introLocation" type="text" placeholder="대략적인 거주 지역을 적어주세요. (예: 용인 처인구, 광명)" maxlength="20">
+                  </div>
                   <fieldset class="intro-question" data-group="joinSources">
                     <legend>가입 경로 <span class="intro-required">*</span><small>복수 선택 가능 · 회원 카드에는 공개되지 않아요</small></legend>
                     <div class="intro-choice-grid">
@@ -93,10 +97,16 @@
                 </div>
               </div>
               <div class="intro-wizard-step" data-step="4">
-                <h3>좋아하고 꺼리는 게임</h3>
+                <h3>게임 취향</h3>
                 <div class="intro-form-fields">
-                  <fieldset class="intro-question" data-group="preferredGameTypes"><legend>좋아하는 게임 유형 <span class="intro-required">*</span><small>복수 선택 가능</small></legend><div class="intro-choice-grid"><label><input type="checkbox" value="party">파티·친목</label><label><input type="checkbox" value="mystery">추리·미스터리</label><label><input type="checkbox" value="strategy">전략·유로</label><label><input type="checkbox" value="thematic">테마·몰입</label><label><input type="checkbox" value="cooperative">협력</label><label><input type="checkbox" value="social_deduction">마피아·블러핑</label><label><input type="checkbox" value="card_deckbuilding">카드·덱빌딩</label><label><input type="checkbox" value="puzzle_abstract">퍼즐·추상</label><label><input type="checkbox" value="campaign_legacy">캠페인·레거시</label><label data-exclusive="true"><input type="checkbox" value="any">장르를 가리지 않음</label></div><div class="intro-custom-option"><input class="intro-input" id="introPreferredCustom" type="text" maxlength="20" placeholder="기타 유형"><button type="button" data-add-custom="preferredGameTypes">추가</button></div></fieldset>
-                  <fieldset class="intro-question" data-group="avoidGameTypes"><legend>꺼리는 게임 유형 <span class="intro-required">*</span><small>복수 선택 가능</small></legend><div class="intro-choice-grid"><label><input type="checkbox" value="마피아류">마피아류</label><label><input type="checkbox" value="실시간">실시간</label><label><input type="checkbox" value="협상">협상</label><label><input type="checkbox" value="파티게임">파티게임</label><label><input type="checkbox" value="긴 플레이타임">긴 플레이타임</label><label><input type="checkbox" value="고난도 전략">고난도 전략</label><label><input type="checkbox" value="운 비중 높음">운 비중 높음</label><label><input type="checkbox" value="공격/견제 강함">공격·견제 강함</label><label data-exclusive="true"><input type="checkbox" value="none">딱히 없음</label></div><div class="intro-custom-option"><input class="intro-input" id="introAvoidCustom" type="text" maxlength="20" placeholder="기타 유형"><button type="button" data-add-custom="avoidGameTypes">추가</button></div></fieldset>
+                  <h4 class="intro-section-title">게임 유형</h4>
+                  <fieldset class="intro-question" data-group="preferredGameTypes"><legend>주 취향 게임 유형 <span class="intro-required">*</span><small>주로 플레이하고 싶은 유형을 모두 선택해주세요.</small></legend><div class="intro-choice-grid intro-game-type-options"></div><div class="intro-custom-option"><input class="intro-input" id="introPreferredCustom" type="text" maxlength="20" placeholder="기타 유형"><button type="button" data-add-custom="preferredGameTypes">추가</button></div></fieldset>
+                  <fieldset class="intro-question" data-group="gameTypeRange"><legend>취향 범위 게임 유형 <span class="intro-required">*</span><small>주 취향은 자동으로 포함됩니다. 그 외에도 즐길 수 있는 유형을 선택해주세요.</small></legend><div class="intro-choice-grid intro-game-type-options"></div><div class="intro-custom-option"><input class="intro-input" id="introRangeCustom" type="text" maxlength="20" placeholder="기타 유형"><button type="button" data-add-custom="gameTypeRange">추가</button></div></fieldset>
+                  <fieldset class="intro-question" data-group="avoidGameTypes"><legend>꺼리는 게임 유형 <span class="intro-required">*</span><small>가능하면 피하고 싶은 유형을 선택해주세요.</small></legend><div class="intro-choice-grid"><label><input type="checkbox" value="마피아류">마피아류</label><label><input type="checkbox" value="실시간">실시간</label><label><input type="checkbox" value="협상">협상</label><label><input type="checkbox" value="파티게임">파티게임</label><label><input type="checkbox" value="긴 플레이타임">긴 플레이타임</label><label><input type="checkbox" value="고난도 전략">고난도 전략</label><label><input type="checkbox" value="운 비중 높음">운 비중 높음</label><label><input type="checkbox" value="공격/견제 강함">공격·견제 강함</label><label data-exclusive="true"><input type="checkbox" value="none">딱히 없음</label></div><div class="intro-custom-option"><input class="intro-input" id="introAvoidCustom" type="text" maxlength="20" placeholder="기타 유형"><button type="button" data-add-custom="avoidGameTypes">추가</button></div></fieldset>
+                  <h4 class="intro-section-title">게임 난이도</h4>
+                  <fieldset class="intro-question" data-group="preferredGameDepths"><legend>주 취향 난이도 <span class="intro-required">*</span><small>주로 플레이하고 싶은 난이도를 모두 선택해주세요.</small></legend><div class="intro-choice-grid intro-depth-options"></div></fieldset>
+                  <fieldset class="intro-question" data-group="gameDepthRange"><legend>취향 범위 난이도 <span class="intro-required">*</span><small>주 취향은 자동으로 포함됩니다. 그 외에도 즐길 수 있는 난이도를 선택해주세요.</small></legend><div class="intro-choice-grid intro-depth-options"></div></fieldset>
+                  <fieldset class="intro-question" data-group="avoidGameDepths"><legend>꺼리는 난이도 <small>가능하면 피하고 싶은 난이도를 선택해주세요.</small></legend><div class="intro-choice-grid intro-depth-options"></div></fieldset>
                 </div>
               </div>
               <div class="intro-wizard-step" data-step="5">
@@ -105,7 +115,7 @@
               </div>
               <div class="intro-wizard-step" data-step="6">
                 <h3>마지막 한 가지</h3>
-                <div class="intro-field"><label class="intro-label" for="introExpectation">모임에 바라는 점 및 각오 <span class="intro-required">*</span></label><textarea class="intro-input intro-textarea" id="introExpectation" minlength="10" maxlength="500" placeholder="서로 즐겁게 게임하기 위해 바라는 점이나 나의 각오를 적어주세요."></textarea><span class="intro-field-hint">10~500자</span></div>
+                <div class="intro-field"><label class="intro-label" for="introExpectation">모임에서 기대하는 점이나 함께하고 싶은 방식 <span class="intro-required">*</span></label><textarea class="intro-input intro-textarea" id="introExpectation" minlength="10" maxlength="500" placeholder="서로 즐겁게 게임하기 위해 기대하는 점이나 함께하고 싶은 방식을 적어주세요."></textarea><span class="intro-field-hint">10~500자</span></div>
               </div>
               <div class="intro-wizard-complete" id="introWizardComplete" hidden><h3>모임원 프로필이 완성됐어요.</h3><p id="introWizardReward" hidden>🎁 음료 2,000원 쿠폰이 지급됐어요.</p><button class="intro-submit-btn" id="introWizardDoneBtn" type="button">확인</button></div>
             </div>
@@ -172,11 +182,56 @@
     const BUILTIN_GAME_TYPES = new Set(Object.keys(GAME_TYPE_LABELS));
     const BUILTIN_AVOID_TYPES = new Set(['마피아류','실시간','협상','파티게임','긴 플레이타임','고난도 전략','운 비중 높음','공격/견제 강함','none']);
     const CLOCKTOWER_LABELS = { love:'매우 좋아함', interested:'기회가 되면 참여하고 싶음', curious:'아직 모르지만 해보고 싶음', not_preferred:'별로 선호하지 않음', no:'참여하고 싶지 않음' };
+    const GAME_TYPE_OPTIONS = [['party','파티·친목'],['mystery','추리·미스터리'],['strategy','전략·유로'],['thematic','테마·몰입'],['cooperative','협력'],['social_deduction','마피아·블러핑'],['card_deckbuilding','카드·덱빌딩'],['puzzle_abstract','퍼즐·추상'],['campaign_legacy','캠페인·레거시'],['any','장르를 가리지 않음']];
+    const DEPTH_OPTIONS = [
+      ['intro','입문 · 추천','1.0~1.5','저스트 원 ~ 코드네임'], ['light','라이트 · 패밀리','1.5~2.5','스플렌더 ~ 윙스팬'],
+      ['strategy','전략 · 매니아','2.5~3.5','아르낙의 잊혀진 유적 ~ 테라포밍 마스'], ['hardcore','하드코어','3.5~5.0','브라스: 버밍엄 ~ 가이아 프로젝트']
+    ];
     let didPrefill = false;
     let wizardStep = 1;
     let wizardIsEdit = false;
     let currentIntroRow = null;
     let selectedTimeSlots = new Set();
+
+    function _choiceHtml(value, label, detail = '') { return `<label><input type="checkbox" value="${value}"><span>${label}</span>${detail ? `<small>${detail}</small>` : ''}</label>`; }
+    function setupPreferenceLayers() {
+      ['preferredGameTypes','gameTypeRange'].forEach(group => {
+        const grid = document.querySelector(`[data-group="${group}"] .intro-game-type-options`);
+        if (grid) grid.innerHTML = GAME_TYPE_OPTIONS.map(([value,label]) => _choiceHtml(value,label)).join('');
+      });
+      ['preferredGameDepths','gameDepthRange','avoidGameDepths'].forEach(group => {
+        const grid = document.querySelector(`[data-group="${group}"] .intro-depth-options`);
+        if (grid) grid.innerHTML = DEPTH_OPTIONS.map(([value,label,range,example]) => _choiceHtml(value,label,`${range} · 예) ${example}`)).join('');
+      });
+      const inputs = group => [...document.querySelectorAll(`[data-group="${group}"] input`)];
+      const values = group => inputs(group).filter(input => input.checked).map(input => input.value);
+      const set = (group, wanted) => inputs(group).forEach(input => { input.checked = wanted.includes(input.value); });
+      const sync = () => {
+        let primaryTypes = values('preferredGameTypes');
+        if (primaryTypes.includes('any')) primaryTypes = ['any'];
+        set('preferredGameTypes', primaryTypes);
+        let rangeTypes = values('gameTypeRange').filter(value => value !== 'any' || primaryTypes.includes('any'));
+        rangeTypes = primaryTypes.includes('any') ? ['any'] : [...new Set([...rangeTypes, ...primaryTypes])];
+        set('gameTypeRange', rangeTypes);
+        inputs('gameTypeRange').forEach(input => { input.disabled = primaryTypes.includes(input.value) || (input.value === 'any' && !primaryTypes.includes('any')); });
+        let avoidTypes = values('avoidGameTypes');
+        if (avoidTypes.includes('none')) avoidTypes = ['none'];
+        if (rangeTypes.includes('party')) avoidTypes = avoidTypes.filter(value => value !== '파티게임');
+        if (rangeTypes.includes('social_deduction')) avoidTypes = avoidTypes.filter(value => value !== '마피아류');
+        set('avoidGameTypes', avoidTypes);
+        inputs('avoidGameTypes').forEach(input => { input.disabled = (input.value === '파티게임' && rangeTypes.includes('party')) || (input.value === '마피아류' && rangeTypes.includes('social_deduction')); });
+
+        const primaryDepths = values('preferredGameDepths');
+        const avoidDepths = values('avoidGameDepths');
+        let rangeDepths = [...new Set([...values('gameDepthRange'), ...primaryDepths])].filter(value => !avoidDepths.includes(value));
+        set('gameDepthRange', rangeDepths);
+        inputs('gameDepthRange').forEach(input => { input.disabled = primaryDepths.includes(input.value) || avoidDepths.includes(input.value); });
+        inputs('avoidGameDepths').forEach(input => { input.disabled = rangeDepths.includes(input.value); });
+      };
+      ['preferredGameTypes','gameTypeRange','avoidGameTypes','preferredGameDepths','gameDepthRange','avoidGameDepths'].forEach(group => document.querySelector(`[data-group="${group}"]`)?.addEventListener('change', sync));
+      window._syncPreferenceLayers = sync;
+      sync();
+    }
 
     function setupFrequencySelects() {
       ['introAverageFrequency','introPossibleMin','introPossibleMax','introDesiredMin','introDesiredMax'].forEach(id => {
@@ -327,6 +382,10 @@
       label.append(input, document.createTextNode(value));
       grid.insertBefore(label, grid.querySelector('label[data-exclusive="true"]'));
       if (checked) input.dispatchEvent(new Event('change', { bubbles:true }));
+      if (groupName === 'preferredGameTypes') {
+        addCustomOption('gameTypeRange', value, checked);
+        window._syncPreferenceLayers?.();
+      }
       return true;
     }
     function addSharedCustomOptions(intros) {
@@ -426,11 +485,14 @@
         if (!getAvailableTimes().length) return stepFail('참여 가능한 시간대를 하나 이상 선택해주세요.', document.querySelector('[data-group="availableTimes"]'));
       }
       if (step === 4) {
-        if (!selectedValues('preferredGameTypes').length) return stepFail('좋아하는 게임 유형을 하나 이상 선택해주세요.', document.querySelector('[data-group="preferredGameTypes"]'));
+        if (!selectedValues('preferredGameTypes').length) return stepFail('주 취향 게임 유형을 하나 이상 선택해주세요.', document.querySelector('[data-group="preferredGameTypes"]'));
+        if (!selectedValues('gameTypeRange').length) return stepFail('취향 범위 게임 유형을 하나 이상 선택해주세요.', document.querySelector('[data-group="gameTypeRange"]'));
         if (!selectedValues('avoidGameTypes').length) return stepFail('꺼리는 게임 유형을 하나 이상 선택해주세요.', document.querySelector('[data-group="avoidGameTypes"]'));
+        if (!selectedValues('preferredGameDepths').length) return stepFail('주 취향 난이도를 하나 이상 선택해주세요.', document.querySelector('[data-group="preferredGameDepths"]'));
+        if (!selectedValues('gameDepthRange').length) return stepFail('취향 범위 난이도를 하나 이상 선택해주세요.', document.querySelector('[data-group="gameDepthRange"]'));
       }
       if (step === 5 && !document.querySelector('[name="clocktowerPreference"]:checked')) return stepFail('시계탑 게임 선호도를 선택해주세요.', document.querySelector('[data-group="clocktowerPreference"]'));
-      if (step === 6 && document.getElementById('introExpectation').value.trim().length < 10) return stepFail('모임에 바라는 점 및 각오를 10자 이상 적어주세요.', document.getElementById('introExpectation'));
+      if (step === 6 && document.getElementById('introExpectation').value.trim().length < 10) return stepFail('모임에서 기대하는 점이나 함께하고 싶은 방식을 10자 이상 적어주세요.', document.getElementById('introExpectation'));
       return true;
     }
 
@@ -457,6 +519,7 @@
     setupFrequencySelects();
     setupDaySelection();
     setupTimePicker();
+    setupPreferenceLayers();
 
     // 자기소개 작성은 로그인 필수 (모임 보드와 user_id 기준으로 연동되기 때문)
     function _syncLoginUI() {
@@ -494,6 +557,7 @@
 
     function editIntro(id, r, focusForm = true) {
       document.getElementById('introNickname').value = r.nickname || '';
+      document.getElementById('introLocation').value = r.location || '';
       setSelectedValues('joinSources', r.join_sources);
       setSelectedValues('companionTypes', r.companion_types);
       document.getElementById('introAverageFrequency').value = r.average_play_frequency ?? '';
@@ -504,7 +568,12 @@
       setSelectedValues('availableDays', r.available_days);
       setAvailableTimes(r.available_times);
       setSelectedValues('preferredGameTypes', r.preferred_game_types);
-      setSelectedValues('avoidGameTypes', r._avoid_tags?.length ? r._avoid_tags : (r.questionnaire_completed_at ? ['none'] : []));
+      setSelectedValues('gameTypeRange', r.game_type_range);
+      setSelectedValues('avoidGameTypes', r.avoid_game_types);
+      setSelectedValues('preferredGameDepths', r.preferred_game_depths);
+      setSelectedValues('gameDepthRange', r.game_depth_range);
+      setSelectedValues('avoidGameDepths', r.avoid_game_depths);
+      window._syncPreferenceLayers?.();
       const clocktower = document.querySelector(`[name="clocktowerPreference"][value="${r.clocktower_preference || ''}"]`);
       document.querySelectorAll('[name="clocktowerPreference"]').forEach(input => { input.checked = input === clocktower; });
       document.getElementById('introExpectation').value = r.expectation || '';
@@ -592,7 +661,7 @@
           ? `<img class="profile-panel-avatar" src="${escHtml(repPath)}" alt="">`
           : `<span class="profile-panel-avatar profile-panel-avatar--empty">🐾</span>`;
         const gameTypes = labelList(r.preferred_game_types, GAME_TYPE_LABELS);
-        const depthSummary = (r._preferred_game_depths || []).map(value => DEPTH_SUMMARY_LABELS[value]).filter(Boolean).join(' · ');
+        const depthSummary = (r.preferred_game_depths || []).map(value => ({intro:'입문 · 추천',light:'라이트 · 패밀리',strategy:'전략 · 매니아',hardcore:'하드코어'})[value]).filter(Boolean).join(' · ');
         const gameTaste = [gameTypes, depthSummary].filter(Boolean).join(' · ');
         const usualPlay = [
           r.average_play_frequency != null ? FREQUENCY_LABELS[r.average_play_frequency] : '',
@@ -706,6 +775,7 @@
       const nickname = document.getElementById('introNickname').value.trim();
       const answers = {
         nickname,
+        location: document.getElementById('introLocation').value.trim(),
         joinSources: selectedValues('joinSources'),
         companionTypes: selectedValues('companionTypes'),
         averagePlayFrequency: Number(document.getElementById('introAverageFrequency').value),
@@ -716,7 +786,11 @@
         availableDays: selectedValues('availableDays'),
         availableTimes: getAvailableTimes(),
         preferredGameTypes: selectedValues('preferredGameTypes'),
+        gameTypeRange: selectedValues('gameTypeRange'),
         avoidGameTypes: selectedValues('avoidGameTypes'),
+        preferredGameDepths: selectedValues('preferredGameDepths'),
+        gameDepthRange: selectedValues('gameDepthRange'),
+        avoidGameDepths: selectedValues('avoidGameDepths'),
         clocktowerPreference: document.querySelector('[name="clocktowerPreference"]:checked')?.value || '',
         expectation: document.getElementById('introExpectation').value.trim(),
       };
@@ -725,7 +799,8 @@
       const requiredGroups = [
         ['joinSources','가입 경로'], ['companionTypes','주로 함께 게임하는 사람'],
         ['availableDays','참여 가능한 요일'], ['availableTimes','참여 가능한 시간대'],
-        ['preferredGameTypes','좋아하는 게임 유형'], ['avoidGameTypes','꺼리는 게임 유형'],
+        ['preferredGameTypes','주 취향 게임 유형'], ['gameTypeRange','취향 범위 게임 유형'], ['avoidGameTypes','꺼리는 게임 유형'],
+        ['preferredGameDepths','주 취향 난이도'], ['gameDepthRange','취향 범위 난이도'],
       ];
       for (const [key, label] of requiredGroups) {
         if (!answers[key].length) return fail(`${label}을(를) 하나 이상 선택해주세요.`, document.querySelector(`[data-group="${key}"]`));
@@ -735,7 +810,7 @@
       if (answers.possibleFrequencyMin > answers.possibleFrequencyMax) return fail('참여 가능 최소 빈도는 최대 빈도보다 높을 수 없어요.', document.getElementById('introPossibleMin'));
       if (answers.desiredFrequencyMin > answers.desiredFrequencyMax) return fail('참여 희망 최소 빈도는 최대 빈도보다 높을 수 없어요.', document.getElementById('introDesiredMin'));
       if (!answers.clocktowerPreference) return fail('시계탑 게임 선호도를 선택해주세요.', document.querySelector('[data-group="clocktowerPreference"]'));
-      if (answers.expectation.length < 10) return fail('모임에 바라는 점 및 각오를 10자 이상 적어주세요.', document.getElementById('introExpectation'));
+      if (answers.expectation.length < 10) return fail('모임에서 기대하는 점이나 함께하고 싶은 방식을 10자 이상 적어주세요.', document.getElementById('introExpectation'));
 
       const btn = document.getElementById('introSubmitBtn');
       btn.disabled = true;
