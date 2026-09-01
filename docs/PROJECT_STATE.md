@@ -6,17 +6,19 @@
 
 ## 0. 현재 상태
 
-- 현재 작업: 보드 확장 컨트롤·참여자 navigation 정리 완료, 브라우저 실검수 대기
+- 현재 작업: 보드 확장 컨트롤·참여자 navigation 정리 완료, 추가 버그 3건은 구현 보류
 - 상세 Plan: 없음
 - 현재 단계: 기록/프로필/모임 보드의 확장 컨트롤과 모임원·모임 참여자 navigation은 공통 계약으로 정리됐다.
-- 다음 작업: 사용자 실화면에서 기록 보드 sticky 접기 복원, 360px 헤더 폭, 모임 보드→홈 미리보기 카드 시작점과 참여자 navigation을 확인한다.
+- 다음 작업: 사진 섹션 sticky 접기 복원, 모임 보드→홈 미리보기 focus, 프로필 수정 위저드 footer navigation을 재개한다.
 - 인수인계: 가장 어려웠던 게임은 기존 `profile_hardest_games` 정본을 유지하고 위저드 편집으로 이동한다. 최초 작성 쿠폰 partial unique 보장은 변경하지 않는다.
 - 승인 대기: 없음.
 - 현재 버그: 게임도감 전체보기 전환 시 시작줄이 살짝 위로 올라오는 증상은 상세 조건 설명 대기.
 
 ### 다음 시작점
 
-1. 사용자 실화면 검수 결과가 있으면 해당 화면의 DOM·계산값을 기준으로 후속 조정한다.
+1. 사진 전체보기는 `.profile-section-more-btn`의 별도 토글이라 일반 목록 sticky 복원 경로를 타지 않는다. 사진 접기 시 같은 sticky 헤더 측정·scroll 복원을 붙인다.
+2. 모임 보드의 `/?focus=meeting` 진입은 현재 `#meetingPreview`의 첫 카드로 double-rAF scroll하지만 사용자 화면에서는 중간에 머문다. 홈의 scroll restoration/후속 렌더를 실제 DOM 좌표로 다시 측정해 보정한다.
+3. 프로필 수정 iframe 위저드는 `introWizardPrevBtn`/`introWizardNextBtn` markup·click handler가 있으나 사용자 화면에 없다. embed/board-frame CSS 또는 hidden 상태를 실측해 footer navigation이 표시되도록 고친다.
 
 ## 1. 사용자 확인 대기
 
