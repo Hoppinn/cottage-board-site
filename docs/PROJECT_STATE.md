@@ -6,12 +6,12 @@
 
 ## 0. 현재 상태
 
-- 현재 작업: 화면·용어·데이터 정본 지도 정리 완료
-- 상세 기획: [member-board-plan.md](plans/member-board-plan.md)와 [member-intro-preference-plan.md](plans/member-intro-preference-plan.md)는 완료된 구현 의도를 보존한다.
-- 현재 단계: `member_intros`가 회원 공개 프로필과 게임 취향의 정본이다. 내 프로필 보드 정본·프로필 보드 미리보기 카드·모임원 목록 카드는 모두 이 값을 읽으며, `profiles.avoid_tags`·`profiles.preferred_game_depths`는 레거시 데이터 보존용이다. 화면·용어 탐색은 [UI_MAP.md](UI_MAP.md)를 따른다.
-- 다음 작업: 새 기능 작업을 시작할 때 대상 화면명과 정본을 UI_MAP에서 먼저 확정한다.
-- 인수인계: 닉네임·가입 경로·거주 지역·참여 시간/빈도·시계탑 선호·서술은 보존한다. 최초 작성 쿠폰의 partial unique 보장은 유지한다.
-- 승인 대기: 없음.
+- 현재 작업: 모임원 프로필 설문 — 평소 플레이·모임 참여 분리
+- 상세 Plan: [member-intro-play-pattern-plan.md](plans/member-intro-play-pattern-plan.md)
+- 현재 단계: 조사·Plan 완료, 구현과 033 migration은 아직 시작하지 않았다. `usual_play_days/times` 신규 필드가 필요하며 기존 `available_days/times`는 모임 참여 가능 일정 정본으로 보존한다.
+- 다음 작업: Plan 승인 후 033 migration 작성 → 운영 적용 → 새 프런트 배포 순서로 진행한다.
+- 인수인계: 가장 어려웠던 게임은 기존 `profile_hardest_games` 정본을 유지하고 위저드 편집으로 이동한다. 최초 작성 쿠폰 partial unique 보장은 변경하지 않는다.
+- 승인 대기: 033 DB/RPC 변경 및 구현 Plan 승인.
 - 현재 버그: 게임도감 전체보기 전환 시 시작줄이 살짝 위로 올라오는 증상은 상세 조건 설명 대기.
 
 ### 다음 시작점
