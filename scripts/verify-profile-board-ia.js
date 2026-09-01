@@ -80,7 +80,7 @@ check('structured player fields appear once in their sections', !!tasteBuilder
   && (tasteBuilder[0].match(/선호 웨이트/g) || []).length === 1
   && (tasteBuilder[0].match(/평균 플레이 빈도/g) || []).length === 1
   && (tasteBuilder[0].match(/주로 함께하는 사람/g) || []).length === 1
-  && (tasteBuilder[0].match(/가능한 요일·시간/g) || []).length === 1
+  && (tasteBuilder[0].match(/참여 가능한 때/g) || []).length === 1
   && (tasteBuilder[0].match(/거주 지역/g) || []).length === 1
   && !tasteBuilder[0].includes('이동 가능 범위'));
 check('location remains and travel range is hidden', !!tasteBuilder
@@ -154,7 +154,7 @@ const tasteCardEnd = boardSrc.indexOf('  const _syncTasteCard', tasteCardStart);
 const tasteCard = tasteCardStart >= 0 && tasteCardEnd > tasteCardStart ? boardSrc.slice(tasteCardStart, tasteCardEnd) : '';
 check('profile summary card uses requested information hierarchy', tasteCard.includes('d.expectation || d.bio')
   && tasteCard.includes('게임 취향:') && tasteCard.includes('평소 플레이:')
-  && tasteCard.includes('가능한 요일·시간:') && tasteCard.includes('설명 가능')
+  && tasteCard.includes('참여 가능한 때:') && tasteCard.includes('설명 가능')
   && tasteCard.includes('formatMemberIntroAvailability'));
 check('profile summary card hides hardest-game experience', !tasteCard.includes('hardestGames')
   && !tasteCard.includes('profile-card-experience-row'));

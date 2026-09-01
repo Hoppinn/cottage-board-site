@@ -2670,13 +2670,13 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
         <div class="profile-taste-subtitle">게임 유형</div>
         ${_tasteTier('주 취향', _introLabels(d.preferredGameTypes, _INTRO_GAME_TYPE_LABELS))}
         ${_tasteTier('즐기는 범위', _gameRangeNames(d.gameTypeRange))}
-        ${avoidTypes.length && !avoidTypes.includes('none') ? _tasteTier('꺼림', _introLabels(avoidTypes, {})) : _tasteTier('꺼림 유형', '없음')}
+        ${_tasteTier('꺼림 유형', avoidTypes.includes('none') ? '없음' : _introLabels(avoidTypes, {}))}
       </div>
       <div class="profile-taste-group">
         <div class="profile-taste-subtitle">게임 난이도</div>
         ${_tasteTier('주 난이도', _rangeDepthNames(d.preferredGameDepths), _formatDepthRanges(d.preferredGameDepths))}
         ${_tasteTier('즐기는 범위', _rangeDepthNames(d.gameDepthRange), _formatDepthRanges(d.gameDepthRange))}
-        ${avoidDepths.length ? _tasteTier('꺼림', _depthNames(avoidDepths), _formatDepthRanges(avoidDepths)) : _tasteTier('꺼림 난이도', '없음')}
+        ${_tasteTier('꺼림 난이도', _depthNames(avoidDepths), _formatDepthRanges(avoidDepths))}
       </div>
       ${d.clocktowerPreference ? `<div class="profile-taste-clocktower">${_profileInfoRowHtml('시계탑 선호', _INTRO_CLOCKTOWER_LABELS[d.clocktowerPreference] || d.clocktowerPreference)}</div>` : ''}
       </div>
@@ -2755,10 +2755,10 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
       || '';
     const bio = d.expectation || d.bio || '';
     return `${bio ? `<span class="profile-card-bio-row">${escH(bio)}</span>` : ''}
-      ${types.length ? `<span class="profile-card-detail-row"><b>주 취향 유형:</b> ${escH(types.join(' · '))}</span>` : ''}
-      ${depthLabels.length ? `<span class="profile-card-detail-row"><b>주 취향 난이도:</b> ${escH(depthLabels.join(' · '))}</span>` : ''}
+      ${types.length ? `<span class="profile-card-detail-row"><b>주 취향:</b> ${escH(types.join(' · '))}</span>` : ''}
+      ${depthLabels.length ? `<span class="profile-card-detail-row"><b>주 난이도:</b> ${escH(depthLabels.join(' · '))}</span>` : ''}
       ${(frequency || companions) ? `<span class="profile-card-detail-row"><b>평소 플레이:</b> ${escH([frequency, companions].filter(Boolean).join(' · '))}</span>` : ''}
-      ${available ? `<span class="profile-card-detail-row"><b>가능한 요일·시간:</b> ${escH(available)}</span>` : ''}
+      ${available ? `<span class="profile-card-detail-row"><b>참여 가능한 때:</b> ${escH(available)}</span>` : ''}
       <span class="profile-card-games-row">좋아하는 게임 ${(d.likedGames || []).length} · 해보고 싶은 게임 ${(d.curiousGames || []).length} · 설명 가능 ${(d.ruleGames || []).length}</span>`;
   };
   const _syncTasteCard = () => {
@@ -2860,12 +2860,12 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
       </div>
     </section>
     <section class="meeting-board-section meeting-plan-section">
-      <div class="taste-section-label">참여 페이스</div>
+      <div class="taste-section-label">모임 참여 페이스</div>
       <div class="meeting-profile-display">
         ${_meetingProfileRowHtml('참여 가능 빈도', _introFrequencyRange(_meeting.possibleFrequencyMin, _meeting.possibleFrequencyMax))}
-        ${_meetingProfileRowHtml('참여 희망 빈도', _introFrequencyRange(_meeting.desiredFrequencyMin, _meeting.desiredFrequencyMax))}
-        ${_meetingProfileRowHtml('가능한 요일', _availableDays)}
-        ${_meetingProfileRowHtml('가능한 시간', _availableTimes)}
+        ${_meetingProfileRowHtml('원하는 참여 빈도', _introFrequencyRange(_meeting.desiredFrequencyMin, _meeting.desiredFrequencyMax))}
+        ${_meetingProfileRowHtml('참여 가능한 요일', _availableDays)}
+        ${_meetingProfileRowHtml('참여 가능한 시간대', _availableTimes)}
       </div>
     </section>
     <section class="meeting-board-section meeting-recent-section">

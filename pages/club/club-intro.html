@@ -78,24 +78,24 @@
               <div class="intro-wizard-step" data-step="2">
                 <h3>평소 게임하는 방식</h3>
                 <div class="intro-form-fields">
-                  <div class="intro-field"><label class="intro-label" for="introAverageFrequency">평균 보드게임 플레이 빈도 <span class="intro-required">*</span></label><select class="intro-input" id="introAverageFrequency"><option value="">선택해주세요</option></select></div>
+                  <div class="intro-field"><label class="intro-label" for="introAverageFrequency">평균 플레이 빈도 <span class="intro-required">*</span></label><select class="intro-input" id="introAverageFrequency"><option value="">선택해주세요</option></select></div>
                   <fieldset class="intro-question" data-group="companionTypes">
                     <legend>주로 함께 게임하는 사람 <span class="intro-required">*</span><small>복수 선택 가능</small></legend>
                     <div class="intro-choice-grid">
                       <label><input type="checkbox" value="friends">친구·지인</label><label><input type="checkbox" value="partner">연인·배우자</label><label><input type="checkbox" value="family">가족</label><label><input type="checkbox" value="boardgame_group">보드게임 모임·동호회</label><label><input type="checkbox" value="various">상황에 따라 다양함</label>
                     </div>
                   </fieldset>
-                  <fieldset class="intro-question" data-group="usualPlayDays"><legend>평소 게임하는 요일 <span class="intro-required">*</span><small>복수 선택 가능</small></legend><div class="intro-choice-grid intro-choice-grid--days"><label><input type="checkbox" value="mon">월</label><label><input type="checkbox" value="tue">화</label><label><input type="checkbox" value="wed">수</label><label><input type="checkbox" value="thu">목</label><label><input type="checkbox" value="fri">금</label><label><input type="checkbox" value="sat">토</label><label><input type="checkbox" value="sun">일</label><label class="intro-choice-wide"><input type="checkbox" value="flexible">일정에 따라 유동적</label></div></fieldset>
-                  <fieldset class="intro-question" data-group="usualPlayTimes"><legend>평소 게임하는 시간 <span class="intro-required">*</span><small>30분 단위로 여러 구간을 선택할 수 있어요</small></legend><div class="intro-time-picker" id="introUsualTimePicker"></div><p class="intro-time-result" id="introUsualTimeResult" aria-live="polite">시간을 선택해주세요.</p><div class="intro-choice-grid intro-choice-grid--single"><label><input type="checkbox" id="introUsualTimeFlexible" value="flexible">시간대 유동적</label></div></fieldset>
+                  <fieldset class="intro-question" data-group="usualPlayDays"><legend>평소 플레이 요일 <span class="intro-required">*</span><small>복수 선택 가능</small></legend><div class="intro-choice-grid intro-choice-grid--days"><label><input type="checkbox" value="mon">월</label><label><input type="checkbox" value="tue">화</label><label><input type="checkbox" value="wed">수</label><label><input type="checkbox" value="thu">목</label><label><input type="checkbox" value="fri">금</label><label><input type="checkbox" value="sat">토</label><label><input type="checkbox" value="sun">일</label><label class="intro-choice-wide"><input type="checkbox" value="flexible">일정에 따라 유동적</label></div></fieldset>
+                  <fieldset class="intro-question" data-group="usualPlayTimes"><legend>평소 플레이 시간대 <span class="intro-required">*</span><small>30분 단위로 여러 구간을 선택할 수 있어요</small></legend><div class="intro-time-picker" id="introUsualTimePicker"></div><p class="intro-time-result" id="introUsualTimeResult" aria-live="polite">시간을 선택해주세요.</p><div class="intro-choice-grid intro-choice-grid--single"><label><input type="checkbox" id="introUsualTimeFlexible" value="flexible">시간대 유동적</label></div></fieldset>
                 </div>
               </div>
               <div class="intro-wizard-step" data-step="3">
-                <h3>코티지 모임 참여</h3>
+                <h3>모임 참여 페이스</h3>
                 <div class="intro-form-fields">
-                  <fieldset class="intro-question"><legend>모임 참여 가능 빈도 <span class="intro-required">*</span><small>현실적으로 가능한 최소~최대</small></legend><div class="intro-range-row"><select class="intro-input" id="introPossibleMin"><option value="">최소</option></select><span>~</span><select class="intro-input" id="introPossibleMax"><option value="">최대</option></select></div></fieldset>
-                  <fieldset class="intro-question"><legend>모임 참여 희망 빈도 <span class="intro-required">*</span><small>원하는 최소~최대</small></legend><div class="intro-range-row"><select class="intro-input" id="introDesiredMin"><option value="">최소</option></select><span>~</span><select class="intro-input" id="introDesiredMax"><option value="">최대</option></select></div></fieldset>
-                  <fieldset class="intro-question" data-group="availableDays"><legend>주로 참여 가능한 요일 <span class="intro-required">*</span><small>복수 선택 가능</small></legend><div class="intro-choice-grid intro-choice-grid--days"><label><input type="checkbox" value="mon">월</label><label><input type="checkbox" value="tue">화</label><label><input type="checkbox" value="wed">수</label><label><input type="checkbox" value="thu">목</label><label><input type="checkbox" value="fri">금</label><label><input type="checkbox" value="sat">토</label><label><input type="checkbox" value="sun">일</label><label class="intro-choice-wide"><input type="checkbox" value="flexible">일정에 따라 유동적</label></div></fieldset>
-                  <fieldset class="intro-question" data-group="availableTimes"><legend>주로 참여 가능한 시간대 <span class="intro-required">*</span><small>30분 단위로 여러 구간을 선택할 수 있어요</small></legend><div class="intro-time-picker" id="introTimePicker"></div><p class="intro-time-result" id="introTimeResult" aria-live="polite">시간을 선택해주세요.</p><div class="intro-choice-grid intro-choice-grid--single"><label><input type="checkbox" id="introTimeFlexible" value="flexible">시간대 유동적</label></div></fieldset>
+                  <fieldset class="intro-question"><legend>참여 가능 빈도 <span class="intro-required">*</span><small>현실적으로 가능한 최소~최대</small></legend><div class="intro-range-row"><select class="intro-input" id="introPossibleMin"><option value="">최소</option></select><span>~</span><select class="intro-input" id="introPossibleMax"><option value="">최대</option></select></div></fieldset>
+                  <fieldset class="intro-question"><legend>원하는 참여 빈도 <span class="intro-required">*</span><small>원하는 최소~최대</small></legend><div class="intro-range-row"><select class="intro-input" id="introDesiredMin"><option value="">최소</option></select><span>~</span><select class="intro-input" id="introDesiredMax"><option value="">최대</option></select></div></fieldset>
+                  <fieldset class="intro-question" data-group="availableDays"><legend>참여 가능한 요일 <span class="intro-required">*</span><small>복수 선택 가능</small></legend><div class="intro-choice-grid intro-choice-grid--days"><label><input type="checkbox" value="mon">월</label><label><input type="checkbox" value="tue">화</label><label><input type="checkbox" value="wed">수</label><label><input type="checkbox" value="thu">목</label><label><input type="checkbox" value="fri">금</label><label><input type="checkbox" value="sat">토</label><label><input type="checkbox" value="sun">일</label><label class="intro-choice-wide"><input type="checkbox" value="flexible">일정에 따라 유동적</label></div></fieldset>
+                  <fieldset class="intro-question" data-group="availableTimes"><legend>참여 가능한 시간대 <span class="intro-required">*</span><small>30분 단위로 여러 구간을 선택할 수 있어요</small></legend><div class="intro-time-picker" id="introTimePicker"></div><p class="intro-time-result" id="introTimeResult" aria-live="polite">시간을 선택해주세요.</p><div class="intro-choice-grid intro-choice-grid--single"><label><input type="checkbox" id="introTimeFlexible" value="flexible">시간대 유동적</label></div></fieldset>
                 </div>
               </div>
               <div class="intro-wizard-step" data-step="4">
@@ -103,18 +103,18 @@
                 <div class="intro-form-fields">
                   <h4 class="intro-section-title">게임 유형</h4>
                   <fieldset class="intro-question" data-group="preferredGameTypes"><legend>주 취향 게임 유형 <span class="intro-required">*</span><small>주로 플레이하고 싶은 유형을 모두 선택해주세요.</small></legend><div class="intro-choice-grid intro-game-type-options"></div><div class="intro-custom-option"><input class="intro-input" id="introPreferredCustom" type="text" maxlength="20" placeholder="기타 유형"><button type="button" data-add-custom="preferredGameTypes">추가</button></div></fieldset>
-                  <fieldset class="intro-question" data-group="gameTypeRange"><legend>취향 범위 게임 유형 <span class="intro-required">*</span><small>주 취향은 자동으로 포함됩니다. 그 외에도 즐길 수 있는 유형을 선택해주세요.</small></legend><div class="intro-choice-grid intro-game-type-options"></div><div class="intro-custom-option"><input class="intro-input" id="introRangeCustom" type="text" maxlength="20" placeholder="기타 유형"><button type="button" data-add-custom="gameTypeRange">추가</button></div></fieldset>
+                  <fieldset class="intro-question" data-group="gameTypeRange"><legend>즐기는 게임 유형 범위 <span class="intro-required">*</span><small>주 취향은 자동으로 포함됩니다. 그 외에도 즐길 수 있는 유형을 선택해주세요.</small></legend><div class="intro-choice-grid intro-game-type-options"></div><div class="intro-custom-option"><input class="intro-input" id="introRangeCustom" type="text" maxlength="20" placeholder="기타 유형"><button type="button" data-add-custom="gameTypeRange">추가</button></div></fieldset>
                   <fieldset class="intro-question" data-group="avoidGameTypes"><legend>꺼리는 게임 유형 <span class="intro-required">*</span><small>가능하면 피하고 싶은 유형을 선택해주세요.</small></legend><div class="intro-choice-grid"><label><input type="checkbox" value="마피아류">마피아류</label><label><input type="checkbox" value="실시간">실시간</label><label><input type="checkbox" value="협상">협상</label><label><input type="checkbox" value="파티게임">파티게임</label><label><input type="checkbox" value="긴 플레이타임">긴 플레이타임</label><label><input type="checkbox" value="고난도 전략">고난도 전략</label><label><input type="checkbox" value="운 비중 높음">운 비중 높음</label><label><input type="checkbox" value="공격/견제 강함">공격·견제 강함</label><label data-exclusive="true"><input type="checkbox" value="none">딱히 없음</label></div><div class="intro-custom-option"><input class="intro-input" id="introAvoidCustom" type="text" maxlength="20" placeholder="기타 유형"><button type="button" data-add-custom="avoidGameTypes">추가</button></div></fieldset>
                   <h4 class="intro-section-title">게임 난이도</h4>
-                  <fieldset class="intro-question" data-group="preferredGameDepths"><legend>주 취향 난이도 <span class="intro-required">*</span><small>주로 플레이하고 싶은 난이도를 모두 선택해주세요.</small></legend><div class="intro-choice-grid intro-depth-options"></div></fieldset>
-                  <fieldset class="intro-question" data-group="gameDepthRange"><legend>취향 범위 난이도 <span class="intro-required">*</span><small>주 취향은 자동으로 포함됩니다. 그 외에도 즐길 수 있는 난이도를 선택해주세요.</small></legend><div class="intro-choice-grid intro-depth-options"></div></fieldset>
+                  <fieldset class="intro-question" data-group="preferredGameDepths"><legend>주로 즐기는 난이도 <span class="intro-required">*</span><small>주로 플레이하고 싶은 난이도를 모두 선택해주세요.</small></legend><div class="intro-choice-grid intro-depth-options"></div></fieldset>
+                  <fieldset class="intro-question" data-group="gameDepthRange"><legend>즐기는 난이도 범위 <span class="intro-required">*</span><small>주 취향은 자동으로 포함됩니다. 그 외에도 즐길 수 있는 난이도를 선택해주세요.</small></legend><div class="intro-choice-grid intro-depth-options"></div></fieldset>
                   <fieldset class="intro-question" data-group="avoidGameDepths"><legend>꺼리는 난이도 <small>가능하면 피하고 싶은 난이도를 선택해주세요.</small></legend><div class="intro-choice-grid intro-depth-options"></div></fieldset>
                   <fieldset class="intro-question"><legend>가장 어려웠던 게임 <small>최대 2개 · 실제로 플레이해본 게임만 골라주세요.</small></legend><div class="profile-hardest-list intro-hardest-list" id="introHardestList"></div><button class="profile-hardest-add" id="introHardestAddBtn" type="button">+ 게임 추가</button></fieldset>
                 </div>
               </div>
               <div class="intro-wizard-step" data-step="5">
-                <h3>시계탑 게임은 어떠세요?</h3>
-                <fieldset class="intro-question" data-group="clocktowerPreference"><legend>시계탑 게임 선호도 <span class="intro-required">*</span></legend><div class="intro-choice-grid intro-choice-grid--radio"><label><input type="radio" name="clocktowerPreference" value="love">매우 좋아함</label><label><input type="radio" name="clocktowerPreference" value="interested">기회가 되면 참여하고 싶음</label><label><input type="radio" name="clocktowerPreference" value="curious">아직 모르지만 해보고 싶음</label><label><input type="radio" name="clocktowerPreference" value="not_preferred">별로 선호하지 않음</label><label><input type="radio" name="clocktowerPreference" value="no">참여하고 싶지 않음</label></div></fieldset>
+                <h3>시계탑 선호</h3>
+                <fieldset class="intro-question" data-group="clocktowerPreference"><legend>시계탑 선호 <span class="intro-required">*</span></legend><div class="intro-choice-grid intro-choice-grid--radio"><label><input type="radio" name="clocktowerPreference" value="love">매우 좋아함</label><label><input type="radio" name="clocktowerPreference" value="interested">기회가 되면 참여하고 싶음</label><label><input type="radio" name="clocktowerPreference" value="curious">아직 모르지만 해보고 싶음</label><label><input type="radio" name="clocktowerPreference" value="not_preferred">별로 선호하지 않음</label><label><input type="radio" name="clocktowerPreference" value="no">참여하고 싶지 않음</label></div></fieldset>
               </div>
               <div class="intro-wizard-step" data-step="6">
                 <h3>자기소개</h3>
@@ -526,25 +526,25 @@
       if (step === 2) {
         if (!selectedValues('companionTypes').length) return stepFail('주로 함께 게임하는 사람을 하나 이상 선택해주세요.', document.querySelector('[data-group="companionTypes"]'));
         if (value('introAverageFrequency') === '') return stepFail('평균 플레이 빈도를 선택해주세요.', document.getElementById('introAverageFrequency'));
-        if (!selectedValues('usualPlayDays').length) return stepFail('평소 게임하는 요일을 하나 이상 선택해주세요.', document.querySelector('[data-group="usualPlayDays"]'));
-        if (!getSelectedTimes('usual').length) return stepFail('평소 게임하는 시간을 하나 이상 선택해주세요.', document.querySelector('[data-group="usualPlayTimes"]'));
+        if (!selectedValues('usualPlayDays').length) return stepFail('평소 플레이 요일을 하나 이상 선택해주세요.', document.querySelector('[data-group="usualPlayDays"]'));
+        if (!getSelectedTimes('usual').length) return stepFail('평소 플레이 시간대를 하나 이상 선택해주세요.', document.querySelector('[data-group="usualPlayTimes"]'));
       }
       if (step === 3) {
         const frequencyIds = ['introPossibleMin','introPossibleMax','introDesiredMin','introDesiredMax'];
-        if (frequencyIds.some(id => value(id) === '')) return stepFail('모임 참여 빈도를 모두 선택해주세요.', document.getElementById(frequencyIds.find(id => value(id) === '')));
+        if (frequencyIds.some(id => value(id) === '')) return stepFail('참여 가능 빈도와 원하는 참여 빈도를 모두 선택해주세요.', document.getElementById(frequencyIds.find(id => value(id) === '')));
         if (Number(value('introPossibleMin')) > Number(value('introPossibleMax'))) return stepFail('참여 가능 최소 빈도는 최대 빈도보다 높을 수 없어요.', document.getElementById('introPossibleMin'));
-        if (Number(value('introDesiredMin')) > Number(value('introDesiredMax'))) return stepFail('참여 희망 최소 빈도는 최대 빈도보다 높을 수 없어요.', document.getElementById('introDesiredMin'));
+        if (Number(value('introDesiredMin')) > Number(value('introDesiredMax'))) return stepFail('원하는 참여 최소 빈도는 최대 빈도보다 높을 수 없어요.', document.getElementById('introDesiredMin'));
         if (!selectedValues('availableDays').length) return stepFail('참여 가능한 요일을 하나 이상 선택해주세요.', document.querySelector('[data-group="availableDays"]'));
         if (!getSelectedTimes('available').length) return stepFail('참여 가능한 시간대를 하나 이상 선택해주세요.', document.querySelector('[data-group="availableTimes"]'));
       }
       if (step === 4) {
         if (!selectedValues('preferredGameTypes').length) return stepFail('주 취향 게임 유형을 하나 이상 선택해주세요.', document.querySelector('[data-group="preferredGameTypes"]'));
-        if (!selectedValues('gameTypeRange').length) return stepFail('취향 범위 게임 유형을 하나 이상 선택해주세요.', document.querySelector('[data-group="gameTypeRange"]'));
+        if (!selectedValues('gameTypeRange').length) return stepFail('즐기는 게임 유형 범위를 하나 이상 선택해주세요.', document.querySelector('[data-group="gameTypeRange"]'));
         if (!selectedValues('avoidGameTypes').length) return stepFail('꺼리는 게임 유형을 하나 이상 선택해주세요.', document.querySelector('[data-group="avoidGameTypes"]'));
-        if (!selectedValues('preferredGameDepths').length) return stepFail('주 취향 난이도를 하나 이상 선택해주세요.', document.querySelector('[data-group="preferredGameDepths"]'));
-        if (!selectedValues('gameDepthRange').length) return stepFail('취향 범위 난이도를 하나 이상 선택해주세요.', document.querySelector('[data-group="gameDepthRange"]'));
+        if (!selectedValues('preferredGameDepths').length) return stepFail('주로 즐기는 난이도를 하나 이상 선택해주세요.', document.querySelector('[data-group="preferredGameDepths"]'));
+        if (!selectedValues('gameDepthRange').length) return stepFail('즐기는 난이도 범위를 하나 이상 선택해주세요.', document.querySelector('[data-group="gameDepthRange"]'));
       }
-      if (step === 5 && !document.querySelector('[name="clocktowerPreference"]:checked')) return stepFail('시계탑 게임 선호도를 선택해주세요.', document.querySelector('[data-group="clocktowerPreference"]'));
+      if (step === 5 && !document.querySelector('[name="clocktowerPreference"]:checked')) return stepFail('시계탑 선호를 선택해주세요.', document.querySelector('[data-group="clocktowerPreference"]'));
       if (step === 6 && document.getElementById('introExpectation').value.trim().length < 10) return stepFail('모임에서 기대하는 점이나 함께하고 싶은 방식을 10자 이상 적어주세요.', document.getElementById('introExpectation'));
       return true;
     }
@@ -864,19 +864,19 @@
 
       if (!nickname) return fail('닉네임을 입력해주세요.', document.getElementById('introNickname'));
       const requiredGroups = [
-        ['joinSources','가입 경로'], ['companionTypes','주로 함께 게임하는 사람'], ['usualPlayDays','평소 게임하는 요일'], ['usualPlayTimes','평소 게임하는 시간'],
+        ['joinSources','가입 경로'], ['companionTypes','주로 함께 게임하는 사람'], ['usualPlayDays','평소 플레이 요일'], ['usualPlayTimes','평소 플레이 시간대'],
         ['availableDays','참여 가능한 요일'], ['availableTimes','참여 가능한 시간대'],
-        ['preferredGameTypes','주 취향 게임 유형'], ['gameTypeRange','취향 범위 게임 유형'], ['avoidGameTypes','꺼리는 게임 유형'],
-        ['preferredGameDepths','주 취향 난이도'], ['gameDepthRange','취향 범위 난이도'],
+        ['preferredGameTypes','주 취향 게임 유형'], ['gameTypeRange','즐기는 게임 유형 범위'], ['avoidGameTypes','꺼리는 게임 유형'],
+        ['preferredGameDepths','주로 즐기는 난이도'], ['gameDepthRange','즐기는 난이도 범위'],
       ];
       for (const [key, label] of requiredGroups) {
         if (!answers[key].length) return fail(`${label}을(를) 하나 이상 선택해주세요.`, document.querySelector(`[data-group="${key}"]`));
       }
       const frequencyIds = ['introAverageFrequency','introPossibleMin','introPossibleMax','introDesiredMin','introDesiredMax'];
-      if (frequencyIds.some(id => document.getElementById(id).value === '')) return fail('플레이 빈도와 참여 빈도를 모두 선택해주세요.', document.getElementById(frequencyIds.find(id => document.getElementById(id).value === '')));
+      if (frequencyIds.some(id => document.getElementById(id).value === '')) return fail('평균 플레이 빈도와 참여 가능/원하는 참여 빈도를 모두 선택해주세요.', document.getElementById(frequencyIds.find(id => document.getElementById(id).value === '')));
       if (answers.possibleFrequencyMin > answers.possibleFrequencyMax) return fail('참여 가능 최소 빈도는 최대 빈도보다 높을 수 없어요.', document.getElementById('introPossibleMin'));
-      if (answers.desiredFrequencyMin > answers.desiredFrequencyMax) return fail('참여 희망 최소 빈도는 최대 빈도보다 높을 수 없어요.', document.getElementById('introDesiredMin'));
-      if (!answers.clocktowerPreference) return fail('시계탑 게임 선호도를 선택해주세요.', document.querySelector('[data-group="clocktowerPreference"]'));
+      if (answers.desiredFrequencyMin > answers.desiredFrequencyMax) return fail('원하는 참여 최소 빈도는 최대 빈도보다 높을 수 없어요.', document.getElementById('introDesiredMin'));
+      if (!answers.clocktowerPreference) return fail('시계탑 선호를 선택해주세요.', document.querySelector('[data-group="clocktowerPreference"]'));
       if (answers.expectation.length < 10) return fail('모임에서 기대하는 점이나 함께하고 싶은 방식을 10자 이상 적어주세요.', document.getElementById('introExpectation'));
 
       const btn = document.getElementById('introSubmitBtn');

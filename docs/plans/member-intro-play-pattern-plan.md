@@ -4,7 +4,7 @@
 
 ## 목표와 종료 조건
 
-- 목표: 6단계 모임원 프로필 작성 위저드에서 평소 플레이 습관과 코티지 모임 참여 조건을 분리하고, 가장 어려웠던 게임 편집을 위저드로 옮긴다.
+- 목표: 6단계 모임원 프로필 작성 위저드에서 평소 플레이 습관과 모임 참여 페이스 조건을 분리하고, 가장 어려웠던 게임 편집을 위저드로 옮긴다.
 - 종료 조건: 신규·수정 프로필이 두 종류의 요일/시간을 별도 저장·출력하고, 가장 어려웠던 게임은 위저드에서만 편집되며 360px에서 1~6단계 action bar가 같은 위치에 정상 노출된다.
 
 ## 조사 결론: 정본과 필드
@@ -14,9 +14,9 @@
 | 평균 플레이 빈도 | `member_intros.average_play_frequency` | 재사용 |
 | 주로 함께 게임하는 사람 | `member_intros.companion_types` | 재사용 |
 | 평소 플레이 요일 | `member_intros.usual_play_days` | **033 신규 `TEXT[]` 필요** |
-| 평소 플레이 시간 | `member_intros.usual_play_times` | **033 신규 `TEXT[]` 필요** |
-| 현실적으로 가능한/희망 모임 참여 빈도 | `possible_frequency_min/max`, `desired_frequency_min/max` | 재사용 |
-| 모임 참여 가능 요일/시간 | `available_days`, `available_times` | 재사용. 평소 습관으로 복사·변환하지 않음 |
+| 평소 플레이 시간대 | `member_intros.usual_play_times` | **033 신규 `TEXT[]` 필요** |
+| 현실적으로 가능한/원하는 참여 빈도 | `possible_frequency_min/max`, `desired_frequency_min/max` | 재사용 |
+| 참여 가능한 요일/시간대 | `available_days`, `available_times` | 재사용. 평소 습관으로 복사·변환하지 않음 |
 | 가장 어려웠던 게임 | `profile_hardest_games` | 기존 정본 재사용, 신규 컬럼 없음 |
 
 `usual_play_days`는 `mon`~`sun`과 `flexible`만 허용한다. `usual_play_times`는 기존 30분 슬롯(`HH:00`/`HH:30`)과 `flexible`만 허용한다. 공휴일은 모임 참여 가능 일정(`available_days`)에만 둔다. 기존 행의 신규 두 필드는 빈 배열로 시작하며, 기존 `available_*` 값을 평소 습관으로 이관하지 않는다.
@@ -39,7 +39,7 @@
 
 | 파일 | 변경 |
 |---|---|
-| `pages/club/club-intro.html` | 2단계를 평소 플레이 습관(평균 빈도·동반자·평소 요일/시간), 3단계를 모임 참여(가능/희망 빈도·참여 가능 요일/시간)로 재배치. 요일/시간 선택 헬퍼를 대상별 설정으로 일반화한다. 수정 시 두 쌍을 각각 로드하고 새 RPC 인자를 저장한다. 4단계에 최대 2개의 가장 어려웠던 게임 선택 UI를 넣는다. 6단계 제목/안내문을 자기소개로 바꾼다. |
+| `pages/club/club-intro.html` | 2단계를 평소 플레이 습관(평균 빈도·동반자·평소 플레이 요일/시간대), 3단계를 모임 참여 페이스(참여 가능/원하는 참여 빈도·참여 가능한 요일/시간대)로 재배치. 요일/시간 선택 헬퍼를 대상별 설정으로 일반화한다. 수정 시 두 쌍을 각각 로드하고 새 RPC 인자를 저장한다. 4단계에 최대 2개의 가장 어려웠던 게임 선택 UI를 넣는다. 6단계 제목/안내문을 자기소개로 바꾼다. |
 | `assets/js/supabase-client.js` | `getMeetingProfile`의 평소 플레이 필드 반환, `submitMemberIntro`의 033 인자 전달, 기존 hardest-game 조회/정규화 재사용. |
 | `assets/js/kakao-auth.js` | `_buildTasteInnerHtml`에서 평소 플레이와 모임 참여를 분리 출력한다. 현재 보드의 `+ 게임 추가`·삭제 바인딩과 버튼을 제거하고 결과만 표시한다. `none`은 `없음`, 빈값은 `미입력`으로 표시한다. |
 | `assets/css/style.css` | 위저드 공통 flex 레이아웃만 조정한다. body를 scroll 영역으로, nav를 공통 footer/action bar로 유지하여 1~6단계 모두 같은 위치에 둔다. 5·6단계 전용 margin/padding 보정은 만들지 않는다. |
