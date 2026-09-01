@@ -10,7 +10,7 @@
 | 내 프로필 보드 정본 | 내 보드 > 프로필 보드 | `openProfilePanel('taste')` / `_buildTasteInnerHtml()` | 프로필 전체 정보와 게임 취향 3단을 보여주는 상세본 |
 | 프로필 보드 미리보기 카드 | 내 보드 안 프로필 보드 카드 | `_tasteCardSummaryHtml()` | 요약본 1: 주 취향 중심 압축 |
 | 모임원 프로필 페이지 | 동호회 > 모임원 프로필 | `pages/club/club-intro.html` | 모임원 프로필 목록과 작성 진입점 |
-| 모임원 프로필 작성 위저드 | 모임원 프로필 페이지의 작성·수정 | `club-intro.html` `openWizard()` | 6단계 자기소개 입력·저장 |
+| 모임원 프로필 작성 위저드 | 모임원 프로필 페이지의 작성·수정 | `club-intro.html` `openWizard()` | 6단계 자기소개 입력·저장. 2단계 평소 플레이, 3단계 코티지 모임 참여, 4단계 게임 취향·어려운 게임 |
 | 모임원 목록 카드 | 모임원 프로필 페이지의 각 회원 | `club-intro.html` `loadIntros()` | 요약본 2: 주 취향·짧은 꺼림·참여 정보 |
 | 플레이 기록 정본 | 기록 입력·목록 | `pages/game/game-reviews.html` / `assets/js/game-reviews.js` | 기록 조회·작성·수정의 원 화면 |
 | 플레이 기록 embed | 홈/내 보드에서 기록 열기 | `game-reviews.html` embed URL / `game-reviews.js` `initHub()` | 부모 화면 안에서 여는 기록 정본의 임베드 진입 |
@@ -33,8 +33,8 @@
 
 | 도메인 | 정본 | 핵심 필드·계약 |
 |---|---|---|
-| 회원 프로필·게임 취향 | `member_intros` | `preferred_game_types`·`game_type_range`·`avoid_game_types`, `preferred_game_depths`·`game_depth_range`·`avoid_game_depths`; 주 취향은 범위의 부분집합 |
-| 회원 공개 기본 정보 | `member_intros` | `nickname`, `location`, `join_sources`, 빈도, 요일·시간, 시계탑 선호, `expectation` |
+| 회원 프로필·게임 취향 | `member_intros` + `profile_hardest_games` | `preferred_game_types`·`game_type_range`·`avoid_game_types`, `preferred_game_depths`·`game_depth_range`·`avoid_game_depths`; 주 취향은 범위의 부분집합. 어려운 게임은 별도 정본 `profile_hardest_games` |
+| 회원 공개 기본 정보 | `member_intros` | `nickname`, `location`, `join_sources`, 빈도, 평소 플레이 `usual_play_days/times`, 모임 참여 가능 `available_days/times`, 시계탑 선호, `expectation` |
 | 계정 공통 프로필 | `profiles` | 계정 식별, 사진, 한줄소개 `bio`, 활동 누적, 대표 업적·칭호. `avoid_tags`·`preferred_game_depths`는 새 설문 정본이 아닌 레거시 컬럼 |
 | 좋아하는 게임 | `game_likes` | 사용자별 좋아요 게임 |
 | 해보고 싶은 게임 | `game_curious` | 사용자별 관심 게임 |

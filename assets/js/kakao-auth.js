@@ -682,6 +682,8 @@ function _openBoardFrameModal({ src, title, tab = null, wizardOnly = false }) {
     modal.classList.add('is-open');
   });
 }
+// 모임원 프로필 위저드도 같은 검색 UX를 재사용한다. 호출부가 목록 상태와 저장 시점만 정한다.
+window.openCottageGameAddSearchModal = _openGameAddSearchModal;
 
 function _bindRecordSubsheet(subBody, ctx) {
   const { _getGameKeyById, _allPhotoData, _PHOTO_SHOW, readOnly } = ctx;
@@ -797,70 +799,6 @@ function _bindTasteSubsheet(subBody, ctx) {
             });
           });
           const userId = String(user.id);
-
-          // ── 가장 어려웠던 게임 최대 2개 (profile_hardest_games) ──
-          let hardestGames = (ctx.hardestGames || []).map(game => ({
-            game_id: game.game_id || null,
-            custom_name: game.custom_name || null,
-            sort_order: game.sort_order,
-          }));
-          const hardestList = subBody.querySelector('.profile-hardest-list');
-          const hardestAddBtn = subBody.querySelector('.profile-hardest-add');
-          const _hardestKey = game => game.game_id ? `id:${game.game_id}` : `custom:${String(game.custom_name || '').toLocaleLowerCase('ko-KR')}`;
-          const _hardestPayload = games => games.map(game => ({ gameId: game.game_id, customName: game.custom_name }));
-          function _renderHardestGames() {
-            if (!hardestList) return;
-            hardestList.innerHTML = hardestGames.length ? hardestGames.map((game, index) => `
-              <div class="profile-hardest-item" data-game-id="${escH(game.game_id || '')}" data-custom-name="${escH(game.custom_name || '')}">
-                <span class="profile-hardest-order">${index + 1}</span>
-                <span class="profile-hardest-name">${escH(resolveGameName?.(game) || game.custom_name || game.game_id || '')}</span>
-                <button class="profile-hardest-remove" type="button" title="삭제">✕</button>
-              </div>`).join('') : '<p class="profile-hardest-empty">해본 게임 중 어려웠던 게임을 추가해보세요</p>';
-            if (hardestAddBtn) hardestAddBtn.disabled = hardestGames.length >= 2;
-            hardestList.querySelectorAll('.profile-hardest-item').forEach(item => {
-              const gameId = item.dataset.gameId || null;
-              if (gameId) item.querySelector('.profile-hardest-name')?.addEventListener('click', () => {
-                window.ensureGameSheet?.();
-                window.openGameSheet?.(gameId);
-              });
-              item.querySelector('.profile-hardest-remove')?.addEventListener('click', async () => {
-                const key = gameId ? `id:${gameId}` : `custom:${String(item.dataset.customName || '').toLocaleLowerCase('ko-KR')}`;
-                const next = hardestGames.filter(game => _hardestKey(game) !== key);
-                const result = await window.CottageDB?.replaceProfileHardestGames?.(userId, _hardestPayload(next));
-                if (!result?.success) { window.showToast?.('게임 경험을 저장하지 못했어요.'); return; }
-                hardestGames = next.map((game, index) => ({ ...game, sort_order:index + 1 }));
-                _renderHardestGames();
-                onProfileDataSaved?.({ hardestGames });
-              });
-            });
-          }
-          hardestAddBtn?.addEventListener('click', () => {
-            _openGameAddSearchModal({
-              overlayId:'profileHardestAddModal',
-              title:'🏅 가장 어려웠던 게임 추가',
-              inList:(gameId, customName) => hardestGames.some(game => _hardestKey(game) === (gameId ? `id:${gameId}` : `custom:${String(customName || '').toLocaleLowerCase('ko-KR')}`)),
-              onAdd:async (gameId, customName) => {
-                if (hardestGames.length >= 2) { window.showToast?.('가장 어려웠던 게임은 2개까지 등록할 수 있어요.'); return false; }
-                const next = [...hardestGames, { game_id:gameId || null, custom_name:customName || null }];
-                const result = await window.CottageDB?.replaceProfileHardestGames?.(userId, _hardestPayload(next));
-                if (!result?.success) { window.showToast?.('게임 경험을 저장하지 못했어요.'); return false; }
-                hardestGames = next.map((game, index) => ({ ...game, sort_order:index + 1 }));
-                _renderHardestGames();
-                onProfileDataSaved?.({ hardestGames });
-                return true;
-              },
-              onRemove:async (gameId, customName) => {
-                const key = gameId ? `id:${gameId}` : `custom:${String(customName || '').toLocaleLowerCase('ko-KR')}`;
-                const next = hardestGames.filter(game => _hardestKey(game) !== key);
-                const result = await window.CottageDB?.replaceProfileHardestGames?.(userId, _hardestPayload(next));
-                if (!result?.success) return false;
-                hardestGames = next.map((game, index) => ({ ...game, sort_order:index + 1 }));
-                _renderHardestGames();
-                onProfileDataSaved?.({ hardestGames });
-                return true;
-              },
-            });
-          });
 
           // ── 게임 목록 (좋아요·관심) — 원천 관리(game_likes/curious) ──
           // 칩 1개 추가 (검색 모달 공용)
@@ -2684,6 +2622,10 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
       _introLabels(d.availableDays, _INTRO_DAY_LABELS_EXTENDED),
       window.CottageDB?.formatMemberIntroTimes?.(d.availableTimes) || _introLabels(d.availableTimes, {}),
     ].filter(Boolean).join(' · ');
+    const usualStructured = window.CottageDB?.formatMemberIntroAvailability?.(d.usualPlayDays, d.usualPlayTimes) || [
+      _introLabels(d.usualPlayDays, _INTRO_DAY_LABELS_EXTENDED),
+      window.CottageDB?.formatMemberIntroTimes?.(d.usualPlayTimes) || _introLabels(d.usualPlayTimes, {}),
+    ].filter(Boolean).join(' · ');
     return `
     ${d.expectation
       ? `<section class="profile-info-section profile-expectation-section">
@@ -2699,7 +2641,8 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
       <div class="profile-info-list">
         ${_profileInfoRowHtml('평균 플레이 빈도', d.averagePlayFrequency != null ? _INTRO_FREQUENCY_LABELS[d.averagePlayFrequency] : '')}
         ${_profileInfoRowHtml('주로 함께하는 사람', _introLabels(d.companionTypes, _INTRO_COMPANION_LABELS))}
-        ${_profileInfoRowHtml('가능한 요일·시간', availableStructured || d.available || '')}
+        ${_profileInfoRowHtml('평소 게임 요일·시간', usualStructured)}
+        ${_profileInfoRowHtml('모임 참여 가능 요일·시간', availableStructured || d.available || '')}
         ${_profileInfoRowHtml('거주 지역', d.location || '')}
         ${_profileInfoRowHtml('가입 경로', _introLabels(d.joinSources, _INTRO_JOIN_SOURCE_LABELS))}
       </div>
@@ -2710,7 +2653,7 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
         <div class="profile-taste-subtitle">게임 유형</div>
         ${_tasteTier('주 취향', _introLabels(d.preferredGameTypes, _INTRO_GAME_TYPE_LABELS))}
         ${_tasteTier('취향 범위', _introLabels(d.gameTypeRange, _INTRO_GAME_TYPE_LABELS))}
-        ${_tasteTier('꺼림', _introLabels(d.avoidGameTypes, {}))}
+        ${_tasteTier('꺼림', (d.avoidGameTypes || []).includes('none') ? '없음' : _introLabels(d.avoidGameTypes, {}))}
       </div>
       <div class="profile-taste-group">
         <div class="profile-taste-subtitle">게임 난이도</div>
@@ -2722,7 +2665,7 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
       </div>
       <div class="profile-taste-subsection profile-taste-hardest-block">
       <div class="profile-experience-block">
-        <div class="profile-experience-head"><span>가장 어려웠던 게임</span>${_ro(`<button class="profile-hardest-add" type="button"${hardestGames.length >= 2 ? ' disabled' : ''}>+ 게임 추가</button>`)}</div>
+      <div class="profile-experience-head"><span>가장 어려웠던 게임</span></div>
         <div class="profile-hardest-list">${_buildHardestGamesHtml(hardestGames)}</div>
         <p class="profile-experience-hint">실제로 플레이해본 범위를 보여줘요.</p>
       </div>

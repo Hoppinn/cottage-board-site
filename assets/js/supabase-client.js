@@ -1075,6 +1075,8 @@ window._cottageSess = (function () {
         possibleFrequencyMax: intro.possible_frequency_max,
         desiredFrequencyMin: intro.desired_frequency_min,
         desiredFrequencyMax: intro.desired_frequency_max,
+        usualPlayDays: intro.usual_play_days || [],
+        usualPlayTimes: intro.usual_play_times || [],
         availableDays: intro.available_days || [],
         availableTimes: intro.available_times || [],
         preferredGameTypes: intro.preferred_game_types || [],
@@ -1173,6 +1175,8 @@ window._cottageSess = (function () {
         p_possible_frequency_max: answers.possibleFrequencyMax,
         p_desired_frequency_min: answers.desiredFrequencyMin,
         p_desired_frequency_max: answers.desiredFrequencyMax,
+        p_usual_play_days: answers.usualPlayDays,
+        p_usual_play_times: answers.usualPlayTimes,
         p_available_days: answers.availableDays,
         p_available_times: answers.availableTimes,
         p_preferred_game_types: answers.preferredGameTypes,
@@ -1183,6 +1187,7 @@ window._cottageSess = (function () {
         p_avoid_game_depths: answers.avoidGameDepths,
         p_clocktower_preference: answers.clocktowerPreference,
         p_expectation: answers.expectation,
+        p_hardest_games: answers.hardestGames || [],
       });
       if (error) {
         console.error('[submitMemberIntro]', error);
