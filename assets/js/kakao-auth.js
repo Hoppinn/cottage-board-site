@@ -604,12 +604,40 @@ function _openGameAddSearchModal({ overlayId, title, inList, onAdd, onRemove }) 
 }
 
 function _bindActivityTogglesAndMore(subBody) {
+  // 목록 아래에 있던 전체보기는 공통 섹션 헤더의 보조 액션으로 올린다. 숨김 목록 참조를
+  // 버튼에 보관하므로, 위치만 바뀌고 기존 표시 수·열림 상태는 그대로 유지된다.
+  subBody.querySelectorAll('.profile-activity-group').forEach(group => {
+    const btn = group.querySelector('.profile-more-btn');
+    const header = group.querySelector('.profile-activity-header, .meeting-recent-header');
+    const wrap = group.querySelector('.profile-more-wrap');
+    if (!btn || !header || !wrap) return;
+    btn._profileMoreWrap = wrap;
+    btn.closest('.profile-more-btn-wrap')?.remove();
+    header.appendChild(btn);
+  });
   subBody.querySelectorAll('.profile-more-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       const wrap = btn._profileMoreWrap || btn.closest('.profile-activity-list')?.querySelector('.profile-more-wrap');
       if (!wrap) return;
+      const group = btn.closest('.profile-activity-group');
+      const header = group?.querySelector('.profile-activity-header');
+      const stickyTop = header ? Number.parseFloat(getComputedStyle(header).top) || 0 : 0;
+      const wasSticky = !!header && Math.abs(header.getBoundingClientRect().top - (subBody.getBoundingClientRect().top + stickyTop)) < 1;
+      const headerEntryTop = wasSticky
+        ? subBody.scrollTop + group.getBoundingClientRect().top - subBody.getBoundingClientRect().top - stickyTop
+        : null;
       const isHidden = wrap.classList.toggle('is-hidden');
       btn.textContent = isHidden ? '전체보기 ▼' : '접기 ▲';
+      // sticky 헤더 아래로 충분히 내려간 상태에서 접으면, 축소로 생긴 빈 높이만큼
+      // 최하단에 남지 않도록 그 섹션의 원래 진입점으로 복원한다.
+      if (isHidden && headerEntryTop != null) {
+        requestAnimationFrame(() => {
+          const previousBehavior = subBody.style.scrollBehavior;
+          subBody.style.scrollBehavior = 'auto';
+          subBody.scrollTop = Math.max(0, headerEntryTop);
+          subBody.style.scrollBehavior = previousBehavior;
+        });
+      }
     });
   });
   subBody.querySelectorAll('.profile-section-more-btn').forEach(btn => {
@@ -688,17 +716,6 @@ window.openCottageGameAddSearchModal = _openGameAddSearchModal;
 
 function _bindRecordSubsheet(subBody, ctx) {
   const { _getGameKeyById, _allPhotoData, _PHOTO_SHOW, readOnly } = ctx;
-          // 콘텐츠 아래의 더보기는 수집 보드와 같은 섹션 헤더 컨트롤로 올린다.
-          // 원래 목록의 숨김 wrapper를 버튼에 보관해 위치를 옮겨도 기존 표시 개수·상태를 유지한다.
-          subBody.querySelectorAll('.profile-activity-group').forEach(group => {
-            const btn = group.querySelector('.profile-more-btn');
-            const header = group.querySelector('.profile-activity-header');
-            const wrap = group.querySelector('.profile-more-wrap');
-            if (!btn || !header || !wrap) return;
-            btn._profileMoreWrap = wrap;
-            btn.closest('.profile-more-btn-wrap')?.remove();
-            header.appendChild(btn);
-          });
           if (!subBody.querySelector('.profile-record-action-row')) {
             const actionRow = document.createElement('div');
             actionRow.className = 'profile-record-action-row';
@@ -877,7 +894,15 @@ function _bindTasteSubsheet(subBody, ctx) {
               });
             });
 
-            // 위임: 더보기 / 📖 룰토글(양방향 공유) / ✕ 삭제(확인)
+            const moreBtn = subBody.querySelector(`.taste-more-btn[data-taste-list="${listEl?.id}"]`);
+            moreBtn?.addEventListener('click', () => {
+              const wrap = listEl?.querySelector('.taste-game-more-wrap');
+              if (!wrap) return;
+              wrap.hidden = !wrap.hidden;
+              moreBtn.textContent = wrap.hidden ? '전체보기 ▼' : '접기 ▲';
+            });
+
+            // 위임: 📖 룰토글(양방향 공유) / ✕ 삭제(확인)
             listEl?.addEventListener('click', async e => {
               const moreBtn = e.target.closest('.taste-more-btn');
               if (moreBtn) {
@@ -2582,8 +2607,7 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
       return `<div class="taste-game-item${clickable}"${gidAttr}${cnAttr}>${thumb}<span class="taste-game-name">${escH(name)}</span>${_ro(`<button class="mb-rule-btn${ruleOn}" type="button" title="룰 설명 가능">📖</button>`)}${_ro('<button class="taste-game-del" type="button" title="삭제">✕</button>')}</div>`;
     };
     if (games.length <= maxInitial) return games.map(renderItem).join('');
-    const restCount = games.length - maxInitial;
-    return `${games.slice(0, maxInitial).map(renderItem).join('')}<div class="taste-game-more-wrap" hidden>${games.slice(maxInitial).map(renderItem).join('')}</div><button class="taste-more-btn" type="button">전체보기 ▼</button>`;
+    return `${games.slice(0, maxInitial).map(renderItem).join('')}<div class="taste-game-more-wrap" hidden>${games.slice(maxInitial).map(renderItem).join('')}</div>`;
   }
 
   const _profileGameName = game => {
@@ -2683,11 +2707,11 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
       </div>
       </div>
     <div class="taste-game-section profile-taste-games-section">
-      <div class="profile-taste-subtitle">❤️ 좋아하는 게임 <span class="taste-count" id="tastelikedCount">${likedGames.length}개</span> ${_ro('<button class="taste-add-btn taste-add-btn--inline" id="tastelikedAddBtn" type="button">+ 게임 추가</button>')}</div>
+      <div class="profile-taste-subtitle profile-taste-games-header"><span>❤️ 좋아하는 게임 <span class="taste-count" id="tastelikedCount">${likedGames.length}개</span></span> ${_ro('<button class="taste-add-btn taste-add-btn--inline" id="tastelikedAddBtn" type="button">+ 게임 추가</button>')}${likedGames.length > 5 ? '<button class="taste-more-btn" data-taste-list="tastelikedList" type="button">전체보기 ▼</button>' : ''}</div>
       <div class="taste-game-list" id="tastelikedList">${_buildTasteGameItems(likedGames, _ruleSet)}</div>
     </div>
     <div class="taste-game-section">
-      <div class="profile-taste-subtitle">👀 해보고 싶은 게임 <span class="taste-count" id="tastecuriousCount">${curiousGames.length}개</span> ${_ro('<button class="taste-add-btn taste-add-btn--inline" id="tastecuriousAddBtn" type="button">+ 게임 추가</button>')}</div>
+      <div class="profile-taste-subtitle profile-taste-games-header"><span>👀 해보고 싶은 게임 <span class="taste-count" id="tastecuriousCount">${curiousGames.length}개</span></span> ${_ro('<button class="taste-add-btn taste-add-btn--inline" id="tastecuriousAddBtn" type="button">+ 게임 추가</button>')}${curiousGames.length > 5 ? '<button class="taste-more-btn" data-taste-list="tastecuriousList" type="button">전체보기 ▼</button>' : ''}</div>
       <div class="taste-game-list" id="tastecuriousList">${_buildTasteGameItems(curiousGames, _ruleSet)}</div>
     </div>
     </section>
@@ -2839,8 +2863,8 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
       <p class="taste-game-empty">불러오는 중…</p>
       </div>
     </section>
-    <section class="meeting-board-section meeting-recent-section">
-      <div class="taste-section-label">최근 참여${stats.moimCount ? ` · ${stats.moimCount}회` : ''}</div>
+    <section class="meeting-board-section meeting-recent-section profile-activity-group">
+      <div class="taste-section-label meeting-recent-header">최근 참여${stats.moimCount ? ` · ${stats.moimCount}회` : ''}</div>
       ${_recentPlaysHtml}
     </section>
     `;
@@ -3257,9 +3281,10 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
 // Phase C: openProfilePanel 통합 패널로 위임. 자기 자신이면 편집 가능한 내 보드로.
 async function openOtherProfileSheet(userId, opts = {}) {
   if (!userId) return;
+  const { autoSubsheet = null, ...panelOpts } = opts;
   const self = getKakaoUser();
-  if (self && String(self.id) === String(userId)) return openProfilePanel(null, opts);
-  return openProfilePanel(null, { userId: String(userId), readOnly: true, ...opts });
+  if (self && String(self.id) === String(userId)) return openProfilePanel(autoSubsheet, panelOpts);
+  return openProfilePanel(autoSubsheet, { userId: String(userId), readOnly: true, ...panelOpts });
 }
 window.openOtherProfileSheet = openOtherProfileSheet;
 

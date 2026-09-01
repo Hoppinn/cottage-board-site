@@ -742,12 +742,12 @@
           ? formatAvailability(r.available_days, r.available_times)
           : (r.available || '');
         return `
-        <div class="intro-card-news${clickable ? ' intro-card-news--clickable' : ''}" data-id="${r.id}" data-user-id="${escHtml(r.user_id || '')}" data-color="${escHtml(r.card_color||'')}" data-idx="${idx}"${clickable ? ` role="button" tabindex="0" aria-label="${escHtml(r.nickname)} 내 보드 열기"` : ''}>
+        <div class="intro-card-news${clickable ? ' intro-card-news--clickable' : ''}" data-id="${r.id}" data-user-id="${escHtml(r.user_id || '')}" data-color="${escHtml(r.card_color||'')}" data-idx="${idx}">
           <div class="intro-card-news-head">
-            <div class="intro-card-news-identity"><span class="intro-card-news-avatar">${repAvatar}</span><strong class="intro-card-news-name">${escHtml(r.nickname)}</strong></div>
+            ${clickable ? `<button class="intro-card-news-identity" data-user-id="${escHtml(r.user_id)}" type="button" aria-label="${escHtml(r.nickname)} 내 보드 열기"><span class="intro-card-news-avatar">${repAvatar}</span><strong class="intro-card-news-name">${escHtml(r.nickname)}</strong></button>` : `<div class="intro-card-news-identity"><span class="intro-card-news-avatar">${repAvatar}</span><strong class="intro-card-news-name">${escHtml(r.nickname)}</strong></div>`}
             ${actions}
           </div>
-          <div class="intro-card-news-body">
+          <div class="intro-card-news-body"${clickable ? ` data-user-id="${escHtml(r.user_id)}" role="button" tabindex="0" aria-label="${escHtml(r.nickname)} 프로필 보드 열기"` : ''}>
             ${r.expectation || r._bio ? `<p class="intro-card-news-message">${escHtml(r.expectation || r._bio)}</p>` : ''}
             ${introCardSummary('🎲', '주 취향', gameTypes)}
             ${introCardSummary('⚖️', '주 난이도', depthSummary)}
@@ -764,22 +764,25 @@
         applyCardColor(card, card.dataset.color, Number(card.dataset.idx));
       });
 
-      // 카드 전체는 읽기 전용 내보드 메인으로 통일한다. 카드 안 보조 액션은 아래 각 핸들러가 전파를 막는다.
-      el.querySelectorAll('.intro-card-news--clickable').forEach(card => {
-        const uid = card.dataset.userId;
-        const openBoard = e => {
-          if (e?.target?.closest?.('button, a')) return;
-          if (!uid) return;
-          window.openOtherProfileSheet?.(uid);
-        };
-        card.addEventListener('click', openBoard);
-        card.addEventListener('keydown', e => {
-          if (e.key === 'Enter' || e.key === ' ') {
-            if (e.target !== card) return;
-            e.preventDefault();
-            openBoard(e);
-          }
+      // 사람 자체인 헤더는 내 보드, 프로필 내용은 프로필 보드로 분리한다. 둘 다 독립
+      // interactive 영역이라 카드 전체 click handler를 두지 않는다.
+      el.querySelectorAll('.intro-card-news-identity[data-user-id]').forEach(head => {
+        head.addEventListener('click', e => {
+          e.preventDefault();
+          e.stopPropagation();
+          window.openOtherProfileSheet?.(head.dataset.userId);
         });
+      });
+      el.querySelectorAll('.intro-card-news-body[data-user-id]').forEach(cardBody => {
+        const openProfileBoard = e => {
+          if (e.type === 'keydown' && !['Enter', ' '].includes(e.key)) return;
+          if (e.type === 'keydown' && e.target !== cardBody) return;
+          e.preventDefault();
+          e.stopPropagation();
+          window.openOtherProfileSheet?.(cardBody.dataset.userId, { autoSubsheet: 'taste' });
+        };
+        cardBody.addEventListener('click', openProfileBoard);
+        cardBody.addEventListener('keydown', openProfileBoard);
       });
 
       el.querySelectorAll('.intro-card-del').forEach(btn => {

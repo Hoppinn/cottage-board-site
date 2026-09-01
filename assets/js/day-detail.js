@@ -204,8 +204,13 @@
       border: 1px solid var(--line, #e5ddd2);
       border-radius: 10px;
       background: #f8f4ee;
+      cursor: pointer;
     }
+    .dd-participant-card:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
     .dd-participant-card .dd-modal-nick { margin-bottom: 3px; min-width: 0; }
+    .dd-participant-name { padding: 0; border: 0; background: none; color: inherit; font: inherit; font-weight: 700; cursor: pointer; }
+    .dd-participant-name:hover { color: var(--green); }
+    .dd-participant-name:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
     .dd-participant-card .dd-time { margin-bottom: 0; text-align: right; flex-shrink: 0; }
     .dd-participant-card .dd-context-block {
       margin: 0;
@@ -1244,9 +1249,9 @@
             <button class="dd-participant-action dd-participant-action--delete" data-dd-participant-action="delete" type="button" aria-label="참여 취소">✕</button>
           </span>`
         : '';
-      return `<article class="dd-participant-card">
+      return `<article class="dd-participant-card" data-uid="${esc(v.user_id)}" role="button" tabindex="0" aria-label="${esc(v.nickname)} 모임 보드 열기">
         <div class="dd-participant-head">
-          <div class="dd-participant-nick-wrap"><div class="dd-modal-nick">${esc(v.nickname)}</div>${participantActions}</div>
+          <div class="dd-participant-nick-wrap"><button class="dd-modal-nick dd-participant-name" data-uid="${esc(v.user_id)}" type="button">${esc(v.nickname)}</button>${participantActions}</div>
           <div class="dd-time">${window.formatVoteHour(v.time_start)}~${window.formatVoteHour(v.time_end)}${partyCount([v]) > 1 ? ` · ${partyCount([v]) - 1}명 동반` : ''}</div>
         </div>
         ${_buildUsualContextHtml(profileByUserId.get(String(v.user_id)))}
@@ -1567,6 +1572,32 @@
     });
 
     _bindDdGameHitClicks(el);
+    // 카드 빈 영역은 현재 모임 날짜를 보존한 모임 보드, 이름은 사람 자체의 내 보드로
+    // 분리한다. 내부 버튼·게임 클릭은 각자 동작만 수행하도록 전파를 막는다.
+    el.querySelectorAll('.dd-participant-card[data-uid]').forEach(card => {
+      const openMeetingBoard = e => {
+        if (e.type === 'keydown' && !['Enter', ' '].includes(e.key)) return;
+        if (e.type === 'keydown' && e.target !== card) return;
+        if (e.target.closest('button, a, input, select, textarea, .dd-game-hit')) return;
+        e.preventDefault();
+        e.stopPropagation();
+        window.CottageDB?.trackEvent('meeting_planner_bar_click', { date: voteDate, user_id: card.dataset.uid });
+        window.openOtherMeetingSheet?.(card.dataset.uid, { focusDate: voteDate });
+      };
+      card.addEventListener('click', openMeetingBoard);
+      card.addEventListener('keydown', openMeetingBoard);
+    });
+    el.querySelectorAll('.dd-participant-name[data-uid]').forEach(name => {
+      const openProfileBoard = e => {
+        if (e.type === 'keydown' && !['Enter', ' '].includes(e.key)) return;
+        e.preventDefault();
+        e.stopPropagation();
+        window.CottageDB?.trackEvent('meeting_profile_click', { user_id: name.dataset.uid });
+        window.openOtherProfileSheet?.(name.dataset.uid);
+      };
+      name.addEventListener('click', openProfileBoard);
+      name.addEventListener('keydown', openProfileBoard);
+    });
 
     // 개인 날짜 상세에서만 가능했던 대표 게임·희망 인원 편집을 날짜 전체 상세에서도 제공한다.
     // 성공 시 myGames의 같은 객체를 갱신하므로 현재 모달과 호출부 캐시가 일치하고,

@@ -259,7 +259,7 @@ assets/js/
 │                               # 의존: window.CottageDB (getMeetingVotes, getMeetingVoteGames,
 │                               #   getProfileBoardData — 개인 날짜 상세의 평소 참조),
 │                               #   window.COTTAGE_GAMES (게임명 해석, optional),
-│                               #   window.openOtherMeetingSheet (kakao-auth.js — 참여자 닉네임 클릭),
+│                               #   window.openOtherProfileSheet/openOtherMeetingSheet (kakao-auth.js — 참여자 이름/카드 클릭),
 │                               #   window.getGameKeyById (play-records-utils.js) +
 │                               #     window.ensureGameSheet/openGameSheet (game-sheet.js — 게임 행 클릭)
 │                               # ⚠️ 위 전역은 전부 클릭 시점에 window.X?.()로 참조할 것 —
@@ -501,13 +501,14 @@ game-reviews.html — 기록 입력 탭
     월~일 경계에서 다음 주 데이터가 빠지지 않는다. 회원 자기소개(club-intro.html)와
     동일 테이블/컬럼을 읽고 써서 한쪽 수정이 다른 쪽에 즉시 반영된다. `taste`는 레거시 내부 키다.
   - 자기소개 작성은 로그인 필수(member_intros.user_id 기준 upsert, 유저당 1행)
-  - 회원 자기소개 카드 전체 클릭 → `openOtherProfileSheet(userId)` → 읽기전용 내 보드 메인. 본인이면 내 보드 메인으로 열고,
+  - 회원 자기소개 카드의 닉네임·헤더 클릭 → `openOtherProfileSheet(userId)` → 읽기전용 내 보드 메인, 카드 본문과
+    `프로필 자세히 보기 ›` → `openOtherProfileSheet(userId, {autoSubsheet:'taste'})` → 프로필 보드. 본인이면 편집 가능한 같은 보드로 열고,
     타회원이면 편집 컨트롤·비공개 섹션(알림/교환권/함께한시간)을 제외한다. 카드 안 수정·삭제·색상 버튼은 이 진입과 독립적으로 동작한다.
     (구 별도 otherMainPanel/_openOtherMeetingSubSheet 구조는 폐지)
-  - 닉네임 클릭 진입점은 두 갈래다. **특정 일정의 모임 참여자**(`.sched-bar-name`)는
-    openOtherMeetingSheet(모임 보드 직행), **그 외 전부**(게임시트 좋아요/궁금해요 아바타, 게임평·플레이기록 닉네임/리뷰어 이름)는
-    openOtherProfileSheet(읽기전용 내 보드 전체). 플레이기록 게시판 참여자 태그가 기존에 모임 보드로 잘못 연결돼 있던 것을
-    수정하고, 게임평·리뷰어 이름에는 클릭 진입점을 신규 추가. 상세는 js-api.md openOtherProfileSheet/openOtherMeetingSheet 항목.
+  - 참여자 navigation은 이름·identity 헤더 → openOtherProfileSheet(내 보드), 모임 참여 카드의 빈 영역 →
+    openOtherMeetingSheet(모임 보드 직행, 해당 날짜는 focusDate)로 통일한다. 게임시트 좋아요/궁금해요 아바타,
+    게임평·플레이기록 닉네임/리뷰어 이름도 전자에 따른다. 모임 조율의 참여자 상세 카드도 같은 규칙이며, 중첩된 이름 click은
+    카드 click으로 전파하지 않는다. 상세는 js-api.md openOtherProfileSheet/openOtherMeetingSheet 항목.
   - ⚠️ **Phase D가 club-history.html(동호회 기록 & 사진)을 빠뜨렸고 2026-07-22에 보강**했다 — 그 페이지 참여자 태그엔
     `data-nick`도 핸들러도 없어 구조상 100% 안 열렸다. **닉네임을 렌더하는 화면을 새로 만들면 이 진입점을 함께 붙일 것.**
     닉네임→userId 맵 규칙은 **회원 명부 ∪ 기록 작성자**(한쪽만 쓰면 닉네임 변경자·미기록 회원이 조용히 빠진다).

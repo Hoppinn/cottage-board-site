@@ -1621,14 +1621,19 @@ let _meetingReload = null;     // initMeetingSection이 loadWeek 참조를 주�
 let _meetingPreviewFocusPending = new URLSearchParams(location.search).get('focus') === 'meeting';
 function focusMeetingPreviewFromBoard() {
   if (!_meetingPreviewFocusPending) return;
-  const target = document.getElementById('meetingPreview');
-  if (!target?.children.length) return;
+  const preview = document.getElementById('meetingPreview');
+  const target = preview?.firstElementChild;
+  if (!target) return;
   _meetingPreviewFocusPending = false;
-  const headerHeight = document.querySelector('.site-header')?.offsetHeight || 0;
-  const previousBehavior = document.documentElement.style.scrollBehavior;
-  document.documentElement.style.scrollBehavior = 'auto';
-  window.scrollTo(0, Math.max(0, window.scrollY + target.getBoundingClientRect().top - headerHeight));
-  document.documentElement.style.scrollBehavior = previousBehavior;
+  // 비동기 렌더 뒤 브라우저의 기본 복원 위치가 확정된 다음, 래퍼가 아닌 실제 모임 카드의
+  // 시작점을 현재 고정 헤더 바로 아래로 맞춘다.
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    const headerHeight = document.querySelector('.site-header')?.offsetHeight || 0;
+    const previousBehavior = document.documentElement.style.scrollBehavior;
+    document.documentElement.style.scrollBehavior = 'auto';
+    window.scrollTo(0, Math.max(0, window.scrollY + target.getBoundingClientRect().top - headerHeight));
+    document.documentElement.style.scrollBehavior = previousBehavior;
+  }));
 }
 
 // 모임보드 게임 목록 인원조건 select(kakao-auth.js)에서 바로 반영 — 홈 미리보기는
