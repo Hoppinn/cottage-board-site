@@ -2745,7 +2745,7 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
   // 카드는 옛 개수 그대로였다(들어가면 4개, 나오면 3개). 이제 _boardData(취향·모임 공용
   // 단일 소스)를 받는 함수이고, 변경이 일어난 자리에서 _syncTasteCard()로 다시 그린다.
   const _profileCardDetailRowHtml = (label, value) => value
-    ? `<span class="profile-card-detail-row"><b>${escH(label)}</b><span class="profile-card-detail-value">${escH(value)}</span></span>`
+    ? `<span class="profile-card-detail-row"><b>${escH(label)}:</b><span class="profile-card-detail-value">${escH(value)}</span></span>`
     : '';
   const _tasteCardSummaryHtml = (d) => {
     const types = (d.preferredGameTypes || []).map(value => _INTRO_GAME_TYPE_LABELS[value] || value);
@@ -2757,8 +2757,8 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
       || '';
     const bio = d.expectation || d.bio || '';
     return `${bio ? `<span class="profile-card-bio-row">${escH(bio)}</span>` : ''}
-      ${(types.length || depthLabel) ? `<span class="profile-card-summary-group profile-card-summary-group--taste">${_profileCardDetailRowHtml('주 취향:', types.join(' · '))}${_profileCardDetailRowHtml('주 난이도:', depthLabel)}</span>` : ''}
-      ${(possibleFrequency || available) ? `<span class="profile-card-summary-group profile-card-summary-group--meeting">${_profileCardDetailRowHtml('참여 가능 빈도:', possibleFrequency)}${_profileCardDetailRowHtml('참여 가능한 때:', available)}</span>` : ''}
+      ${(types.length || depthLabel) ? `<span class="profile-card-summary-group profile-card-summary-group--taste">${_profileCardDetailRowHtml('주 취향', types.join(' · '))}${_profileCardDetailRowHtml('주 난이도', depthLabel)}</span>` : ''}
+      ${(possibleFrequency || available) ? `<span class="profile-card-summary-group profile-card-summary-group--meeting">${_profileCardDetailRowHtml('참여 가능 빈도', possibleFrequency)}${_profileCardDetailRowHtml('참여 가능한 때', available)}</span>` : ''}
       <span class="profile-card-games-row">좋아하는 게임 ${(d.likedGames || []).length} · 해보고 싶은 게임 ${(d.curiousGames || []).length}</span>`;
   };
   const _syncTasteCard = () => {

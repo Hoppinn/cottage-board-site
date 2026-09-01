@@ -448,11 +448,11 @@
         ? selected.map(value => fullLabels[value]).filter(Boolean).join(' · ')
         : selected.map(value => shortLabels[value]).filter(Boolean).join(' · ');
     }
-    function introCardSummary(icon, label, value) {
+    function introCardSummary(icon, label, value, { groupStart = false } = {}) {
       if (!value) return '';
       const safeLabel = escHtml(label);
       const safeValue = escHtml(value);
-      return `<div class="intro-card-news-summary" aria-label="${safeLabel}: ${safeValue}"><span aria-hidden="true">${icon}</span><span><b class="intro-card-news-summary-label">${safeLabel}</b>: ${safeValue}</span></div>`;
+      return `<div class="intro-card-news-summary${groupStart ? ' intro-card-news-summary--group-start' : ''}" aria-label="${safeLabel}: ${safeValue}"><span aria-hidden="true">${icon}</span><span><b class="intro-card-news-summary-label">${safeLabel}:</b><span class="intro-card-news-summary-value">${safeValue}</span></span></div>`;
     }
     function hardestKey(game) {
       return game.game_id ? `id:${game.game_id}` : `custom:${String(game.custom_name || '').toLocaleLowerCase('ko-KR')}`;
@@ -751,7 +751,7 @@
             ${r.expectation || r._bio ? `<p class="intro-card-news-message">${escHtml(r.expectation || r._bio)}</p>` : ''}
             ${introCardSummary('🎲', '주 취향', gameTypes)}
             ${introCardSummary('⚖️', '주 난이도', depthSummary)}
-            ${introCardSummary('📅', '참여 가능 빈도', possibleFrequency)}
+            ${introCardSummary('📅', '참여 가능 빈도', possibleFrequency, { groupStart: true })}
             ${introCardSummary('🗓️', '참여 가능한 때', availableSchedule)}
             <div class="intro-card-news-games">좋아하는 게임 ${r._liked_game_count} · 해보고 싶은 게임 ${r._curious_game_count}</div>
             ${clickable ? '<span class="intro-card-news-link" aria-hidden="true">프로필 자세히 보기 ›</span>' : ''}

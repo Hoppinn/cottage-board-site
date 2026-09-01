@@ -4729,7 +4729,7 @@ html:has(body.embed-mode) { scroll-padding-top: 0; }
 .profile-card-summary-group + .profile-card-summary-group{margin-top:6px;}
 .profile-card-summary-group .profile-card-detail-row + .profile-card-detail-row{margin-top:1px;}
 .profile-card-detail-row b{color:var(--text);font-weight:700;white-space:nowrap;}
-.profile-card-detail-value{white-space:normal;}
+.profile-card-detail-value,.intro-card-news-summary-value{margin-left:.25em;white-space:normal;}
 .profile-card-games-row{display:block;margin-top:8px;font-size:10px;color:var(--muted);white-space:pre-line;}
 .profile-card-arrow{font-size:16px;color:var(--muted);flex-shrink:0;margin-left:auto;}
 .profile-card.has-badge{position:relative;}
@@ -7076,6 +7076,7 @@ html.intro-wizard-embed .club-breadcrumb,html.intro-wizard-embed .page-mini-hero
 .intro-card-news-summary{display:flex;gap:4px;align-items:flex-start;min-width:0;color:var(--text-dark);font-size:12px;font-weight:400;line-height:1.45;}
 .intro-card-news-summary span:last-child{min-width:0;word-break:keep-all;}
 .intro-card-news-summary-label{font-weight:600;color:var(--text);}
+.intro-card-news-summary--group-start{margin-top:3px;}
 .intro-card-news-message{margin:0 0 2px;color:var(--text);font-size:12px;font-weight:400;line-height:1.45;}
 .intro-card-news-games{margin-top:2px;color:var(--muted);font-size:10px;font-weight:400;line-height:1.4;}
 .intro-card-news-link{align-self:flex-end;margin-top:auto;padding-top:3px;color:var(--green);font-size:11px;font-weight:700;}
