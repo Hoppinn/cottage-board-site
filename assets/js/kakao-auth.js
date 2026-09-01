@@ -976,7 +976,7 @@ function _bindTasteSubsheet(subBody, ctx) {
           }
 
           // ── 커뮤니티 bio 칩 동적 추가 ──
-          const _communityBioChips = (allBioSuggestions || []).filter(t => !_PREDEFINED_CHIPS.includes(t));
+          const _communityBioChips = (allBioSuggestions || []).filter(t => !_BIO_PREDEFINED.includes(t));
           if (_communityBioChips.length > 0) {
             const _chipsContainer = subBody.querySelector('.taste-bio-chips');
             if (_chipsContainer) {
