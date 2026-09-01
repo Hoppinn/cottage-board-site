@@ -2617,6 +2617,9 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
       if (ordered.length <= 1) return _depthNames(ordered);
       return ordered.map(code => ({ intro:'입문', light:'라이트', strategy:'매니아', hardcore:'하드코어' })[code]).join(' · ');
     };
+    const _gameRangeNames = values => (values || []).includes('any')
+      ? _INTRO_GAME_TYPE_LABELS.any
+      : _introLabels(values, _INTRO_GAME_TYPE_LABELS);
     const _tasteTier = (label, value, range = '') => `
       <div class="profile-taste-tier">
         <span class="profile-taste-tier-label">${label}</span>
@@ -2657,8 +2660,8 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
       <div class="profile-main-title">모임 참여 페이스</div>
       <div class="profile-info-list">
         ${_profileInfoRowHtml('참여 가능 빈도', _introFrequencyRange(d.possibleFrequencyMin, d.possibleFrequencyMax))}
-        ${_profileInfoRowHtml('참여 희망 빈도', _introFrequencyRange(d.desiredFrequencyMin, d.desiredFrequencyMax))}
-        ${_profileInfoRowHtml('모임 가능한 때', availableStructured || d.available || '')}
+        ${_profileInfoRowHtml('원하는 참여 빈도', _introFrequencyRange(d.desiredFrequencyMin, d.desiredFrequencyMax))}
+        ${_profileInfoRowHtml('참여 가능한 때', availableStructured || d.available || '')}
       </div>
     </section>
     <section class="profile-info-section profile-taste-section">
@@ -2666,13 +2669,13 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
       <div class="profile-taste-group">
         <div class="profile-taste-subtitle">게임 유형</div>
         ${_tasteTier('주 취향', _introLabels(d.preferredGameTypes, _INTRO_GAME_TYPE_LABELS))}
-        ${_tasteTier('취향 범위', _introLabels(d.gameTypeRange, _INTRO_GAME_TYPE_LABELS))}
+        ${_tasteTier('즐기는 범위', _gameRangeNames(d.gameTypeRange))}
         ${avoidTypes.length && !avoidTypes.includes('none') ? _tasteTier('꺼림', _introLabels(avoidTypes, {})) : _tasteTier('꺼림 유형', '없음')}
       </div>
       <div class="profile-taste-group">
         <div class="profile-taste-subtitle">게임 난이도</div>
-        ${_tasteTier('주 취향', _rangeDepthNames(d.preferredGameDepths), _formatDepthRanges(d.preferredGameDepths))}
-        ${_tasteTier('취향 범위', _rangeDepthNames(d.gameDepthRange), _formatDepthRanges(d.gameDepthRange))}
+        ${_tasteTier('주 난이도', _rangeDepthNames(d.preferredGameDepths), _formatDepthRanges(d.preferredGameDepths))}
+        ${_tasteTier('즐기는 범위', _rangeDepthNames(d.gameDepthRange), _formatDepthRanges(d.gameDepthRange))}
         ${avoidDepths.length ? _tasteTier('꺼림', _depthNames(avoidDepths), _formatDepthRanges(avoidDepths)) : _tasteTier('꺼림 난이도', '없음')}
       </div>
       ${d.clocktowerPreference ? `<div class="profile-taste-clocktower">${_profileInfoRowHtml('시계탑 선호', _INTRO_CLOCKTOWER_LABELS[d.clocktowerPreference] || d.clocktowerPreference)}</div>` : ''}

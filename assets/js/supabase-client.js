@@ -978,7 +978,10 @@ window._cottageSess = (function () {
     const scheduleFlexible = (days || []).some(value => String(value) === 'flexible');
     const timeLabel = formatMemberIntroTimes(times);
     const compactTimeLabel = scheduleFlexible ? timeLabel.replace('시간대 유동적', '시간대') : timeLabel;
-    return [formatMemberIntroDays(days), compactTimeLabel, scheduleFlexible ? '일정 유동적' : ''].filter(Boolean).join(' · ');
+    const timeAndSchedule = scheduleFlexible && compactTimeLabel
+      ? `${compactTimeLabel}·일정 유동적`
+      : (scheduleFlexible ? '일정 유동적' : compactTimeLabel);
+    return [formatMemberIntroDays(days), timeAndSchedule].filter(Boolean).join(' · ');
   }
 
   const MEMBER_INTRO_LEGACY_TIME_RANGES = {
