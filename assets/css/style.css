@@ -4723,11 +4723,13 @@ html:has(body.embed-mode) { scroll-padding-top: 0; }
 .profile-card:hover .profile-card-label-chevron{color:var(--green);transform:translateX(2px);}
 .profile-card-summary{display:block;font-size:11px;color:var(--muted);margin-top:4px;line-height:1.5;word-break:keep-all;white-space:pre-line;}
 .profile-card-bio-row{display:block;}
-.profile-card-profile-row,.profile-card-detail-row{display:block;margin-top:4px;}
+.profile-card-profile-row{display:block;margin-top:4px;}
+.profile-card-detail-row{display:flex;align-items:baseline;gap:3px;min-width:0;margin-top:4px;}
 .profile-card-summary-group{display:block;}
 .profile-card-summary-group + .profile-card-summary-group{margin-top:6px;}
 .profile-card-summary-group .profile-card-detail-row + .profile-card-detail-row{margin-top:1px;}
-.profile-card-detail-row b{color:var(--text);font-weight:700;}
+.profile-card-detail-row b{flex:0 0 auto;color:var(--text);font-weight:700;white-space:nowrap;}
+.profile-card-detail-value{flex:1 1 auto;min-width:0;white-space:normal;overflow-wrap:anywhere;}
 .profile-card-games-row{display:block;margin-top:8px;font-size:10px;color:var(--muted);white-space:pre-line;}
 .profile-card-arrow{font-size:16px;color:var(--muted);flex-shrink:0;margin-left:auto;}
 .profile-card.has-badge{position:relative;}
