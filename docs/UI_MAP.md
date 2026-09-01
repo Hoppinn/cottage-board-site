@@ -7,7 +7,7 @@
 | 공식 화면명 | 사용자 진입점 | 실제 파일·함수 | 역할 |
 |---|---|---|---|
 | 내 보드 | 헤더의 내 보드 | `assets/js/kakao-auth.js` `openProfilePanel()` | 로그인 회원의 보드 컨테이너 |
-| 내 프로필 보드 정본 | 내 보드 > 프로필 보드 | `openProfilePanel('taste')` / `_buildTasteInnerHtml()` | 프로필 전체 정보와 게임 취향 3단을 보여주는 상세본 |
+| 내 프로필 보드 정본 | 내 보드 > 프로필 보드 | `openProfilePanel('taste')` / `_buildTasteInnerHtml()` | 평소 플레이·모임 플레이·게임 취향 3단·어려운 게임을 보여주는 상세본 |
 | 프로필 보드 미리보기 카드 | 내 보드 안 프로필 보드 카드 | `_tasteCardSummaryHtml()` | 요약본 1: 주 취향 중심 압축 |
 | 모임원 프로필 페이지 | 동호회 > 모임원 프로필 | `pages/club/club-intro.html` | 모임원 프로필 목록과 작성 진입점 |
 | 모임원 프로필 작성 위저드 | 모임원 프로필 페이지의 작성·수정 | `club-intro.html` `openWizard()` | 6단계 자기소개 입력·저장. 2단계 평소 플레이, 3단계 코티지 모임 참여, 4단계 게임 취향·어려운 게임 |

@@ -2612,6 +2612,11 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
     const likedGames = d.likedGames || [];
     const curiousGames = d.curiousGames || [];
     const _depthNames = values => (values || []).map(code => _INTRO_DEPTH_OPTIONS[code]?.name).filter(Boolean).join(' · ');
+    const _rangeDepthNames = values => {
+      const ordered = ['intro','light','strategy','hardcore'].filter(code => (values || []).includes(code));
+      if (ordered.length <= 1) return _depthNames(ordered);
+      return ordered.map(code => ({ intro:'입문', light:'라이트', strategy:'매니아', hardcore:'하드코어' })[code]).join(' · ');
+    };
     const _tasteTier = (label, value, range = '') => `
       <div class="profile-taste-tier">
         <span class="profile-taste-tier-label">${label}</span>
@@ -2626,6 +2631,8 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
       _introLabels(d.usualPlayDays, _INTRO_DAY_LABELS_EXTENDED),
       window.CottageDB?.formatMemberIntroTimes?.(d.usualPlayTimes) || _introLabels(d.usualPlayTimes, {}),
     ].filter(Boolean).join(' · ');
+    const avoidTypes = d.avoidGameTypes || [];
+    const avoidDepths = d.avoidGameDepths || [];
     return `
     ${d.expectation
       ? `<section class="profile-info-section profile-expectation-section">
@@ -2641,10 +2648,17 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
       <div class="profile-info-list">
         ${_profileInfoRowHtml('평균 플레이 빈도', d.averagePlayFrequency != null ? _INTRO_FREQUENCY_LABELS[d.averagePlayFrequency] : '')}
         ${_profileInfoRowHtml('주로 함께하는 사람', _introLabels(d.companionTypes, _INTRO_COMPANION_LABELS))}
-        ${_profileInfoRowHtml('평소 게임 요일·시간', usualStructured)}
-        ${_profileInfoRowHtml('모임 참여 가능 요일·시간', availableStructured || d.available || '')}
+        ${_profileInfoRowHtml('주로 플레이하는 때', usualStructured)}
         ${_profileInfoRowHtml('거주 지역', d.location || '')}
         ${_profileInfoRowHtml('가입 경로', _introLabels(d.joinSources, _INTRO_JOIN_SOURCE_LABELS))}
+      </div>
+    </section>
+    <section class="profile-info-section profile-meeting-play-section">
+      <div class="profile-main-title">모임 플레이</div>
+      <div class="profile-info-list">
+        ${_profileInfoRowHtml('참여 가능 빈도', _introFrequencyRange(d.possibleFrequencyMin, d.possibleFrequencyMax))}
+        ${_profileInfoRowHtml('참여 희망 빈도', _introFrequencyRange(d.desiredFrequencyMin, d.desiredFrequencyMax))}
+        ${_profileInfoRowHtml('모임 가능한 때', availableStructured || d.available || '')}
       </div>
     </section>
     <section class="profile-info-section profile-taste-section">
@@ -2653,13 +2667,13 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
         <div class="profile-taste-subtitle">게임 유형</div>
         ${_tasteTier('주 취향', _introLabels(d.preferredGameTypes, _INTRO_GAME_TYPE_LABELS))}
         ${_tasteTier('취향 범위', _introLabels(d.gameTypeRange, _INTRO_GAME_TYPE_LABELS))}
-        ${_tasteTier('꺼림', (d.avoidGameTypes || []).includes('none') ? '없음' : _introLabels(d.avoidGameTypes, {}))}
+        ${avoidTypes.length && !avoidTypes.includes('none') ? _tasteTier('꺼림', _introLabels(avoidTypes, {})) : _tasteTier('꺼림 유형', '없음')}
       </div>
       <div class="profile-taste-group">
         <div class="profile-taste-subtitle">게임 난이도</div>
         ${_tasteTier('주 취향', _depthNames(d.preferredGameDepths), _formatDepthRanges(d.preferredGameDepths))}
-        ${_tasteTier('취향 범위', _depthNames(d.gameDepthRange), _formatDepthRanges(d.gameDepthRange))}
-        ${_tasteTier('꺼림', _depthNames(d.avoidGameDepths), _formatDepthRanges(d.avoidGameDepths))}
+        ${_tasteTier('취향 범위', _rangeDepthNames(d.gameDepthRange), _formatDepthRanges(d.gameDepthRange))}
+        ${avoidDepths.length ? _tasteTier('꺼림', _depthNames(avoidDepths), _formatDepthRanges(avoidDepths)) : _tasteTier('꺼림 난이도', '없음')}
       </div>
       ${d.clocktowerPreference ? `<div class="profile-taste-clocktower">${_profileInfoRowHtml('시계탑 선호', _INTRO_CLOCKTOWER_LABELS[d.clocktowerPreference] || d.clocktowerPreference)}</div>` : ''}
       </div>
