@@ -193,7 +193,7 @@
     let currentIntroRow = null;
     let selectedTimeSlots = new Set();
 
-    function _choiceHtml(value, label, detail = '') { return `<label><input type="checkbox" value="${value}"><span>${label}</span>${detail ? `<small>${detail}</small>` : ''}</label>`; }
+    function _choiceHtml(value, label, detail = '') { return `<label class="intro-choice-card"><input type="checkbox" value="${value}"><span class="intro-choice-card-title">${label}</span>${detail ? `<small class="intro-choice-card-meta">${detail}</small>` : ''}</label>`; }
     function setupPreferenceLayers() {
       ['preferredGameTypes','gameTypeRange'].forEach(group => {
         const grid = document.querySelector(`[data-group="${group}"] .intro-game-type-options`);
