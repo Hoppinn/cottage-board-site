@@ -4817,7 +4817,7 @@ html:has(body.embed-mode) { scroll-padding-top: 0; }
 .profile-taste-subsection{margin-top:18px;}
 .profile-taste-hardest-block .profile-experience-block,.profile-taste-hardest-block .profile-experience-block:last-child{padding:0;border-bottom:none;}
 .profile-taste-subtitle{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:var(--text);margin-bottom:8px;}
-.profile-taste-section > .profile-taste-group > .profile-taste-subtitle,.profile-taste-hardest-block .profile-experience-head{margin-left:8px;}
+.profile-taste-section > .profile-taste-group > .profile-taste-subtitle,.profile-taste-hardest-block .profile-experience-head{margin-left:2px;}
 .profile-main-title{display:flex;align-items:center;min-height:32px;box-sizing:border-box;border:1px solid color-mix(in srgb,var(--border) 58%,var(--bg2,#f5f1eb));border-radius:8px;background:color-mix(in srgb,var(--bg2,#f5f1eb) 72%,var(--paper));padding:7px 10px;color:var(--text);font-size:13px;font-weight:700;margin-bottom:8px;}
 .profile-expectation-section .profile-main-title{min-height:0;border:0;background:none;padding:0;margin-bottom:7px;}
 .taste-section-label{font-size:13px;font-weight:700;color:var(--text);margin-bottom:8px;display:flex;align-items:center;gap:6px;}
