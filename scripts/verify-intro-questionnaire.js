@@ -36,10 +36,12 @@ check(html.includes('validateStep(wizardStep)'), 'Wizard step validation missing
 check(html.includes('openWizard({ edit: !!r.questionnaire_completed_at })'), 'Wizard edit entry missing');
 check(html.includes("document.getElementById('introWizardReward').hidden = !result.voucherGranted"), 'Voucher completion branch missing');
 const cardRenderer = html.slice(html.indexOf("el.innerHTML = data.map"), html.indexOf('// 카드 색상 적용'));
-check(cardRenderer.includes('r._bio') && cardRenderer.includes('r.companion_types')
-  && cardRenderer.includes('r.preferred_game_depths') && cardRenderer.includes('r._liked_game_count')
-  && cardRenderer.includes('r._curious_game_count') && !cardRenderer.includes('r.clocktower_preference'),
-  'Profile card matches the profile-preview summary fields');
+check(cardRenderer.includes('r._bio') && cardRenderer.includes('r.preferred_game_types')
+  && cardRenderer.includes('r.preferred_game_depths') && cardRenderer.includes('r.possible_frequency_min')
+  && cardRenderer.includes('r.available_days') && cardRenderer.includes('r._liked_game_count')
+  && cardRenderer.includes('r._curious_game_count') && !cardRenderer.includes('r.companion_types')
+  && !cardRenderer.includes('r.usual_play_days') && !cardRenderer.includes('r.clocktower_preference'),
+  'Profile card matches the shared profile-summary fields');
 check(html.includes("myRow?.questionnaire_completed_at ? '모임원 프로필 수정하기' : '모임원 프로필 작성하기'"), 'Existing profile start label missing');
 
 // 브라우저가 없어도 인라인 스크립트의 파싱 오류는 잡는다.

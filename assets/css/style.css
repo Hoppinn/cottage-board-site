@@ -4722,7 +4722,7 @@ html:has(body.embed-mode) { scroll-padding-top: 0; }
 .profile-card-label-chevron{display:inline-block;margin-left:2px;color:var(--muted);font-size:15px;font-weight:500;line-height:1;transition:color .12s,transform .12s;}
 .profile-card:hover .profile-card-label-chevron{color:var(--green);transform:translateX(2px);}
 .profile-card-summary{display:block;font-size:11px;color:var(--muted);margin-top:4px;line-height:1.5;word-break:keep-all;white-space:pre-line;}
-.profile-card-bio-row{display:block;}
+.profile-card-bio-row{display:-webkit-box;overflow:hidden;-webkit-box-orient:vertical;-webkit-line-clamp:2;}
 .profile-card-profile-row{display:block;margin-top:4px;}
 .profile-card-detail-row{display:block;margin-top:4px;}
 .profile-card-summary-group{display:block;}

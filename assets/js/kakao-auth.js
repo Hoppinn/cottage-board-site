@@ -2759,7 +2759,7 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
     return `${bio ? `<span class="profile-card-bio-row">${escH(bio)}</span>` : ''}
       ${(types.length || depthLabel) ? `<span class="profile-card-summary-group profile-card-summary-group--taste">${_profileCardDetailRowHtml('주 취향:', types.join(' · '))}${_profileCardDetailRowHtml('주 난이도:', depthLabel)}</span>` : ''}
       ${(possibleFrequency || available) ? `<span class="profile-card-summary-group profile-card-summary-group--meeting">${_profileCardDetailRowHtml('참여 가능 빈도:', possibleFrequency)}${_profileCardDetailRowHtml('참여 가능한 때:', available)}</span>` : ''}
-      <span class="profile-card-games-row">좋아하는 게임 ${(d.likedGames || []).length} · 해보고 싶은 게임 ${(d.curiousGames || []).length} · 설명 가능 ${(d.ruleGames || []).length}</span>`;
+      <span class="profile-card-games-row">좋아하는 게임 ${(d.likedGames || []).length} · 해보고 싶은 게임 ${(d.curiousGames || []).length}</span>`;
   };
   const _syncTasteCard = () => {
     const el = body.querySelector('.profile-card[data-subsheet="taste"] .profile-card-summary');

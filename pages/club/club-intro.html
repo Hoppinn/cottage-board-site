@@ -735,12 +735,8 @@
         const repAvatar = repPath
           ? `<img class="profile-panel-avatar" src="${escHtml(repPath)}" alt="">`
           : `<span class="profile-panel-avatar profile-panel-avatar--empty">🐾</span>`;
-        const gameTypes = labelList(r.preferred_game_types, GAME_TYPE_LABELS);
+        const gameTypes = (r.preferred_game_types || []).map(value => GAME_TYPE_LABELS[value] || value).join(' · ');
         const depthSummary = formatPrimaryDepthSummary(r.preferred_game_depths);
-        const averagePlayFrequency = r.average_play_frequency != null ? FREQUENCY_LABELS[r.average_play_frequency] : '';
-        const companionTypes = labelList(r.companion_types, COMPANION_LABELS);
-        const usualSchedule = (r.usual_play_days?.length || r.usual_play_times?.length)
-          ? formatAvailability(r.usual_play_days, r.usual_play_times) : '';
         const possibleFrequency = frequencyRange(r.possible_frequency_min, r.possible_frequency_max);
         const availableSchedule = (r.available_days?.length || r.available_times?.length)
           ? formatAvailability(r.available_days, r.available_times)
@@ -755,9 +751,6 @@
             ${r.expectation || r._bio ? `<p class="intro-card-news-message">${escHtml(r.expectation || r._bio)}</p>` : ''}
             ${introCardSummary('🎲', '주 취향', gameTypes)}
             ${introCardSummary('⚖️', '주 난이도', depthSummary)}
-            ${introCardSummary('🎮', '평균 플레이 빈도', averagePlayFrequency)}
-            ${introCardSummary('👥', '주로 함께하는 사람', companionTypes)}
-            ${introCardSummary('🕰️', '평소 플레이하는 때', usualSchedule)}
             ${introCardSummary('📅', '참여 가능 빈도', possibleFrequency)}
             ${introCardSummary('🗓️', '참여 가능한 때', availableSchedule)}
             <div class="intro-card-news-games">좋아하는 게임 ${r._liked_game_count} · 해보고 싶은 게임 ${r._curious_game_count}</div>
