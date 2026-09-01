@@ -32,11 +32,11 @@ check('다음 주 게임도 가까운 미래 목록에 포함', load.includes('_
   && load.includes('_weekData.myVotes = _weekData.upcomingVotes'));
 check('날짜 선택은 실제 가까운 참여 일정에서 생성', src.includes('new Set(_weekData.myVotes.map(v => v.vote_date))')
   && !src.includes('const _mbWeek ='));
-check('모임 보드는 세 가지 주요 섹션으로 단순화', ['다가오는 모임', '모임 참여 페이스', '최근 참여']
+check('모임 보드는 다가오는 모임과 최근 참여만 표시', ['다가오는 모임', '최근 참여']
   .every(label => build.includes(label))
   && build.includes('meeting-upcoming-section')
-  && build.includes('meeting-plan-section')
-  && build.includes('meeting-recent-section'));
+  && build.includes('meeting-recent-section') && !build.includes('meeting-plan-section')
+  && !build.includes('모임 참여 페이스'));
 check('날짜별 카드가 당일 정보와 게임을 함께 렌더', src.includes('_buildMeetingDateCardsHtml')
   && src.includes('data-date="${escH(vote.vote_date)}"')
   && src.includes('vote.game_style') && src.includes('vote.game_depth')
@@ -72,9 +72,8 @@ check('다가오는 모임은 참여 등록 하나와 날짜 옆 아이콘 액�
   && !src.includes('id="meetinglikedAddBtn"') && !src.includes('id="meetingcuriousAddBtn"')
   && src.includes('class="mb-date-card-main"')
   && src.includes('title="참여 수정"') && src.includes('title="참여 삭제"'));
-check('모임 참여 페이스는 기존 빈도·참여 가능 일정 데이터를 함께 표시', build.includes("'참여 가능 빈도'")
-  && build.includes("'원하는 참여 빈도'") && build.includes("'참여 가능한 요일'") && build.includes("'참여 가능한 시간대'")
-  && build.includes('formatMemberIntroDays') && build.includes('formatMemberIntroTimes'));
+check('모임 보드는 프로필성 참여 페이스를 반복하지 않음', !build.includes("'참여 가능 빈도'")
+  && !build.includes("'원하는 참여 빈도'") && !build.includes("'참여 가능한 요일'") && !build.includes("'참여 가능한 시간대'"));
 check('참여자 카드가 중복 개인 상세 모달을 열지 않음', src.includes('<article class="mb-date-card')
   && !src.includes('entry.addEventListener(\'click\', openDate)')
   && !src.includes('entry.addEventListener(\'keydown\', openDate)'));

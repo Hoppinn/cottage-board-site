@@ -989,7 +989,7 @@ function _bindTasteSubsheet(subBody, ctx) {
 
 // ── '모임 보드' 서브시트 afterRender (R10a: openProfilePanel에서 추출) ──
 function _bindMeetingSubsheet(subBody, ctx) {
-  const { user, readOnly, body, _ro, _emitLikesChanged, _getGameKeyById, _ruleSet, _meeting, _meetingProfileRowHtml,
+  const { user, readOnly, body, _ro, _emitLikesChanged, _getGameKeyById, _ruleSet, _meeting,
           getPendingScroll, setPendingScroll, setTasteScrollTo, backTo, focusDate } = ctx;
           const userId = String(user.id);
 
@@ -2436,7 +2436,7 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
     };
     const meetingGameLine = (listType, label) => {
       const games = meetingGamesByType(listType).map(_meetingGameName).filter(Boolean);
-      return games.length ? `<div class="profile-card-meeting-line"><span class="profile-card-meeting-label">${label}</span><span class="profile-card-meeting-games">${games.map(escH).join(' · ')}</span></div>` : '';
+      return games.length ? `<div class="profile-card-meeting-line${listType === 'want' ? ' profile-card-meeting-line--want' : ''}"><span class="profile-card-meeting-label">${label}</span><span class="profile-card-meeting-games">${games.map(escH).join(' · ')}</span></div>` : '';
     };
     const meetingMessages = _uniqueMeetingValues(myVotes.map(v => String(v.recruitment_message || '').trim()));
     const styleHtml = meetingStyles.length
@@ -2832,10 +2832,6 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
     ? _openActivityList(buildActivityList(_recentPlays, _recentPlayItemHtml, 5))
     : _emptyList('아직 모임 참여 기록이 없어요');
 
-  function _meetingProfileRowHtml(label, val) {
-    return `<div class="meeting-profile-row"><span class="meeting-profile-label">${label}</span><span class="meeting-profile-val${val ? '' : ' is-empty'}">${val ? escH(val) : '미입력'}</span></div>`;
-  }
-
   const _introFrequencyRange = (min, max) => {
     if (min == null || max == null) return '';
     return min === max ? _INTRO_FREQUENCY_LABELS[min] : `${_INTRO_FREQUENCY_LABELS[min]} ~ ${_INTRO_FREQUENCY_LABELS[max]}`;
@@ -2843,29 +2839,11 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
 
   // 진입할 때마다 최신 데이터로 다시 빌드한다.
   function _buildMeetingInnerHtml(d) {
-    const _meeting = d;
-    const _availableDayText = window.CottageDB?.formatMemberIntroDays?.(_meeting.availableDays)
-      || _introLabels(_meeting.availableDays, _INTRO_DAY_LABELS_EXTENDED);
-    const _availableDays = [_availableDayText,
-      (_meeting.availableDays || []).some(value => String(value) === 'flexible') ? '일정 유동적' : '']
-      .filter(Boolean).join(' · ');
-    const _availableTimes = window.CottageDB?.formatMemberIntroTimes?.(_meeting.availableTimes)
-      || _introLabels(_meeting.availableTimes, {});
-
     return `
     <section class="meeting-board-section meeting-upcoming-section" aria-label="다가오는 모임">
       <div id="mbWeekSection">
       <div class="taste-section-label">다가오는 모임</div>
       <p class="taste-game-empty">불러오는 중…</p>
-      </div>
-    </section>
-    <section class="meeting-board-section meeting-plan-section">
-      <div class="taste-section-label">모임 참여 페이스</div>
-      <div class="meeting-profile-display">
-        ${_meetingProfileRowHtml('참여 가능 빈도', _introFrequencyRange(_meeting.possibleFrequencyMin, _meeting.possibleFrequencyMax))}
-        ${_meetingProfileRowHtml('원하는 참여 빈도', _introFrequencyRange(_meeting.desiredFrequencyMin, _meeting.desiredFrequencyMax))}
-        ${_meetingProfileRowHtml('참여 가능한 요일', _availableDays)}
-        ${_meetingProfileRowHtml('참여 가능한 시간대', _availableTimes)}
       </div>
     </section>
     <section class="meeting-board-section meeting-recent-section">
@@ -3238,7 +3216,7 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
           _syncTasteCard(); // 모임보드도 같은 소스(_boardData)를 쓴다 → 취향 카드 함께 최신화
           subBody.innerHTML = _buildMeetingInnerHtml(d);
           _bindMeetingSubsheet(subBody, {
-              user, readOnly, body, _ro, _emitLikesChanged, _getGameKeyById, _ruleSet: _makeRuleSet(d), _meeting: d, _meetingProfileRowHtml,
+              user, readOnly, body, _ro, _emitLikesChanged, _getGameKeyById, _ruleSet: _makeRuleSet(d), _meeting: d,
               getPendingScroll: () => _pendingMeetingScrollTop, setPendingScroll: v => { _pendingMeetingScrollTop = v; },
             setTasteScrollTo: v => { _pendingTasteScrollTo = v; }, focusDate,
             backTo, // 상세팝업 뒤로가기 체인용(2026-08-09) — 이 패널 자신이 들어온 backTo를 그대로 물려준다

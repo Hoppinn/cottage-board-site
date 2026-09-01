@@ -15,7 +15,7 @@
 | 플레이 기록 정본 | 기록 입력·목록 | `pages/game/game-reviews.html` / `assets/js/game-reviews.js` | 기록 조회·작성·수정의 원 화면 |
 | 플레이 기록 embed | 홈/내 보드에서 기록 열기 | `game-reviews.html` embed URL / `game-reviews.js` `initHub()` | 부모 화면 안에서 여는 기록 정본의 임베드 진입 |
 | 기록 보드 | 내 보드 > 기록 보드 | `kakao-auth.js` 기록 서브시트 | 내 기록·통계 요약 |
-| 모임 보드 | 내 보드 > 모임 보드 | `openProfilePanel('meeting')` | 가까운 모임 참여 상태·게임 |
+| 모임 보드 | 내 보드 > 모임 보드 | `openProfilePanel('meeting')` | 실제 다가오는 모임·참여 등록·최근 참여. 프로필성 모임 참여 페이스는 노출하지 않음 |
 | 홈 코티지 모임 미리보기 | 홈의 코티지 모임 영역 | `index.html` / `assets/js/index-page.js` | 날짜별 모임 상태의 홈 요약 |
 | 날짜 모임 조율 | 홈/플래너의 날짜 선택 | `assets/js/day-detail.js` `openDateMeetingModal()` | 한 날짜의 모임 현황·인원 조율·참여자별 상세 |
 | 수집 보드 | 내 보드 > 수집 보드 | `kakao-auth.js` 수집 서브시트 | 좋아요·궁금해요 등 개인 수집 요약 |
