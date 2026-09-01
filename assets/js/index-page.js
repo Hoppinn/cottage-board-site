@@ -1493,7 +1493,6 @@ window.addEventListener('cottage-record-changed', initRecentPlay);
   window.addEventListener('cottage-auth-changed', preloadIfLoggedIn);
 
  function openModal(tab) {
-  if (tab === 'input' && !window.getKakaoUser?.()) { window.kakaoLogin?.(); return; }
     pendingTab = tab;
     modal.setAttribute('aria-hidden', 'false');
     modal.classList.add('is-open');
