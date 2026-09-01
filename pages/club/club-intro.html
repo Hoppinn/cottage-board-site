@@ -94,17 +94,12 @@
                 <div class="intro-form-fields">
                   <fieldset class="intro-question"><legend>모임 참여 가능 빈도 <span class="intro-required">*</span><small>현실적으로 가능한 최소~최대</small></legend><div class="intro-range-row"><select class="intro-input" id="introPossibleMin"><option value="">최소</option></select><span>~</span><select class="intro-input" id="introPossibleMax"><option value="">최대</option></select></div></fieldset>
                   <fieldset class="intro-question"><legend>모임 참여 희망 빈도 <span class="intro-required">*</span><small>원하는 최소~최대</small></legend><div class="intro-range-row"><select class="intro-input" id="introDesiredMin"><option value="">최소</option></select><span>~</span><select class="intro-input" id="introDesiredMax"><option value="">최대</option></select></div></fieldset>
-                </div>
-              </div>
-              <div class="intro-wizard-step" data-step="4">
-                <h3>게임 취향과 경험</h3>
-                <div class="intro-form-fields">
                   <fieldset class="intro-question" data-group="availableDays"><legend>주로 참여 가능한 요일 <span class="intro-required">*</span><small>복수 선택 가능</small></legend><div class="intro-choice-grid intro-choice-grid--days"><label><input type="checkbox" value="mon">월</label><label><input type="checkbox" value="tue">화</label><label><input type="checkbox" value="wed">수</label><label><input type="checkbox" value="thu">목</label><label><input type="checkbox" value="fri">금</label><label><input type="checkbox" value="sat">토</label><label><input type="checkbox" value="sun">일</label><label class="intro-choice-wide"><input type="checkbox" value="flexible">일정에 따라 유동적</label></div></fieldset>
                   <fieldset class="intro-question" data-group="availableTimes"><legend>주로 참여 가능한 시간대 <span class="intro-required">*</span><small>30분 단위로 여러 구간을 선택할 수 있어요</small></legend><div class="intro-time-picker" id="introTimePicker"></div><p class="intro-time-result" id="introTimeResult" aria-live="polite">시간을 선택해주세요.</p><div class="intro-choice-grid intro-choice-grid--single"><label><input type="checkbox" id="introTimeFlexible" value="flexible">시간대 유동적</label></div></fieldset>
                 </div>
               </div>
               <div class="intro-wizard-step" data-step="4">
-                <h3>게임 취향</h3>
+                <h3>게임 취향과 경험</h3>
                 <div class="intro-form-fields">
                   <h4 class="intro-section-title">게임 유형</h4>
                   <fieldset class="intro-question" data-group="preferredGameTypes"><legend>주 취향 게임 유형 <span class="intro-required">*</span><small>주로 플레이하고 싶은 유형을 모두 선택해주세요.</small></legend><div class="intro-choice-grid intro-game-type-options"></div><div class="intro-custom-option"><input class="intro-input" id="introPreferredCustom" type="text" maxlength="20" placeholder="기타 유형"><button type="button" data-add-custom="preferredGameTypes">추가</button></div></fieldset>
@@ -293,15 +288,17 @@
       presets.innerHTML = '<button type="button" data-day-preset="weekday">평일</button><button type="button" data-day-preset="weekend">주말</button><button type="button" data-day-preset="daily">매일</button>';
       group.querySelector('legend').insertAdjacentElement('afterend', presets);
 
-      const holidayOption = document.createElement('label');
-      holidayOption.className = 'intro-choice-wide';
-      holidayOption.hidden = true;
-      holidayOption.innerHTML = '<input type="checkbox" value="holiday" disabled>공휴일';
-      grid.insertBefore(holidayOption, grid.querySelector('[value="flexible"]')?.closest('label') || null);
+      let holidayOption = null;
+      if (enableHoliday) {
+        holidayOption = document.createElement('label');
+        holidayOption.className = 'intro-choice-wide';
+        holidayOption.innerHTML = '<input type="checkbox" value="holiday">공휴일';
+        grid.insertBefore(holidayOption, grid.querySelector('[value="flexible"]')?.closest('label') || null);
+      }
 
       const presetDays = { weekday:['mon','tue','wed','thu','fri'], weekend:['sat','sun'], daily:dayCodes };
       const syncPresets = () => {
-        const selected = new Set(selectedValues('availableDays'));
+        const selected = new Set(selectedValues(groupName));
         presets.querySelectorAll('[data-day-preset]').forEach(button => {
           const values = presetDays[button.dataset.dayPreset];
           button.setAttribute('aria-pressed', String(values.every(value => selected.has(value)) && dayCodes.every(value => values.includes(value) === selected.has(value))));
@@ -315,14 +312,7 @@
         syncPresets();
       });
       group.addEventListener('change', syncPresets);
-      const showHoliday = async () => {
-        if (!enableHoliday) return;
-        const supported = await window.CottageDB?.isMemberIntroHolidaySupported?.();
-        if (!supported) return;
-        holidayOption.hidden = false;
-        holidayOption.querySelector('input').disabled = false;
-      };
-      void showHoliday();
+      syncPresets();
     }
     function slotCode(index) {
       const minutes = (index % 48) * 30;
@@ -346,6 +336,7 @@
       let dragging = false;
       let paintSelected = true;
       let suppressClick = false;
+      let activePointerId = null;
       const paint = button => {
         if (paintSelected) selectedTimeSlots[kind].add(button.dataset.time);
         else selectedTimeSlots[kind].delete(button.dataset.time);
@@ -357,17 +348,25 @@
         paintSelected = !selectedTimeSlots[kind].has(button.dataset.time);
         paint(button);
         suppressClick = true;
-        dragging = event.pointerType === 'mouse';
-        if (dragging) event.preventDefault();
+        dragging = true;
+        activePointerId = event.pointerId;
+        picker.setPointerCapture?.(activePointerId);
+        event.preventDefault();
       });
-      picker.addEventListener('pointerover', event => {
-        const button = event.target.closest('.intro-time-slot');
-        if (dragging && button) paint(button);
+      picker.addEventListener('pointermove', event => {
+        if (!dragging || event.pointerId !== activePointerId) return;
+        const button = document.elementFromPoint(event.clientX, event.clientY)?.closest?.('.intro-time-slot');
+        if (button && picker.contains(button)) paint(button);
       });
-      document.addEventListener('pointerup', () => {
+      const stopDragging = event => {
+        if (activePointerId != null && event.pointerId !== activePointerId) return;
         dragging = false;
+        if (activePointerId != null && picker.hasPointerCapture?.(activePointerId)) picker.releasePointerCapture(activePointerId);
+        activePointerId = null;
         setTimeout(() => { suppressClick = false; }, 0);
-      });
+      };
+      picker.addEventListener('pointerup', stopDragging);
+      picker.addEventListener('pointercancel', stopDragging);
       picker.addEventListener('click', event => {
         const button = event.target.closest('.intro-time-slot');
         if (!button) return;
