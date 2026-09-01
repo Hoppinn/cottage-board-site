@@ -683,6 +683,8 @@ function _openBoardFrameModal({ src, title, tab = null, wizardOnly = false }) {
     if (e.data?.type === 'cottage-profile-intro-ready' && wizardOnly && !wizardStartRequested) {
       wizardStartRequested = true;
       frame.contentWindow?.postMessage({ type: 'cottage-open-profile-intro-wizard' }, '*');
+    } else if (e.data?.type === 'cottage-profile-intro-saved') {
+      window.dispatchEvent(new CustomEvent('cottage-profile-intro-saved'));
     } else if (e.data?.type === 'cottage-close-profile-wizard') {
       close();
     }
@@ -1962,7 +1964,7 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
   const _existingWasReadOnly = existing?.classList.contains('profile-panel--readonly');
   // 기존 패널을 자기 close 핸들러를 안 거치고 강제로 치우는 경로 — 그 패널이 push해둔
   // activeView도 여기서 같이 pop해야 한다(토큰은 DOM 노드에 저장돼 있어 이 클로저 밖에서도 접근 가능).
-  if (existing) { window.removeEventListener('cottage-meeting-changed', existing._meetingPreviewRefresh); window.popActiveView?.(existing._viewToken); existing.remove(); document.getElementById('profileSubSheet')?.remove(); if (!readOnly && !_existingWasReadOnly) return; }
+  if (existing) { window.removeEventListener('cottage-meeting-changed', existing._meetingPreviewRefresh); window.removeEventListener('cottage-profile-intro-saved', existing._profileIntroRefresh); window.popActiveView?.(existing._viewToken); existing.remove(); document.getElementById('profileSubSheet')?.remove(); if (!readOnly && !_existingWasReadOnly) return; }
 
   const panel = document.createElement('div');
   panel.id = 'profilePanel';
@@ -1992,6 +1994,7 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
   const _closePanel = () => {
     panel._identityObserver?.disconnect();
     window.removeEventListener('cottage-meeting-changed', panel._meetingPreviewRefresh);
+    window.removeEventListener('cottage-profile-intro-saved', panel._profileIntroRefresh);
     document.getElementById('profileSubSheet')?.remove();
     _popView();
     panel.remove();
@@ -2582,6 +2585,12 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
     if (mp) _boardData = mp;
     return _boardData;
   }
+  panel._profileIntroRefresh = () => {
+    const sub = document.getElementById('profileSubSheet');
+    if (!panel.isConnected || sub?.querySelector('.profile-subsheet-title')?.textContent !== '프로필 보드') return;
+    body.querySelector('.profile-card[data-subsheet="taste"]')?.click();
+  };
+  window.addEventListener('cottage-profile-intro-saved', panel._profileIntroRefresh);
   // 룰 설명 가능(can_explain_rules) — 취향·모임 보드 공유(meeting_game_prefs). game_id는 슬러그.
   const _makeRuleSet = d => new Set((d?.ruleGames || []).map(g => g.game_id ? `id:${g.game_id}` : `cn:${g.custom_name || ''}`));
   const _bioTagsOf = d => (d?.bio ? d.bio.split(',').map(t => t.trim()).filter(Boolean) : []);
