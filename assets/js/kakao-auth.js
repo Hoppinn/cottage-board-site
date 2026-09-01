@@ -2676,7 +2676,7 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
         <div class="profile-taste-subtitle">게임 난이도</div>
         ${_tasteTier('주 난이도', _rangeDepthNames(d.preferredGameDepths), _formatDepthRanges(d.preferredGameDepths))}
         ${_tasteTier('즐기는 범위', _rangeDepthNames(d.gameDepthRange), _formatDepthRanges(d.gameDepthRange))}
-        ${_tasteTier('꺼림 난이도', _depthNames(avoidDepths), _formatDepthRanges(avoidDepths))}
+        ${_tasteTier('꺼림 난이도', avoidDepths.length ? _depthNames(avoidDepths) : '없음', _formatDepthRanges(avoidDepths))}
       </div>
       ${d.clocktowerPreference ? `<div class="profile-taste-clocktower">${_profileInfoRowHtml('시계탑 선호', _INTRO_CLOCKTOWER_LABELS[d.clocktowerPreference] || d.clocktowerPreference)}</div>` : ''}
       </div>

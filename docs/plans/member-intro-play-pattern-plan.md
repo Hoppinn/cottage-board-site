@@ -41,7 +41,7 @@
 |---|---|
 | `pages/club/club-intro.html` | 2단계를 평소 플레이 습관(평균 빈도·동반자·평소 플레이 요일/시간대), 3단계를 모임 참여 페이스(참여 가능/원하는 참여 빈도·참여 가능한 요일/시간대)로 재배치. 요일/시간 선택 헬퍼를 대상별 설정으로 일반화한다. 수정 시 두 쌍을 각각 로드하고 새 RPC 인자를 저장한다. 4단계에 최대 2개의 가장 어려웠던 게임 선택 UI를 넣는다. 6단계 제목/안내문을 자기소개로 바꾼다. |
 | `assets/js/supabase-client.js` | `getMeetingProfile`의 평소 플레이 필드 반환, `submitMemberIntro`의 033 인자 전달, 기존 hardest-game 조회/정규화 재사용. |
-| `assets/js/kakao-auth.js` | `_buildTasteInnerHtml`에서 평소 플레이와 모임 참여를 분리 출력한다. 현재 보드의 `+ 게임 추가`·삭제 바인딩과 버튼을 제거하고 결과만 표시한다. `none`은 `없음`, 빈값은 `미입력`으로 표시한다. |
+| `assets/js/kakao-auth.js` | `_buildTasteInnerHtml`에서 평소 플레이와 모임 참여를 분리 출력한다. 현재 보드의 `+ 게임 추가`·삭제 바인딩과 버튼을 제거하고 결과만 표시한다. 꺼림 유형의 `none`과 빈 꺼림 난이도는 `없음`으로 표시한다. |
 | `assets/css/style.css` | 위저드 공통 flex 레이아웃만 조정한다. body를 scroll 영역으로, nav를 공통 footer/action bar로 유지하여 1~6단계 모두 같은 위치에 둔다. 5·6단계 전용 margin/padding 보정은 만들지 않는다. |
 | `docs/db-schema.md`, `docs/js-api.md`, `docs/UI_MAP.md`, `docs/PROJECT_STATE.md` | 033 적용 상태, 새 필드·RPC·출력 정본 및 완료 상태를 동기화한다. |
 
@@ -71,6 +71,6 @@
 2. `usual_play_*`와 `available_*`가 별개 값으로 RPC·DB·수정 위저드 왕복되는지
 3. 가장 어려웠던 게임의 기존값 로드·추가·삭제·저장, 최대 2개·중복·직접 입력 검증
 4. 프로필 보드 정본이 평소 플레이/모임 참여를 분리 출력하고 직접 편집 UI가 없는지
-5. `none → 없음`, 빈값 → `미입력` 출력
+5. 꺼림 유형의 `none → 없음`, 빈 꺼림 난이도 → `없음` 출력
 6. 신규 최초 저장 쿠폰 1회 지급, 기존 수정 저장 재지급 없음
 7. 360×568 실제 화면에서 신규/수정 모두 1~6단계 action bar y 위치, 다음/저장 버튼, 키보드·스크롤 겹침 확인
