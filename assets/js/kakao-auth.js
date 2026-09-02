@@ -1657,7 +1657,7 @@ function _bindNotifSubsheet(subBody, ctx) {
               if (li.dataset.introUid) {
                 // 남의 보드로 교체되므로 알림으로 돌아올 경로를 함께 넘긴다(R10c).
                 // backTo.opts는 비워 둘 것 — readOnly를 실으면 알림 버튼이 _ro()로 사라져 조용히 무시된다.
-                openOtherMeetingSheet(li.dataset.introUid, { backTo: { type: 'panel', autoSubsheet: 'notif', label: _notifTitle } });
+                openOtherProfileSheet(li.dataset.introUid, { backTo: { type: 'panel', autoSubsheet: 'notif', label: _notifTitle } });
                 return;
               }
               const memberLink = e.target.closest('[data-member-uid]');
