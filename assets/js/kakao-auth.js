@@ -222,11 +222,16 @@ async function promptNicknameChange() {
       return;
     }
   }
-  user.nickname = trimmed;
-  localStorage.setItem(`cottage_custom_nick_${user.id}`, trimmed);
-  localStorage.setItem(KAKAO_USER_KEY, JSON.stringify(user));
-  updateLoginUI(user);
-  window.CottageDB?.upsertProfile(String(user.id), trimmed, user.kakaoNickname || null).catch(() => {});
+user.nickname = trimmed;
+localStorage.setItem(`cottage_custom_nick_${user.id}`, trimmed);
+localStorage.setItem(KAKAO_USER_KEY, JSON.stringify(user));
+updateLoginUI(user);
+
+await window.CottageDB?.upsertProfile(
+  String(user.id),
+  trimmed,
+  user.kakaoNickname || null
+);
 }
 
 function getKakaoUser() {
@@ -1654,12 +1659,21 @@ function _bindNotifSubsheet(subBody, ctx) {
           subBody.querySelectorAll('.profile-notif-list li.is-clickable, .profile-notif-more-list li.is-clickable').forEach(li => {
             li.addEventListener('click', e => {
               if (e.target.closest('button, a')) return;
-              if (li.dataset.introUid) {
-                // 남의 보드로 교체되므로 알림으로 돌아올 경로를 함께 넘긴다(R10c).
-                // backTo.opts는 비워 둘 것 — readOnly를 실으면 알림 버튼이 _ro()로 사라져 조용히 무시된다.
-                openOtherProfileSheet(li.dataset.introUid, { backTo: { type: 'taste', autoSubsheet: 'notif', label: _notifTitle } });
-                return;
-              }
+              const introMemberLink = e.target.closest('[data-intro-member-uid]');
+if (introMemberLink) {
+  openOtherProfileSheet(
+    String(introMemberLink.dataset.introMemberUid),
+    {
+      autoSubsheet: 'taste',
+      backTo: {
+        type: 'panel',
+        autoSubsheet: 'notif',
+        label: _notifTitle
+      }
+    }
+  );
+  return;
+}
               const memberLink = e.target.closest('[data-member-uid]');
               if (memberLink) {
                 // 신규 회원은 "모임 보드"도 "취향 보드"도 아니라 보드 홈(패널 메인, 서브시트
@@ -2028,7 +2042,7 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
     (window.CottageAchievements?.fetchUserStats?.(String(user.id), user.nickname || null) || Promise.resolve(null)).catch(() => null),
     readOnly ? Promise.resolve(0)  : (window.CottageDB?.getVoucherBalance?.(String(user.id)) || Promise.resolve(0)).catch(() => 0),
     readOnly ? Promise.resolve([]) : (window.CottageDB?.getVoucherProducts?.() || Promise.resolve([])).catch(() => []),
-    readOnly ? Promise.resolve([]) : (window.CottageDB?.getVoucherHistory?.(String(user.id), 5) || Promise.resolve([])).catch(() => []),
+    readOnly ? Promise.resolve([]) : (window.CottageDB?.getVoucherHistory?.(String(user.id), 50) || Promise.resolve([])).catch(() => []),
     (window.CottageDB?.getAllBioTagSuggestions?.() || Promise.resolve([])).catch(() => []),
     (window.CottageDB?.getMeetingVotes?.(_upcomingStart, _upcomingEnd) || Promise.resolve([])).catch(() => []),
     (window.CottageDB?.getMeetingVoteGames?.(_upcomingStart, _upcomingEnd) || Promise.resolve([])).catch(() => []),
@@ -2191,6 +2205,22 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
   }, 1);
 
   const _hasFirstPlayVoucher = voucherHistory.some((item) => item.reason === 'first_play' && Number(item.delta) > 0);
+  const _introVoucher = voucherHistory.find(
+  item => item.reason === 'intro_complete' && Number(item.delta) > 0
+);
+
+const introVoucherCardHtml = _introVoucher
+  ? `<div class="notif-reward-card notif-reward-card--voucher is-seen">
+      <div class="notif-reward-row">
+        <div class="notif-reward-icon-col">🎫</div>
+        <div class="notif-reward-body">
+          <div class="notif-reward-title">모임원 프로필 작성 보상 수령 완료</div>
+          <div class="notif-reward-desc">모임원 프로필 작성 보상으로 음료교환권 1장을 받으셨어요 ✓</div>
+          <div class="notif-card-date">${escH(fmtShort(_introVoucher.created_at))}</div>
+        </div>
+      </div>
+    </div>`
+  : '';
   // 로컬 세션(기기별) 또는 DB(notice:voucher, 기기 간 동기화) 둘 중 하나라도 확인됐으면 seen.
   const voucherSeen = !!_sessForNotif.voucherNoticeSeen || (_noticeAckKeys || []).includes('notice:voucher');
   const VOUCHER_NOTICE_DATE = '2026-06-16';
@@ -2306,15 +2336,25 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
     // 이렇게 많이?"로 오해하기 쉽다(2026-08-02 사용자 요청).
     const _period = '최근 한 달간 ';
     if (n.type === 'new_intro') {
-      const shown = n.names.slice(0, MAX_NOTIF_NAMES);
-      const rest = n.names.length - shown.length;
-      const desc = n.count === 1
-        ? `${escH(n.names[0])}님이 소개글을 올렸어요`
-        : rest > 0
-          ? `${_period}${shown.map(escH).join(', ')}님 외 ${rest}명이 소개글을 올렸어요`
-          : `${_period}${shown.map(escH).join(', ')}님이 소개글을 올렸어요`;
-      return `<li class="${cls}"${n.firstUserId ? ` data-intro-uid="${escH(String(n.firstUserId))}"` : ''}>${_card('👋', '동호회 소개글', desc)}${readBtn}</li>`;
-    }
+    const nameLink = (name, i) => {
+    const uid = n.userIds?.[i];
+    return uid
+      ? `<span class="notif-member-link" data-intro-member-uid="${escH(String(uid))}">${escH(name)}</span>`
+      : escH(name);
+  };
+
+  const shownCount = Math.min(n.names.length, MAX_NOTIF_NAMES);
+  const rest = n.names.length - shownCount;
+  const shownLinks = n.names.slice(0, shownCount).map(nameLink).join(', ');
+
+  const desc = n.count === 1
+    ? `${nameLink(n.names[0], 0)}님이 소개글을 올렸어요`
+    : rest > 0
+      ? `${_period}${shownLinks}님 외 ${rest}명이 소개글을 올렸어요`
+      : `${_period}${shownLinks}님이 소개글을 올렸어요`;
+
+  return `<li class="${cls}">${_card('👋', '동호회 소개글', desc)}${readBtn}</li>`;
+}
     if (n.type === 'new_member') {
       // 이름마다 그 사람의 uid를 실어 클릭 시 보드로 이동(2026-08-02, 사용자 요청 —
       // 나뿐 아니라 모든 사용자가 클릭하면 그 신규회원 보드로 가야 함). new_intro는
@@ -2395,7 +2435,7 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
   // 공지는 미확인이면 맨 위, 확인했으면 맨 아래 — 보상 카드와 같은 규칙
   const _noticeFirst = _feeNoticeLive && !_feeSeen;
   // 새 알림이 1건뿐일 때만 NEW 뱃지가 반짝임 — 여러 건이 동시에 반짝이면 산만해서(2026-08-02 판단) is-multi-new로 막는다.
-  let _notifInnerHtml = `<div class="profile-notif-body${_newCount === 1 ? '' : ' is-multi-new'}"><div class="notif-list-header">${_hasAnyNew ? '<button class="profile-notif-confirm-all" type="button">모두 읽기</button>' : ''}</div>${_noticeFirst ? _feeNoticeHtml : ''}${_voucherFirst ? voucherCardHtml : ''}<ul class="profile-notif-list">${_allNotifItems}</ul>${_hiddenNotifHtml}${_voucherFirst ? '' : voucherCardHtml}${_noticeFirst ? '' : _feeNoticeHtml}${_notifHelpHtml}</div>`;
+  let _notifInnerHtml = `<div class="profile-notif-body${_newCount === 1 ? '' : ' is-multi-new'}"><div class="notif-list-header">${_hasAnyNew ? '<button class="profile-notif-confirm-all" type="button">모두 읽기</button>' : ''}</div>${_noticeFirst ? _feeNoticeHtml : ''}${_voucherFirst ? voucherCardHtml : ''}<ul class="profile-notif-list">${_allNotifItems}</ul>${_hiddenNotifHtml}${_voucherFirst ? '' : voucherCardHtml}${introVoucherCardHtml}${_noticeFirst ? '' : _feeNoticeHtml}${_notifHelpHtml}</div>`;
 
   const voucherHtml = `<div class="profile-voucher-section"><button class="profile-voucher-toggle" type="button"><span class="profile-voucher-header">🎫 음료교환권 <span class="profile-voucher-bal-label">${voucherBalance}장 보유</span></span><span class="profile-toggle-arrow">▾</span></button><div id="profileVoucherInner" class="is-collapsed">${_buildVoucherInner(voucherBalance, voucherProducts, voucherHistory, isDevMode)}</div></div>`;
 
@@ -3373,3 +3413,5 @@ async function openOtherMeetingSheet(userId, opts = {}) {
 window.openOtherMeetingSheet = openOtherMeetingSheet;
 
 document.addEventListener('DOMContentLoaded', initKakaoAuth);
+
+

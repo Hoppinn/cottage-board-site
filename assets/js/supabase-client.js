@@ -1942,30 +1942,30 @@ window._cottageSess = (function () {
           (effectiveSeenAt ? r.created_at > effectiveSeenAt : true) && !readKeys.has(`new_intro:${r.id}`)
         );
         if (newIntros.length > 0) {
-          notifs.push({
-            type: 'new_intro',
-            key: `new_intro:${newIntros[0].id}`,
-            keys: newIntros.map(r => `new_intro:${r.id}`),
-            count: newIntros.length,
-            names: newIntros.map(r => r.nickname),
-            firstUserId: newIntros[0].user_id,
-            date: newIntros[0].created_at,
-            isNew: true,
-          });
-        } else if (allIntros.length > 0) {
+  notifs.push({
+    type: 'new_intro',
+    key: `new_intro:${newIntros[0].id}`,
+    keys: newIntros.map(r => `new_intro:${r.id}`),
+    count: allIntros.length,
+    names: allIntros.map(r => r.nickname),
+    userIds: allIntros.map(r => r.user_id),
+    date: newIntros[0].created_at,
+    isNew: true,
+  });
+} else if (allIntros.length > 0) {
           // 최신 1건으로 접지 않고 전원 유지 — new_member와 같은 이유(2026-07-31,
           // 읽음 처리 후 재조회하면 나머지가 사라지는 게 실제로 불편했다).
-          notifs.push({
-            type: 'new_intro',
-            key: `new_intro:${allIntros[0].id}`,
-            keys: allIntros.map(r => `new_intro:${r.id}`),
-            count: allIntros.length,
-            names: allIntros.map(r => r.nickname),
-            firstUserId: allIntros[0].user_id,
-            date: allIntros[0].created_at,
-            isNew: false,
-          });
-        }
+           notifs.push({
+    type: 'new_intro',
+    key: `new_intro:${allIntros[0].id}`,
+    keys: allIntros.map(r => `new_intro:${r.id}`),
+    count: allIntros.length,
+    names: allIntros.map(r => r.nickname),
+    userIds: allIntros.map(r => r.user_id),
+    date: allIntros[0].created_at,
+    isNew: false,
+  });
+}
       }
       // 신규 회원가입: new_intro와 동일한 묶음 알림 패턴. page_events엔 닉네임이 없어 profiles에서 별도 조회.
       {
