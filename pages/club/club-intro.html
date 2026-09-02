@@ -109,8 +109,11 @@
                   <fieldset class="intro-question" data-group="preferredGameDepths"><legend>주로 즐기는 난이도 <span class="intro-required">*</span><small>주로 플레이하고 싶은 난이도를 모두 선택해주세요.</small></legend><div class="intro-choice-grid intro-depth-options"></div></fieldset>
                   <fieldset class="intro-question" data-group="gameDepthRange"><legend>즐기는 난이도 범위 <span class="intro-required">*</span><small>주 취향은 자동으로 포함됩니다. 그 외에도 즐길 수 있는 난이도를 선택해주세요.</small></legend><div class="intro-choice-grid intro-depth-options"></div></fieldset>
                   <fieldset class="intro-question" data-group="avoidGameDepths"><legend>꺼리는 난이도 <small>가능하면 피하고 싶은 난이도를 선택해주세요.</small></legend><div class="intro-choice-grid intro-depth-options"></div></fieldset>
-                  <fieldset class="intro-question"><legend>가장 어려웠던 게임 <small>최대 2개 · 실제로 플레이해본 게임만 골라주세요.</small></legend><div class="profile-hardest-list intro-hardest-list" id="introHardestList"></div><button class="profile-hardest-add" id="introHardestAddBtn" type="button">+ 게임 추가</button></fieldset>
-                </div>
+<fieldset class="intro-question">
+  <legend>가장 어려웠던 게임 <span class="intro-required">*</span><small>최대 2개 · 실제로 플레이해본 게임만 골라주세요.</small></legend>
+  <div class="profile-hardest-list intro-hardest-list" id="introHardestList"></div>
+  <button class="profile-hardest-add" id="introHardestAddBtn" type="button">+ 게임 추가</button>
+</fieldset>                </div>
               </div>
               <div class="intro-wizard-step" data-step="5">
                 <h3>시계탑 선호</h3>
@@ -561,6 +564,7 @@
         if (!selectedValues('avoidGameTypes').length) return stepFail('꺼리는 게임 유형을 하나 이상 선택해주세요.', document.querySelector('[data-group="avoidGameTypes"]'));
         if (!selectedValues('preferredGameDepths').length) return stepFail('주로 즐기는 난이도를 하나 이상 선택해주세요.', document.querySelector('[data-group="preferredGameDepths"]'));
         if (!selectedValues('gameDepthRange').length) return stepFail('즐기는 난이도 범위를 하나 이상 선택해주세요.', document.querySelector('[data-group="gameDepthRange"]'));
+        if (!selectedHardestGames.length) return stepFail('가장 어려웠던 게임을 하나 이상 선택해주세요.', document.getElementById('introHardestAddBtn'));
       }
       if (step === 5 && !document.querySelector('[name="clocktowerPreference"]:checked')) return stepFail('시계탑 선호를 선택해주세요.', document.querySelector('[data-group="clocktowerPreference"]'));
       if (step === 6 && document.getElementById('introExpectation').value.trim().length < 10) return stepFail('모임에서 기대하는 점이나 함께하고 싶은 방식을 10자 이상 적어주세요.', document.getElementById('introExpectation'));

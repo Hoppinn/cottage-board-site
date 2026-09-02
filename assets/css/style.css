@@ -9558,3 +9558,10 @@ body.is-embedded .inner-page{padding-top:0;}
   .pr-same-as-above-btn{ font-size:10px; }
 
 }
+
+
+
+/* 위저드 > 가장 어려운 해본 게임 모달 위로 올리기 */
+#introHardestAddModal {
+  z-index: calc(var(--z-shelf) + 100);
+}
