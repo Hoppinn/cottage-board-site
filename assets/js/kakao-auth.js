@@ -232,7 +232,20 @@ await window.CottageDB?.upsertProfile(
   trimmed,
   user.kakaoNickname || null
 );
+
+const panel = document.getElementById('profilePanel');
+if (panel && !panel.classList.contains('profile-panel--readonly')) {
+  const nickBtn = panel.querySelector('.profile-panel-nick');
+  if (nickBtn) {
+    nickBtn.innerHTML = `${escH(trimmed)} <span class="profile-nick-edit">✏️</span>`;
+  }
+
+  const compactNick = panel.querySelector('.profile-panel-compact-nickname');
+  if (compactNick) compactNick.textContent = trimmed;
 }
+}
+
+
 
 function getKakaoUser() {
   const saved = localStorage.getItem(KAKAO_USER_KEY);
