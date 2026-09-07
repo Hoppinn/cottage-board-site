@@ -1,5 +1,15 @@
 # PLAN — 활성 뷰(시트/모달/iframe) 단위 체류시간 추적
 
+## 2026-09-07 registry decision
+
+`page-labels.js` is the correct home for active-view identifiers: it is already loaded before `script-nav.js` on every active-tracking page and is the display-label source consumed by both analytics surfaces. Do not centralize modal open/close code.
+
+When the overlay follow-up is implemented, add a real consumed `window.COTTAGE_ACTIVE_VIEWS` registry in `page-labels.js`. Each entry must provide a stable `key`, a display `label`, and a `v2Only` boolean. Owner files (`index-page.js`, `game-sheet.js`, `kakao-auth.js`, `day-detail.js`, `guide.html`, and the common lightbox utility) use the registry key only for existing `pushActiveView/popActiveView` lifecycle calls; they retain their own DOM and close behavior.
+
+`MemberAnalytics.V2_ONLY_PAGE_KEYS` remains in `member-analytics.js`: it is an analytics cutoff contract, not a UI registry. Add a verifier that every registry `v2Only` key also occurs in that set and in `COTTAGE_PAGE_LABELS`. A real-page key reused by an overlay (`game-reviews` in the home record iframe) must remain non-marker so historical v1 rows cannot distort the v2 cutoff.
+
+Registry candidates are the already wired views and every confirmed missing target: recommendation condition/list; game cover/rule/comment/photo/play; common photo lightbox; board records iframe/wizard; game-search; meeting-day-picker; game/taste add; guide iframe. Pick final keys at implementation, favoring one stable key per long-lived user-visible view rather than one per call site.
+
 ## 2026-09-07 follow-up: full overlay audit
 
 The original three-stage wiring was not a complete overlay inventory. The user required the audit to begin with every overlay opening path, rather than only existing `pushActiveView` calls.

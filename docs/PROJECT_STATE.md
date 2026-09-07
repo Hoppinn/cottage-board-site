@@ -1,5 +1,11 @@
 # PROJECT_STATE — 코티지보드 현재 상태
 
+<!-- ACTIVE-VIEW REGISTRY REVIEW 2026-09-07 -->
+- Decision: extend existing `assets/js/page-labels.js`; do not create a parallel inventory file or move overlay lifecycle ownership. It already loads before `script-nav.js` on all relevant pages and is the display-label SSOT consumed by admin/member analytics.
+- Proposed implementation for Commit B: add a consumed `window.COTTAGE_ACTIVE_VIEWS` registry whose entries have a stable `key`, display `label`, and `v2Only` classification. Each owner file looks up its entry/key and retains its own open/close lifecycle. `COTTAGE_PAGE_LABELS` remains the analytics display map; the active registry supplies its matching labels to avoid a second manually maintained label list.
+- Keep `MemberAnalytics.V2_ONLY_PAGE_KEYS` in `member-analytics.js`, because it is a v2-cutoff calculation contract, not a UI registry. Add a small static verifier that every registry entry marked `v2Only` is present there and has a page label. Existing real-page reuse such as the home record iframe → `game-reviews` stays explicitly non-v2-marker, preventing historical v1 rows from becoming cutoff markers.
+- Scope for the registry: existing tracked views plus confirmed missing targets: recommendation condition/list; game cover/rule/comment/photo/play; photo lightbox; board records iframe/wizard; game-search; meeting-day-picker; game/taste add; guide iframe. Exact keys are to be selected while wiring, favoring one key for one user-visible, long-lived view and reusing an existing key only when the same screen meaning is truly identical.
+
 <!-- ACTIVE HANDOFF 2026-09-07: analytics preparation + active-view overlay audit -->
 - Current objective: first commonize the read-only `page_sessions` preparation pipeline between administrator analytics and owner-only member analysis; then complete active-view wiring for every meaningful topmost overlay.
 - Detailed active-view plan: `docs/PLAN_active_view_tracking.md`. The user approved this direction and required the full inventory before edits; inventory was reported in the session conversation.
