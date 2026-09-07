@@ -1901,15 +1901,17 @@ async function _renderAdminMemberBoard(subBody, userId) {
   const evs = events || [];
   const todayKst = MA.kstToday();
   const visitCount = usage?.visit_count ?? 0;
-  const totalMin = usage?.total_minutes ?? 0;
-  const todaySec = (usage?.today_date === todayKst) ? (usage?.today_seconds ?? 0) : 0;
+  // `profiles.total_minutes` is a legacy column name: increment_profile_counters
+  // stores p_secs in it. Keep the seconds unit explicit after the DB boundary.
+  const totalUsageSeconds = Number(usage?.total_minutes || 0);
+  const todaySec = (usage?.today_date === todayKst) ? Number(usage?.today_seconds || 0) : 0;
   const activeDays = new Set(rows.filter(r => r.entered_at).map(r => MA.toKstDate(r.entered_at))).size;
 
   subBody.innerHTML = `<div class="amb">
     <div class="amb-sec-label">📊 이용 요약 <span class="amb-sec-sub">전 기간 누적</span></div>
     <div class="amb-summary">
       <div class="amb-stat"><span class="amb-stat-v">${visitCount}</span><span class="amb-stat-l">방문</span></div>
-      <div class="amb-stat"><span class="amb-stat-v">${_ambDur(totalMin * 60)}</span><span class="amb-stat-l">누적 체류</span></div>
+      <div class="amb-stat"><span class="amb-stat-v">${_ambDur(totalUsageSeconds)}</span><span class="amb-stat-l">누적 체류</span></div>
       <div class="amb-stat"><span class="amb-stat-v">${_ambDur(todaySec)}</span><span class="amb-stat-l">오늘</span></div>
       <div class="amb-stat"><span class="amb-stat-v">${activeDays}일</span><span class="amb-stat-l">방문일수*</span></div>
     </div>
@@ -2470,7 +2472,8 @@ const introVoucherCardHtml = _introVoucher
   const sessData = window._cottageSess?.get(String(user.id)) || {};
 
   // 통계 요약줄 계산
-  const _statsSavedSecs = stats.profile?.total_minutes || 0;
+  // Legacy DB name notwithstanding, profiles.total_minutes is stored in seconds.
+  const _statsSavedSecs = Number(stats.profile?.total_minutes || 0);
   const _statsLocalSecs = sessData.timeSec || 0;
   const _statsSessionSecs = window._cottageSessionStart
     ? Math.floor((Date.now() - window._cottageSessionStart) / 1000) : 0;

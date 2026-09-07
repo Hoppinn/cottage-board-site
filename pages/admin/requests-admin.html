@@ -1546,7 +1546,8 @@
           // rowsV2는 iframe 중복을 접고 활성 뷰 추적 이후 행만 남긴 현재 화면의 체류 소스다.
           const pageTodayS = _todayPm ? [..._todayPm.values()].reduce((sum, row) => sum + row.totalSec, 0) : 0;
           const todayS = Math.max(profileTodayS, pageTodayS);
-          const totalS = p.total_minutes || 0;
+          // Legacy DB name notwithstanding, profiles.total_minutes is stored in seconds.
+          const totalUsageSeconds = Number(p.total_minutes || 0);
           const isBanned = !!p.is_banned;
           const isMe = String(p.user_id) === '4916417947';
           const nick = introNickMap.get(String(p.user_id)) || p.nickname || p.real_name || '(닉네임없음)';
@@ -1556,7 +1557,7 @@
             ? `${escH(nick)}<span class="admin-real-name">(${escH(p.real_name)})</span>`
             : escH(nick);
           // 펼침 기본값이 '오늘'이라(위 _visitorPagesHtml) 토글 라벨·초기 표를 같은 오늘 pm으로 맞춘다.
-          return `<div class="admin-member-card${isBanned?' is-banned':''}" data-uid="${escH(p.user_id)}" data-banned="${isBanned}" data-last-seen="${escH(p.last_seen_at||'')}" data-visitor-type="member" data-total-sec="${totalS}" data-today-sec="${todayS}" style="${hid}">
+          return `<div class="admin-member-card${isBanned?' is-banned':''}" data-uid="${escH(p.user_id)}" data-banned="${isBanned}" data-last-seen="${escH(p.last_seen_at||'')}" data-visitor-type="member" data-total-sec="${totalUsageSeconds}" data-today-sec="${todayS}" style="${hid}">
             <div class="admin-member-name"><button class="admin-member-board-link" type="button" data-member-uid="${escH(p.user_id)}">${dnHtml}</button><span style="font-size:10px;background:#e8f4e8;color:#2e7d32;border-radius:3px;padding:1px 5px;margin-left:4px;font-weight:600">회원</span>${isBanned?' <span class="admin-banned-badge">🚫 밴됨</span>':''}${isMe?' <span style="font-size:11px;color:var(--green)">👑 관리자</span>':''}<span class="admin-online-status" data-uid="${escH(p.user_id)}"></span></div>
             <div class="admin-member-metas">
               <span>가입 ${fmtDate(p.first_seen_at)}</span>
@@ -1564,7 +1565,7 @@
               <span>방문 ${p.visit_count != null ? p.visit_count + '회' : '-'}</span>
               ${joinSourceHtml}
               ${_todayChip(p, todayS, pageTodayS)}
-              <span title="profiles.total_minutes — 전 기간 누적(heartbeat 포함). 아래 페이지별 합계는 page_sessions 기준이라 이보다 작습니다.">⏱ 총 ${fmtTime(totalS)}</span>
+              <span title="profiles.total_minutes(레거시 이름, 저장 단위: 초) — 전 기간 누적(heartbeat 포함). 아래 페이지별 합계는 page_sessions 기준이라 이보다 작을 수 있습니다.">⏱ 총 ${fmtTime(totalUsageSeconds)}</span>
               ${_visitorPagesToggle(memberPageMap.get(p.user_id), _todayPm)}
               ${isMe ? '' : `<button class="admin-ban-btn ${isBanned?'unban':'ban'}" data-uid="${escH(p.user_id)}">${isBanned?'✅ 밴 해제':'🚫 밴'}</button>`}
             </div>

@@ -6,6 +6,7 @@
 
 ## 0. 현재 상태
 
+- 시간 단위 표시: 2026-09-07 `profiles.total_minutes`의 legacy 이름과 실제 seconds 단위를 코드·도메인 문서에 명시하고, 오너 전용 회원 분석의 60배 표시를 수정했다. 다음 별도 후보는 관리자와 회원 분석의 `page_sessions` 중복 제거·집계 경로를 같은 지표인지 먼저 조사하는 일이며, 누적 `profiles` 값과 맞추는 작업은 아니다.
 - 현재 작업: P1 시각 회귀(사진 sticky, 홈 미리보기 focus, 기록 아코디언, 모달·시트 스크롤 경계) 확인 완료. 다음은 P2 데이터 정합성 조사다.
 - 상세 Plan: [보드 상호작용 회귀](plans/board-interaction-regressions-plan.md) · [모임 참여 데이터](plans/meeting-participation-data-plan.md) · [명칭 정합성 조사](plans/naming-alignment-audit-plan.md)
 - 현재 단계: 최근 참여의 모임 단위 개편은 데이터 관계가 불명확해 구현 보류다. `game_play_records`에는 모임 ID가 없고 `meeting_votes`는 참여 등록이므로 날짜만으로 결합하지 않는다.

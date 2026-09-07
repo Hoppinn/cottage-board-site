@@ -20,6 +20,12 @@ const OWNER = '4916417947';
 
 let fail = 0;
 const ck = (ok, msg) => { console.log(`  ${ok ? '✅' : '🔴'} ${msg}`); if (!ok) fail++; };
+const formatDurationSeconds = sec => {
+  sec = Math.round(Number(sec) || 0);
+  if (sec < 60) return sec + '초';
+  const min = Math.floor(sec / 60), hour = Math.floor(min / 60);
+  return hour > 0 ? `${hour}시간 ${min % 60}분` : `${min}분`;
+};
 
 (async () => {
   fs.rmSync(OUT, { recursive: true, force: true });
@@ -51,7 +57,9 @@ const ck = (ok, msg) => { console.log(`  ${ok ? '✅' : '🔴'} ${msg}`); if (!o
   // 대상 회원 고르기 — 오너가 아닌 회원 하나(getAllProfiles).
   const target = await page.evaluate(async (owner) => {
     const ps = await window.CottageDB.getAllProfiles();
-    const m = (ps || []).find(p => String(p.user_id) !== String(owner));
+    // Prefer the current high-value fixture so a 60x display regression is obvious.
+    const m = (ps || []).find(p => p.nickname === '덕 지')
+      || (ps || []).find(p => String(p.user_id) !== String(owner));
     return m ? { id: String(m.user_id), nick: m.nickname } : null;
   }, OWNER);
   if (!target) { console.log('🔴 비오너 회원을 못 찾음 — 판정 중단'); await browser.close(); process.exit(1); }
@@ -85,6 +93,15 @@ const ck = (ok, msg) => { console.log(`  ${ok ? '✅' : '🔴'} ${msg}`); if (!o
     const periods = await page.locator('.amb-period-btn').count();
     ck(amb === 1, `amb 섹션이 렌더됨`);
     ck(stats === 4, `이용 요약 4칸 (${stats})`);
+    const profileTotal = await page.evaluate(async id => {
+      const usage = await window.CottageDB.getProfileUsage(id);
+      return Number(usage?.total_minutes || 0);
+    }, target.id);
+    const shownTotal = await page.locator('.amb-stat').nth(1).locator('.amb-stat-v').innerText();
+    const expectedTotal = formatDurationSeconds(profileTotal);
+    ck(shownTotal === expectedTotal, `누적 체류가 profiles 초 단위와 일치 (${shownTotal} = ${profileTotal}초)`);
+    ck(formatDurationSeconds(58500) === '16시간 15분', '16시간 15분 예시의 초 단위 포맷');
+    ck(formatDurationSeconds(426540) === '118시간 29분', '118시간 29분 예시의 초 단위 포맷');
     ck(periods === 4, `기간 버튼 4개 (${periods})`);
     // 페이지 분포와 활동이 **둘 다 기간 통(.amb-vp) 안**에 있다(함께 기간에 반응)
     ck(await page.locator('.amb-vp .amb-page-table').count() === 1, `페이지 분포가 기간 통 안에 있다`);
