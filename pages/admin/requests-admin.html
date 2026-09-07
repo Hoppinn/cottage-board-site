@@ -703,7 +703,7 @@
         </div>`;
 
       // 바텀시트 open/close
-      function openAdminBS(id) {
+      function openAdminBottomSheet(id) {
         el.querySelectorAll('.admin-bs-overlay').forEach(o => { o.style.display = 'none'; });
         const overlay = document.getElementById(id);
         if (overlay) overlay.style.display = 'flex';
@@ -714,7 +714,7 @@
         document.body.style.overflow = '';
       }
       el.querySelectorAll('.admin-menu-card[data-bs]').forEach(card => {
-        card.addEventListener('click', () => openAdminBS(card.dataset.bs));
+        card.addEventListener('click', () => openAdminBottomSheet(card.dataset.bs));
       });
       el.querySelectorAll('.admin-menu-card[data-scroll]').forEach(card => {
         card.addEventListener('click', () => {
