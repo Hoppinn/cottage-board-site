@@ -68,6 +68,14 @@ function auditHistoricalMigration() {
   const beforeFixIds = new Set(Object.keys(beforeFixMap));
   const currentIds = new Set(Object.keys(currentMap));
 
+  const countRows = (ids) => games.filter((game) => ids.has(String(game.bggId))).length;
+  const legacyRetainedIds = new Set(
+    [...legacyIds].filter((id) => currentMap[id] && currentMap[id] === legacyMap[id])
+  );
+  const fallbackCollisionResolvedIds = setDifference(collisionIds, legacyRetainedIds);
+  const retainedOrResolvedIds = new Set([...legacyRetainedIds, ...fallbackCollisionResolvedIds]);
+  const laterAddedIds = setDifference(currentIds, retainedOrResolvedIds);
+
   const sets = {
     legacy_intersect_collision: setIntersection(legacyIds, collisionIds),
     legacy_minus_collision: setDifference(legacyIds, collisionIds),
@@ -104,6 +112,26 @@ function auditHistoricalMigration() {
       canonical_after_bb92: sortedKeys(afterIds),
       canonical_before_fix: sortedKeys(beforeFixIds),
       canonical_current: sortedKeys(currentIds),
+    },
+    provenance: {
+      legacy_value_retained_or_restored: {
+        label: "레거시 값 유지·복원",
+        keyCount: legacyRetainedIds.size,
+        gameRowCount: countRows(legacyRetainedIds),
+        bggIds: sortedKeys(legacyRetainedIds),
+      },
+      fallback_collision_resolution: {
+        label: "fallback 충돌 해결값 유지",
+        keyCount: fallbackCollisionResolvedIds.size,
+        gameRowCount: countRows(fallbackCollisionResolvedIds),
+        bggIds: sortedKeys(fallbackCollisionResolvedIds),
+      },
+      later_individual_additions: {
+        label: "이후 개별 추가",
+        keyCount: laterAddedIds.size,
+        gameRowCount: countRows(laterAddedIds),
+        bggIds: sortedKeys(laterAddedIds),
+      },
     },
     sets: Object.fromEntries(
       Object.entries(sets).map(([name, set]) => [name, { count: set.size, bggIds: sortedKeys(set) }])
