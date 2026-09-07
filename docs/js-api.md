@@ -209,6 +209,7 @@ window.escH = (s) => String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;')
 | `EVENT_FAMILIES` / `EVENT_ALL_TYPES` / `eventPersonId` | 이벤트 계열 **단일 출처**. 🚨 **새 `trackEvent` 타입은 여기 등록**(안 하면 조회 안 됨, #13) |
 | `EVENT_TYPE_LABELS` / `eventTypeLabel(type)` | 타입 → 한글 라벨(보드 「무엇을 했나」가 raw 타입명 대신 이걸 보여줌). 없는 타입은 raw 폴백 — **새 타입 추가 시 여기도 한 줄**(안 하면 raw 노출) |
 | `countMemberEvents(events, userId, period?, todayKst?)` | 그 회원 이벤트를 계열별 카운트 `[{key,emoji,label,total,types:[{type,label,n}]}]`(총계 내림차순, `types`의 `label`은 한글). `period`는 `created_at` 기준으로 페이지 분포와 **같은 기간 규칙**(안 넘기면 전 기간). 명단(`ddPanelHtml`)은 여기 없다 — 그건 「여러 사람」 드릴다운 |
+| `preparePageSessions(rawRows)` | `page_sessions` 읽기 전처리 단일 경로. 원본을 바꾸지 않고 page 정규화 → 같은 사람·페이지의 3초 인접 twin INSERT 접기(긴 체류·외부 referrer 우선) → v2 cutoff와 `rowsV2`를 계산해 `{rows, v2Cutoff, rowsV2}`로 반환한다. 관리자는 모집단을 먼저 정한 뒤 호출하고, 오너 회원 보드는 `rows`를 소비한다. |
 
 - **관리자 페이지는 별칭·래퍼로 소비**한다(`const _inVpPeriod = (r,p) => MemberAnalytics.inVpPeriod(r,p,todayKst)` 등). 검증 스크립트도 이 모듈을 eval한다(`scripts/_member-analytics.js` 공용 로더, `--negctl`용 소스 변형 지원).
 - **로드**: `requests-admin.html`은 인라인 별칭을 위해 명시 `<script>`(kakao-auth.js 앞). 그 외 페이지는 `kakao-auth.js`가 **자기경로 동적 로드**(day-detail.js와 같은 방식)라 HTML 편집 불필요.

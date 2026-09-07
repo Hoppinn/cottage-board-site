@@ -1897,7 +1897,8 @@ async function _renderAdminMemberBoard(subBody, userId) {
   ]);
   if (!subBody.isConnected) return; // 조회 대기 중 다른 서브시트로 이탈
   // page는 정규화 전 원문이라 관리자 페이지와 같은 버킷이 되도록 접는다(#14).
-  const rows = (rawSessions || []).map(r => ({ ...r, page: MA.normalizePageKey(r.page) }));
+  const preparedSessions = MA.preparePageSessions(rawSessions || []);
+  const rows = preparedSessions.rows;
   const evs = events || [];
   const todayKst = MA.kstToday();
   const visitCount = usage?.visit_count ?? 0;

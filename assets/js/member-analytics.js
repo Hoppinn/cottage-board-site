@@ -101,6 +101,41 @@
     return PAGE_KEY_ALIASES[key] || key;
   }
 
+  // One read-time preparation path for both analytics surfaces. The DB rows stay immutable.
+  const TWIN_WINDOW_MS = 3000;
+  function collapseTwinInserts(rowset) {
+    const byKey = new Map();
+    for (const r of rowset) {
+      const pid = r.user_id ? 'u:' + r.user_id : (r.session_key ? 's:' + r.session_key : null);
+      if (!pid || !r.entered_at) { byKey.set(Symbol(), [r]); continue; }
+      const k = pid + '\x00' + r.page;
+      if (!byKey.has(k)) byKey.set(k, []);
+      byKey.get(k).push(r);
+    }
+    const isInternalRef = ref => !!ref && (ref.startsWith('/') || Object.prototype.hasOwnProperty.call(PAGE_KEY_ALIASES, ref));
+    const out = [];
+    for (const list of byKey.values()) {
+      if (list.length === 1) { out.push(list[0]); continue; }
+      list.sort((a, b) => new Date(a.entered_at) - new Date(b.entered_at));
+      let group = [list[0]];
+      const flush = () => {
+        let best = group[0];
+        for (const r of group) if ((r.duration_sec || 0) > (best.duration_sec || 0)) best = r;
+        if (isInternalRef(best.referrer) || !best.referrer) {
+          const better = group.find(r => r.referrer && !isInternalRef(r.referrer));
+          if (better) best = { ...best, referrer: better.referrer };
+        }
+        out.push(best);
+      };
+      for (let i = 1; i < list.length; i++) {
+        if (new Date(list[i].entered_at) - new Date(list[i - 1].entered_at) <= TWIN_WINDOW_MS) group.push(list[i]);
+        else { flush(); group = [list[i]]; }
+      }
+      flush();
+    }
+    return out;
+  }
+
   // ── 추적 버전 경계(v1→v2, 2026-08-18) ─────────────────────────────
   // v1(~2026-08-18): page_sessions 1행 = 방문 전체(URL 기준, 시트·모달 안 구분).
   // v2(2026-08-18~): 시트·모달(활성 뷰) 세그먼트별로 여러 행(PLAN_active_view_tracking.md).
@@ -149,6 +184,12 @@
   function filterToV2(rows, cutoff) {
     if (!cutoff) return rows;
     return rows.filter(r => r.entered_at && r.entered_at >= cutoff);
+  }
+
+  function preparePageSessions(rawRows) {
+    const rows = collapseTwinInserts((rawRows || []).map(r => ({ ...r, page: normalizePageKey(r.page) })));
+    const v2Cutoff = computeV2Cutoff(rows);
+    return { rows, v2Cutoff, rowsV2: filterToV2(rows, v2Cutoff) };
   }
 
   // ── 한 사람의 페이지 분포 ──────────────────────────────────────────
@@ -251,7 +292,7 @@
   window.MemberAnalytics = {
     toKstDate, kstToday, kstShift,
     VP_PERIODS, VP_DATE_RE, inVpPeriod, inPeriodByKst, vpLabel,
-    PAGE_KEY_ALIASES, normalizePageKey,
+    PAGE_KEY_ALIASES, normalizePageKey, collapseTwinInserts, preparePageSessions,
     V2_ONLY_PAGE_KEYS, computeV2Cutoff, filterToV2,
     buildPageMap,
     EVENT_FAMILIES, EVENT_ALL_TYPES, eventPersonId, countMemberEvents,
