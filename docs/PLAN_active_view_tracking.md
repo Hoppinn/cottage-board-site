@@ -1,5 +1,21 @@
 # PLAN — 활성 뷰(시트/모달/iframe) 단위 체류시간 추적
 
+## 2026-09-07 follow-up: full overlay audit
+
+The original three-stage wiring was not a complete overlay inventory. The user required the audit to begin with every overlay opening path, rather than only existing `pushActiveView` calls.
+
+Missing tracking targets confirmed in the reported inventory:
+
+- `index-page.js`: recommendation condition modal and recommendation-all overlay.
+- `game-sheet.js`: cover viewer, rule hub, comment/photo/play entry forms.
+- `play-records-utils.js`: common photo lightbox, including iframe parent-message handling.
+- `kakao-auth.js`: board iframe/wizard, reusable game-search modal, meeting day picker, add/taste overlays.
+- `pages/info/guide.html`: guide iframe overlay.
+
+Existing valid targets: profile panel (subsheet inherits panel view), game sheet/location shelf, day-detail family, planner family, and home record/planner iframe overlays. Excluded: toast, tooltip, menu/autocomplete/dropdown, short confirmations (session-join and external-link), and admin sheets because administrator tracking is globally disabled.
+
+Implementation constraints: every included overlay owns/releases one token on all existing close paths; preserve the 3-second cutoff, iframe self-tracking block, and no `page_views` re-entry; reverse-order close removes only the matching non-top token without switching the visible label; new keys require page-label and v2-cutoff registration.
+
 작성: 2026-08-18. 1차 개정: 같은 날, 사용자가 "단일 writer 원칙" 승인조건을 걸어 재설계. **승인됨(조건부) — 조건은 아래 「승인 조건」 그대로 고정.**
 
 ## 배경 — 왜 필요한가

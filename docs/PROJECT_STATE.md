@@ -1,5 +1,14 @@
 # PROJECT_STATE — 코티지보드 현재 상태
 
+<!-- ACTIVE HANDOFF 2026-09-07: analytics preparation + active-view overlay audit -->
+- Current objective: first commonize the read-only `page_sessions` preparation pipeline between administrator analytics and owner-only member analysis; then complete active-view wiring for every meaningful topmost overlay.
+- Detailed active-view plan: `docs/PLAN_active_view_tracking.md`. The user approved this direction and required the full inventory before edits; inventory was reported in the session conversation.
+- No source change is pending from this handoff: the first combined patch failed atomically on a documentation-context mismatch.
+- Commit A: add `MemberAnalytics.preparePageSessions(rawRows)`, preserving exactly `normalizePageKey` → existing 3-second adjacent twin collapse (longest duration and external-referrer preference) → `computeV2Cutoff` / `filterToV2`. Admin chooses its population first and consumes `{rows,v2Cutoff,rowsV2}`; `kakao-auth.js::_renderAdminMemberBoard` consumes `prepared.rows`. Update js-api/admin-analytics docs and verify same-input equality. Do not mutate DB rows or reconcile `page_sessions` with `profiles.total_minutes`.
+- Commit B: wire active-view tokens for recommendation condition/list; game cover/rule/comment/photo/play; common photo lightbox including iframe-parent messages; board iframe/wizard; add-search/day-picker/taste overlays; guide iframe. Existing connected targets stay: profile panel/subsheets, game sheet/shelf, day-detail, planner, home record/planner iframe. Exclude toast/menu/autocomplete/short confirm and admin-only sheets.
+- Stack edge: current `popActiveView` ignores all non-top tokens. Keep duplicate/unknown pop as no-op, but remove matching non-top tokens without switching the visible label for programmatic reverse-order close. Extend the active-view verifier for nested return, reverse close, duplicate close, visibility, and 3-second cutoff.
+- Historical data: do not lower/rewrite page views. Overlay returns do not call page-view tracking; duplicate session effects are read-time deduped. Any data rewrite needs a separate evidence-based approved plan.
+
 최종 갱신: 2026-09-07
 
 > 이 문서는 세션을 다시 시작할 수 있게 **열린 상태와 그 재개 맥락**만 보관한다. 완료한 변경·검증의 상세는 git commit, 계속 유효한 구조·데이터 계약은 도메인 문서가 정본이다. 완료 목록·커밋 목록·세션 회고는 여기서 제거한다.
