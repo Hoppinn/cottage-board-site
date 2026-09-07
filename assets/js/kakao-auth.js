@@ -661,11 +661,25 @@ function _bindActivityTogglesAndMore(subBody) {
   subBody.querySelectorAll('.profile-section-more-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       const group = btn.closest('.profile-activity-group');
+      const header = group?.querySelector('.profile-activity-header');
+      const stickyTop = header ? Number.parseFloat(getComputedStyle(header).top) || 0 : 0;
+      const wasSticky = !!header && Math.abs(header.getBoundingClientRect().top - (subBody.getBoundingClientRect().top + stickyTop)) < 1;
+      const headerEntryTop = wasSticky
+        ? subBody.scrollTop + group.getBoundingClientRect().top - subBody.getBoundingClientRect().top - stickyTop
+        : null;
       const hidden = group?.querySelectorAll('[data-profile-section-more]') || [];
       const isExpanded = btn.getAttribute('aria-expanded') === 'true';
       hidden.forEach(el => el.classList.toggle('record-photo-hidden', isExpanded));
       btn.setAttribute('aria-expanded', String(!isExpanded));
       btn.textContent = isExpanded ? '전체보기 ▼' : '접기 ▲';
+      if (isExpanded && headerEntryTop != null) {
+        requestAnimationFrame(() => {
+          const previousBehavior = subBody.style.scrollBehavior;
+          subBody.style.scrollBehavior = 'auto';
+          subBody.scrollTop = Math.max(0, headerEntryTop);
+          subBody.style.scrollBehavior = previousBehavior;
+        });
+      }
     });
   });
 }
