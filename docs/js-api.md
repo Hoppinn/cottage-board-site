@@ -289,6 +289,8 @@ window.escH = (s) => String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;')
 | `window.COTTAGE_ACTIVE_VIEWS` | 활성 뷰 key | 장시간 모달·시트의 `{key,label,v2Only}` registry. lifecycle은 각 소유 파일이 `pushActiveView`/`popActiveView`로 유지하며, `label`은 `COTTAGE_PAGE_LABELS`에서 파생한다. `v2Only:true`는 반드시 `MemberAnalytics.V2_ONLY_PAGE_KEYS`에 있어야 한다 |
 | `window.COTTAGE_PAGE_LABELS_BY_PATH` | pathname | ⚠️ **앱 코드에 소비처가 없다** (2026-07-21, #28). 마지막 용도였던 `page_sessions.referrer` 저장이 `COTTAGE_SESSION_REF`로 바뀌면서 비었고, 지금 읽는 건 `scripts/audit-page-buckets.js` 하나뿐이다. **그래서 삭제하지 않았다** — 지우려면 그 스크립트를 먼저 옮길 것 |
 
+홈 iframe 모달에서 실제 독립 페이지를 보여줄 때는 별도 가상 key를 만들지 않고 registry의 실페이지 key를 쓴다. 현재 `game-reviews`, `club-intro`는 `v2Only:false`이며, iframe 자신은 embedded-frame guard로 추적하지 않고 부모가 open 1회 push·close 1회 pop한다.
+
 🚨 **표시 라벨을 DB에 저장하지 않는다** (#14, 2026-07-20). 예전엔 트래커가 `BY_PATH`의 한글 라벨을 `page_sessions.page`에 그대로 넣어서, **라벨을 개명할 때마다 같은 페이지가 새 버킷으로 쪼개졌다**(11,777행이 42종으로 흩어짐). 지금은 **저장=슬러그 / 표시=라벨**로 분리돼 있어 `COTTAGE_PAGE_LABELS` 값은 자유롭게 고쳐도 데이터가 안 갈린다.
 
 ⚠️ **두 맵의 값이 어긋나 있었다 (2026-07-21 정정)** — `COTTAGE_PAGE_LABELS`가 개명을 못 따라가 `club-intro`가 `'동호회 소개'`(실제로는 club.html의 옛 이름)로 표시되는 등 6개가 틀렸다. 이제 **각 페이지의 실제 `<title>`과 맞춘다** — 값을 바꿀 땐 title을 보고 바꿀 것.

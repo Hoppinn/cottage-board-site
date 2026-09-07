@@ -1780,6 +1780,74 @@ window.addEventListener('cottage-meeting-changed', () => { _meetingReload?.(); }
 })();
 
 
+(function initMemberProfilesModal() {
+  const modal    = document.getElementById('memberProfilesModal');
+  const frame    = document.getElementById('memberProfilesFrame');
+  const dim      = document.getElementById('memberProfilesDim');
+  const closeBtn = document.getElementById('memberProfilesClose');
+  const openBtn  = document.getElementById('openMemberProfilesBtn');
+  const loader   = document.getElementById('memberProfilesLoader');
+  if (!modal || !frame || !dim || !closeBtn || !openBtn) return;
+
+  const introSrc = './pages/club/club-intro.html?embed=1';
+  let viewToken = null;
+  let viewActive = false;
+
+  // iframe은 script-nav.js의 embedded-frame 가드로 자체 세션 추적을 하지 않는다.
+  // 부모가 기존 실페이지 key만 push/pop해 홈 체류와 프로필 열람 체류를 나눈다.
+  function ensureView() {
+    if (viewActive) return;
+    viewActive = true;
+    viewToken = window.pushActiveView?.(window.COTTAGE_ACTIVE_VIEWS?.['club-intro']?.key) ?? null;
+  }
+
+  function popView() {
+    if (!viewActive) return;
+    window.popActiveView?.(viewToken);
+    viewActive = false;
+    viewToken = null;
+  }
+
+  function openModal() {
+    modal.setAttribute('aria-hidden', 'false');
+    modal.classList.add('is-open');
+    document.body.style.overflow = 'hidden';
+    ensureView();
+
+    if (frame.classList.contains('is-ready')) return;
+    if (loader) loader.style.display = 'flex';
+    if (!frame.src || !frame.src.includes('/club-intro.html')) frame.src = introSrc;
+  }
+
+  // 배경·×·ESC는 이 경로만 호출한다. viewActive 가드가 같은 token의 중복 pop을 막는다.
+  function closeModal() {
+    if (!modal.classList.contains('is-open')) return;
+    modal.setAttribute('aria-hidden', 'true');
+    modal.classList.remove('is-open');
+    document.body.style.overflow = '';
+    popView();
+
+    // iframe 내부 링크로 다른 페이지로 이동했을 때만 다음 열기에 프로필 목록으로 되돌린다.
+    const currentPath = frame.contentWindow?.location?.pathname ?? '';
+    if (!currentPath.endsWith('club-intro.html')) {
+      frame.classList.remove('is-ready');
+      frame.src = introSrc;
+    }
+  }
+
+  frame.addEventListener('load', () => {
+    frame.classList.add('is-ready');
+    if (loader) loader.style.display = 'none';
+  });
+  openBtn.addEventListener('click', openModal);
+  dim.addEventListener('click', closeModal);
+  closeBtn.addEventListener('click', closeModal);
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeModal();
+  });
+})();
+
+
 (async function initMeetingSection() {
   const statusEl  = document.getElementById('meetingStatusMsg');
   const daysEl    = document.getElementById('meetingDays');

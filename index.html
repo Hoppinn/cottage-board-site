@@ -282,7 +282,10 @@
       <div class="home-section-inner">
         <div class="home-section-header">
           <h2 class="home-section-title">코티지 모임</h2>
-          <button class="home-section-more" id="openPlannerBtn" type="button">플래너 보기</button>
+          <div class="rp-header-actions">
+            <button class="home-section-more" id="openMemberProfilesBtn" type="button">모임원 프로필</button>
+            <button class="home-section-more" id="openPlannerBtn" type="button">플래너 보기</button>
+          </div>
         </div>
         <div class="meeting-status" id="meetingStatus">
           <span class="meeting-status-msg" id="meetingStatusMsg">불러오는 중...</span>
@@ -300,6 +303,17 @@
       <div class="planner-sheet-loader" id="plannerSheetLoader" aria-hidden="true"></div>
       <iframe class="planner-sheet-frame" id="plannerSheetFrame" src="" title="모임 플래너"></iframe>
       <a class="sheet-fullscreen-link" href="./pages/club/club-schedule.html">↗ 페이지로 이동</a>
+    </div>
+  </div>
+
+  <!-- 모임원 프로필 센터모달 -->
+  <div class="record-iframe-modal" id="memberProfilesModal" aria-hidden="true">
+    <div class="record-iframe-dim" id="memberProfilesDim"></div>
+    <div class="record-iframe-panel">
+      <button aria-label="모임원 프로필 닫기" class="record-iframe-close" id="memberProfilesClose" type="button">✕</button>
+      <div class="record-iframe-loader" id="memberProfilesLoader" aria-hidden="true"></div>
+      <iframe class="record-iframe-frame" id="memberProfilesFrame" src="" title="모임원 프로필"></iframe>
+      <a class="sheet-fullscreen-link" href="./pages/club/club-intro.html">↗ 페이지로 이동</a>
     </div>
   </div>
 

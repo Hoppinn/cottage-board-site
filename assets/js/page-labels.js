@@ -43,8 +43,9 @@
     'game-play': true, 'photo-lightbox': true, 'board-records': true,
     'board-wizard': true, 'game-search': true, 'meeting-day-picker': true,
     'taste-game-add': true, 'guide-iframe': true,
-    // The home record iframe reuses this real page key; it cannot mark the v2 cutoff.
-    'game-reviews': false,
+    // 홈 iframe 모달은 기존 실페이지 키를 재사용한다. 직접 페이지와 같은 기존 화면이므로
+    // v2 cutoff 표식으로 쓰지 않는다.
+    'game-reviews': false, 'club-intro': false,
   };
   window.COTTAGE_ACTIVE_VIEWS = Object.fromEntries(Object.entries(activeViewV2).map(([key, v2Only]) => [key, {
     key, label: window.COTTAGE_PAGE_LABELS[key], v2Only,
