@@ -291,6 +291,7 @@ function openRecommendOverlay(){
   });
 
   overlay.classList.add("is-open");
+  if (!overlay._activeViewToken) overlay._activeViewToken = window.pushActiveView?.(window.COTTAGE_ACTIVE_VIEWS?.['recommend-all']?.key);
   document.body.style.overflow = "hidden";
 }
 
@@ -298,6 +299,8 @@ function closeRecommendOverlay(){
   const overlay = document.getElementById("recommendOverlay");
   if(!overlay) return;
   overlay.classList.remove("is-open");
+  window.popActiveView?.(overlay._activeViewToken);
+  overlay._activeViewToken = null;
   document.body.style.overflow = "";
 }
 
@@ -624,6 +627,7 @@ function openRecommendModal(){
   const _mainD = playerMainRow ? playerMainRow.style.display : null;
 
   recommendModal.classList.add('is-active');
+  if (!recommendModal._activeViewToken) recommendModal._activeViewToken = window.pushActiveView?.(window.COTTAGE_ACTIVE_VIEWS?.['recommend-condition']?.key);
 
   recommendModal.setAttribute(
     'aria-hidden',
@@ -641,6 +645,8 @@ function closeRecommendModal(){
   }
 
   recommendModal.classList.remove('is-active');
+  window.popActiveView?.(recommendModal._activeViewToken);
+  recommendModal._activeViewToken = null;
 
   recommendModal.setAttribute(
     'aria-hidden',
@@ -1533,8 +1539,11 @@ window.addEventListener('cottage-record-changed', initRecentPlay);
       }
     } else if (e.data?.type === 'cottage-lightbox-open') {
       iframeLightboxOpen = true;
+      if (!modal._iframeLightboxViewToken) modal._iframeLightboxViewToken = window.pushActiveView?.(window.COTTAGE_ACTIVE_VIEWS?.['photo-lightbox']?.key);
     } else if (e.data?.type === 'cottage-lightbox-close') {
       iframeLightboxOpen = false;
+      window.popActiveView?.(modal._iframeLightboxViewToken);
+      modal._iframeLightboxViewToken = null;
     } else if (e.data?.type === 'cottage-record-changed') {
       // iframe(game-reviews.html embed) 안에서 기록을 쓰면 window.dispatchEvent는
       // iframe 자신의 window에서만 울려 부모(홈)엔 안 닿는다 — postMessage로 받는다.

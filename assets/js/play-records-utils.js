@@ -86,6 +86,7 @@
 
     const lb = document.createElement('div');
     lb.className = 'pr-lightbox';
+    let activeViewToken = window.pushActiveView?.(window.COTTAGE_ACTIVE_VIEWS?.['photo-lightbox']?.key);
 
     const img = document.createElement('img');
     img.className = 'pr-lightbox-img';
@@ -151,6 +152,8 @@
 
     function closeLb() {
       document.removeEventListener('keydown', onKey);
+      window.popActiveView?.(activeViewToken);
+      activeViewToken = null;
       lb.remove();
       if (window.parent !== window) window.parent.postMessage({ type: 'cottage-lightbox-close' }, '*');
     }

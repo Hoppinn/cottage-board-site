@@ -959,9 +959,15 @@ function bindGameCardEvents(){
   // 뒤라 조용히 무시된다(경고만 로그) — 스택이 절대 안 무너진다.
   window.popActiveView = function (token) {
     if (_shouldSkipSessionTracking() || _finalized) return;
-    const top = _stack[_stack.length - 1];
-    if (!top || top.token !== token) {
-      console.warn('[popActiveView] stale/mismatched token — 무시(스택 보존)', { expected: top?.token ?? null, got: token });
+    const index = _stack.findIndex(entry => entry.token === token);
+    if (index < 0) {
+      console.warn('[popActiveView] stale/unknown token — 무시(스택 보존)', { got: token });
+      return;
+    }
+    // Programmatic reverse-order close can remove a covered overlay. Its visible
+    // label was never current, so only remove the matching entry without flushing.
+    if (index !== _stack.length - 1) {
+      _stack.splice(index, 1);
       return;
     }
     _stack.pop();

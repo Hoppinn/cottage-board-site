@@ -184,11 +184,29 @@ console.log(`\n=== 4) stale 토큰(이미 다른 뷰로 넘어간 뒤 옛 토큰
     `B push 시 A(my-board) 구간 5초 flush — 실제 ${JSON.stringify(t.sent[0])}`);
   check(t.sent[1].page === 'other-board' && t.sent[1].duration_sec === 10,
     `other-board가 5+5=10초 단일 행(stale pop이 안 쪼갬) — 실제 ${JSON.stringify(t.sent[1])}`);
-  check(t.sent[2].page === 'my-board' && t.sent[2].duration_sec === 5,
-    `pop(B) 이후 my-board로 정상 복귀, 마지막 5초 — 실제 ${JSON.stringify(t.sent[2])}`);
+  check(t.sent[2].page === 'index' && t.sent[2].duration_sec === 5,
+    `pop(B) 이후 제거된 A를 건너뛰고 index로 복귀, 마지막 5초 — 실제 ${JSON.stringify(t.sent[2])}`);
 }
 
-console.log(`\n=== 5) visibility hidden→visible — pop 없이 flush만, 숨은 시간은 안 셈 ===`);
+console.log(`\n=== 5) 역순 close — 가려진 뷰만 제거하고 현재 라벨은 유지 ===`);
+{
+  realNowStub.value = 1_000_000_000_000;
+  const t = loadTracker();
+  const tokA = t.push('my-board');
+  t.advance(5);
+  const tokB = t.push('other-board');
+  t.advance(5);
+  t.pop(tokA); // covered A: no flush and other-board remains visible
+  t.advance(5);
+  t.pop(tokB);
+  t.advance(5);
+  t.firePagehide();
+  check(JSON.stringify(t.sent.map(s => [s.page, s.duration_sec])) === JSON.stringify([
+    ['my-board', 5], ['other-board', 10], ['index', 5],
+  ]), `역순 close 뒤 other-board 10초가 분할되지 않고 index로 복귀 — ${JSON.stringify(t.sent.map(s => [s.page, s.duration_sec]))}`);
+}
+
+console.log(`\n=== 6) visibility hidden→visible — pop 없이 flush만, 숨은 시간은 안 셈 ===`);
 {
   realNowStub.value = 1_000_000_000_000;
   const t = loadTracker();
@@ -207,7 +225,7 @@ console.log(`\n=== 5) visibility hidden→visible — pop 없이 flush만, 숨�
   check(t.sent[2].page === 'index' && t.sent[2].duration_sec === 3, `pop 후 index로 정상 복귀, 마지막 3초 — ${JSON.stringify(t.sent[2])}`);
 }
 
-console.log(`\n=== 6) 3초 미만 세그먼트는 무시(기존 문턱 유지) ===${NEGCTL ? ' [--negctl 적용]' : ''}`);
+console.log(`\n=== 7) 3초 미만 세그먼트는 무시(기존 문턱 유지) ===${NEGCTL ? ' [--negctl 적용]' : ''}`);
 {
   realNowStub.value = 1_000_000_000_000;
   const t = loadTracker({ forceNegctl: NEGCTL });
@@ -223,7 +241,7 @@ console.log(`\n=== 6) 3초 미만 세그먼트는 무시(기존 문턱 유지) =
   }
 }
 
-console.log(`\n=== 7) 트래킹 스킵 조건(관리자/embedded) — push/pop이 안전하게 no-op ===`);
+console.log(`\n=== 8) 트래킹 스킵 조건(관리자/embedded) — push/pop이 안전하게 no-op ===`);
 {
   realNowStub.value = 1_000_000_000_000;
   const tAdmin = loadTracker({ admin: true });
@@ -232,7 +250,7 @@ console.log(`\n=== 7) 트래킹 스킵 조건(관리자/embedded) — push/pop�
   check(tEmbed.api.pushActiveView === undefined, `embedded(iframe): window.pushActiveView 자체가 정의 안 됨 — ${typeof tEmbed.api.pushActiveView}`);
 }
 
-console.log(`\n=== 8) 단일 writer — page_sessions INSERT를 시도하는 곳이 코드베이스에 한 곳뿐인가 ===`);
+console.log(`\n=== 9) 단일 writer — page_sessions INSERT를 시도하는 곳이 코드베이스에 한 곳뿐인가 ===`);
 {
   const grepTargets = [
     ['assets/js/supabase-client.js', false],  // page_sessions insert가 없어야 함(단, _startAnonHeartbeat의 dur=0 마커는 예외)
@@ -250,12 +268,26 @@ console.log(`\n=== 8) 단일 writer — page_sessions INSERT를 시도하는 곳
   }
 }
 
-console.log(`\n=== 9) profiles.today_seconds 로직 무변경 회귀 확인 (increment_profile_counters RPC 유지) ===`);
+console.log(`\n=== 10) profiles.today_seconds 로직 무변경 회귀 확인 (increment_profile_counters RPC 유지) ===`);
 {
   const scContent = fs.readFileSync(path.join(__dirname, '..', 'assets', 'js', 'supabase-client.js'), 'utf8');
   check(scContent.includes("db.rpc('increment_profile_counters'"), 'increment_profile_counters RPC 호출 여전히 존재(profiles 총합 로직 무변경)');
   check(!scContent.includes('insertPageSession'), 'insertPageSession 파라미터 완전히 제거됨(죽은 코드 정리 확인)');
   check(!scContent.includes('_sessionEnterAt'), '_sessionEnterAt 상태도 완전히 제거됨(page_sessions insert에만 쓰이던 값)');
+}
+
+console.log(`\n=== 11) 활성 뷰 registry — v2 키와 표시 라벨 계약 ===`);
+{
+  const labelsWindow = {};
+  const labelsSrc = fs.readFileSync(path.join(__dirname, '..', 'assets', 'js', 'page-labels.js'), 'utf8');
+  new Function('window', labelsSrc)(labelsWindow);
+  const { loadMemberAnalytics } = require('./_member-analytics');
+  const v2Keys = loadMemberAnalytics().V2_ONLY_PAGE_KEYS;
+  const entries = Object.values(labelsWindow.COTTAGE_ACTIVE_VIEWS || {});
+  check(entries.length > 0, 'COTTAGE_ACTIVE_VIEWS registry가 비어 있지 않음');
+  check(entries.every(v => v.key && v.label), '모든 registry 항목에 key와 표시 label이 있음');
+  check(entries.filter(v => v.v2Only).every(v => v2Keys.has(v.key)), 'v2Only registry 키가 모두 MemberAnalytics cutoff 집합에 있음');
+  check(entries.every(v => labelsWindow.COTTAGE_PAGE_LABELS[v.key] === v.label), 'registry label이 COTTAGE_PAGE_LABELS 정본과 일치');
 }
 
 Date.now = _realDateNow;

@@ -536,9 +536,9 @@ function _buildGameListHtml(gameIds, emptyMsg) {
 // R2 DRY: _openTasteAddModal(취향보드)/_openBoxAddSearch(모임보드 취향박스) 공용 검색-추가 모달.
 // 두 호출처의 "목록에 있는지 확인"(inList)·"추가 시 처리"(onAdd)·"취소 시 처리"(onRemove)만
 // 다르고 검색 UI는 동일해 헬퍼로 추출. onRemove를 넘기면 "추가됨" 항목 재클릭이 취소로 동작한다.
-function _openGameAddSearchModal({ overlayId, title, inList, onAdd, onRemove }) {
+function _openGameAddSearchModal({ overlayId, title, inList, onAdd, onRemove, activeViewKey = 'game-search' }) {
   const _TOGGLE_HINT = '다시 누르면 목록에서 빼요';
-  document.getElementById(overlayId)?.remove();
+  document.getElementById(overlayId)?._closeActiveView?.();
   const overlay = document.createElement('div');
   overlay.id = overlayId;
   overlay.className = 'mb-add-overlay';
@@ -548,9 +548,11 @@ function _openGameAddSearchModal({ overlayId, title, inList, onAdd, onRemove }) 
     <div class="mb-add-results"></div>
   </div>`;
   document.body.appendChild(overlay);
+  const viewToken = window.pushActiveView?.(window.COTTAGE_ACTIVE_VIEWS?.[activeViewKey]?.key);
   const input = overlay.querySelector('.mb-add-input');
   const resultsEl = overlay.querySelector('.mb-add-results');
-  const close = () => { overlay.remove(); document.removeEventListener('keydown', onEsc); };
+  const close = () => { window.popActiveView?.(viewToken); overlay.remove(); document.removeEventListener('keydown', onEsc); };
+  overlay._closeActiveView = close;
   const onEsc = e => { if (e.key === 'Escape') close(); };
   overlay.querySelector('.mb-add-close').addEventListener('click', close);
   overlay.addEventListener('click', e => { if (e.target === overlay) close(); });
@@ -704,6 +706,7 @@ function _openBoardFrameModal({ src, title, tab = null, wizardOnly = false }) {
       <iframe class="record-iframe-frame" src="${escH(src)}" title="${escH(title)}"></iframe>
     </div>`;
   document.body.appendChild(modal);
+  const viewToken = window.pushActiveView?.(window.COTTAGE_ACTIVE_VIEWS?.[wizardOnly ? 'board-wizard' : 'board-records']?.key);
 
   const frame = modal.querySelector('.record-iframe-frame, .board-wizard-frame');
   const loader = modal.querySelector('.record-iframe-loader');
@@ -725,6 +728,7 @@ function _openBoardFrameModal({ src, title, tab = null, wizardOnly = false }) {
     document.removeEventListener('keydown', onKeydown);
     window.removeEventListener('message', onMessage);
     if (document.body.style.overflow === 'hidden') document.body.style.overflow = previousOverflow;
+    window.popActiveView?.(viewToken);
     modal.remove();
   };
   modal._closeBoardFrameModal = close;
@@ -895,6 +899,7 @@ function _bindProfileBoardSubsheet(subBody, ctx) {
             const isLiked = listKey === 'liked';
             _openGameAddSearchModal({
               overlayId: 'mbAddModal',
+              activeViewKey: 'taste-game-add',
               title: `${isLiked ? '❤️ 좋아하는 게임' : '👀 해보고 싶은 게임'} 추가`,
               inList: (gameId, customName) => {
                 if (gameId) return !!listEl.querySelector(`[data-game-id="${gameId}"]`);
@@ -1172,7 +1177,8 @@ function _bindMeetingSubsheet(subBody, ctx) {
             overlay.className = 'mb-add-overlay';
             const vgId = slug ? (window.gameData?.[slug]?.bgg?.id ?? null) : null;
             const vgCustom = vgId != null ? null : (customName || name);
-            const close = () => overlay.remove();
+            const viewToken = window.pushActiveView?.(window.COTTAGE_ACTIVE_VIEWS?.['meeting-day-picker']?.key);
+            const close = () => { window.popActiveView?.(viewToken); overlay.remove(); };
             if (!partDays.length) {
               overlay.innerHTML = `<div class="mb-add-box"><div class="mb-add-head"><span class="mb-add-title">🗓️ 날짜 선택</span><button aria-label="닫기" class="mb-add-close" type="button">✕</button></div><p class="mb-daypick-empty">먼저 가까운 참여 일정을 등록해주세요.<br>플래너에서 날짜를 정하면 그날 하고 싶은 게임을 고를 수 있어요.</p><button class="mb-add-daypick-done" type="button">플래너 열기</button></div>`;
               document.body.appendChild(overlay);
@@ -1337,6 +1343,7 @@ function _bindMeetingSubsheet(subBody, ctx) {
             const isWant = listType === 'want';
             _openGameAddSearchModal({
               overlayId: 'mbBoxAddSearch',
+              activeViewKey: 'taste-game-add',
               title: `${isWant ? '❤️ 좋아하는 게임' : '👀 해보고 싶은 게임'} 추가`,
               inList: (gameId, customName) => {
                 if (gameId) return games.some(g => String(g.game_id) === String(gameId));

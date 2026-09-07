@@ -21,7 +21,34 @@
     'game-sheet': '게임 정보 시트', 'game-location-shelf': '게임 위치(시트)',
     // PLAN_active_view_tracking.md 3차(2026-08-19) — 이날 모임 상세·플래너 등록/수정 모달.
     'day-detail': '이날 모임 상세', 'planner-register': '모임 플래너(등록/수정)',
+    'recommend-condition': '추천 조건', 'recommend-all': '추천 게임 전체보기',
+    'game-cover': '게임 표지 보기', 'game-rule': '게임 룰 보기',
+    'game-comment': '게임평 작성', 'game-photo': '게임 사진 추가', 'game-play': '플레이 기록 작성',
+    'photo-lightbox': '사진 크게 보기', 'board-records': '기록 보드',
+    'board-wizard': '보드 설정', 'game-search': '게임 검색',
+    'meeting-day-picker': '모임 날짜 선택', 'taste-game-add': '취향 게임 추가',
+    'guide-iframe': '홈페이지 기능 안내',
   };
+
+  // Active overlays retain lifecycle ownership in their source files. This registry
+  // supplies their stable analytics keys and derives labels from the display SSOT.
+  const activeViewV2 = {
+    'my-board': true, 'my-board-growth': true, 'my-board-taste': true,
+    'my-board-records': true, 'my-board-voucher': true, 'my-board-notif': true,
+    'my-board-usage': true, 'my-board-meeting': true, 'other-board': true,
+    'game-sheet': true, 'game-location-shelf': true, 'day-detail': true,
+    'planner-register': true,
+    'recommend-condition': true, 'recommend-all': true,
+    'game-cover': true, 'game-rule': true, 'game-comment': true, 'game-photo': true,
+    'game-play': true, 'photo-lightbox': true, 'board-records': true,
+    'board-wizard': true, 'game-search': true, 'meeting-day-picker': true,
+    'taste-game-add': true, 'guide-iframe': true,
+    // The home record iframe reuses this real page key; it cannot mark the v2 cutoff.
+    'game-reviews': false,
+  };
+  window.COTTAGE_ACTIVE_VIEWS = Object.fromEntries(Object.entries(activeViewV2).map(([key, v2Only]) => [key, {
+    key, label: window.COTTAGE_PAGE_LABELS[key], v2Only,
+  }]));
 
   // pathname → slug. `page_sessions.page`에 저장되는 값은 **항상 이 함수의 결과**다.
   // 저장 경로가 둘(script-nav.js 세션 트래커 / supabase-client.js _startAnonHeartbeat)이라

@@ -163,6 +163,10 @@
     // 홈 전용 플래너 모달, 전부 'day-detail'/'planner-register' 두 키로 수렴(본문 주석 참조).
     // 'game-reviews'는 실페이지 키를 재사용한 것이라 여기 추가하지 않는다(v2 cutoff 오염 방지).
     'day-detail', 'planner-register',
+    'recommend-condition', 'recommend-all',
+    'game-cover', 'game-rule', 'game-comment', 'game-photo', 'game-play',
+    'photo-lightbox', 'board-records', 'board-wizard', 'game-search',
+    'meeting-day-picker', 'taste-game-add', 'guide-iframe',
   ]);
 
   // rows(정규화된 page_sessions)에서 v2 시작 시각(entered_at, ISO 문자열)을 계산.

@@ -115,12 +115,14 @@
       });
     });
 
+    var guideOverlayViewToken = null;
     function openGuideOverlay(href, label) {
       var overlay = document.getElementById('guideIframeOverlay');
       var iframe = document.getElementById('guideIframe');
       var title = document.getElementById('guideIframeTitle');
       if (!overlay) return;
       overlay.style.display = 'flex';
+      if (!guideOverlayViewToken) guideOverlayViewToken = window.pushActiveView?.(window.COTTAGE_ACTIVE_VIEWS?.['guide-iframe']?.key);
       if (iframe) {
         var hashIdx = href.indexOf('#');
         var embedHref = hashIdx !== -1
@@ -137,6 +139,8 @@
       var iframe = document.getElementById('guideIframe');
       if (!overlay) return;
       overlay.style.display = 'none';
+      window.popActiveView?.(guideOverlayViewToken);
+      guideOverlayViewToken = null;
       if (iframe) iframe.src = '';
       document.body.style.overflow = '';
     }

@@ -278,13 +278,17 @@ function _ensureGameSheetViewToken() {
 }
 
 function _openCoverModal(src) {
-  document.getElementById('coverModal')?.remove();
+  document.getElementById('coverModal')?._closeActiveView?.();
   const m = document.createElement('div');
   m.id = 'coverModal';
   m.style.cssText = 'position:fixed;inset:0;z-index:9650;background:rgba(0,0,0,0.8);display:flex;align-items:center;justify-content:center;';
   m.innerHTML = `<img src="${src}" style="max-width:90%;max-height:85vh;object-fit:contain;border-radius:12px;" onerror="this.onerror=null;this.src='${DEFAULT_GAME_IMAGE}';">
-    <button aria-label="표지 크게 보기 닫기" onclick="document.getElementById('coverModal')?.remove()" style="position:absolute;top:16px;right:16px;background:rgba(255,255,255,0.15);border:none;color:#fff;font-size:20px;width:36px;height:36px;border-radius:50%;cursor:pointer;line-height:1;">✕</button>`;
-  m.addEventListener('click', e => { if (e.target === m) m.remove(); });
+    <button aria-label="표지 크게 보기 닫기" class="cover-modal-close" style="position:absolute;top:16px;right:16px;background:rgba(255,255,255,0.15);border:none;color:#fff;font-size:20px;width:36px;height:36px;border-radius:50%;cursor:pointer;line-height:1;">✕</button>`;
+  const viewToken = window.pushActiveView?.(window.COTTAGE_ACTIVE_VIEWS?.['game-cover']?.key);
+  const close = () => { window.popActiveView?.(viewToken); m.remove(); };
+  m._closeActiveView = close;
+  m.querySelector('.cover-modal-close').addEventListener('click', close);
+  m.addEventListener('click', e => { if (e.target === m) close(); });
   document.body.appendChild(m);
 }
 
@@ -326,7 +330,7 @@ function _ruleHubParagraphsHtml(text) {
 function _openRuleHubModal(gameName, { sections: ruleSections, errorNote, photos, organizerNote } = {}, focusSection) {
   const hasRule = ruleSections && Object.keys(ruleSections).length > 0;
   if (!hasRule && !errorNote && !photos?.length && !organizerNote) return;
-  document.getElementById('ruleHubModal')?.remove();
+  document.getElementById('ruleHubModal')?._closeActiveView?.();
   const panels = [];
   if (hasRule) {
     const subHtml = _RULE_SECTION_ORDER
@@ -370,7 +374,9 @@ function _openRuleHubModal(gameName, { sections: ruleSections, errorNote, photos
     </div>
   </div>`;
   document.body.appendChild(overlay);
-  const close = () => overlay.remove();
+  const viewToken = window.pushActiveView?.(window.COTTAGE_ACTIVE_VIEWS?.['game-rule']?.key);
+  const close = () => { window.popActiveView?.(viewToken); overlay.remove(); };
+  overlay._closeActiveView = close;
   overlay.querySelector('.rule-hub-close').addEventListener('click', close);
   overlay.addEventListener('click', e => { if (e.target === overlay) close(); });
   if (photos?.length && window.openLightbox) {
@@ -1816,6 +1822,15 @@ async function onDeletePlayReview(btn) {
   await initSheetCommentsPreview(gameKey);
 }
 
+function _openTrackedSheetModal(modal, key) {
+  if (!modal._activeViewToken) modal._activeViewToken = window.pushActiveView?.(window.COTTAGE_ACTIVE_VIEWS?.[key]?.key);
+  modal.style.display = 'flex';
+}
+function _closeTrackedSheetModal(modal) {
+  window.popActiveView?.(modal?._activeViewToken);
+  if (modal) modal._activeViewToken = null;
+}
+
 function getOrCreateCommentModal() {
   let modal = document.getElementById('sheetCommentModal');
   if (modal) return modal;
@@ -1880,7 +1895,7 @@ function onOpenCommentInput(btn) {
       modal._opening = false;
       if (titleEl) titleEl.textContent = '게임평 추가';
       if (linkWrap) linkWrap.style.display = 'none';
-      modal.style.display = 'flex';
+      _openTrackedSheetModal(modal, 'game-comment');
       input?.focus();
       return;
     }
@@ -1889,7 +1904,7 @@ function onOpenCommentInput(btn) {
     // 기록과 무관한 '남기기' — 내 기록 연동/남 세션 참여 select UX
     if (titleEl) titleEl.textContent = '게임평 남기기';
     if (linkLabel) linkLabel.style.display = '';
-    modal.style.display = 'flex';
+    _openTrackedSheetModal(modal, 'game-comment');
     input?.focus();
 
     modal._myRecordCountAtOpen = 0;
@@ -1945,7 +1960,7 @@ function onEditComment(btn) {
   if (input) { input.value = btn.dataset.text; input.readOnly = false; }
   const linkWrap = document.getElementById('sheetCommentPlayLink');
   if (linkWrap) linkWrap.style.display = 'none';
-  modal.style.display = 'flex';
+  _openTrackedSheetModal(modal, 'game-comment');
   input?.focus();
 }
 
@@ -1997,7 +2012,7 @@ async function onLinkCommentToPlay(btn) {
     linkSelect.style.display = 'block';
   }
   if (linkWrap) linkWrap.style.display = 'block';
-  modal.style.display = 'flex';
+  _openTrackedSheetModal(modal, 'game-comment');
 }
 
 function onCloseCommentModal() {
@@ -2012,6 +2027,7 @@ function onCloseCommentModal() {
     if (input) input.readOnly = false;
     const linkLabel = document.querySelector('#sheetCommentPlayLink .sheet-comment-play-link-label');
     if (linkLabel) linkLabel.style.display = '';
+    _closeTrackedSheetModal(modal);
   }
 }
 
@@ -2113,13 +2129,13 @@ function onOpenPhotoInput(btn) {
         if (mine.length || others.length) linkWrap.style.display = 'block';
       }
     }
-    modal.style.display = 'flex';
+    _openTrackedSheetModal(modal, 'game-photo');
   });
 }
 
 function onClosePhotoModal() {
   const modal = document.getElementById('sheetPhotoModal');
-  if (modal) { modal._opening = false; modal.style.display = 'none'; }
+  if (modal) { modal._opening = false; modal.style.display = 'none'; _closeTrackedSheetModal(modal); }
 }
 
 async function onSubmitPhotoModal() {
@@ -2762,13 +2778,14 @@ function onOpenPlayModal(gameKey) {
   modal._photoFiles = [];
   const photoGrid = document.getElementById('sheetPlayModalPhotoGrid');
   if (photoGrid) { window.revokePhotoGridBlobs?.(photoGrid); photoGrid.innerHTML = ''; }
-  modal.style.display = 'flex';
+  _openTrackedSheetModal(modal, 'game-play');
 }
 
 function onClosePlayModal() {
   const modal = document.getElementById('sheetPlayModal');
   if (!modal) return;
   modal.style.display = 'none';
+  _closeTrackedSheetModal(modal);
   delete modal.dataset.editId;
   const title = modal.querySelector('.sheet-play-modal-title');
   const submit = document.getElementById('sheetPlayModalSubmit');
@@ -2849,7 +2866,7 @@ function onOpenEditPlayModal(gameKey, recordId, playerCount, playerNames, playTi
   const reviewInput = document.getElementById('sheetPlayModalReview');
   if (reviewInput) reviewInput.value = reviewText || '';
 
-  modal.style.display = 'flex';
+  _openTrackedSheetModal(modal, 'game-play');
 }
 
 async function onSubmitPlayModal() {

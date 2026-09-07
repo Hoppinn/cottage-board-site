@@ -285,6 +285,7 @@ window.escH = (s) => String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;')
 |------|--------|------|
 | `window.COTTAGE_PAGE_SLUG(pathname)` | — (함수) | **저장용 SSOT** (#14). `page_sessions.page`에 넣을 슬러그를 만든다. `script-nav.js` 세션 트래커와 `supabase-client.js` `_startAnonHeartbeat`이 **둘 다 이 함수**를 쓴다 |
 | `window.COTTAGE_PAGE_LABELS` | slug (예: `'about'`) | **표시용 SSOT.** requests-admin.html의 `page_views`·`page_sessions` 양쪽 화면이 전부 이 맵으로 이름을 붙인다 |
+| `window.COTTAGE_ACTIVE_VIEWS` | 활성 뷰 key | 장시간 모달·시트의 `{key,label,v2Only}` registry. lifecycle은 각 소유 파일이 `pushActiveView`/`popActiveView`로 유지하며, `label`은 `COTTAGE_PAGE_LABELS`에서 파생한다. `v2Only:true`는 반드시 `MemberAnalytics.V2_ONLY_PAGE_KEYS`에 있어야 한다 |
 | `window.COTTAGE_PAGE_LABELS_BY_PATH` | pathname | ⚠️ **앱 코드에 소비처가 없다** (2026-07-21, #28). 마지막 용도였던 `page_sessions.referrer` 저장이 `COTTAGE_SESSION_REF`로 바뀌면서 비었고, 지금 읽는 건 `scripts/audit-page-buckets.js` 하나뿐이다. **그래서 삭제하지 않았다** — 지우려면 그 스크립트를 먼저 옮길 것 |
 
 🚨 **표시 라벨을 DB에 저장하지 않는다** (#14, 2026-07-20). 예전엔 트래커가 `BY_PATH`의 한글 라벨을 `page_sessions.page`에 그대로 넣어서, **라벨을 개명할 때마다 같은 페이지가 새 버킷으로 쪼개졌다**(11,777행이 42종으로 흩어짐). 지금은 **저장=슬러그 / 표시=라벨**로 분리돼 있어 `COTTAGE_PAGE_LABELS` 값은 자유롭게 고쳐도 데이터가 안 갈린다.
@@ -370,7 +371,7 @@ window.escH = (s) => String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;')
 | `window.CottageGameView` | game-display-adapter.js | game-sheet.js, owned-games-page.js, index-page.js, script-nav.js |
 | `window.getAllGamesArray` | game-sheet.js (전역 함수선언, 무인자·`{key,...game}`) | script-nav.js, index-page.js, owned-games-page.js |
 | `window.SUPABASE_CONFIG` | supabase-config.js | supabase-client.js |
-| `window.COTTAGE_PAGE_SLUG` / `COTTAGE_PAGE_LABELS` / `COTTAGE_PAGE_LABELS_BY_PATH` | page-labels.js | script-nav.js, supabase-client.js(`_startAnonHeartbeat`), requests-admin.html (script-nav.js 로드 직전 필수) |
+| `window.COTTAGE_PAGE_SLUG` / `COTTAGE_PAGE_LABELS` / `COTTAGE_ACTIVE_VIEWS` / `COTTAGE_PAGE_LABELS_BY_PATH` | page-labels.js | script-nav.js, supabase-client.js(`_startAnonHeartbeat`), requests-admin.html (script-nav.js 로드 직전 필수) |
 | `window.renderDayDetailHTML` | day-detail.js | 일정 상세 블록 HTML 반환 `({ date, timeStart, timeEnd, wantGames, learnGames })`. 모달/인라인 공용. |
 | `window.openDayDetailModal` | day-detail.js | 레거시 — 직접 데이터 전달 방식으로 개인 일정 모달 열기 `(opts)`. |
 | `window.openDateScheduleModal` | day-detail.js | 개인 날짜 상세 `(userId, voteDate)`. `getProfileBoardData`의 평소 유형·복수 깊이·경험과 해당 날짜 `meeting_votes`/`meeting_vote_games`의 오늘 유형·깊이·성향·모집 문구·게임을 **평소/오늘 두 구획**으로 표시한다. 프로필 조회 실패는 평소 빈 상태로만 처리해 날짜 상세를 유지한다. 대표 게임(`is_priority`)·인원 조건(`player_condition`)은 기존처럼 본인만 편집하고 타인은 readOnly다. |
