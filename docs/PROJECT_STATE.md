@@ -7,7 +7,7 @@
 ## 0. 현재 상태
 
 - 현재 작업: 2026-09-07에 접수한 백로그를 우선순위화했다. 활성 WIP는 P0 세 건만 유지한다.
-- 상세 Plan: 없음
+- 상세 Plan: [보드 상호작용 회귀](plans/board-interaction-regressions-plan.md) · [모임 참여 데이터](plans/meeting-participation-data-plan.md) · [명칭 정합성 조사](plans/naming-alignment-audit-plan.md)
 - 현재 단계: 최근 참여의 모임 단위 개편은 데이터 관계가 불명확해 구현 보류다. `game_play_records`에는 모임 ID가 없고 `meeting_votes`는 참여 등록이므로 날짜만으로 결합하지 않는다.
 - 다음 작업: P0 세 건의 런타임/데이터 근거를 확정한 뒤 한 건씩 수정·검증·커밋한다.
 - 인수인계: 가장 어려웠던 게임은 기존 `profile_hardest_games` 정본을 유지하고 위저드 편집으로 이동한다. 최초 작성 쿠폰 partial unique 보장은 변경하지 않는다.
@@ -19,11 +19,11 @@
 1. **P0 사진 sticky 접기** — `.profile-section-more-btn`이 일반 목록의 sticky 복원 경로를 타지 않는다. 360px 런타임 좌표를 확보한 뒤 사진만 같은 복원 계약을 적용한다.
 2. **P0 모임 보드→홈 미리보기 focus** — `/?focus=meeting`의 double-rAF 스크롤이 실제 화면에서 중간에 멈춘다. scroll restoration·후속 렌더 뒤의 DOM 좌표를 측정해 한 번만 보정한다.
 3. **P0 플래너 과거 인원** — 본체가 오늘 기준 -7~+62일만 읽어 과거 주·달을 0명으로 보인다. 이동한 주/달 범위의 실제 `meeting_votes`를 재조회·캐시해 주간/달력 모두 같은 집계를 쓴다.
-4. **P1 시각·입력 회귀** — 프로필 수정 iframe footer, 기록 보드 아코디언 높이·하단 위치 보정, 센터모달·바텀시트의 배경 스크롤 차단(iPhone 포함). 반복 보고된 시각 항목은 런타임 측정 전 수정하지 않는다.
+4. **P1 시각·입력 회귀** — 상세 판단·검증은 [보드 상호작용 회귀 Plan](plans/board-interaction-regressions-plan.md)을 따른다.
 5. **P2 데이터 정합성** — 누적 체류시간 원인 감사, `덕지` 기록을 `덕 지` 회원 보드로 연결하는 안전한 닉네임 해소 규칙 조사.
 6. **P3 기능·콘텐츠** — 메인 모임 미리보기의 모임원 프로필 링크, 게임 위치 2건·보유게임 1건, 가입경로 보드라이프.
-7. **P4 조사 전용** — UI 신명칭과 코드 레거시 명칭 전수 조사·리팩토링 순서 제안(수정 금지).
-8. **보류/Plan 필요** — 최근 참여를 실제 모임 단위로 바꾸는 데이터 모델, AGENTS.md 재사용 원칙 문서 반영 승인.
+7. **P4 조사 전용** — [명칭 정합성 조사 Plan](plans/naming-alignment-audit-plan.md)에 따라 보고만 하고 수정하지 않는다.
+8. **보류/Plan 필요** — 최근 참여의 데이터 모델은 [모임 참여 데이터 Plan](plans/meeting-participation-data-plan.md)을 따른다. AGENTS.md 재사용 원칙 문서 반영은 별도 승인 완료 전까지 보류한다.
 
 ## 1. 사용자 확인 대기
 
