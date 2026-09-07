@@ -1789,7 +1789,8 @@ window.addEventListener('cottage-meeting-changed', () => { _meetingReload?.(); }
   const loader   = document.getElementById('memberProfilesLoader');
   if (!modal || !frame || !dim || !closeBtn || !openBtn) return;
 
-  const introSrc = './pages/club/club-intro.html?embed=1';
+  // localhost의 extensionless redirect가 query를 버려도 hash 표식은 남는다.
+  const introSrc = './pages/club/club-intro.html?embed=1#embed=1';
   let viewToken = null;
   let viewActive = false;
 

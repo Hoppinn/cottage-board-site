@@ -7675,9 +7675,6 @@ button.intro-card-news-identity{cursor:pointer;}
 button.home-section-more{background:none;border:none;cursor:pointer;padding:0;}
 .rp-header-actions{display:flex;align-items:center;gap:10px;}
 .rp-header-actions .home-section-more + .home-section-more::before{content:"·";margin-right:10px;color:var(--border);font-weight:400;}
-/* 모임 제목과 별개인 우측 액션 그룹. flex 정렬로 360px에서도 한 줄을 보존한다. */
-#meeting .rp-header-actions{margin-left:auto;flex:0 0 auto;gap:0;white-space:nowrap;}
-#meeting .rp-header-actions .home-section-more + .home-section-more::before{margin-right:14px;}
 
 /* ── 기록 남기기 센터모달 ──
    📌 크기·레이어는 공용 플래너 센터모달(.planner-modal-overlay / .planner-modal-box)에 맞춘다.
@@ -7695,6 +7692,9 @@ button.home-section-more{background:none;border:none;cursor:pointer;padding:0;}
 .record-iframe-frame.is-ready{opacity:1;}
 .member-profiles-body{position:relative;display:flex;flex:1 1 auto;min-height:0;}
 .member-profiles-body .record-iframe-frame{height:100%;min-height:0;}
+.member-profiles-modal .intro-wizard-head{gap:8px;padding:7px 10px 6px;}
+.member-profiles-modal .intro-wizard-head h2{font-size:15px;line-height:1.3;}
+.member-profiles-modal .intro-wizard-close{padding:3px;font-size:16px;}
 .board-wizard-modal{padding:0;}
 .board-wizard-frame{width:100%;height:100%;border:0;background:transparent;}
 .record-iframe-loader{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:#fff;z-index:1;}
