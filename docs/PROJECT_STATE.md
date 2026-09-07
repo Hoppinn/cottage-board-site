@@ -7,7 +7,7 @@
 ## 0. 현재 상태
 
 - 시간 단위 표시: `profiles.total_minutes`의 legacy 이름과 실제 seconds 단위를 코드·도메인 문서에 명시하고, 오너 전용 회원 분석의 60배 표시를 수정했다. 관리자와 회원 분석의 `page_sessions` 경로 비교는 별도 보류 후보다.
-- 현재 작업: 약칭 출처 분류 audit 완료. 다음 작업은 P3 기능·콘텐츠 후보 중 하나를 독립 범위로 착수한다.
+- 현재 작업: 없음. 약칭 출처 분류 audit은 완료·검증·커밋됐다. 아래 NEXT/BACKLOG/DEFERRED 항목은 승인 없이 착수하지 않는다.
 - 상세 Plan: [보드 상호작용 회귀](plans/board-interaction-regressions-plan.md) · [모임 참여 데이터](plans/meeting-participation-data-plan.md) · [닉네임 해소 보정](plans/nickname-resolution-correction-plan.md)
 - 현재 단계: 최근 참여의 모임 단위 개편은 데이터 관계가 불명확해 구현 보류다. `game_play_records`에는 모임 ID가 없고 `meeting_votes`는 참여 등록이므로 날짜만으로 결합하지 않는다.
 - P2 완료: `player_names` 후보는 공백 사이 `%` 패턴으로 넓히고, 최종적으로 쉼표 토큰의 `normalizeNick` 정확 일치만 사용한다. 활동 통계·태그 알림·게임 도감·참여/함께한 날 업적과 참여자 링크에 같은 규칙을 적용했고, 충돌 키는 자동 연결하지 않는다. 원문 기록과 작성자 `user_id` 권한은 보존했으며 모임 참석을 추론하지 않았다. 읽기 전용 감사는 프로필 46개·기록 122개·충돌 0쌍, `덕 지` 0→20건/3→9일 및 `play_5·10·20` 신규 임계값 후보, `원철` 부분문자열 오탐 2→0건을 확인했다. 이번 세션에서 업적 지급 write는 실행하지 않았다.
@@ -15,14 +15,17 @@
 - 승인 대기: `AGENTS.md` embed·iframe 재사용 원칙 추가(Yellow), 가입경로 `보드라이프` 추가(DB 값/입력 경로 확인 후 Plan 여부 판단).
 - 현재 버그: 게임도감 전체보기 전환 시 시작줄이 살짝 위로 올라오는 증상은 상세 조건 설명 대기.
 
-### 다음 우선순위
+## 1. NOW
+
+- 현재 승인되어 진행 중인 작업 없음.
+
+## 2. NEXT (자동 착수 금지)
 
 1. **현재 버그 조건 확정** — 게임도감 전체보기 전환 시 시작줄이 살짝 위로 올라오는 증상의 재현 조건을 사용자 화면 기준으로 확정한다.
 2. **P3 기능·콘텐츠** — 메인 모임 미리보기의 모임원 프로필 링크를 먼저 확인하고, 이후 게임 위치 2건·보유게임 1건을 별도 범위로 처리한다.
 3. **가입경로 보드라이프** — DB 값과 입력 경로 확인 후 필요한 경우 Plan을 작성한다.
-4. **보류/Plan 필요** — 최근 참여의 데이터 모델은 [모임 참여 데이터 Plan](plans/meeting-participation-data-plan.md)을 따른다. `AGENTS.md` 재사용 원칙 문서 반영은 별도 승인 완료 전까지 보류한다.
 
-## 1. 사용자 확인 대기
+## 3. BACKLOG (자동 착수 금지)
 
 | 항목 | 남은 확인 | 재개·판정 경로 |
 |---|---|---|
@@ -34,7 +37,7 @@
 | 업적 2건 | 게임평 진행도, 기존 기록에 사진·참여자 수정으로 임계값을 넘겼을 때 업적이 즉시 반영되는지 | 커밋 `22488d7`, `7a1b68d`. 브라우저 실확인만 남음. |
 | 추천게임 코스·QR | 실제 폰에서 sticky 바가 헤더 아래에 붙는지, 배포 뒤 QR이 코스 탭까지 이동하는지 | 배포된 URL에서만 확인 가능. |
 
-## 2. 보류·사용자 판단 대기
+## 4. BACKLOG — 사용자 판단 대기 (자동 착수 금지)
 
 | 항목 | 현재 판단 | 재개 조건 |
 |---|---|---|
@@ -47,16 +50,18 @@
 | 한줄소개 GPT 연동 | 이전 기획의 입력·출력 기준이 복원되지 않음 | 사용자가 원하는 경험을 다시 설명 |
 | 취향보드 Phase 2 | 성향 5축의 정책·표현이 미확정 | Phase 1 사용자 검토 후 재개 |
 
-## 3. 조건부 작업과 위험 계약
+## 5. DEFERRED / TRIGGER (자동 착수 금지)
 
 - **보드 sticky 헤더 우선순위** — P2 데이터 정합성 다음의 UI 작업 후보. ① 수집 보드의 업적·캐릭터·칭호·도감, ② 프로필 보드의 좋아하는 게임·해보고 싶은 게임 순으로 적용한다. 각 보드 scroll container 안에서 현재 섹션 하나만 고정하고, 기존 시각 스타일은 유지한다. ③ 모임 보드 `최근 참여`는 모임 단위 데이터 모델이 확정된 뒤에만 적용한다. 여러 보드를 건드리는 Yellow UI 작업이므로 착수 시 별도 Plan과 변경안 승인을 받는다.
+- **Legacy naming migration** — 다음 점검: 현재 큰 기능 묶음 완료 후. 구조 안정화·의존관계 파악·회귀 검증·호환 전략·반복 혼선 여부를 함께 판단하며, 트리거는 검토 시작 시점일 뿐 실행 확정이 아니다. 상세 기준은 [명칭 정합성 조사 Plan](plans/naming-alignment-audit-plan.md)을 따른다.
+- **최근 참여 데이터 모델** — [모임 참여 데이터 Plan](plans/meeting-participation-data-plan.md)에 따라 데이터 관계와 범위를 먼저 확정한 뒤 재검토한다.
 - BGG 영구 미연결 게임의 수동 기본정보는 `build:master` 실행 시 초기화될 수 있다. 해당 작업 전 [PROJECT_STRUCTURE.md](PROJECT_STRUCTURE.md) 최상단의 보존 한계를 확인한다. 근본 해소는 별도 파이프라인 설계다.
 - `game_play_records`가 약 1,500행에 가까워지면 `getUserFirstRecordCount`의 RPC 전환을 재검토한다. 정확성 위험과 근거는 [REFACTOR_CHECKPOINT.md](REFACTOR_CHECKPOINT.md)에 있다.
 - 닉네임 보호·체류시간 원자 증가·다기기 프로필/사진 복원은 열린 작업이 아니라 현재 계약이다. [PROJECT_STRUCTURE.md](PROJECT_STRUCTURE.md) §3~5, [db-schema.md](db-schema.md) `increment_profile_counters`, [ls-schema.md](ls-schema.md)를 정본으로 사용한다.
 - `openProfilePanel`의 서브시트 라우팅·backTo·비동기 렌더 주의는 [js-api.md](js-api.md)를 정본으로 사용한다. 이 문서에 사본을 만들지 않는다.
 - `task-continue` 훅은 다음 긴 미완 작업에서만 검증한다: 작업 파일을 여는지, 질문 뒤 이어가는지, 진전 없이 반복하지 않는지. 실패하면 더 고치지 않고 훅을 폐기한다.
 
-## 4. 작업별 정본
+## 6. 작업별 정본
 
 - 페이지 구조·렌더 경로: [PROJECT_STRUCTURE.md](PROJECT_STRUCTURE.md)
 - DB·RLS·RPC: [db-schema.md](db-schema.md)
