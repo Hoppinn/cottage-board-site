@@ -307,13 +307,17 @@
   </div>
 
   <!-- 모임원 프로필 센터모달 -->
-  <div class="record-iframe-modal" id="memberProfilesModal" aria-hidden="true">
+  <div class="record-iframe-modal member-profiles-modal" id="memberProfilesModal" aria-hidden="true">
     <div class="record-iframe-dim" id="memberProfilesDim"></div>
     <div class="record-iframe-panel">
-      <button aria-label="모임원 프로필 닫기" class="record-iframe-close" id="memberProfilesClose" type="button">✕</button>
-      <div class="record-iframe-loader" id="memberProfilesLoader" aria-hidden="true"></div>
-      <iframe class="record-iframe-frame" id="memberProfilesFrame" src="" title="모임원 프로필"></iframe>
-      <a class="sheet-fullscreen-link" href="./pages/club/club-intro.html">↗ 페이지로 이동</a>
+      <header class="intro-wizard-head">
+        <h2>모임원 프로필</h2>
+        <button aria-label="모임원 프로필 닫기" class="intro-wizard-close" id="memberProfilesClose" type="button">✕</button>
+      </header>
+      <div class="member-profiles-body">
+        <div class="record-iframe-loader" id="memberProfilesLoader" aria-hidden="true"></div>
+        <iframe class="record-iframe-frame" id="memberProfilesFrame" src="" title="모임원 프로필"></iframe>
+      </div>
     </div>
   </div>
 

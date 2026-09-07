@@ -349,7 +349,7 @@ embed 모드에서는 `header.js`가 `document` 클릭을 가로채 내부 `.htm
 사용 페이지:
 - `game-location.html` — `openShelfSheet(url)`이 `?embed=1&highlight=GAMEID` URL로 호출
 - `guide.html` — `openGuideOverlay(href)` 내부에서 `?embed=1` 자동 추가
-- `index.html` 홈 코티지 모임의 `모임원 프로필`은 `club-intro.html?embed=1`을 기존 `record-iframe-modal` 규격으로 연다. iframe 자체는 frame guard로 추적하지 않고, 부모가 기존 `club-intro` active-view 키를 열기 1회 push·모든 닫기 경로에서 같은 token 1회 pop해 체류 구간만 분할한다.
+- `index.html` 홈 코티지 모임의 `모임원 프로필`은 `club-intro.html?embed=1`을 기존 `record-iframe-modal` 규격으로 연다. 부모 모달의 고정 `모임원 프로필` header 아래 iframe 본문만 스크롤하며, `embed=1`은 iframe 안의 독립 페이지 chrome(공통 header·breadcrumb·mini hero·footer)만 숨긴다. iframe 자체는 frame guard로 추적하지 않고, 부모가 기존 `club-intro` active-view 키를 열기 1회 push·모든 닫기 경로에서 같은 token 1회 pop해 체류 구간만 분할한다.
 
 ⚠️ **헤더 높이 기반 CSS는 `body.embed-mode{--header-total-h:0px}` 하나로 다 안 잡힌다** — 이 재정의는 **body의 자손**에게만 적용되고, `html{scroll-padding-top:var(--header-total-h)}`(style.css 81번째 줄)처럼 **`<html>` 자신에** 선언된 속성은 `<body>`가 그 조상이라 변수 재정의가 거꾸로 안 흐른다(2026-08-10, `game-location.html`의 `shelf=` 자동 스크롤이 헤더 없는 embed 화면에서도 매번 52px씩 못 미치던 사건 — `html:has(body.embed-mode){scroll-padding-top:0}`로 별도 수정, 현재 사용하는 작업 규칙 파일의 반복 패치 정지 규칙에도 기록). **새 embed 대응 CSS를 `<html>` 셀렉터에 선언하려면 `body.embed-mode` 변수 재정의로는 안 되고 `html:has(body.embed-mode)`(또는 JS로 `<html>`에도 클래스 부여)가 필요하다.**
 

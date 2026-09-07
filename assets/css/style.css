@@ -7675,6 +7675,9 @@ button.intro-card-news-identity{cursor:pointer;}
 button.home-section-more{background:none;border:none;cursor:pointer;padding:0;}
 .rp-header-actions{display:flex;align-items:center;gap:10px;}
 .rp-header-actions .home-section-more + .home-section-more::before{content:"·";margin-right:10px;color:var(--border);font-weight:400;}
+/* 모임 제목과 별개인 우측 액션 그룹. flex 정렬로 360px에서도 한 줄을 보존한다. */
+#meeting .rp-header-actions{margin-left:auto;flex:0 0 auto;gap:0;white-space:nowrap;}
+#meeting .rp-header-actions .home-section-more + .home-section-more::before{margin-right:14px;}
 
 /* ── 기록 남기기 센터모달 ──
    📌 크기·레이어는 공용 플래너 센터모달(.planner-modal-overlay / .planner-modal-box)에 맞춘다.
@@ -7690,6 +7693,8 @@ button.home-section-more{background:none;border:none;cursor:pointer;padding:0;}
 .record-iframe-close{position:absolute;top:10px;right:12px;background:none;border:none;font-size:18px;line-height:1;cursor:pointer;color:var(--ink);padding:4px;z-index:2;}
 .record-iframe-frame{width:100%;flex:1;border:none;opacity:0;transition:opacity 0.2s;}
 .record-iframe-frame.is-ready{opacity:1;}
+.member-profiles-body{position:relative;display:flex;flex:1 1 auto;min-height:0;}
+.member-profiles-body .record-iframe-frame{height:100%;min-height:0;}
 .board-wizard-modal{padding:0;}
 .board-wizard-frame{width:100%;height:100%;border:0;background:transparent;}
 .record-iframe-loader{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:#fff;z-index:1;}
@@ -7729,6 +7734,10 @@ body.embed-mode footer,
 body.is-embedded .breadcrumb,
 body.is-embedded .page-mini-hero,
 body.is-embedded footer { display:none!important; }
+/* 홈 모임원 프로필 iframe은 부모 모달 header가 제목을 맡는다. */
+body.embed-mode .club-breadcrumb{display:none!important;}
+/* 독립 페이지 footer와 달리, 프로필 작성 위저드의 footer는 다음/저장 제어다. */
+body.embed-mode .intro-wizard-nav:not([hidden]){display:grid!important;visibility:visible!important;}
 body.embed-mode .inner-page,
 body.is-embedded .inner-page { padding:0 18px 36px; }
 body.embed-mode #reviewRoot,
