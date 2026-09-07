@@ -58,6 +58,7 @@
 
 ## 4. 조건부 작업과 위험 계약
 
+- **보드 sticky 헤더 우선순위** — P2 데이터 정합성 다음의 UI 작업 후보. ① 수집 보드의 업적·캐릭터·칭호·도감, ② 프로필 보드의 좋아하는 게임·해보고 싶은 게임 순으로 적용한다. 각 보드 scroll container 안에서 현재 섹션 하나만 고정하고, 기존 시각 스타일은 유지한다. ③ 모임 보드 `최근 참여`는 모임 단위 데이터 모델이 확정된 뒤에만 적용한다. 여러 보드를 건드리는 Yellow UI 작업이므로 착수 시 별도 Plan과 변경안 승인을 받는다.
 - **Legacy naming migration** — 다음 점검: 현재 큰 기능 묶음 완료 후. 구조 안정화·의존관계 파악·회귀 검증·호환 전략·반복 혼선 여부를 함께 판단하며, 트리거는 검토 시작 시점일 뿐 실행 확정이 아니다. 상세 기준은 [명칭 정합성 조사 Plan](plans/naming-alignment-audit-plan.md)을 따른다.
 - BGG 영구 미연결 게임의 수동 기본정보는 `build:master` 실행 시 초기화될 수 있다. 해당 작업 전 [PROJECT_STRUCTURE.md](PROJECT_STRUCTURE.md) 최상단의 보존 한계를 확인한다. 근본 해소는 별도 파이프라인 설계다.
 - `game_play_records`가 약 1,500행에 가까워지면 `getUserFirstRecordCount`의 RPC 전환을 재검토한다. 정확성 위험과 근거는 [REFACTOR_CHECKPOINT.md](REFACTOR_CHECKPOINT.md)에 있다.
