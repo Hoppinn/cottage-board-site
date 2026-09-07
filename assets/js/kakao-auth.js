@@ -315,7 +315,7 @@ function _trackPvOnce(pageName) {
   window.CottageDB?.trackPageView(pageName);
 }
 
-function _afterGrowthRender(subBody, expandChar = false, expandTitle = false, readOnly = false) {
+function _afterCollectionBoardRender(subBody, expandChar = false, expandTitle = false, readOnly = false) {
   const _charBody = subBody.querySelector('.profile-char-body');
   // 읽기전용: 대표 캐릭터 선택/변경 바인딩 스킵(남의 대표를 바꾸면 안 됨). 펼침 토글은 유지.
   if (_charBody && !readOnly) {
@@ -486,7 +486,7 @@ function _afterGrowthRender(subBody, expandChar = false, expandTitle = false, re
       btn.textContent = isHidden ? '전체보기 ▼' : '접기 ▲';
     });
   });
-  // 🚨 `_growthInnerHtml`은 패널 오픈 시 **1회** 만들어진 문자열이라, 수집 보드에
+  // 🚨 `_collectionBoardInnerHtml`은 패널 오픈 시 **1회** 만들어진 문자열이라, 수집 보드에
   //    다시 들어오면 그때의 대표 캐릭터·칭호가 되살아난다(= 방금 바꾼 게 되돌아간 것처럼 보임).
   //    렌더 직후 이번 세션에서 바꾼 값을 다시 입혀 맞춘다. 남의 보드(readOnly)엔 적용 금지.
   if (!readOnly) window.CottageAchievements?.reapplyRepOverrides?.();
@@ -821,7 +821,7 @@ function _bindRecordSubsheet(subBody, ctx) {
         }
 
 // ── 프로필 보드 서브시트 afterRender (레거시 내부 이름 taste 유지) ──
-function _bindTasteSubsheet(subBody, ctx) {
+function _bindProfileBoardSubsheet(subBody, ctx) {
   const { user, readOnly, _emitLikesChanged, allBioSuggestions, _BIO_PREDEFINED, _ruleSet, onBioSaved, onProfileDataSaved, resolveGameName } = ctx;
           subBody.querySelectorAll('[data-board-frame-src]').forEach(button => {
             button.addEventListener('click', e => {
@@ -1641,7 +1641,7 @@ function _bindMeetingSubsheet(subBody, ctx) {
 // ctx: _markAllNotifSeen/_markOneNotifSeen/_markVoucherSeen/_markNoticeSeen(user·body 캡처), _getGameKeyByName/_getGameKeyById
 function _bindNotifSubsheet(subBody, ctx) {
   const { _markAllNotifSeen, _markOneNotifSeen, _markVoucherSeen, _markNoticeSeen, _getGameKeyByName, _getGameKeyById, _notifTitle,
-    _openSubSheet, _growthInnerHtml, _afterGrowthRender, readOnly, _openNotifSubsheet } = ctx;
+    _openSubSheet, _collectionBoardInnerHtml, _afterCollectionBoardRender, readOnly, _openNotifSubsheet } = ctx;
           subBody.querySelector('.profile-notif-confirm-all')?.addEventListener('click', () => _markAllNotifSeen(subBody));
           subBody.querySelector('.profile-voucher-confirm')?.addEventListener('click', () => _markVoucherSeen(subBody));
           subBody.querySelector('.profile-voucher-link')?.addEventListener('click', () => _markVoucherSeen(subBody));
@@ -1697,14 +1697,14 @@ if (introMemberLink) {
                 openProfilePanel(null, { userId: String(memberLink.dataset.memberUid), readOnly: true, backTo: { type: 'panel', autoSubsheet: 'notif', label: _notifTitle } });
                 return;
               }
-              if (li.dataset.notifAchIds && _openSubSheet && _growthInnerHtml) {
+              if (li.dataset.notifAchIds && _openSubSheet && _collectionBoardInnerHtml) {
                 // 업적 알림 클릭 → 내 수집 보드로 이동, 업적 목록을 펼치고 해당 항목으로
                 // 스크롤+강조(2026-08-02, 사용자 요청). 업적은 항상 "내" 것이라 readOnly만
                 // 그대로 물려주면 되고(남의 알림을 보는 경로 자체가 없음), 캐릭터/칭호
                 // 펼침(expandChar/expandTitle)은 이 진입과 무관해 둘 다 false로 둔다.
                 const achIds = li.dataset.notifAchIds.split(',').filter(Boolean);
-                _openSubSheet('수집 보드', _growthInnerHtml, gsubBody => {
-                  _afterGrowthRender(gsubBody, false, false, readOnly);
+                _openSubSheet('수집 보드', _collectionBoardInnerHtml, gsubBody => {
+                  _afterCollectionBoardRender(gsubBody, false, false, readOnly);
                   const achToggleBtn = gsubBody.querySelector('.profile-ach-toggle-btn');
                   const achList = gsubBody.querySelector('.profile-ach-list');
                   if (achToggleBtn && achList?.classList.contains('is-hidden')) achToggleBtn.click();
@@ -2541,10 +2541,10 @@ const introVoucherCardHtml = _introVoucher
   const _achCount    = _achResult?.achCount ?? 0;
   const _achTotal    = _achResult?.achTotal ?? 96;
 
-  const _growthLine = `업적 ${_achCount}/${_achTotal} · 캐릭터 ${_charCount}/${_charTotal} · 칭호 ${_titleCount}/${_titleTotal} · 도감 ${_codexPlayed}/${_codexTotal}`;
-  const _growthPct = Math.round((_charCount + _titleCount + _achCount + _codexPlayed) / (_charTotal + _titleTotal + _achTotal + _codexTotal) * 100);
+  const _collectionSummaryLine = `업적 ${_achCount}/${_achTotal} · 캐릭터 ${_charCount}/${_charTotal} · 칭호 ${_titleCount}/${_titleTotal} · 도감 ${_codexPlayed}/${_codexTotal}`;
+  const _collectionProgressPct = Math.round((_charCount + _titleCount + _achCount + _codexPlayed) / (_charTotal + _titleTotal + _achTotal + _codexTotal) * 100);
   const _nextAch = userStats ? window.CottageAchievements?.findNextAchievement?.(userStats) : null;
-  const _growthBadge = `<div class="profile-growth-badge">🌱 성장도 ${_growthPct}%${_nextAch ? ` · ${_nextAch.emoji}까지 ${escH(_nextAch.label)} ${_nextAch.gap}${_nextAch.unit} 남음` : ''}</div>`;
+  const _collectionProgressBadge = `<div class="profile-growth-badge">🌱 성장도 ${_collectionProgressPct}%${_nextAch ? ` · ${_nextAch.emoji}까지 ${escH(_nextAch.label)} ${_nextAch.gap}${_nextAch.unit} 남음` : ''}</div>`;
 
   const _actParts = [
     `교환권 ${voucherBalance}장`,
@@ -2596,7 +2596,7 @@ const introVoucherCardHtml = _introVoucher
 
   // ── 서브시트 콘텐츠 변수 ──────────────────────────────────────
   // 성장 보드: 업적 → 캐릭터 → 칭호 → 게임 도감 순
-  const _growthInnerHtml = `${achHtml}${charHtml}${titleHtml}${codexHtml}`;
+  const _collectionBoardInnerHtml = `${achHtml}${charHtml}${titleHtml}${codexHtml}`;
   // 음료교환권: voucherHtml 단독
   const _voucherInnerHtml = voucherHtml;
 
@@ -2694,14 +2694,14 @@ const introVoucherCardHtml = _introVoucher
   };
 
   // 내 프로필 보드 정본: 최신 데이터 전체를 3단 게임 취향까지 읽기 전용으로 보여준다.
-  function _buildTasteInnerHtml(d) {
+  function _buildProfileBoardInnerHtml(d) {
     const _ruleSet = _makeRuleSet(d);
     const likedGames = d.likedGames || [];
     const curiousGames = d.curiousGames || [];
     const _gameRangeNames = values => (values || []).includes('any')
       ? _INTRO_GAME_TYPE_LABELS.any
       : _introLabels(values, _INTRO_GAME_TYPE_LABELS);
-    const _tasteTier = (label, value, range = '') => `
+    const _profileTier = (label, value, range = '') => `
       <div class="profile-taste-tier">
         <span class="profile-taste-tier-label">${label}</span>
         <span class="profile-taste-tier-value${value ? '' : ' is-empty'}">${value ? escH(value) : '미입력'}${range ? `<small>${escH(range)}</small>` : ''}</span>
@@ -2749,15 +2749,15 @@ const introVoucherCardHtml = _introVoucher
       <div class="profile-main-title">게임 취향</div>
       <div class="profile-taste-group">
         <div class="profile-taste-subtitle">게임 유형</div>
-        ${_tasteTier('주 취향', _introLabels(d.preferredGameTypes, _INTRO_GAME_TYPE_LABELS))}
-        ${_tasteTier('즐기는 범위', _gameRangeNames(d.gameTypeRange))}
-        ${_tasteTier('꺼림 유형', avoidTypes.includes('none') ? '없음' : _introLabels(avoidTypes, {}))}
+        ${_profileTier('주 취향', _introLabels(d.preferredGameTypes, _INTRO_GAME_TYPE_LABELS))}
+        ${_profileTier('즐기는 범위', _gameRangeNames(d.gameTypeRange))}
+        ${_profileTier('꺼림 유형', avoidTypes.includes('none') ? '없음' : _introLabels(avoidTypes, {}))}
       </div>
       <div class="profile-taste-group">
         <div class="profile-taste-subtitle">게임 난이도</div>
-        ${_tasteTier('주 난이도', _formatPrimaryDepthNames(d.preferredGameDepths), _formatDepthRanges(d.preferredGameDepths))}
-        ${_tasteTier('즐기는 범위', _formatPrimaryDepthNames(d.gameDepthRange), _formatDepthRanges(d.gameDepthRange))}
-        ${_tasteTier('꺼림 난이도', avoidDepths.length ? _depthNames(avoidDepths) : '없음', _formatDepthRanges(avoidDepths))}
+        ${_profileTier('주 난이도', _formatPrimaryDepthNames(d.preferredGameDepths), _formatDepthRanges(d.preferredGameDepths))}
+        ${_profileTier('즐기는 범위', _formatPrimaryDepthNames(d.gameDepthRange), _formatDepthRanges(d.gameDepthRange))}
+        ${_profileTier('꺼림 난이도', avoidDepths.length ? _depthNames(avoidDepths) : '없음', _formatDepthRanges(avoidDepths))}
       </div>
       ${d.clocktowerPreference ? `<div class="profile-taste-clocktower">${_profileInfoRowHtml('시계탑 선호', _INTRO_CLOCKTOWER_LABELS[d.clocktowerPreference] || d.clocktowerPreference)}</div>` : ''}
       </div>
@@ -2962,9 +2962,9 @@ const introVoucherCardHtml = _introVoucher
       <button class="profile-growth-link" type="button">
         <span class="profile-growth-card-heading"><span class="profile-card-icon">🏆</span><span class="profile-card-label">수집 보드 <span class="profile-card-label-chevron" aria-hidden="true">›</span></span></span>
         <span class="profile-growth-summary-row">
-          <span class="profile-growth-summary-text">${escH(_growthLine)}</span>
+          <span class="profile-growth-summary-text">${escH(_collectionSummaryLine)}</span>
         </span>
-        ${_growthBadge}
+        ${_collectionProgressBadge}
       </button>
     </div>
     <div class="profile-card-grid">
@@ -3226,7 +3226,7 @@ const introVoucherCardHtml = _introVoucher
     // onLeave 스냅샷: 개별 읽음은 DOM만 바꾸므로, 뒤로가기/백드롭으로 나갔다 다시 들어와도
     // 유지되려면 캐시 문자열을 현재 DOM으로 갱신해야 한다(기록보드와 같은 방식).
     // ✕닫기는 패널째 제거 → 다음 오픈 시 DB에서 새로 읽으므로 스냅샷 불필요.
-    _openSubSheet(_notifTitle, _notifInnerHtml, subBody => _bindNotifSubsheet(subBody, { _markAllNotifSeen, _markOneNotifSeen, _markVoucherSeen, _markNoticeSeen, _getGameKeyByName, _getGameKeyById, _notifTitle, _openSubSheet, _growthInnerHtml, _afterGrowthRender, readOnly, _openNotifSubsheet }), '', bodyEl => { _notifInnerHtml = bodyEl.innerHTML; });
+    _openSubSheet(_notifTitle, _notifInnerHtml, subBody => _bindNotifSubsheet(subBody, { _markAllNotifSeen, _markOneNotifSeen, _markVoucherSeen, _markNoticeSeen, _getGameKeyByName, _getGameKeyById, _notifTitle, _openSubSheet, _collectionBoardInnerHtml, _afterCollectionBoardRender, readOnly, _openNotifSubsheet }), '', bodyEl => { _notifInnerHtml = bodyEl.innerHTML; });
   }
 
   // ── 카드 클릭 → 서브시트 ─────────────────────────────────────
@@ -3239,7 +3239,7 @@ const introVoucherCardHtml = _introVoucher
 
       } else if (type === 'growth') {
         _trackPvOnce('my-board-growth');
-        _openSubSheet('수집 보드', _growthInnerHtml, subBody => _afterGrowthRender(subBody, false, false, readOnly));
+        _openSubSheet('수집 보드', _collectionBoardInnerHtml, subBody => _afterCollectionBoardRender(subBody, false, false, readOnly));
 
       } else if (type === 'voucher') {
         _trackPvOnce('my-board-voucher');
@@ -3252,8 +3252,8 @@ const introVoucherCardHtml = _introVoucher
           const d = await _refreshBoardData();
           if (!subBody.isConnected) return; // 재조회를 기다리는 사이 다른 서브시트로 떠남
           _syncTasteCard(); // 다른 기기·탭에서 바뀐 값도 카드에 반영(재조회한 값이 곧 진실)
-          subBody.innerHTML = _buildTasteInnerHtml(d);
-          _bindTasteSubsheet(subBody, {
+          subBody.innerHTML = _buildProfileBoardInnerHtml(d);
+          _bindProfileBoardSubsheet(subBody, {
             user, readOnly, panel, _emitLikesChanged, allBioSuggestions, _BIO_PREDEFINED, _ruleSet: _makeRuleSet(d),
             onBioSaved: (newBio) => { _boardData.bio = newBio; _syncTasteCard(); },
             hardestGames: d.hardestGames || [],
@@ -3306,11 +3306,11 @@ const introVoucherCardHtml = _introVoucher
   });
 
   // ── 프로필 영역 버튼 바인딩 ─────────────────────────────────
-  body.querySelector('.profile-panel-avatar-wrap')?.addEventListener('click', () => { _trackPvOnce('my-board-growth'); _openSubSheet('수집 보드', _growthInnerHtml, subBody => _afterGrowthRender(subBody, true, false, readOnly)); });
-  body.querySelector('.profile-panel-rep-name')?.addEventListener('click', () => { _trackPvOnce('my-board-growth'); _openSubSheet('수집 보드', _growthInnerHtml, subBody => _afterGrowthRender(subBody, true, false, readOnly)); });
+  body.querySelector('.profile-panel-avatar-wrap')?.addEventListener('click', () => { _trackPvOnce('my-board-growth'); _openSubSheet('수집 보드', _collectionBoardInnerHtml, subBody => _afterCollectionBoardRender(subBody, true, false, readOnly)); });
+  body.querySelector('.profile-panel-rep-name')?.addEventListener('click', () => { _trackPvOnce('my-board-growth'); _openSubSheet('수집 보드', _collectionBoardInnerHtml, subBody => _afterCollectionBoardRender(subBody, true, false, readOnly)); });
   if (!readOnly) body.querySelector('.profile-panel-nick')?.addEventListener('click', () => promptNicknameChange());
-  body.querySelector('.profile-panel-title-name')?.addEventListener('click', () => { _trackPvOnce('my-board-growth'); _openSubSheet('수집 보드', _growthInnerHtml, subBody => _afterGrowthRender(subBody, false, true, readOnly)); });
-  body.querySelector('.profile-growth-link')?.addEventListener('click', () => { _trackPvOnce('my-board-growth'); _openSubSheet('수집 보드', _growthInnerHtml, subBody => _afterGrowthRender(subBody, false, false, readOnly)); });
+  body.querySelector('.profile-panel-title-name')?.addEventListener('click', () => { _trackPvOnce('my-board-growth'); _openSubSheet('수집 보드', _collectionBoardInnerHtml, subBody => _afterCollectionBoardRender(subBody, false, true, readOnly)); });
+  body.querySelector('.profile-growth-link')?.addEventListener('click', () => { _trackPvOnce('my-board-growth'); _openSubSheet('수집 보드', _collectionBoardInnerHtml, subBody => _afterCollectionBoardRender(subBody, false, false, readOnly)); });
 
   // ── 취향 카드 요약 동기화 (좋아요/궁금해요가 어디서 바뀌든 한 곳에서 받는다) ──
   // 게임시트·취향보드·모임보드가 모두 'cottage-likes-changed'를 쏘므로, 발생 지점마다

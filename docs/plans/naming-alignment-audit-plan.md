@@ -34,3 +34,11 @@ DB 컬럼, RPC, `event_type`, localStorage 키, URL, 외부 메시지/API, 누�
 ## 검증
 
 조사 결과에 각 명칭의 정의·간접 호출·이벤트/HTML attribute·문서/주석 소비처를 구분해 제시한다. 실행 승인 전에는 rename하지 않는다.
+
+## Legacy naming migration 점검
+
+`taste`·`growth` 같은 legacy 명칭의 완전 제거는 기능 개발 중에 끼워 넣지 않는다. 큰 기능 묶음 완료, 안정화·버그 수정 중심 단계, 배포 전 technical debt 정리, 또는 같은 명칭으로 인한 오해·잘못된 수정·설명 비용이 두 번 이상 반복될 때 검토를 시작한다.
+
+트리거는 검토 시작 시점이며 실행 조건은 별개다. 구조 안정성, 호출처 파악, 회귀 검증, UI 작업과의 비중첩, DB/URL/저장/분석 호환 전략, 기존 데이터·링크 보존, 반복 유지보수 비용을 함께 판단한다. 충분하지 않으면 보류한다.
+
+실행한다면 JS뿐 아니라 CSS·HTML attribute·URL/file/iframe 경로·DB·analytics·storage·공개 API·기존 링크·데이터 migration/fallback·문서·테스트를 별도 Plan에서 검토하고, 필요하면 old→new alias를 기간 한정으로 유지한다.
