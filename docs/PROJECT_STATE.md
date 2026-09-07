@@ -9,7 +9,7 @@
 - 현재 작업: P1 시각 회귀(사진 sticky, 홈 미리보기 focus, 기록 아코디언, 모달·시트 스크롤 경계) 확인 완료. 다음은 P2 데이터 정합성 조사다.
 - 상세 Plan: [보드 상호작용 회귀](plans/board-interaction-regressions-plan.md) · [모임 참여 데이터](plans/meeting-participation-data-plan.md) · [명칭 정합성 조사](plans/naming-alignment-audit-plan.md)
 - 현재 단계: 최근 참여의 모임 단위 개편은 데이터 관계가 불명확해 구현 보류다. `game_play_records`에는 모임 ID가 없고 `meeting_votes`는 참여 등록이므로 날짜만으로 결합하지 않는다.
-- 다음 작업: 누적 체류시간 원인 감사와 `덕지` 기록의 안전한 회원 닉네임 해소 규칙을 조사한다.
+- 다음 작업: `덕지` 기록을 `덕 지` 회원 보드로 연결하는 안전한 닉네임 해소 규칙을 조사한다. 누적 체류시간 감사는 2026-09-07에 회원 카드의 당일 0 표시 1건을 재현·수정·운영 렌더로 확인해 닫았다(상세: `admin-analytics.md` ⑦).
 - 인수인계: 가장 어려웠던 게임은 기존 `profile_hardest_games` 정본을 유지하고 위저드 편집으로 이동한다. 최초 작성 쿠폰 partial unique 보장은 변경하지 않는다.
 - 승인 대기: `AGENTS.md` embed·iframe 재사용 원칙 추가(Yellow), 가입경로 `보드라이프` 추가(DB 값/입력 경로 확인 후 Plan 여부 판단).
 - 현재 버그: 게임도감 전체보기 전환 시 시작줄이 살짝 위로 올라오는 증상은 상세 조건 설명 대기.
@@ -17,7 +17,7 @@
 ### 다음 시작점
 
 1. **명칭 정합성 audit 완료** — 내부 지역 `openAdminBS`와 문서의 이전 함수명 참조를 정리했다. 현재 추가 rename 필요 없음; URL·DB·analytics·storage·routing·공개 API는 legacy 계약으로 유지한다.
-2. **P2 데이터 정합성** — 누적 체류시간 원인 감사, `덕지` 기록을 `덕 지` 회원 보드로 연결하는 안전한 닉네임 해소 규칙 조사.
+2. **P2 데이터 정합성** — `덕지` 기록을 `덕 지` 회원 보드로 연결하는 안전한 닉네임 해소 규칙 조사. 누적 체류시간 감사는 회원 카드의 당일 표시를 `rowsV2` 세션·heartbeat 중 큰 값으로 보완해 닫음(`admin-analytics.md` ⑦).
 3. **P3 기능·콘텐츠** — 메인 모임 미리보기의 모임원 프로필 링크, 게임 위치 2건·보유게임 1건, 가입경로 보드라이프.
 8. **보류/Plan 필요** — 최근 참여의 데이터 모델은 [모임 참여 데이터 Plan](plans/meeting-participation-data-plan.md)을 따른다. AGENTS.md 재사용 원칙 문서 반영은 별도 승인 완료 전까지 보류한다.
 

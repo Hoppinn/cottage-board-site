@@ -1523,11 +1523,11 @@
       // 0이 정상적으로 나오는 경로가 실제로 있다(= 이 칩은 고장 신호가 아니다):
       //   · today_seconds는 heartbeat(1분)·visibilitychange로만 오른다 → 1분 미만 방문은 0
       //   · 자정 넘김 시 today_date가 세션 시작값에 고정되는 알려진 건(§4 ④)
-      const _todayChip = (p, todayS) => {
-        const seenToday = p.last_seen_at && _toKstDate(p.last_seen_at) === todayKst;
+      const _todayChip = (p, todayS, pageTodayS) => {
+        const seenToday = (p.last_seen_at && _toKstDate(p.last_seen_at) === todayKst) || pageTodayS > 0;
         if (!seenToday && todayS === 0) return '';
         if (todayS > 0) {
-          return `<span style="color:var(--green);font-weight:600" title="profiles.today_seconds — 오늘 누적(heartbeat 포함). 1분 미만 방문은 0으로 남을 수 있어 실제의 하한입니다">오늘 ${fmtTime(todayS)}</span>`;
+          return `<span style="color:var(--green);font-weight:600" title="profiles.today_seconds(heartbeat)와 오늘 page_sessions(실측 초) 중 큰 값입니다. 두 값은 같은 체류의 하한이므로 합치지 않으며, 1분 미만 방문은 profiles에 0으로 남을 수 있습니다">오늘 ${fmtTime(todayS)}</span>`;
         }
         return `<span style="color:var(--muted);font-weight:600" title="오늘 방문 흔적(last_seen_at)은 있는데 today_seconds가 0입니다. 1분 미만 방문이거나 동기화가 안 실린 경우로, 「데이터 없음」이 아니라 「0으로 기록됨」입니다">오늘 0분</span>`;
       };
@@ -1540,7 +1540,12 @@
         const hid = i >= 3 ? 'display:none;' : '';
         if (u._type === 'member') {
           const p = u;
-          const todayS = p.today_date === todayKst ? (p.today_seconds || 0) : 0;
+          const profileTodayS = p.today_date === todayKst ? (p.today_seconds || 0) : 0;
+          const _todayPm = memberPageMapToday.get(p.user_id);
+          // 두 경로는 같은 체류를 각자 하한으로 남긴다. 더하면 중복이므로 큰 값만 쓴다.
+          // rowsV2는 iframe 중복을 접고 활성 뷰 추적 이후 행만 남긴 현재 화면의 체류 소스다.
+          const pageTodayS = _todayPm ? [..._todayPm.values()].reduce((sum, row) => sum + row.totalSec, 0) : 0;
+          const todayS = Math.max(profileTodayS, pageTodayS);
           const totalS = p.total_minutes || 0;
           const isBanned = !!p.is_banned;
           const isMe = String(p.user_id) === '4916417947';
@@ -1551,7 +1556,6 @@
             ? `${escH(nick)}<span class="admin-real-name">(${escH(p.real_name)})</span>`
             : escH(nick);
           // 펼침 기본값이 '오늘'이라(위 _visitorPagesHtml) 토글 라벨·초기 표를 같은 오늘 pm으로 맞춘다.
-          const _todayPm = memberPageMapToday.get(p.user_id);
           return `<div class="admin-member-card${isBanned?' is-banned':''}" data-uid="${escH(p.user_id)}" data-banned="${isBanned}" data-last-seen="${escH(p.last_seen_at||'')}" data-visitor-type="member" data-total-sec="${totalS}" data-today-sec="${todayS}" style="${hid}">
             <div class="admin-member-name"><button class="admin-member-board-link" type="button" data-member-uid="${escH(p.user_id)}">${dnHtml}</button><span style="font-size:10px;background:#e8f4e8;color:#2e7d32;border-radius:3px;padding:1px 5px;margin-left:4px;font-weight:600">회원</span>${isBanned?' <span class="admin-banned-badge">🚫 밴됨</span>':''}${isMe?' <span style="font-size:11px;color:var(--green)">👑 관리자</span>':''}<span class="admin-online-status" data-uid="${escH(p.user_id)}"></span></div>
             <div class="admin-member-metas">
@@ -1559,7 +1563,7 @@
               <span>최근 ${fmtDate(p.last_seen_at)}</span>
               <span>방문 ${p.visit_count != null ? p.visit_count + '회' : '-'}</span>
               ${joinSourceHtml}
-              ${_todayChip(p, todayS)}
+              ${_todayChip(p, todayS, pageTodayS)}
               <span title="profiles.total_minutes — 전 기간 누적(heartbeat 포함). 아래 페이지별 합계는 page_sessions 기준이라 이보다 작습니다.">⏱ 총 ${fmtTime(totalS)}</span>
               ${_visitorPagesToggle(memberPageMap.get(p.user_id), _todayPm)}
               ${isMe ? '' : `<button class="admin-ban-btn ${isBanned?'unban':'ban'}" data-uid="${escH(p.user_id)}">${isBanned?'✅ 밴 해제':'🚫 밴'}</button>`}
@@ -1610,7 +1614,7 @@
       const visitorSortBar = `<div class="admin-visitor-filter" id="visitorSortBar">
         <button class="admin-visitor-filter-btn is-active" data-sort="recent" onclick="applyVisitorSort('recent',this)" title="last_seen_at 내림차순 — 기존 기본 정렬">🕒 최근 방문순</button>
         <button class="admin-visitor-filter-btn" data-sort="total" onclick="applyVisitorSort('total',this)" title="회원은 profiles 누적(heartbeat 포함), 비회원은 page_sessions 합계라 기준이 다릅니다">⏱ 누적 시간순</button>
-        <button class="admin-visitor-filter-btn" data-sort="today" onclick="applyVisitorSort('today',this)" title="회원은 today_seconds, 비회원은 page_sessions·heartbeat 중 큰 값. 오늘 흔적이 없으면 0입니다">📅 오늘 이용시간순</button>
+        <button class="admin-visitor-filter-btn" data-sort="today" onclick="applyVisitorSort('today',this)" title="회원·비회원 모두 page_sessions와 heartbeat 누적 중 큰 값입니다. 오늘 흔적이 없으면 0입니다">📅 오늘 이용시간순</button>
       </div>
       <div class="admin-scope-note" id="visitorSortNote" hidden>⚠️ 시간 정렬은 <b>회원과 비회원의 계산 기준이 다릅니다</b> — 회원은 heartbeat까지 포함한 누적이고 비회원은 페이지 체류 기록 합(하한)이라, 같은 시간을 머물러도 회원이 위로 올라갑니다.</div>`;
 
