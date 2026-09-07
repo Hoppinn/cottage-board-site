@@ -95,6 +95,54 @@ window._cottageSess = (function () {
     return String(str || '').replace(/[%_]/g, '');
   }
 
+  // player_names는 사람이 입력한 쉼표 구분 텍스트다. ILIKE는 후보를 넓히는 데만 쓰고,
+  // 최종 귀속은 공백을 제거한 정확 토큰 비교로만 한다.
+  function _normalizeNickname(value) {
+    return String(value ?? '').replace(/\s+/g, '').toLowerCase();
+  }
+  window.normalizeNick = _normalizeNickname;
+
+  function _splitPlayerNames(value) {
+    return String(value || '').split(',').map(name => name.trim()).filter(Boolean);
+  }
+
+  function _buildNicknameCandidatePattern(nickname) {
+    const key = _normalizeNickname(nickname);
+    return key ? `%${[...key].map(_escapeLike).join('%')}%` : '';
+  }
+
+  function _rawNicknameTokenEqual(token, nickname) {
+    return String(token || '').trim().toLowerCase() === String(nickname || '').trim().toLowerCase();
+  }
+
+  async function _getParticipantRows(userId, nickname, columns) {
+    if (!nickname) return { data: [], error: null };
+    try {
+      const { data: profiles, error: profileError } = await db.from('profiles').select('user_id,nickname');
+      if (profileError) return { data: [], error: profileError };
+      const key = _normalizeNickname(nickname);
+      const matchedProfiles = (profiles || []).filter(profile => _normalizeNickname(profile.nickname) === key);
+      const isUniqueTarget = matchedProfiles.length === 1 && String(matchedProfiles[0].user_id) === String(userId);
+      const pattern = isUniqueTarget
+        ? _buildNicknameCandidatePattern(nickname)
+        : `%${_escapeLike(nickname)}%`;
+      if (!pattern) return { data: [], error: null };
+      const { data, error } = await db.from('game_play_records')
+        .select(columns.includes('player_names') ? columns : `${columns},player_names`)
+        .ilike('player_names', pattern)
+        .order('created_at', { ascending: false });
+      if (error) return { data: [], error };
+      const filtered = (data || []).filter(row => _splitPlayerNames(row.player_names).some(token => {
+        if (isUniqueTarget) return _normalizeNickname(token) === key;
+        return _rawNicknameTokenEqual(token, nickname);
+      }));
+      return { data: filtered, error: null };
+    } catch (error) {
+      return { data: [], error };
+    }
+  }
+
+
   // 기록 추가/수정/삭제 후 "최근 기록"류 화면에 알리는 신호. 홈의 recordIframeFrame처럼
   // game-reviews.html이 iframe으로 임베드된 경로에선 window.dispatchEvent가 부모(홈)에
   // 안 닿는다 — postMessage도 같이 쏴야 부모 쪽 리스너가 받는다.
@@ -1696,11 +1744,7 @@ window._cottageSess = (function () {
       ];
       if (nickname) {
         queries.push(
-          db.from('game_play_records')
-            .select('id, game_id, played_at, created_at, group_name')
-            .ilike('player_names', `%${_escapeLike(nickname)}%`)
-            .neq('user_id', userId)
-            .order('created_at', { ascending: false })
+          _getParticipantRows(userId, nickname, 'id, game_id, user_id, played_at, created_at, group_name')
         );
       }
       const [playRes, commentRes, suggestRes, profile, reviewRes, taggedRes] = await Promise.all(queries);
@@ -1748,12 +1792,7 @@ window._cottageSess = (function () {
       // 이미 쓰던 30일 창을 여기도 공유해 상한을 만든다.
       const _NOTIF_RECENT_SINCE = new Date(Date.now() - 30 * 86400000).toISOString();
       const taggedPromise = nickname
-        ? db.from('game_play_records')
-            .select('id, game_id, group_name, played_at, created_at, player_names')
-            .ilike('player_names', `%${_escapeLike(nickname)}%`)
-            .neq('user_id', userId)
-            .order('created_at', { ascending: false })
-            .limit(20)
+        ? _getParticipantRows(userId, nickname, 'id, game_id, user_id, group_name, played_at, created_at, player_names')
         : Promise.resolve({ data: [] });
       const curiousPromise = db.from('game_curious')
         .select('game_id')
@@ -1857,9 +1896,10 @@ window._cottageSess = (function () {
         // 통째로 차지한다(2026-07-21 실측: 김기성 14줄 → 모임 3개, 설애 15줄 → 6개).
         // ⚠️ 게임별로 묶으면 안 접힌다 — 같은 실측에서 16건 중 게임이 11종이었다(거의 전부 다른 게임).
         const tagGroups = new Map();
-        for (const r of taggedRes.data || []) {
-          const names = (r.player_names || '').split(',').map(n => n.trim());
-          if (!names.some(n => n.toLowerCase() === nickname.toLowerCase())) continue;
+        const taggedRows = (taggedRes.data || [])
+          .filter(r => String(r.user_id) !== String(userId))
+          .slice(0, 20);
+        for (const r of taggedRows) {
           const date = r.played_at || r.created_at.slice(0, 10);
           const gk = `${r.group_name || ''}|${date}`;
           if (!tagGroups.has(gk)) tagGroups.set(gk, { groupName: r.group_name, date, rows: [] });
@@ -2399,9 +2439,7 @@ window._cottageSess = (function () {
       if (error) console.error('[getUserPlayedGames]', error);
       let participantRows = [];
       if (nickname) {
-        const { data, error: pErr } = await db.from('game_play_records')
-          .select('game_id, played_at, created_at')
-          .ilike('player_names', `%${_escapeLike(nickname)}%`);
+        const { data, error: pErr } = await _getParticipantRows(userId, nickname, 'game_id, played_at, created_at');
         if (pErr) console.error('[getUserPlayedGames]', pErr);
         participantRows = data || [];
       }
@@ -2460,11 +2498,9 @@ window._cottageSess = (function () {
     if (!nickname) return 0;
     try {
       // 내 닉네임이 player_names에 포함된 기록 수 (내가 쓴 기록 포함)
-      const { count, error } = await db.from('game_play_records')
-        .select('id', { count: 'exact', head: true })
-        .ilike('player_names', `%${_escapeLike(nickname)}%`);
+      const { data, error } = await _getParticipantRows(userId, nickname, 'id');
       if (error) console.error('[getUserParticipationCount]', error);
-      return count || 0;
+      return data?.length || 0;
     } catch (err) { console.error('[getUserParticipationCount]', err); return 0; }
   }
 
@@ -2560,8 +2596,7 @@ window._cottageSess = (function () {
       if (authorErr) console.error('[getUserUniqueDayCount]', authorErr);
       const dateSet = new Set((authorRows || []).map(toDateStr));
       if (nickname) {
-        const { data: participantRows, error: participantErr } = await db.from('game_play_records')
-          .select('played_at, created_at').ilike('player_names', `%${_escapeLike(nickname)}%`);
+        const { data: participantRows, error: participantErr } = await _getParticipantRows(userId, nickname, 'played_at, created_at');
         if (participantErr) console.error('[getUserUniqueDayCount]', participantErr);
         (participantRows || []).forEach(r => dateSet.add(toDateStr(r)));
       }

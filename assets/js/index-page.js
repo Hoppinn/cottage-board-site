@@ -1349,8 +1349,15 @@ async function initRecentPlay() {
     // 참여자 이름 → user_id 해석용 맵 (전체 프로필 기준 + 기록에서 보강).
     // ⚠️ profiles엔 id 컬럼이 없고 kakao 키는 user_id — game-reviews의 p.id 프로필맵은 빈 맵이었음.
     const _nickUser = new Map();
-    for (const p of (profiles || [])) { if (p.user_id && p.nickname) _nickUser.set(String(p.nickname).trim().toLowerCase(), String(p.user_id)); }
-    for (const rec of records) { if (rec.user_id && rec.nickname) _nickUser.set(String(rec.nickname).trim().toLowerCase(), String(rec.user_id)); }
+    const _addUniqueNick = (nickname, userId) => {
+      const key = window.normalizeNick(nickname);
+      const id = String(userId);
+      if (!key) return;
+      if (!_nickUser.has(key)) _nickUser.set(key, id);
+      else if (_nickUser.get(key) !== id) _nickUser.set(key, null);
+    };
+    for (const p of (profiles || [])) { if (p.user_id && p.nickname) _addUniqueNick(p.nickname, p.user_id); }
+    for (const rec of records) { if (rec.user_id && rec.nickname) _addUniqueNick(rec.nickname, rec.user_id); }
     // 이 기록이 내 것(또는 오너)인지 — 사진 삭제 권한
     const _me = window.getKakaoUser?.();
     const _canManagePhoto = !!(_me && ((r.user_id && String(r.user_id) === String(_me.id)) || (!r.user_id && r.nickname && r.nickname === (_me.nickname || _me.kakaoNickname)))) || window.isOwner?.() || false;
@@ -1418,7 +1425,7 @@ async function initRecentPlay() {
 
     // 참여자 이름 → 해당 회원 읽기전용 보드 (기록에서 user_id가 해석되는 이름만 클릭 가능)
     body.querySelectorAll('.pr-tag-who[data-nick]').forEach(span => {
-      const uid = _nickUser.get((span.dataset.nick || '').toLowerCase());
+      const uid = _nickUser.get(window.normalizeNick(span.dataset.nick));
       if (!uid) return;
       span.style.cursor = 'pointer';
       span.addEventListener('click', e => { e.stopPropagation(); window.openOtherProfileSheet?.(uid); });

@@ -22,10 +22,10 @@
 ## 0. 현재 상태
 
 - 시간 단위 표시: 2026-09-07 `profiles.total_minutes`의 legacy 이름과 실제 seconds 단위를 코드·도메인 문서에 명시하고, 오너 전용 회원 분석의 60배 표시를 수정했다. 다음 별도 후보는 관리자와 회원 분석의 `page_sessions` 중복 제거·집계 경로를 같은 지표인지 먼저 조사하는 일이며, 누적 `profiles` 값과 맞추는 작업은 아니다.
-- 현재 작업: P1 시각 회귀와 P2 데이터 정합성 조사를 완료했다. 다음 UI 작업은 별도 Plan·Yellow 승인 후 시작한다.
-- 상세 Plan: [보드 상호작용 회귀](plans/board-interaction-regressions-plan.md) · [모임 참여 데이터](plans/meeting-participation-data-plan.md) · [명칭 정합성 조사](plans/naming-alignment-audit-plan.md)
+- 현재 작업: P1 시각 회귀와 P2 닉네임 정합성 보정을 완료했다. 다음 UI 작업은 별도 Plan·Yellow 승인 후 시작한다.
+- 상세 Plan: [보드 상호작용 회귀](plans/board-interaction-regressions-plan.md) · [모임 참여 데이터](plans/meeting-participation-data-plan.md) · [닉네임 해소 보정](plans/nickname-resolution-correction-plan.md) · [명칭 정합성 조사](plans/naming-alignment-audit-plan.md)
 - 현재 단계: 최근 참여의 모임 단위 개편은 데이터 관계가 불명확해 구현 보류다. `game_play_records`에는 모임 ID가 없고 `meeting_votes`는 참여 등록이므로 날짜만으로 결합하지 않는다.
-- P2 조사 결론: 2026-09-07 읽기 전용 감사에서 프로필 46개·기록 122개를 확인했고, 공백 제거 후 닉네임 충돌은 0쌍이었다. `덕지` 태그 20회는 `덕 지` 회원으로 안전하게 해소할 수 있는 후보다. 단, 통계·알림·업적의 DB 검색은 아직 원문 닉네임을 사용하므로 보정은 누적 수치에 영향을 준다. `game_play_records`에는 모임 ID가 없어 이를 실제 모임 참석으로 승격하거나 날짜·이름으로 결합하지 않는다. DB/API·수치 보정 범위의 별도 Plan 승인 없이는 구현하지 않는다.
+- P2 완료: `player_names` 후보는 공백 사이 `%` 패턴으로 넓히고, 최종적으로 쉼표 토큰의 `normalizeNick` 정확 일치만 사용한다. 활동 통계·태그 알림·게임 도감·참여/함께한 날 업적과 참여자 링크에 같은 규칙을 적용했고, 충돌 키는 자동 연결하지 않는다. 원문 기록과 작성자 `user_id` 권한은 보존했으며 모임 참석을 추론하지 않았다. 읽기 전용 감사는 프로필 46개·기록 122개·충돌 0쌍, `덕 지` 0→20건/3→9일 및 `play_5·10·20` 신규 임계값 후보, `원철` 부분문자열 오탐 2→0건을 확인했다. 이번 세션에서 업적 지급 write는 실행하지 않았다.
 - 인수인계: 가장 어려웠던 게임은 기존 `profile_hardest_games` 정본을 유지하고 위저드 편집으로 이동한다. 최초 작성 쿠폰 partial unique 보장은 변경하지 않는다.
 - 승인 대기: `AGENTS.md` embed·iframe 재사용 원칙 추가(Yellow), 가입경로 `보드라이프` 추가(DB 값/입력 경로 확인 후 Plan 여부 판단).
 - 현재 버그: 게임도감 전체보기 전환 시 시작줄이 살짝 위로 올라오는 증상은 상세 조건 설명 대기.
@@ -33,7 +33,7 @@
 ### 다음 시작점
 
 1. **명칭 정합성 audit 완료** — 내부 지역 `openAdminBS`와 문서의 이전 함수명 참조를 정리했다. 현재 추가 rename 필요 없음; URL·DB·analytics·storage·routing·공개 API는 legacy 계약으로 유지한다.
-2. **P2 데이터 정합성** — 조사 완료. 공백 제거 후 정확 토큰 일치 후보는 프로필 충돌 0쌍으로 안전성이 확인됐지만, 통계·알림·업적 수치 보정 및 모임 단위 연결은 별도 승인 Plan이 필요하다. 누적 체류시간 감사는 회원 카드의 당일 표시를 `rowsV2` 세션·heartbeat 중 큰 값으로 보완해 닫음(`admin-analytics.md` ⑦).
+2. **P2 데이터 정합성** — 완료. 공통 공백 정규화·정확 토큰 보정과 충돌 차단을 적용했고, 원문 기록을 수정하지 않았다. 모임 단위 연결은 계속 별도 데이터 모델 Plan 범위다. 누적 체류시간 감사는 회원 카드의 당일 표시를 `rowsV2` 세션·heartbeat 중 큰 값으로 보완해 닫음(`admin-analytics.md` ⑦).
 3. **P3 기능·콘텐츠** — 메인 모임 미리보기의 모임원 프로필 링크, 게임 위치 2건·보유게임 1건, 가입경로 보드라이프.
 8. **보류/Plan 필요** — 최근 참여의 데이터 모델은 [모임 참여 데이터 Plan](plans/meeting-participation-data-plan.md)을 따른다. AGENTS.md 재사용 원칙 문서 반영은 별도 승인 완료 전까지 보류한다.
 

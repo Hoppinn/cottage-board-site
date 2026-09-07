@@ -574,6 +574,13 @@
   // 회원 전체의 현재 닉네임 → userId. loadRecords에서 1회 채운다(renderRecords는 7곳에서 불리는
   // 동기 재렌더라 그 안에서 조회하면 안 됨). 참여자 태그 클릭 진입점이 이 맵을 쓴다.
   let _profileNickMap = new Map();
+  function _setUniqueNicknameMap(map, nickname, userId) {
+    const key = window.normalizeNick(nickname);
+    const id = String(userId);
+    if (!key) return;
+    if (!map.has(key)) map.set(key, id);
+    else if (map.get(key) !== id) map.set(key, null);
+  }
   // (014) 기록 id → 그 기록에 매인 게임평(game_comments.record_id) 배열. loadRecords에서 1회 로드,
   // buildSessionBody가 동기로 읽는다. 위 맵과 같은 이유로 여기 한 번만 조회한다.
   let _recordCommentsMap = new Map();
@@ -599,7 +606,7 @@
       recordsData = _recs;
       _profileNickMap = new Map();
       for (const p of _profiles) {
-        if (p.user_id && p.nickname) _profileNickMap.set(window.normalizeNick(p.nickname), String(p.user_id));
+        if (p.user_id && p.nickname) _setUniqueNicknameMap(_profileNickMap, p.nickname, p.user_id);
       }
       // (014) 각 기록에 매인 남의 게임평을 한 번에 로드 — 기록 id로 묶어 buildSessionBody가 읽는다.
       _recordCommentsMap = new Map();
@@ -993,7 +1000,7 @@
     _nickUserMap = new Map(_profileNickMap);
     if (data?.length) {
       for (const r of data) {
-        if (r.user_id && r.nickname) _nickUserMap.set(window.normalizeNick(r.nickname), String(r.user_id));
+        if (r.user_id && r.nickname) _setUniqueNicknameMap(_nickUserMap, r.nickname, r.user_id);
       }
     }
 
