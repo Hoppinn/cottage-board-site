@@ -62,6 +62,7 @@ Codex를 포함한 코딩 에이전트가 이 프로젝트에서 따라야 할 �
 | 인증·로그인·프로필·사진 | `docs/PROJECT_STRUCTURE.md` §3~5 |
 | 이용시간·방문자·체류 추적 | `docs/PROJECT_STRUCTURE.md` §6 및 진행 중 Plan |
 | 모달·iframe·시트 | `docs/PROJECT_STRUCTURE.md` §2-A |
+| UI·페이지·모달·시트·iframe·내비게이션 | `docs/PROJECT_GLOSSARY.md`를 함께 읽고, 보고·Plan·작업 설명에서는 표준명을 우선 사용한다. 실제 코드명은 필요한 경우 괄호로 병기한다. |
 | 게임 데이터·파이프라인 | `docs/PROJECT_STRUCTURE.md` §7~8 |
 | BGG ID 수정 / `fetch:bgg` / 번역 파이프라인 | 작업 전 `npm run check`로 필요한 단계 확인 |
 | UI/CSS·sticky·깜빡임 | `docs/DESIGN_RULES.md` |

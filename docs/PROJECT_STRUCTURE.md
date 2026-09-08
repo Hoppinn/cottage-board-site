@@ -6,6 +6,8 @@
 
 ---
 
+화면·기능·UI의 표준 명칭은 [PROJECT_GLOSSARY.md](PROJECT_GLOSSARY.md)를 따른다.
+
 ## 참조 파일
 
 | 주제 | 파일 |
