@@ -7697,11 +7697,6 @@ button.home-section-more{background:none;border:none;cursor:pointer;padding:0;}
 .member-profiles-modal .intro-wizard-close{width:36px;height:36px;padding:0;font-size:17px;display:grid;place-items:center;}
 .member-profiles-body .sheet-fullscreen-link{bottom:10px;right:12px;}
 body.embed-mode #introFormCard{margin-top:11px;}
-@media(max-width:719px){
-  /* 기존 88dvh 중앙 모달의 상단 6dvh 위치는 유지하고, 폭·하단만 화면 끝으로 확장한다. */
-  .member-profiles-modal{align-items:flex-end;padding:0;}
-  .member-profiles-modal .record-iframe-panel{width:100%;max-width:none;height:91.75dvh;max-height:91.75dvh;border-radius:18px 18px 0 0;}
-}
 .board-wizard-modal{padding:0;}
 .board-wizard-frame{width:100%;height:100%;border:0;background:transparent;}
 .record-iframe-loader{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:#fff;z-index:1;}
