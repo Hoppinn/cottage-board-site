@@ -88,16 +88,14 @@
   <script src="../../assets/js/achievements.js"></script>
   <script src="../../assets/js/page-labels.js"></script>
   <script src="../../assets/js/script-nav.js"></script>
+  <script src="../../assets/js/modal-stack-host.js"></script>
   <script src="../../assets/js/game-sheet.js"></script>
   <script src="../../assets/js/play-records-utils.js"></script>
   <script src="../../assets/js/kakao-auth.js"></script>
   <!-- 페이지 오버레이 시트 -->
-  <div id="guideIframeOverlay" style="display:none;position:fixed;inset:0;z-index:9000;background:rgba(0,0,0,0.5);align-items:flex-end;justify-content:center;overflow:hidden;">
-    <div style="width:calc(100% - 20px);height:calc(100vh - 48px);height:calc(100dvh - 48px);background:#fff;border-radius:18px;margin:0 10px 12px;display:flex;flex-direction:column;overflow:hidden;">
-      <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 16px 10px;border-bottom:1px solid #e8e4dc;flex-shrink:0;">
-        <span id="guideIframeTitle" style="font-size:15px;font-weight:700;color:#2c2c2c;"></span>
-        <button aria-label="닫기" onclick="closeGuideOverlay()" style="background:none;border:none;font-size:22px;color:#888;cursor:pointer;padding:0 4px;line-height:1;">✕</button>
-      </div>
+  <div id="guideIframeOverlay" class="guide-iframe-overlay center-modal-backdrop">
+    <div class="guide-iframe-shell center-modal-shell">
+      <button class="guide-iframe-close" aria-label="닫기" onclick="closeGuideOverlay()" type="button">✕</button>
       <iframe id="guideIframe" src="" style="flex:1;width:100%;border:none;" allow="camera;microphone"></iframe>
     </div>
   </div>
@@ -116,21 +114,27 @@
     });
 
     var guideOverlayViewToken = null;
+    var guideStackHost = null;
+
+    function withGuideStackParams(href) {
+      var hashIdx = href.indexOf('#');
+      var base = hashIdx === -1 ? href : href.slice(0, hashIdx);
+      var hash = hashIdx === -1 ? '' : href.slice(hashIdx + 1);
+      var joiner = base.includes('?') ? '&' : '?';
+      var embedHash = hash ? hash + '&embed=1&modalStack=1&modalFrame=root' : 'embed=1&modalStack=1&modalFrame=root';
+      return base + joiner + 'embed=1&modalStack=1&modalFrame=root#' + embedHash;
+    }
+
     function openGuideOverlay(href, label) {
       var overlay = document.getElementById('guideIframeOverlay');
       var iframe = document.getElementById('guideIframe');
-      var title = document.getElementById('guideIframeTitle');
       if (!overlay) return;
       overlay.style.display = 'flex';
       if (!guideOverlayViewToken) guideOverlayViewToken = window.pushActiveView?.(window.COTTAGE_ACTIVE_VIEWS?.['guide-iframe']?.key);
       if (iframe) {
-        var hashIdx = href.indexOf('#');
-        var embedHref = hashIdx !== -1
-          ? href.slice(0, hashIdx) + (href.slice(0, hashIdx).includes('?') ? '&' : '?') + 'embed=1' + href.slice(hashIdx)
-          : href + (href.includes('?') ? '&' : '?') + 'embed=1';
-        iframe.src = embedHref;
+        iframe.src = withGuideStackParams(href);
       }
-      if (title) title.textContent = label || '';
+      guideStackHost?.clear();
       document.body.style.overflow = 'hidden';
     }
 
@@ -138,6 +142,7 @@
       var overlay = document.getElementById('guideIframeOverlay');
       var iframe = document.getElementById('guideIframe');
       if (!overlay) return;
+      guideStackHost?.clear();
       overlay.style.display = 'none';
       window.popActiveView?.(guideOverlayViewToken);
       guideOverlayViewToken = null;
@@ -147,11 +152,14 @@
 
     // 배경 클릭으로 닫기
     document.getElementById('guideIframeOverlay').addEventListener('click', function(e) {
-      if (e.target === this) closeGuideOverlay();
+      if (e.target === this && !guideStackHost?.hasChildren()) closeGuideOverlay();
     });
-    // ESC로 닫기
-    document.addEventListener('keydown', function(e) {
-      if (e.key === 'Escape') closeGuideOverlay();
+    guideStackHost = window.CottageModalStackHost?.create({
+      container: document.getElementById('guideIframeOverlay'),
+      rootFrame: document.getElementById('guideIframe'),
+      rootShell: document.querySelector('#guideIframeOverlay > .guide-iframe-shell'),
+      isOpen: function() { return document.getElementById('guideIframeOverlay').style.display !== 'none'; },
+      onRootClose: closeGuideOverlay,
     });
   </script>
 

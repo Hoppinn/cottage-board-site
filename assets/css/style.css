@@ -1708,11 +1708,9 @@ body.recommend-page main{
   border-color:var(--green);
 }
 
-/* 코스 선택 후 그리드 대신 뜨는 한 줄짜리 sticky 축약바 */
+/* 코스 선택 후 그리드 대신 뜨는 한 줄짜리 축약바 — 본문 흐름을 유지한다. */
 .course-sticky-bar{
-  position:sticky;
-  top:var(--header-total-h);
-  z-index:20;
+  position:static;
   max-width:720px;
   margin:0 auto 12px;
   padding:0 18px;
@@ -1958,11 +1956,12 @@ body.recommend-page main{
   padding:0;
   box-sizing:border-box;
   background:rgba(0,0,0,0.45);
-  transform:translateY(100%);
-  transition:transform 0.28s cubic-bezier(0.4,0,0.2,1);
+  visibility:hidden;
+  pointer-events:none;
 }
 .recommend-overlay.is-open{
-  transform:translateY(0);
+  visibility:visible;
+  pointer-events:auto;
 }
 .recommend-overlay-panel{
   width:100%;
@@ -1978,6 +1977,12 @@ body.recommend-page main{
   border-radius:18px;
   background:var(--bg);
   box-shadow:0 8px 32px rgba(0,0,0,0.18);
+  transform:none;
+  opacity:1;
+  transition:none;
+}
+.recommend-overlay.is-open .recommend-overlay-panel{
+  opacity:1;
 }
 .recommend-overlay-header{
   display:flex;
@@ -3420,7 +3425,8 @@ html:has(body.embed-mode) { scroll-padding-top: 0; }
    margin이 12px라 100px로 맞춰 비율을 비슷하게 뒀다). */
 .rule-hub-overlay{
   position:fixed; inset:0; z-index:var(--z-sheet-modal);
-  background:rgba(0,0,0,0.5);
+  /* 게임정보 root가 stack 전체의 유일한 backdrop을 소유한다. */
+  background:transparent;
   display:flex; align-items:flex-end; justify-content:center;
 }
 .rule-hub-box{
@@ -3434,16 +3440,8 @@ html:has(body.embed-mode) { scroll-padding-top: 0; }
   animation:sheetUp .3s ease-out both;
   box-shadow:0 -10px 30px rgba(100,72,38,0.16);
 }
-.rule-hub-header{
-  flex:0 0 auto;
-  display:flex; align-items:center; justify-content:space-between;
-  padding:16px 20px;
-  border-bottom:1px solid var(--line-soft);
-  background:var(--paper-2);
-}
-.rule-hub-title{font-size:16px; font-weight:800; color:var(--ink);}
-.rule-hub-close{background:none; border:none; font-size:20px; color:var(--muted); cursor:pointer; padding:2px 8px; line-height:1;}
-.rule-hub-scroll{flex:1 1 auto; overflow-y:auto; -webkit-overflow-scrolling:touch; padding:12px 20px 24px; display:flex; flex-direction:column; gap:8px;}
+.rule-hub-back{position:absolute;top:10px;left:12px;z-index:2;background:rgba(255,255,255,.88);border:none;border-radius:8px;color:var(--green);cursor:pointer;font-size:22px;line-height:1;padding:4px 8px;}
+.rule-hub-scroll{flex:1 1 auto; overflow-y:auto; -webkit-overflow-scrolling:touch; padding:22px 20px 24px; display:flex; flex-direction:column; gap:8px;}
 /* 카드형 구분(2026-08-09, 사용자 지적 — game-location.html의 .loc-section류처럼 얇은
    구분선 대신 테두리+둥근모서리+간격으로 섹션을 시각적으로 확실히 나눈다).
    그 페이지 스타일은 game-location.html 안 인라인이라 여기서 못 가져다 쓰고, 같은
@@ -3588,6 +3586,8 @@ html:has(body.embed-mode) { scroll-padding-top: 0; }
 .sheet-mechs-wrap{
   margin-bottom:12px;
 }
+.sheet-card-head{display:flex;align-items:center;justify-content:space-between;gap:12px;}
+.sheet-card-title{margin:0;font-size:11px;font-weight:900;color:var(--muted);letter-spacing:.04em;text-transform:uppercase;}
 .sheet-mechs-section{
   margin-bottom:8px;
 }
@@ -3625,8 +3625,8 @@ html:has(body.embed-mode) { scroll-padding-top: 0; }
   font-weight:500;
   color:var(--muted);
   cursor:pointer;
-  text-decoration:underline;
-  text-underline-offset:2px;
+  text-decoration:none;
+  flex-shrink:0;
 }
 
 /* 코멘트 등록 버튼 */
@@ -4002,7 +4002,7 @@ html:has(body.embed-mode) { scroll-padding-top: 0; }
 
 /* 게임 설명 + 더보기/접기 */
 .sheet-desc-wrap{
-  margin-top:8px;
+  margin-top:6px;
   margin-bottom:4px;
 }
 
@@ -4031,7 +4031,8 @@ html:has(body.embed-mode) { scroll-padding-top: 0; }
   color:var(--green);
   font-weight:500;
   cursor:pointer;
-  text-decoration:underline;
+  text-decoration:none;
+  flex-shrink:0;
 }
 
 /* 진행방식 | 테마 2열 */
@@ -4186,6 +4187,9 @@ html:has(body.embed-mode) { scroll-padding-top: 0; }
 }
 .sheet-info-group .sheet-mechs-wrap{
   margin-bottom:0;
+}
+.sheet-info-group > .sheet-card-head + .sheet-mechs-wrap{
+  margin-top:10px;
 }
 .sheet-info-group .sheet-meta{
   border:none;
@@ -4420,10 +4424,11 @@ html:has(body.embed-mode) { scroll-padding-top: 0; }
 
 /* 내 활동 프로필 패널 */
 @keyframes slideUpSheet{from{transform:translateY(100%)}to{transform:translateY(0)}}
-.shelf-sheet-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:var(--z-shelf);display:flex;align-items:flex-end;justify-content:center;overflow:hidden;}
-.shelf-sheet-box{background:#fff;border-radius:28px 28px 18px 18px;width:calc(100% - 20px);height:calc(100vh - 102px);height:calc(100dvh - 102px);overflow:hidden;margin:0 10px 12px;display:flex;flex-direction:column;animation:slideUpSheet 0.3s ease-out both;}
+.shelf-sheet-overlay{position:fixed;inset:0;background:transparent;z-index:var(--z-sheet-modal);display:flex;align-items:flex-end;justify-content:center;overflow:hidden;}
+.shelf-sheet-box{position:relative;background:#fff;border-radius:28px 28px 18px 18px;width:calc(100% - 20px);height:calc(100vh - 102px);height:calc(100dvh - 102px);overflow:hidden;margin:0 10px 12px;display:flex;flex-direction:column;animation:slideUpSheet 0.3s ease-out both;box-shadow:0 -10px 30px rgba(100,72,38,0.16);}
 .shelf-sheet-header{display:flex;align-items:center;gap:8px;padding:14px 20px 12px;border-bottom:1px solid var(--border);flex-shrink:0;}
 .shelf-sheet-back{background:none;border:none;font-size:18px;cursor:pointer;color:#5a3418;padding:4px 2px;flex-shrink:0;line-height:1;}
+.shelf-sheet-back--floating{position:absolute;top:10px;left:12px;z-index:2;padding:4px 6px;background:rgba(255,255,255,.88);border-radius:8px;}
 .shelf-sheet-title{font-size:16px;font-weight:700;color:#5a3418;flex:1;}
 .shelf-sheet-iframe{flex:1;width:100%;border:none;}
 .profile-panel{position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:var(--z-profile);display:flex;align-items:flex-end;justify-content:center;}
@@ -5091,6 +5096,7 @@ html:has(body.embed-mode) { scroll-padding-top: 0; }
 .meeting-board-page-link{width:100%;margin-top:4px;}
 /* 서브시트 (profile-subsheet) — profile 전용, gameSheet 계열과 무관 */
 .profile-subsheet{position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:var(--z-subsheet);display:flex;align-items:flex-end;justify-content:center;}
+.profile-subsheet--stack-child{background:transparent !important;backdrop-filter:none !important;-webkit-backdrop-filter:none !important;}
 .profile-subsheet-box{background:#fff;border-radius:18px;width:100%;max-width:480px;height:calc(100vh - 48px);height:calc(100dvh - 48px);display:flex;flex-direction:column;overflow:hidden;margin:0 10px 16px;}
 .profile-subsheet-header{flex-shrink:0;background:#fff;cursor:pointer;}
 .profile-subsheet-header > *{position:relative;top:-1px;}
@@ -5105,7 +5111,7 @@ html:has(body.embed-mode) { scroll-padding-top: 0; }
 .profile-subsheet-title{grid-column:2;min-width:0;max-width:100%;overflow:hidden;text-overflow:ellipsis;font-size:14px;font-weight:700;color:var(--text);text-align:center;white-space:nowrap;}
 .profile-subsheet-badge{display:inline-block;background:#e53935;color:#fff;border-radius:10px;font-size:10px;font-weight:700;padding:1px 6px;margin-left:4px;vertical-align:middle;line-height:1.4;}
 .profile-subsheet-close{justify-self:end;background:none;border:none;font-size:18px;color:var(--muted);cursor:pointer;padding:2px 6px;flex-shrink:0;}
-.profile-subsheet-body{padding:16px 18px 32px;overflow-y:auto;flex:1;}
+.profile-subsheet-body{padding:16px 18px 32px;overflow-y:auto;flex:1;min-height:0;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;}
 .profile-subsheet-body>*:first-child{margin-top:0;}
 .profile-subsheet-body--records{padding-top:0;}
 .profile-subsheet-body--records::before{content:"";display:block;position:sticky;top:0;height:8px;background:#fff;z-index:6;}
@@ -6723,6 +6729,11 @@ html.intro-wizard-embed .club-breadcrumb,html.intro-wizard-embed .page-mini-hero
 /* 프로필 보드 iframe은 일반 페이지 요소만 숨긴다. 실제 6단계 wizard footer는
    showWizardStep()이 hidden을 해제한 뒤 반드시 자체 grid를 유지해야 한다. */
 html.intro-wizard-embed .intro-wizard-nav:not([hidden]){display:grid!important;visibility:visible!important;}
+/* 홈 모임원 프로필 root iframe의 작성·수정은 부모 shell 안을 채운다.
+   내 보드의 wizardOnly iframe(html.intro-wizard-embed)은 원래 자기 위저드 레이아웃을 유지한다. */
+html:not(.intro-wizard-embed) body.embed-mode .intro-wizard-overlay{position:absolute;inset:0;padding:0;background:transparent;align-items:stretch;}
+html:not(.intro-wizard-embed) body.embed-mode .intro-wizard{width:100%;max-width:none;height:100%;max-height:none;border-radius:0;box-shadow:none;}
+html:not(.intro-wizard-embed) body.embed-mode .intro-wizard-close{display:none!important;}
 .intro-wizard{
   display:flex;
   flex-direction:column;
@@ -7682,19 +7693,16 @@ button.home-section-more{background:none;border:none;cursor:pointer;padding:0;}
    🚨 z-index를 헤더(.site-header 1000) 아래로 내리지 말 것 — 2026-07-21 사용자 신고의 원인이
       정확히 그것이었다(900). dim이 헤더를 못 덮어 ①헤더 영역은 안 어두워지고 ②로고를 누르면
       모달이 뜬 채로 페이지가 이동하고 ③그 영역을 눌러도 dim 클릭이 안 잡혀 안 닫혔다. */
-.record-iframe-modal{display:flex;position:fixed;inset:0;z-index:var(--z-shelf);align-items:center;justify-content:center;padding:16px;opacity:0;pointer-events:none;transition:opacity 0.25s;}
-.record-iframe-modal.is-open{opacity:1;pointer-events:auto;}
+.record-iframe-modal{display:flex;position:fixed;inset:0;z-index:var(--z-shelf);align-items:center;justify-content:center;padding:16px;visibility:hidden;pointer-events:none;}
+.record-iframe-modal.is-open{visibility:visible;pointer-events:auto;}
 .record-iframe-dim{position:absolute;inset:0;background:rgba(0,0,0,0.55);}
-.record-iframe-panel{position:relative;width:100%;max-width:480px;height:88dvh;max-height:88dvh;background:#fff;border-radius:16px;overflow:hidden;display:flex;flex-direction:column;z-index:1;box-shadow:0 8px 32px rgba(0,0,0,0.18);transform:translateY(80px);transition:transform 0.48s cubic-bezier(0.32,0.72,0,1);}
-.record-iframe-modal.is-open .record-iframe-panel{transform:translateY(0);}
+.record-iframe-panel{position:relative;width:100%;max-width:480px;height:88dvh;max-height:88dvh;background:#fff;border-radius:16px;overflow:hidden;display:flex;flex-direction:column;z-index:1;box-shadow:0 8px 32px rgba(0,0,0,0.18);transform:none;transition:none;}
+.record-iframe-modal.is-suspended{pointer-events:none;}
 .record-iframe-close{position:absolute;top:10px;right:12px;background:none;border:none;font-size:18px;line-height:1;cursor:pointer;color:var(--ink);padding:4px;z-index:2;}
 .record-iframe-frame{width:100%;flex:1;border:none;opacity:0;transition:opacity 0.2s;}
 .record-iframe-frame.is-ready{opacity:1;}
 .member-profiles-body{position:relative;display:flex;flex:1 1 auto;min-height:0;}
 .member-profiles-body .record-iframe-frame{height:100%;min-height:0;}
-.member-profiles-modal .intro-wizard-head{gap:8px;padding:7px 15px;background:#fff;position:relative;z-index:2;box-shadow:0 1px 2px rgba(0,0,0,.04);}
-.member-profiles-modal .intro-wizard-head h2{font-size:17px;font-weight:700;line-height:1.25;}
-.member-profiles-modal .intro-wizard-close{width:36px;height:36px;padding:0;font-size:17px;display:grid;place-items:center;}
 .member-profiles-body .sheet-fullscreen-link{bottom:10px;right:12px;}
 body.embed-mode #introFormCard{margin-top:11px;}
 .board-wizard-modal{padding:0;}
@@ -7705,11 +7713,10 @@ body.embed-mode #introFormCard{margin-top:11px;}
 
 /* ── 플래너 센터모달 (홈 전용 — 빠른진입 모드가 있어 공용 .planner-modal-overlay와 별개) ──
    크기·레이어 규칙은 위 .record-iframe-modal 주석과 동일. */
-.planner-sheet-modal{display:flex;position:fixed;inset:0;z-index:var(--z-shelf);align-items:center;justify-content:center;padding:16px;opacity:0;pointer-events:none;transition:opacity 0.25s;}
-.planner-sheet-modal.is-open{opacity:1;pointer-events:auto;}
+.planner-sheet-modal{display:flex;position:fixed;inset:0;z-index:var(--z-shelf);align-items:center;justify-content:center;padding:16px;visibility:hidden;pointer-events:none;}
+.planner-sheet-modal.is-open{visibility:visible;pointer-events:auto;}
 .planner-sheet-dim{position:absolute;inset:0;background:rgba(0,0,0,0.55);}
-.planner-sheet-panel{position:relative;width:100%;max-width:480px;height:88dvh;max-height:88dvh;background:#fff;border-radius:16px;overflow:hidden;display:flex;flex-direction:column;z-index:1;box-shadow:0 8px 32px rgba(0,0,0,0.18);transform:translateY(80px);transition:transform 0.48s cubic-bezier(0.32,0.72,0,1);}
-.planner-sheet-modal.is-open .planner-sheet-panel{transform:translateY(0);}
+.planner-sheet-panel{position:relative;width:100%;max-width:480px;height:88dvh;max-height:88dvh;background:#fff;border-radius:16px;overflow:hidden;display:flex;flex-direction:column;z-index:1;box-shadow:0 8px 32px rgba(0,0,0,0.18);transform:none;transition:none;}
 .planner-sheet-close{position:absolute;top:10px;right:12px;background:none;border:none;font-size:18px;line-height:1;cursor:pointer;color:var(--ink);padding:4px;z-index:2;}
 .planner-sheet-frame{width:100%;flex:1;border:none;opacity:0;transition:opacity 0.2s;}
 .planner-sheet-frame.is-ready{opacity:1;}
@@ -7736,7 +7743,7 @@ body.embed-mode footer,
 body.is-embedded .breadcrumb,
 body.is-embedded .page-mini-hero,
 body.is-embedded footer { display:none!important; }
-/* 홈 모임원 프로필 iframe은 부모 모달 header가 제목을 맡는다. */
+/* 홈 모임원 프로필 iframe은 부모 모달의 닫기 제어 아래에서 본문을 바로 시작한다. */
 body.embed-mode .club-breadcrumb{display:none!important;}
 /* 독립 페이지 footer와 달리, 프로필 작성 위저드의 footer는 다음/저장 제어다. */
 body.embed-mode .intro-wizard-nav:not([hidden]){display:grid!important;visibility:visible!important;}
@@ -7776,6 +7783,240 @@ body.is-embedded footer,
 body.is-embedded .breadcrumb,
 body.is-embedded .page-mini-hero{display:none!important;}
 body.is-embedded .inner-page{padding-top:0;}
+
+/* 페이지 자체를 iframe으로 여는 홈페이지 기능의 embed chrome 제거. */
+body.embed-mode .about-hero,
+body.is-embedded .about-hero,
+body.embed-mode .hero,
+body.embed-mode #recent-play,
+body.embed-mode #meeting{display:none !important;}
+body.embed-mode #recommend{display:block !important;}
+
+.guide-iframe-overlay{
+  display:none;
+  position:fixed;
+  inset:0;
+  z-index:9000;
+  background:rgba(0,0,0,.5);
+  align-items:flex-end;
+  justify-content:center;
+  overflow:hidden;
+}
+.guide-iframe-shell{
+  position:relative;
+  width:calc(100% - 20px);
+  height:calc(100vh - 48px);
+  height:calc(100dvh - 48px);
+  margin:0 10px 12px;
+  background:#fff;
+  border-radius:18px;
+  display:flex;
+  flex-direction:column;
+  overflow:hidden;
+}
+.guide-iframe-close{
+  position:absolute;
+  top:10px;
+  right:12px;
+  z-index:2;
+  background:none;
+  border:none;
+  color:var(--ink,#333);
+  cursor:pointer;
+  padding:4px;
+  font-size:18px;
+  line-height:1;
+}
+.guide-iframe-shell.is-stack-inactive{pointer-events:none;}
+/* 홈페이지 기능 child의 외곽 규격은 parent shell 하나만 소유한다. 기존 컴포넌트는
+   그 안에서 본문만 렌더하며 별도 dim·닫기 제어를 만들지 않는다. */
+body.guide-child-mode main,
+body.guide-child-mode .site-header,
+body.guide-child-mode .site-footer,
+body.guide-child-mode #recommend,
+body.guide-child-mode .inner-page{display:none!important;}
+body.guide-child-mode .game-sheet{position:absolute;inset:0;width:auto;height:auto;}
+body.guide-child-mode .game-sheet-dim,
+body.guide-child-mode .dd-overlay{background:transparent!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;}
+body.guide-child-mode .game-sheet-panel{
+  left:0!important;
+  right:0!important;
+  top:0!important;
+  bottom:0!important;
+  border-radius:0!important;
+  box-shadow:none!important;
+  animation:none!important;
+}
+body.guide-child-mode .game-sheet-close,
+body.guide-child-mode .sheet-sticky-close,
+body.guide-child-mode .dd-meeting-header .dd-x-btn{display:none!important;}
+body.guide-child-mode .dd-overlay{position:absolute!important;inset:0!important;padding:0!important;}
+body.guide-child-mode .dd-meeting-modal{
+  width:100%!important;
+  height:100%!important;
+  max-height:none!important;
+  border-radius:0!important;
+}
+body.guide-child-mode .recommend-overlay{
+  position:absolute!important;
+  inset:0!important;
+  background:transparent!important;
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+}
+body.guide-child-mode .recommend-overlay-panel{
+  width:100%!important;
+  max-width:none!important;
+  height:100%!important;
+  max-height:none!important;
+  margin:0!important;
+  border-radius:0!important;
+  box-shadow:none!important;
+}
+body.guide-child-mode .recommend-overlay-close,
+body.guide-child-mode .profile-panel-close{display:none!important;}
+/* Host chrome owns stack navigation: drill-down uses its common ← and an
+   independent overlay uses its common ×. Title-only inner rows disappear,
+   while headers that identify the game or board itself stay. */
+/* 추천 전체보기의 header는 독립 페이지 chrome이 아니라 목록 scroll과 분리된
+   화면 기능 header다. Host X만 local close button 대신 사용한다. */
+body.guide-child-mode .recommend-overlay-header{display:flex!important;}
+body.guide-child-mode .profile-panel{
+  position:absolute!important;
+  inset:0!important;
+  background:transparent!important;
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+}
+/* The host owns the only center-modal outer shell. Profile root and its local
+   board subviews both carry .center-modal-shell, so neither may reapply the
+   mobile 10px / 36px / 12px geometry inside the child iframe. */
+body.guide-child-mode .profile-panel-box,
+body.guide-child-mode .profile-subsheet-box{
+  position:absolute!important;
+  inset:0!important;
+  width:auto!important;
+  max-width:none!important;
+  height:auto!important;
+  max-height:none!important;
+  margin:0!important;
+  border-radius:0!important;
+  box-shadow:none!important;
+}
+/* 플래너의 참여자/내 보드는 기존 profilePanel 안에서 모임 보드를 자동으로 연다.
+   guide child에서는 그 보드도 같은 child shell 전체를 쓰게 해 작은 두 번째 모달 외곽을 만들지 않는다. */
+body.guide-child-mode .profile-subsheet{
+  position:absolute!important;
+  inset:0!important;
+  background:transparent!important;
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+}
+/* profile overlay 안의 보드 전환은 host overlay가 아니라 내 보드의 내부 navigation이다.
+   제목·닫기만 감추고, 이 보드가 어디에서 왔는지 보여 주는 ← identity는 남긴다. */
+body.guide-child-mode .profile-subsheet-close,
+body.guide-child-mode .profile-subsheet-title{display:none!important;}
+body.guide-child-mode .profile-subsheet-header{display:grid!important;}
+body.guide-child-mode .profile-subsheet-back{display:flex!important;}
+body.guide-child-mode .rule-hub-overlay{
+  position:absolute!important;
+  inset:0!important;
+  background:transparent!important;
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+}
+body.guide-child-mode .rule-hub-box{
+  width:100%!important;
+  max-width:none!important;
+  height:100%!important;
+  max-height:none!important;
+  margin:0!important;
+  border-radius:0!important;
+  box-shadow:none!important;
+}
+body.guide-child-mode .rule-hub-back{display:none!important;}
+
+/* Parent Modal Stack Host: each child is a sibling frame over the same root backdrop.
+   Its shell deliberately repeats the established viewport center-modal geometry. */
+/* Host child는 root modal의 flex/padding 좌표계가 아니라 항상 viewport를 기준으로 덮는다. */
+.modal-stack-frame-layer{position:fixed;inset:0;z-index:20;pointer-events:auto;}
+.modal-stack-frame-shell{position:fixed;left:10px;right:10px;top:36px;bottom:12px;width:auto;height:auto;margin:0;background:#fff;border-radius:18px;overflow:hidden;display:flex;flex-direction:column;}
+.modal-stack-frame{width:100%;height:100%;border:0;flex:1;}
+.modal-stack-frame-back{position:absolute;top:10px;left:12px;z-index:3;border:0;border-radius:8px;padding:4px 8px;background:rgba(255,255,255,.88);color:var(--green);cursor:pointer;font-size:22px;line-height:1;}
+.modal-stack-frame-close{position:absolute;top:10px;right:12px;z-index:3;border:0;padding:4px;background:none;color:var(--ink);cursor:pointer;font-size:18px;line-height:1;}
+
+/*
+ * 모바일 센터모달 공통 외곽틀.
+ * 게임정보 모달(.game-sheet-panel)의 현재 규격을 기준으로 삼고,
+ * 각 화면의 내부 기능·lifecycle·iframe 상태 전환은 기존 selector에 맡긴다.
+ */
+@media(max-width:719px){
+  .record-iframe-modal,
+  .planner-sheet-modal{padding:0;}
+
+  .center-modal-shell{
+    position:absolute;
+    left:10px;
+    right:10px;
+    top:36px;
+    bottom:12px;
+    width:auto;
+    max-width:none;
+    height:auto;
+    max-height:none;
+    margin:0;
+    border-radius:18px;
+  }
+  .modal-stack-frame-shell.center-modal-shell{position:fixed;}
+
+  .center-modal-backdrop{
+    background:rgba(20,18,14,.5) !important;
+    backdrop-filter:blur(2px);
+    -webkit-backdrop-filter:blur(2px);
+  }
+
+  /* 게임 안내 child도 게임정보 root와 같은 viewport 기준 외곽틀을 쓴다. */
+  .rule-hub-overlay .rule-hub-box{animation:none;}
+  .shelf-sheet-overlay .shelf-sheet-box{animation:none;}
+
+  /* stack 아래 레이어는 보이되 inert와 함께 어떤 입력도 받지 않는다. */
+  .game-sheet.is-stack-inactive,
+  .record-iframe-modal.is-suspended,
+  .profile-panel.is-stack-inactive{pointer-events:none;}
+
+  /* 플래너 내부 등록/수정으로 바로 진입하는 예외는 센터모달 통일 대상이 아니다. */
+  .planner-sheet-modal.is-quick-entry .center-modal-backdrop{
+    background:transparent !important;
+    backdrop-filter:none;
+    -webkit-backdrop-filter:none;
+  }
+  .planner-sheet-modal.is-quick-entry .center-modal-shell{
+    position:relative;
+    inset:auto;
+    width:100%;
+    max-width:none;
+    height:100%;
+    max-height:none;
+    margin:0;
+    border-radius:0;
+  }
+
+  .guide-iframe-close{
+    position:absolute;
+    top:10px;
+    right:12px;
+    z-index:2;
+    background:none;
+    border:none;
+    color:var(--ink,#333);
+    cursor:pointer;
+    padding:4px;
+    font-size:18px;
+    line-height:1;
+  }
+
+}
+
 .home-section-desc{font-size:13px;color:var(--text-info);margin:0 0 12px;line-height:1.6;}
 .home-section-cta{
   display:inline-block;margin-top:16px;
@@ -9420,7 +9661,8 @@ body.is-embedded .inner-page{padding-top:0;}
 
 
   /* ── 바텀시트 → 센터 모달 ── */
-  .game-sheet-panel {
+  .game-sheet-panel,
+  .shelf-sheet-box {
     left: 50%;
     right: auto;
     top: 32px;
@@ -9430,6 +9672,7 @@ body.is-embedded .inner-page{padding-top:0;}
     border-radius: 20px;
     animation: sheetModalIn .22s ease;
   }
+  .shelf-sheet-box{height:auto;margin:0;}
   .rule-hub-box {
     position: absolute;
     left: 50%;

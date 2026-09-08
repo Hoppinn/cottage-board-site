@@ -1,8 +1,43 @@
 (function () {
+  const isEmbedValue = value => value === '1' || value === 'true';
   const _embedQuery = new URLSearchParams(location.search);
   const _embedHash = new URLSearchParams(location.hash.slice(1));
-  if (_embedQuery.get('embed') === '1' || _embedHash.get('embed') === '1') {
+  const _stackValue = _embedQuery.get('modalStack') || _embedHash.get('modalStack');
+  const _stackFrame = _embedQuery.get('modalFrame') || _embedHash.get('modalFrame') || '';
+  const _stackKind = _embedQuery.get('stackKind') || _embedHash.get('stackKind') || '';
+  let _localStackOpenDepth = 0;
+  window.CottageModalStack = {
+    state: () => ({ enabled: _stackValue === '1', frame: _stackFrame, kind: _stackKind, query: _embedQuery, hash: _embedHash }),
+    request: (kind, payload = {}, options = {}) => {
+      if (_stackValue !== '1' || _localStackOpenDepth || window.parent === window) return false;
+      const presentation = options?.presentation === 'drilldown' ? 'drilldown' : 'overlay';
+      window.parent.postMessage({ type: 'cottage-modal-stack-push', kind, payload, presentation }, '*');
+      return true;
+    },
+    pop: () => {
+      if (_stackValue !== '1' || _stackFrame !== 'child' || window.parent === window) return false;
+      window.parent.postMessage({ type: 'cottage-modal-stack-pop' }, '*');
+      return true;
+    },
+    runLocal: fn => {
+      _localStackOpenDepth++;
+      try { return fn(); } finally { _localStackOpenDepth--; }
+    },
+  };
+  if (isEmbedValue(_embedQuery.get('embed')) || isEmbedValue(_embedHash.get('embed'))) {
     document.body.classList.add('embed-mode');
+    // Parent stack child는 첫 paint부터 원 페이지 chrome을 숨긴다.
+    if (_stackValue === '1' && _stackFrame === 'root') document.body.classList.add('modal-stack-root');
+    if (_stackValue === '1' && _stackFrame === 'child') {
+      document.body.classList.add('guide-child-mode');
+      document.addEventListener('keydown', function (e) {
+        if (e.key !== 'Escape') return;
+        if (window.CottageModalStack.pop()) {
+          e.preventDefault();
+          e.stopImmediatePropagation();
+        }
+      }, true);
+    }
     document.addEventListener('click', function (e) {
       const a = e.target.closest('a[href]');
       if (!a || a.target === '_blank') return;
@@ -11,7 +46,7 @@
       let url;
       try { url = new URL(href, location.href); } catch (err) { return; }
       if (url.origin !== location.origin || !url.pathname.endsWith('.html')) return;
-      if (url.searchParams.get('embed') === '1' || new URLSearchParams(url.hash.slice(1)).get('embed') === '1') return;
+      if (isEmbedValue(url.searchParams.get('embed')) || isEmbedValue(new URLSearchParams(url.hash.slice(1)).get('embed'))) return;
       url.searchParams.set('embed', '1');
       // localhost의 extensionless redirect가 query를 버려도 hash는 보존된다.
       url.hash = 'embed=1';
@@ -61,8 +96,8 @@
           <button class="menu-group-header" type="button">동호회 <span class="menu-group-arrow">›</span></button>
           <div class="menu-group-body">
             <a href="${p}club/club.html">동호회 홈</a>
-            <a href="${p}club/club-schedule.html">모임 플래너</a>
             <a href="${p}club/club-intro.html">모임원 프로필</a>
+            <a href="${p}club/club-schedule.html">모임 플래너</a>
             <a href="${p}club/club-history.html">모임 기록 &amp; 사진</a>
           </div>
         </div>

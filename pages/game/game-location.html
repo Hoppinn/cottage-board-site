@@ -154,7 +154,8 @@
     body.embed-mode .owned-page-breadcrumb,
     body.embed-mode .page-mini-hero,
     body.embed-mode .site-footer { display: none !important; }
-    body.embed-mode .inner-page { padding-top: 8px; }
+    /* ←는 panel 좌상단에 그대로 두고, 검색창만 panel 상단 22px부터 시작한다. */
+    body.embed-mode .inner-page { padding-top: 22px; }
     .loc-section-divider {
       margin: 10px 0 6px;
       font-size: 11px;
@@ -212,7 +213,10 @@
   <script>
   (function () {
     const params = new URLSearchParams(location.search);
-    if (params.get('embed') === '1') document.body.classList.add('embed-mode');
+    const hashParams = new URLSearchParams(location.hash.slice(1));
+    if (['1', 'true'].includes(params.get('embed')) || ['1', 'true'].includes(hashParams.get('embed'))) {
+      document.body.classList.add('embed-mode');
+    }
 
     const SECTIONS = [
       { id: 'party',          code: 'A',   label: '파티게임',           sub: false },
@@ -391,11 +395,14 @@
 
       if (!query.trim()) { el.innerHTML = ''; return; }
 
-      const q = query.trim().toLowerCase();
+      const q = query.trim();
+      const matchesTitle = typeof window.matchKoreanSmart === 'function'
+        ? window.matchKoreanSmart
+        : (title, keyword) => String(title).toLowerCase().includes(String(keyword).toLowerCase());
       const matches = games.filter(g => {
-        const display = (g.title?.display || g.id).toLowerCase();
-        const bgg = (g.title?.bgg || '').toLowerCase();
-        return display.includes(q) || bgg.includes(q);
+        const display = g.title?.display || g.id;
+        const bgg = g.title?.bgg || '';
+        return matchesTitle(display, q) || matchesTitle(bgg, q);
       }).slice(0, 20);
 
       if (!matches.length) {
@@ -440,10 +447,6 @@
         const el = document.querySelector(`[data-section-id="${shelfParam}"]`);
         if (el) {
           el.classList.add('is-open');
-          // ⚠️ 진짜 원인은 타이밍이 아니라 CSS였다(style.css `html:has(body.embed-mode)`
-          // 참조) — html{scroll-padding-top:var(--header-total-h)}가 embed 모드에서도
-          // 52px를 그대로 물고 있어서 몇 번을 다시 스크롤해도 항상 그만큼 못 미쳤다.
-          // rAF 2회만 남겨 최초 레이아웃(썸네일 자리 확보는 이미 고쳐둠) 안정을 기다린다.
           requestAnimationFrame(() => requestAnimationFrame(() =>
             el.scrollIntoView({ behavior: 'smooth', block: 'start' })));
         }

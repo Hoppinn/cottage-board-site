@@ -699,8 +699,8 @@ function _openBoardFrameModal({ src, title, tab = null, wizardOnly = false }) {
   modal.innerHTML = wizardOnly
     ? `<iframe class="board-wizard-frame" src="${escH(src)}" title="${escH(title)}"></iframe>`
     : `
-    <div class="record-iframe-dim"></div>
-    <div class="record-iframe-panel" role="dialog" aria-modal="true" aria-label="${escH(title)}">
+    <div class="record-iframe-dim center-modal-backdrop"></div>
+    <div class="record-iframe-panel center-modal-shell" role="dialog" aria-modal="true" aria-label="${escH(title)}">
       <button aria-label="${escH(title)} 닫기" class="record-iframe-close" type="button">✕</button>
       <div class="record-iframe-loader" aria-hidden="true"></div>
       <iframe class="record-iframe-frame" src="${escH(src)}" title="${escH(title)}"></iframe>
@@ -1961,6 +1961,15 @@ async function _renderAdminMemberBoard(subBody, userId) {
   });
 }
 
+function _requestModalStackProfileOverlay(autoSubsheet, opts, selfUser) {
+  if (!window.CottageModalStack?.state?.().enabled) return false;
+  const userId = opts.readOnly ? opts.userId : selfUser?.id;
+  if (!userId) return false;
+  return window.CottageModalStack.request('profile', {
+    user: String(userId), subsheet: autoSubsheet || '', readonly: opts.readOnly ? '1' : '0',
+  }, { presentation: 'overlay' });
+}
+
 async function openProfilePanel(autoSubsheet = null, opts = {}) {
   // Phase C: userId 파라미터화 + 읽기전용 모드. readOnly면 대상 유저(userId)의 공개 보드를
   // 편집 컨트롤 없이 표시(비공개 섹션=알림·교환권·함께한 시간 제외). 편집 컨트롤 HTML은 _ro()로 생략.
@@ -1969,12 +1978,13 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
   //   { type:'panel', autoSubsheet, label, opts? } — 알림에서 남의 보드로 들어온 경우 내 보드로
   // 서브시트→패널 뒤로가기는 _openSubSheet가 이미 하므로, 여기는 패널 한 칸만 담당(깊이 1).
   // 체인이 생겨도 각 패널의 클로저가 자기 backTo를 들고 있어 스택 자료구조가 필요 없다.
-  const { userId: _targetUserId = null, readOnly = false, backTo = null, focusDate = null } = opts;
+  const { userId: _targetUserId = null, readOnly = false, backTo = null, focusDate = null, onClose = null } = opts;
   const _selfUser = getKakaoUser();
   const user = readOnly
     ? { id: String(_targetUserId), nickname: opts.nickname || '' }
     : _selfUser;
   if (!user || !user.id) return;
+  if (_requestModalStackProfileOverlay(autoSubsheet, opts, _selfUser)) return;
   // 🚨 타인 보드 진입부(openOtherProfileSheet 등)가 nickname을 안 넘겨 늘 ''였다 —
   // 패널 제목이 "회원"으로 뜨고, getUserPlayedGames/getUserParticipationCount 등
   // nickname 기반 집계(게임도감·참여횟수)가 본인이 작성 안 한 태그 참여 기록을 못 잡아
@@ -2019,7 +2029,8 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
 
   const panel = document.createElement('div');
   panel.id = 'profilePanel';
-  panel.className = 'profile-panel' + (readOnly ? ' profile-panel--readonly' : '') + (!backTo ? ' profile-panel--main' : '');
+  panel.className = 'profile-panel center-modal-backdrop' + (readOnly ? ' profile-panel--readonly' : '') + (!backTo ? ' profile-panel--main' : '');
+  panel._onClose = typeof onClose === 'function' ? onClose : null;
   const isOwnerUser = String(user.id) === String(OWNER_KAKAO_ID);
   const isDevMode = location.hostname === 'localhost' || isOwnerUser;
   const _panelHeaderHtml = backTo ? `
@@ -2028,7 +2039,7 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
       <span class="profile-panel-title">${escH(user.nickname || (readOnly ? '회원' : '손님'))}의 ${_boardLabel}</span>
       <button aria-label="내 보드 닫기" class="profile-panel-close" type="button">✕</button>
     </div>` : '';
-  panel.innerHTML = `<div class="profile-panel-box">
+  panel.innerHTML = `<div class="profile-panel-box center-modal-shell">
     ${!backTo ? `<button aria-label="내 보드 닫기" class="profile-panel-close profile-panel-main-close" type="button">✕</button>` : ''}
     ${_panelHeaderHtml}
     <div class="profile-panel-body">
@@ -2043,20 +2054,37 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
   panel._viewToken = window.pushActiveView?.(readOnly ? 'other-board' : 'my-board') ?? null;
   const _popView = () => window.popActiveView?.(panel._viewToken);
   const _closePanel = () => {
+    if (panel._onKeydown) document.removeEventListener('keydown', panel._onKeydown, true);
     panel._identityObserver?.disconnect();
     window.removeEventListener('cottage-meeting-changed', panel._meetingPreviewRefresh);
     window.removeEventListener('cottage-profile-intro-saved', panel._profileIntroRefresh);
-    document.getElementById('profileSubSheet')?.remove();
+    const activeSub = document.getElementById('profileSubSheet');
+    if (activeSub?._closeStackChild) activeSub._closeStackChild();
+    else activeSub?.remove();
     _popView();
     panel.remove();
+    // 부모의 inert 해제는 child DOM을 먼저 제거한 뒤에만 한다. 같은 click의 아래 레이어 전달을 막는다.
+    panel._onClose?.();
   };
+  if (panel._onClose) {
+    panel._onKeydown = e => {
+      if (e.key !== 'Escape') return;
+      e.preventDefault();
+      e.stopPropagation();
+      _closePanel();
+    };
+    document.addEventListener('keydown', panel._onKeydown, true);
+  }
   panel.querySelectorAll('.profile-panel-close').forEach(button => button.addEventListener('click', _closePanel));
   panel.addEventListener('click', e => { if (e.target === panel) _closePanel(); });
   panel.querySelector('.profile-panel-header')?.addEventListener('click', e => { if (!e.target.closest('button')) panel.querySelector('.profile-panel-body')?.scrollTo({top:0,behavior:'smooth'}); });
   // ⚠️ 자기 패널을 먼저 지운 뒤 복귀시킨다. 순서가 바뀌면 위 토글 가드(`if (existing) … if (!readOnly) return`)에
   // 걸려 내 보드가 안 열리고 화면이 텅 빈다.
   panel.querySelector('.profile-panel-back')?.addEventListener('click', () => {
-    document.getElementById('profileSubSheet')?.remove();
+    if (panel._onKeydown) document.removeEventListener('keydown', panel._onKeydown, true);
+    const activeSub = document.getElementById('profileSubSheet');
+    if (activeSub?._closeStackChild) activeSub._closeStackChild();
+    else activeSub?.remove();
     _popView();
     panel.remove();
     // restoreScroll=true(보던 지점으로) + noAnim=true(올라오는 연출 없이) — 원래 있던 시트로 돌아가는 것이므로
@@ -3061,14 +3089,26 @@ const introVoucherCardHtml = _introVoucher
   // 사라지고 무조건 "{닉네임}의 {보드}"로만 돌아갔다(2026-08-02 사용자 지적 — 알림에서
   // 업적 클릭 → 수집 보드로 갔는데 뒤로가기가 알림이 아니라 내 보드였음).
   function _openSubSheet(title, contentHtml, afterRender, bodyClass = '', onLeave = null, backTo = null) {
-    document.getElementById('profileSubSheet')?.remove();
+    document.getElementById('profileSubSheet')?._closeStackChild?.();
+    const previousAriaHidden = panel.getAttribute('aria-hidden');
+    panel.classList.add('is-stack-inactive');
+    panel.setAttribute('aria-hidden', 'true');
+    panel.inert = true;
+    panel.setAttribute('inert', '');
+    const restorePanel = () => {
+      panel.inert = false;
+      panel.removeAttribute('inert');
+      panel.classList.remove('is-stack-inactive');
+      if (previousAriaHidden === null) panel.removeAttribute('aria-hidden');
+      else panel.setAttribute('aria-hidden', previousAriaHidden);
+    };
     const sub = document.createElement('div');
     sub.id = 'profileSubSheet';
-    sub.className = 'profile-subsheet' + (readOnly ? ' profile-subsheet--readonly' : '');
+    sub.className = 'profile-subsheet profile-subsheet--stack-child' + (readOnly ? ' profile-subsheet--readonly' : '');
     const isBoardSubsheet = ['프로필 보드', '모임 보드', '기록 보드', '함께한 시간', '수집 보드'].includes(title);
     const backLabel = backTo?.label || (isBoardSubsheet ? '내 보드' : `${escH(user.nickname || (readOnly ? '회원' : '손님'))}의 ${_boardLabel}`);
     sub.innerHTML = `
-      <div class="profile-subsheet-box">
+      <div class="profile-subsheet-box center-modal-shell">
         <div class="profile-subsheet-header profile-fixed-header">
           <button class="profile-subsheet-back profile-fixed-header-left" type="button">${isBoardSubsheet
             ? `<span class="profile-subsheet-back-identity"><span class="profile-subsheet-back-arrow">‹</span><span class="profile-subsheet-back-avatar">${_repIdentityHtml}</span><span class="profile-subsheet-back-name">${escH(user.nickname || (readOnly ? '회원' : '손님'))}</span></span>`
@@ -3083,9 +3123,18 @@ const introVoucherCardHtml = _introVoucher
     // (✕닫기는 패널 자체를 제거해 다음 오픈 시 DB에서 새로 읽으므로 스냅샷 불필요)
     // onLeave가 조용히 실패하면 스냅샷이 누락돼 재진입 시 상태가 되돌아간다(개별 읽음이 이걸 의존) → 로그 필수
     const _returnToMain = () => {
+      document.removeEventListener('keydown', _onSubKeydown, true);
       try { onLeave?.(sub.querySelector('.profile-subsheet-body')); } catch (e) { console.error('[_openSubSheet onLeave]', e); }
       sub.remove();
+      restorePanel();
     };
+    const _onSubKeydown = e => {
+      if (e.key !== 'Escape') return;
+      e.preventDefault();
+      e.stopPropagation();
+      _leaveToPanel();
+    };
+    sub._closeStackChild = _returnToMain;
     const _leaveToPanel = () => {
       _returnToMain();
       if (backTo?.onClick) backTo.onClick();
@@ -3094,6 +3143,7 @@ const introVoucherCardHtml = _introVoucher
     sub.querySelector('.profile-subsheet-close').addEventListener('click', _closePanel);
     sub.addEventListener('click', e => { if (e.target === sub) _leaveToPanel(); });
     sub.querySelector('.profile-subsheet-header').addEventListener('click', e => { if (!e.target.closest('button')) sub.querySelector('.profile-subsheet-body')?.scrollTo({top:0,behavior:'smooth'}); });
+    document.addEventListener('keydown', _onSubKeydown, true);
     if (afterRender) afterRender(sub.querySelector('.profile-subsheet-body'));
   }
 
@@ -3369,6 +3419,11 @@ const introVoucherCardHtml = _introVoucher
 async function openOtherProfileSheet(userId, opts = {}) {
   if (!userId) return;
   const { autoSubsheet = null, ...panelOpts } = opts;
+  if (window.parent !== window && document.body.classList.contains('embed-mode') && location.pathname.endsWith('club-intro.html')) {
+    if (window.CottageModalStack?.request('profile', {
+      user: String(userId), subsheet: autoSubsheet || '', readonly: '1',
+    }, { presentation: 'overlay' })) return;
+  }
   const self = getKakaoUser();
   if (self && String(self.id) === String(userId)) return openProfilePanel(autoSubsheet, panelOpts);
   return openProfilePanel(autoSubsheet, { userId: String(userId), readOnly: true, ...panelOpts });
@@ -3449,6 +3504,22 @@ async function openOtherMeetingSheet(userId, opts = {}) {
 }
 
 window.openOtherMeetingSheet = openOtherMeetingSheet;
+
+const _modalStackProfile = window.CottageModalStack?.state?.();
+if (_modalStackProfile?.frame === 'child' && _modalStackProfile.kind === 'profile') {
+  let _guideProfileOpened = false;
+  const openGuideProfileChild = () => {
+    if (_guideProfileOpened) return;
+    const userId = _modalStackProfile.query.get('user') || _modalStackProfile.hash.get('user') || '';
+    const autoSubsheet = _modalStackProfile.query.get('subsheet') || _modalStackProfile.hash.get('subsheet') || '';
+    const readOnly = (_modalStackProfile.query.get('readonly') || _modalStackProfile.hash.get('readonly')) === '1';
+    if (!readOnly && !getKakaoUser()) return;
+    _guideProfileOpened = true;
+    window.CottageModalStack.runLocal(() => openProfilePanel(autoSubsheet || null, { userId: userId || null, readOnly }));
+  };
+  window.addEventListener('kakao-auth-ready', openGuideProfileChild);
+  requestAnimationFrame(openGuideProfileChild);
+}
 
 document.addEventListener('DOMContentLoaded', initKakaoAuth);
 

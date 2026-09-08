@@ -1,13 +1,13 @@
 # PROJECT_STATE — 코티지보드 현재 상태
 
-최종 갱신: 2026-09-08
+최종 갱신: 2026-09-09
 
 > 이 문서는 세션을 다시 시작할 수 있게 **열린 상태와 그 재개 맥락**만 보관한다. 완료한 변경·검증의 상세는 git commit, 계속 유효한 구조·데이터 계약은 도메인 문서가 정본이다. 완료 목록·커밋 목록·세션 회고는 여기서 제거한다.
 
 ## 0. 현재 상태
 
 - 시간 단위 표시: `profiles.total_minutes`의 legacy 이름과 실제 seconds 단위를 코드·도메인 문서에 명시하고, 오너 전용 회원 분석의 60배 표시를 수정했다. 관리자와 회원 분석의 `page_sessions` 경로 비교는 별도 보류 후보다.
-- 현재 승인되어 진행 중인 작업 없음. 아래 NEXT/BACKLOG/DEFERRED 항목은 승인 없이 착수하지 않는다.
+- NOW: Modal Stack Host의 portal·topmost close guard·`profile-wizard` child 이관은 실제 흰 화면 회귀를 받아 rollback했다. 실패 원인은 `docs/DEBUGGING_HISTORY.md`에 기록했다. 기존 frame/inert/single backdrop/iframe 상태 보존 구조와 코스 UI 변경은 유지한다. B(root X가 iframe 위저드 X처럼 hit되는 경로)는 iframe close 요청 위임 후 사용자 실화면에서 해결 확인됐다. A(`홈 → 프로필페이지 미리보기 → 내 보드`)는 `?modalDebug=1` 실제 계측으로 iframe 내부 `.profile-panel-box.center-modal-shell`의 중복 `10/36/12` 좌표가 원인임을 확인했고, child 안을 채우도록 최소 수정한 뒤 사용자 실화면 해결 확인을 받았다. 상세 측정·실패 가설은 `docs/DEBUGGING_HISTORY.md`를 정본으로 한다.
 - 상세 Plan: [보드 상호작용 회귀](plans/board-interaction-regressions-plan.md) · [모임 참여 데이터](plans/meeting-participation-data-plan.md) · [닉네임 해소 보정](plans/nickname-resolution-correction-plan.md)
 - 현재 단계: 최근 참여의 모임 단위 개편은 데이터 관계가 불명확해 구현 보류다. `game_play_records`에는 모임 ID가 없고 `meeting_votes`는 참여 등록이므로 날짜만으로 결합하지 않는다.
 - P2 완료: `player_names` 후보는 공백 사이 `%` 패턴으로 넓히고, 최종적으로 쉼표 토큰의 `normalizeNick` 정확 일치만 사용한다. 활동 통계·태그 알림·게임 도감·참여/함께한 날 업적과 참여자 링크에 같은 규칙을 적용했고, 충돌 키는 자동 연결하지 않는다. 원문 기록과 작성자 `user_id` 권한은 보존했으며 모임 참석을 추론하지 않았다. 읽기 전용 감사는 프로필 46개·기록 122개·충돌 0쌍, `덕 지` 0→20건/3→9일 및 `play_5·10·20` 신규 임계값 후보, `원철` 부분문자열 오탐 2→0건을 확인했다. 이번 세션에서 업적 지급 write는 실행하지 않았다.
@@ -17,13 +17,13 @@
 
 ## 1. NOW
 
-- 현재 승인되어 진행 중인 작업 없음.
+- **공통 Modal Stack Host** — `docs/plans/modal-stack-host-plan.md`의 기존 host 구조를 유지한다. games 위치·안내만 ← drill-down이며, 전체보기·플래너·보드·모임 조율은 × overlay다. A는 사용자 실화면에서 해결 확인됐고, 독립 overlay 요청은 명시적으로 `presentation: 'overlay'`를 전달하며 호출처 없는 `openProfilePanel()`의 옛 `stackChild` 분기는 제거했다. profile child의 내 보드·프로필 보드·모임 보드는 Host shell 외곽을 다시 적용하지 않고 iframe 전체를 채운다. ←와 ESC는 top frame 하나만 복귀하고, ×는 현재 top frame 하나만 닫아 아래 frame 상태를 보존한다. 기존 모임원 프로필 작성·수정 wizard 경로와 내 보드 내부 ← navigation은 보존한다. 남은 검증은 대표 overlay/drill-down 경로의 실제 동작 확인이다.
 
 ## 2. NEXT (자동 착수 금지)
 
-1. **모임원 프로필 모달 header 미세 조정** — 현재 36px 제목줄을 약 6~8px 키운다. 좌우 padding은 유지하고 상하 padding·제목 글씨(+1px)·× 크기만 중간값으로 조정한다. 독립 페이지 header처럼 커지지 않는 compact modal title row를 360px에서 확인한다.
-2. **게임 위치 2건·보유게임 1건** — 원래 증상·대상 게임을 복원한 뒤 독립 후보로 제안한다.
-3. **가입경로 보드라이프** — DB/RPC 변경 Plan 승인 후 구현한다.
+1. **게임 위치 자동 초점 2건·보유게임 1건** — 게임정보 모달에서 게임 위치 child로 들어갈 때 해당 shelf가 펼쳐지고, highlight 게임이 첫 항목인 상태로 shelf header가 iframe 상단에 와야 하나 실제 화면에서는 최상단에서 멈춘다. 실패한 시도: ① `scrollIntoView()` 호출 시점 rAF 조정, ② 좌표 기반 `window.scrollTo`, ③ `load` 뒤 재실행, ④ header rect를 반복 보정하는 방식. 모두 실제 런타임에서 해결되지 않았으며 제거했다. 재개 전에는 360px iframe의 최종 URL/query·`body.embed-mode`·shelf open 여부·highlight 첫 항목·shelf header/첫 게임 rect·실제 scroll container와 `scrollTop`을 함께 측정해 원인을 확정한다. `#embed=1` fallback은 localhost query 유실 회귀가 있어 측정 전 제거하지 않는다.
+2. **가입경로 보드라이프** — DB/RPC 변경 Plan 승인 후 구현한다.
+3. **홈페이지 기능 child route 공통화 리팩터링** — 현재 `guideStack=1`의 게임정보·기록·추천 전체보기·모임 조율·내 보드는 기존 원본 open 함수와 parent `guideChildSrc()`를 재사용하지만, 기능별 위임 분기와 URL 조립이 각 파일에 남아 있다. 영향 대상은 홈페이지 기능 root iframe에서 이후 추가될 center-modal 성격의 child 경로다. 별도 리팩터링 Plan 승인 뒤 `원본 open 함수 → 공통 child 요청({kind,payload}) → parent route registry → 기존 deep-link/component` 계약으로만 정리하고, 독립 URL·일반 embed·작은 sheet는 유지한다. 검증은 기존 5개 경로와 새 등록 경로에서 parent shell·←/ESC pop·root state 보존을 360×640으로 확인한다.
 
 ## 3. BACKLOG (자동 착수 금지)
 

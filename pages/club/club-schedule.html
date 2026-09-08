@@ -742,7 +742,9 @@
 
     body.is-embedded .site-footer,
     body.is-embedded .header-bar,
-    body.is-embedded .owned-page-nav { display: none !important; }
+    body.is-embedded .owned-page-nav,
+    body.is-embedded .owned-page-breadcrumb,
+    body.is-embedded .page-mini-hero { display: none !important; }
     body.is-embedded { overflow-x: hidden; }
 
     /* 홈에서 등록/수정으로 바로 진입 시 — 플래너 페이지 전체(.inner-page)를 숨기고 등록/수정
@@ -904,6 +906,9 @@
     // 부모 프레임 안에서 실행 중이라는 사실 자체도 embed 판정에 포함해야 ready/date 전달이 멈추지 않는다.
     const IS_EMBEDDED = window.parent !== window
       || new URLSearchParams(location.search).get('embed') === 'true';
+    const _modalStackState = window.CottageModalStack?.state?.();
+    const IS_STACK_MEETING_CHILD = _modalStackState?.frame === 'child' && _modalStackState.kind === 'meeting';
+    const STACK_MEETING_DATE = _modalStackState?.query.get('date') || _modalStackState?.hash.get('date') || '';
 
     // 활성 뷰 체류시간 추적(PLAN_active_view_tracking.md 3차) — schedSheetOverlay(단일 날짜
     // 시간 수정)와 schedMultiOverlay(멀티스텝 등록) 둘 다 "플래너에서 등록/수정 중"이라는
@@ -3029,6 +3034,12 @@
       document.getElementById('viewWeek').style.display = '';
       await renderWeekView(0);
       _initDone = true;
+      if (IS_STACK_MEETING_CHILD && STACK_MEETING_DATE) {
+        await _ensureVoteRangeLoaded(STACK_MEETING_DATE, STACK_MEETING_DATE);
+        const childVotes = allVotes.filter(v => v.vote_date === STACK_MEETING_DATE);
+        const childGames = allVoteGames.filter(g => g.vote_date === STACK_MEETING_DATE);
+        window.CottageModalStack.runLocal(() => window.openDateMeetingModal?.(STACK_MEETING_DATE, childVotes, childGames, {}));
+      }
       if (_pendingRegisterOpen) {
         _pendingRegisterOpen = false;
         document.body.classList.add('is-quick-entry');

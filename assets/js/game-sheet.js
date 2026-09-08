@@ -246,10 +246,14 @@ let closeGameSheetButton =
 let closeGameSheetDim =
   document.querySelector('#closeGameSheetDim');
 
+function _requestModalStack(kind, payload, options) {
+  return window.CottageModalStack?.request(kind, payload, options) === true;
+}
+
 function ensureGameSheet() {
   if (document.getElementById('gameSheet')) return;
   const wrap = document.createElement('div');
-  wrap.innerHTML = '<div class="game-sheet" id="gameSheet"><div class="game-sheet-dim" id="closeGameSheetDim"></div><div class="game-sheet-panel"><button aria-label="게임 정보 닫기" class="game-sheet-close" id="closeGameSheetButton" type="button">✕</button><div class="game-sheet-scroll"><div id="gameSheetContent"></div></div></div></div>';
+  wrap.innerHTML = '<div class="game-sheet" id="gameSheet"><div class="game-sheet-dim center-modal-backdrop" id="closeGameSheetDim"></div><div class="game-sheet-panel center-modal-shell"><button aria-label="게임 정보 닫기" class="game-sheet-close" id="closeGameSheetButton" type="button">✕</button><div class="game-sheet-scroll"><div id="gameSheetContent"></div></div></div></div>';
   document.body.appendChild(wrap.firstChild);
   gameSheet          = document.getElementById('gameSheet');
   gameSheetContent   = document.getElementById('gameSheetContent');
@@ -327,7 +331,8 @@ function _ruleHubParagraphsHtml(text) {
     })
     .join('');
 }
-function _openRuleHubModal(gameName, { sections: ruleSections, errorNote, photos, organizerNote } = {}, focusSection) {
+function _openRuleHubModal(gameName, { sections: ruleSections, errorNote, photos, organizerNote } = {}, focusSection, gameKey = '') {
+  if (_requestModalStack('game-rule', { game: String(gameKey || ''), focus: focusSection || '' }, { presentation: 'drilldown' })) return;
   const hasRule = ruleSections && Object.keys(ruleSections).length > 0;
   if (!hasRule && !errorNote && !photos?.length && !organizerNote) return;
   document.getElementById('ruleHubModal')?._closeActiveView?.();
@@ -356,16 +361,11 @@ function _openRuleHubModal(gameName, { sections: ruleSections, errorNote, photos
 
   const overlay = document.createElement('div');
   overlay.id = 'ruleHubModal';
+  // 게임정보 root가 이미 공통 backdrop을 소유한다. child는 입력을 받는 투명 레이어만 만든다.
   overlay.className = 'rule-hub-overlay';
-  // 헤더는 게임명이 아니라 고정 라벨 "게임 안내" — 게임 방법/자주 틀리는 규칙/정리 방법이
-  // 한 화면 안에서 같이 스크롤되므로 헤더는 이 화면 전체의 역할을 대표해야 한다(개별 섹션명도,
-  // 게임명 반복도 아님). openShelfSheet(게임 위치)가 이미 같은 패턴(고정 라벨) — 그쪽과 통일.
-  // 게임명은 시각적으로는 안 보이지만 aria-label로는 남겨 스크린리더 사용자는 여전히 알 수 있다.
-  overlay.innerHTML = `<div class="rule-hub-box" role="dialog" aria-modal="true" aria-label="게임 안내 – ${window.escH(gameName)}">
-    <div class="rule-hub-header">
-      <span class="rule-hub-title">게임 안내</span>
-      <button class="rule-hub-close" type="button" aria-label="닫기">✕</button>
-    </div>
+  // child는 제목줄 없이 좌측 ←만 둔다. 게임명은 aria-label로만 남긴다.
+  overlay.innerHTML = `<div class="rule-hub-box center-modal-shell" role="dialog" aria-modal="true" aria-label="게임 안내 – ${window.escH(gameName)}">
+    <button class="rule-hub-back" type="button" aria-label="게임정보로 돌아가기">←</button>
     <div class="rule-hub-scroll">
       ${panels.map(s => `<details class="rule-hub-section${s.warn ? ' is-warn' : ''}"${s.key === openKey ? ' open' : ''}>
         <summary><span class="rule-hub-icon">${s.icon}</span><span class="rule-hub-label">${window.escH(s.label)}</span><span class="rule-hub-arrow">▾</span></summary>
@@ -374,10 +374,37 @@ function _openRuleHubModal(gameName, { sections: ruleSections, errorNote, photos
     </div>
   </div>`;
   document.body.appendChild(overlay);
+  const parentSheet = document.getElementById('gameSheet');
+  const previousAriaHidden = parentSheet?.getAttribute('aria-hidden');
+  if (parentSheet) {
+    parentSheet.classList.add('is-stack-inactive');
+    parentSheet.setAttribute('aria-hidden', 'true');
+    parentSheet.inert = true;
+    parentSheet.setAttribute('inert', '');
+  }
   const viewToken = window.pushActiveView?.(window.COTTAGE_ACTIVE_VIEWS?.['game-rule']?.key);
-  const close = () => { window.popActiveView?.(viewToken); overlay.remove(); };
+  const close = () => {
+    if (!overlay.isConnected) return;
+    document.removeEventListener('keydown', onKeydown, true);
+    window.popActiveView?.(viewToken);
+    overlay.remove();
+    if (parentSheet) {
+      parentSheet.inert = false;
+      parentSheet.removeAttribute('inert');
+      parentSheet.classList.remove('is-stack-inactive');
+      if (previousAriaHidden === null) parentSheet.removeAttribute('aria-hidden');
+      else parentSheet.setAttribute('aria-hidden', previousAriaHidden);
+    }
+  };
+  const onKeydown = e => {
+    if (e.key !== 'Escape') return;
+    e.preventDefault();
+    e.stopPropagation();
+    close();
+  };
   overlay._closeActiveView = close;
-  overlay.querySelector('.rule-hub-close').addEventListener('click', close);
+  document.addEventListener('keydown', onKeydown, true);
+  overlay.querySelector('.rule-hub-back').addEventListener('click', close);
   overlay.addEventListener('click', e => { if (e.target === overlay) close(); });
   if (photos?.length && window.openLightbox) {
     const captions = photos.map(() => `${gameName} 정리 방법`);
@@ -388,62 +415,74 @@ function _openRuleHubModal(gameName, { sections: ruleSections, errorNote, photos
 }
 
 function openShelfSheet(url) {
+  const stackUrl = new URL(url, location.href);
+  if (_requestModalStack('game-location', {
+    game: stackUrl.searchParams.get('highlight') || '',
+    shelf: stackUrl.searchParams.get('shelf') || '',
+  }, { presentation: 'drilldown' })) return;
   // 기존에 남아있던(하이드된 채 뒤에 깔린 경우 포함) 오버레이를 강제로 치울 때도
   // 그게 push해둔 토큰을 같이 pop한다 — kakao-auth.js openProfilePanel의 "existing" 패턴과 동일.
   const _existingShelf = document.getElementById('shelfSheetOverlay');
-  if (_existingShelf) { window.popActiveView?.(_existingShelf._viewToken); _existingShelf.remove(); }
+  if (_existingShelf) _existingShelf._closeActiveView?.();
+  const parentSheet = document.getElementById('gameSheet');
+  const previousAriaHidden = parentSheet?.getAttribute('aria-hidden');
+  if (parentSheet) {
+    parentSheet.classList.add('is-stack-inactive');
+    parentSheet.setAttribute('aria-hidden', 'true');
+    parentSheet.inert = true;
+    parentSheet.setAttribute('inert', '');
+  }
+
   const overlay = document.createElement('div');
   overlay.id = 'shelfSheetOverlay';
   overlay.className = 'shelf-sheet-overlay';
+  // query가 localhost redirect에서 유실돼도 iframe이 embed 상태를 유지하도록 hash fallback을 보존한다.
+  const embedUrl = url.includes('#') ? url : `${url}#embed=1`;
   overlay.innerHTML = `
-    <div class="shelf-sheet-box">
-      <div class="shelf-sheet-header">
-        <button class="shelf-sheet-back" type="button">&#8592;</button>
-        <span class="shelf-sheet-title">게임 위치</span>
-      </div>
-      <iframe class="shelf-sheet-iframe" src="${url}"></iframe>
+    <div class="shelf-sheet-box center-modal-shell" role="dialog" aria-modal="true" aria-label="게임 위치">
+      <button class="shelf-sheet-back shelf-sheet-back--floating" type="button" aria-label="게임정보로 돌아가기">&#8592;</button>
+      <iframe class="shelf-sheet-iframe" src="${embedUrl}"></iframe>
     </div>`;
   document.body.appendChild(overlay);
   // 활성 뷰 체류시간 추적(2차) — 토큰은 오버레이 DOM 노드에 저장(패널 재생성마다 클로저 변수가
   // 아니라 노드에 실어야 위 "existing 강제 치우기"에서도 꺼낼 수 있다, kakao-auth.js와 동일 이유).
   overlay._viewToken = window.pushActiveView?.('game-location-shelf') ?? null;
 
-  // ← 뒤로가기: 선반 닫고 직전 게임시트 복원
-  const prevGameKey = (typeof _currentSheetGameKey !== 'undefined') ? _currentSheetGameKey : null;
-  overlay.querySelector('.shelf-sheet-back').addEventListener('click', () => {
+  const restoreParentSheet = () => {
+    if (!parentSheet) return;
+    parentSheet.inert = false;
+    parentSheet.removeAttribute('inert');
+    parentSheet.classList.remove('is-stack-inactive');
+    if (previousAriaHidden === null) parentSheet.removeAttribute('aria-hidden');
+    else parentSheet.setAttribute('aria-hidden', previousAriaHidden);
+  };
+  const closeShelf = () => {
+    if (!overlay.isConnected) return;
+    document.removeEventListener('keydown', onKeydown, true);
     window.popActiveView?.(overlay._viewToken);
     overlay.remove();
-    if (prevGameKey) openGameSheet(prevGameKey);
-  });
-  overlay.addEventListener('click', e => { if (e.target === overlay) { window.popActiveView?.(overlay._viewToken); overlay.remove(); } });
+    restoreParentSheet();
+  };
+  const onKeydown = e => {
+    if (e.key !== 'Escape') return;
+    e.preventDefault();
+    e.stopPropagation();
+    closeShelf();
+  };
+  document.addEventListener('keydown', onKeydown, true);
+  overlay._closeActiveView = closeShelf;
+  overlay.querySelector('.shelf-sheet-back').addEventListener('click', closeShelf);
+  overlay.addEventListener('click', e => { if (e.target === overlay) closeShelf(); });
 
   function registerMsg() { window.addEventListener('message', handleShelfMsg); }
   function handleShelfMsg(e) {
     if (e.data?.action !== 'openGame' || !e.data?.gameId) return;
     window.removeEventListener('message', handleShelfMsg);
 
-    // 선반은 안 닫힌다(게임시트 뒤에 잠시 숨을 뿐) — 그래서 여기서 pop하지 않는다. 게임시트가
-    // 위에 쌓이는(nested push) 것만으로 스택이 [game-location-shelf, game-sheet]가 되고,
-    // 아래 MutationObserver가 게임시트 닫힘을 감지해 선반을 되살릴 때는 이미 game-sheet 쪽
-    // popActiveView(closeGameSheet 안)가 스택 top을 다시 game-location-shelf로 복원해 둔 뒤다.
-    overlay.style.zIndex = '0';
-    overlay.style.pointerEvents = 'none';
+    // 위치 목록에서 다른 게임을 선택하면 현재 child를 먼저 pop하고, 선택한 게임정보를 root로 연다.
+    // 원래 게임정보의 상태를 새 게임으로 덮어쓰는 기존 이동 의미는 유지한다.
+    closeShelf();
     openGameSheet(decodeURIComponent(e.data.gameId));
-
-    const gsEl = document.getElementById('gameSheet');
-    if (gsEl) {
-      const obs = new MutationObserver(() => {
-        if (!gsEl.classList.contains('is-active')) {
-          obs.disconnect();
-          overlay.style.zIndex = '9600';
-          overlay.style.pointerEvents = '';
-          registerMsg();
-        }
-      });
-      obs.observe(gsEl, { attributes: true, attributeFilter: ['class'] });
-    } else {
-      overlay.remove();
-    }
   }
   registerMsg();
 }
@@ -565,6 +604,10 @@ function _buildSheetReactionsHtml(gameKey) {
 function _buildSheetMechsHtml(detail, mechanicsDisplay, categoriesDisplay) {
   return mechanicsDisplay.length || categoriesDisplay.length || detail.bgg.designers?.length ? `
       <div class="sheet-info-group">
+        <div class="sheet-card-head">
+          <p class="sheet-card-title">상세 정보</p>
+          ${mechanicsDisplay.length || categoriesDisplay.length ? `<button class="sheet-mechs-toggle" id="sheetMechsToggle" onclick="toggleSheetMechs(this)">더보기</button>` : ''}
+        </div>
         ${mechanicsDisplay.length || categoriesDisplay.length ? `
           <div class="sheet-mechs-wrap" id="sheetMechsWrap">
             ${mechanicsDisplay.length ? `
@@ -579,7 +622,6 @@ function _buildSheetMechsHtml(detail, mechanicsDisplay, categoriesDisplay) {
                 <p class="sheet-mechs-text is-clamped">${categoriesDisplay.join(" · ")}</p>
               </div>
             ` : ""}
-            <button class="sheet-mechs-toggle" id="sheetMechsToggle" onclick="toggleSheetMechs(this)">+ 더보기</button>
           </div>
         ` : ""}
         ${detail.bgg.designers?.length ? `
@@ -623,6 +665,8 @@ function _buildSameDesignerHtml(gameKey, detail) {
 }
 
 function openGameSheet(gameKey, restoreScroll = false, fromKey = null, noAnim = false){
+  const guideGame = window.gameData?.[gameKey];
+  if (_requestModalStack(guideGame ? 'game-info' : 'game-record', { game: String(gameKey || '') }, { presentation: 'overlay' })) return;
   if (_gameSheetNavBack) {
     _gameSheetNavBack = false;
   } else if (fromKey) {
@@ -631,8 +675,7 @@ function openGameSheet(gameKey, restoreScroll = false, fromKey = null, noAnim = 
     _gameSheetHistory = [];
   }
   _currentSheetGameKey = gameKey;
-  const game =
-    window.gameData?.[gameKey];
+  const game = guideGame;
 
   if(
     !gameSheet ||
@@ -782,10 +825,12 @@ function openGameSheet(gameKey, restoreScroll = false, fromKey = null, noAnim = 
     <!-- 게임 설명 (한국어 소스만 표시) -->
     ${(detail.bgg.descriptionKo || detail.commentSource !== 'bgg') && detail.comment ? `
       <div class="sheet-section">
-        <p class="sheet-section-label">게임 설명</p>
+        <div class="sheet-card-head">
+          <p class="sheet-card-title">게임 설명</p>
+          <button class="sheet-desc-toggle" id="sheetDescToggle" onclick="toggleSheetDesc(this)">더보기</button>
+        </div>
         <div class="sheet-desc-wrap">
           <p class="sheet-desc is-clamped" id="sheetDesc">${detail.comment.replace(/\n/g, '<br>')}</p>
-          <button class="sheet-desc-toggle" id="sheetDescToggle" onclick="toggleSheetDesc(this)">+ 더보기</button>
         </div>
       </div>
     ` : ""}
@@ -976,6 +1021,7 @@ async function updateSheetPlayCountLink(gameKey) {
 }
 
 function closeGameSheet(){
+  if (window.CottageModalStack?.pop()) return;
   if(!gameSheet){
     return;
   }
@@ -1003,6 +1049,7 @@ function closeGameSheet(){
 
 // ── 게임평/기록 전용 바텀시트 ────────────────────────────────────────
 function openGameRecordSheet(gameKey) {
+  if (_requestModalStack('game-record', { game: String(gameKey || '') }, { presentation: 'overlay' })) return;
   if (!gameSheet || !gameSheetContent) return;
   _currentSheetGameKey = gameKey;
   onCloseCommentModal();
@@ -1108,9 +1155,9 @@ async function initSheetOrganizerContent(gameKey) {
 
   // 세 버튼 전부 같은 룰 허브 모달을 연다 — 누른 섹션만 펼치고 나머지는 접어서 시작(_openRuleHubModal 참조).
   const _org = { sections, errorNote, photos, organizerNote };
-  area.querySelector('[data-org-action="rule"]')?.addEventListener('click', () => _openRuleHubModal(gameName, _org, 'rule'));
-  area.querySelector('[data-org-action="error"]')?.addEventListener('click', () => _openRuleHubModal(gameName, _org, 'error'));
-  area.querySelector('[data-org-action="photos"]')?.addEventListener('click', () => _openRuleHubModal(gameName, _org, 'photos'));
+  area.querySelector('[data-org-action="rule"]')?.addEventListener('click', () => _openRuleHubModal(gameName, _org, 'rule', gameKey));
+  area.querySelector('[data-org-action="error"]')?.addEventListener('click', () => _openRuleHubModal(gameName, _org, 'error', gameKey));
+  area.querySelector('[data-org-action="photos"]')?.addEventListener('click', () => _openRuleHubModal(gameName, _org, 'photos', gameKey));
 }
 
 async function initSheetCommentsPreview(gameKey) {
@@ -1388,7 +1435,7 @@ function toggleSheetDesc(btn){
   const desc = document.getElementById('sheetDesc');
   if(!desc) return;
   const clamped = desc.classList.toggle('is-clamped');
-  btn.textContent = clamped ? '+ 더보기' : '- 접기';
+  btn.textContent = clamped ? '더보기' : '접기';
 }
 
 function initSheetDescToggle(){
@@ -1401,18 +1448,18 @@ function initSheetDescToggle(){
 }
 
 function toggleSheetMechs(btn) {
-  const wrap = btn.closest('.sheet-mechs-wrap');
+  const wrap = btn.closest('.sheet-info-group')?.querySelector('.sheet-mechs-wrap');
   if (!wrap) return;
   const texts = wrap.querySelectorAll('.sheet-mechs-text');
   const nowClamped = texts.length && texts[0].classList.contains('is-clamped');
   texts.forEach(t => t.classList.toggle('is-clamped', !nowClamped));
-  btn.textContent = nowClamped ? '- 접기' : '+ 더보기';
+  btn.textContent = nowClamped ? '접기' : '더보기';
 }
 
 function initSheetMechsToggle() {
   const toggle = document.getElementById('sheetMechsToggle');
   if (!toggle) return;
-  const wrap = toggle.closest('.sheet-mechs-wrap');
+  const wrap = toggle.closest('.sheet-info-group')?.querySelector('.sheet-mechs-wrap');
   const texts = wrap ? wrap.querySelectorAll('.sheet-mechs-text') : [];
   let needsToggle = false;
   texts.forEach(t => { if (t.scrollHeight > t.clientHeight + 1) needsToggle = true; });
@@ -2979,6 +3026,41 @@ Object.defineProperty(window, 'gameSheet', {
   get: function () { return gameSheet; },
   configurable: true,
 });
+
+// Stack child iframe은 기존 게임정보/기록 renderer를 그대로 boot한다. 최초 open만
+// runLocal로 감싸 parent push 재귀를 막고, 이후 사용자의 새 open은 정상 push가 된다.
+const _modalStackState = window.CottageModalStack?.state?.();
+if (_modalStackState?.frame === 'child' && ['game-info', 'game-record', 'game-rule'].includes(_modalStackState.kind)) {
+  const openModalStackGame = () => {
+    const gameKey = _modalStackState.query.get('game') || _modalStackState.hash.get('game') || '';
+    if (!gameKey) return;
+    ensureGameSheet();
+    window.CottageModalStack.runLocal(() => {
+      if (_modalStackState.kind === 'game-record') openGameRecordSheet(gameKey);
+      else openGameSheet(gameKey);
+    });
+    if (_modalStackState.kind === 'game-rule') {
+      const focus = _modalStackState.query.get('focus') || _modalStackState.hash.get('focus') || 'rule';
+      const selector = `[data-org-action="${focus}"]`;
+      const openRule = () => {
+        const button = document.querySelector(selector);
+        if (!button) return false;
+        window.CottageModalStack.runLocal(() => button.click());
+        return true;
+      };
+      if (!openRule()) {
+        const observer = new MutationObserver(() => { if (openRule()) observer.disconnect(); });
+        observer.observe(document.body, { childList: true, subtree: true });
+        setTimeout(() => observer.disconnect(), 4000);
+      }
+    }
+  };
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => requestAnimationFrame(openModalStackGame), { once: true });
+  } else {
+    requestAnimationFrame(openModalStackGame);
+  }
+}
 
 })();
 

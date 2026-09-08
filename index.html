@@ -297,8 +297,8 @@
 
   <!-- 플래너 바텀시트 -->
   <div class="planner-sheet-modal" id="plannerSheetModal" aria-hidden="true">
-    <div class="planner-sheet-dim" id="plannerSheetDim"></div>
-    <div class="planner-sheet-panel">
+    <div class="planner-sheet-dim center-modal-backdrop" id="plannerSheetDim"></div>
+    <div class="planner-sheet-panel center-modal-shell">
       <button aria-label="플래너 닫기" class="planner-sheet-close" id="plannerSheetClose" type="button">✕</button>
       <div class="planner-sheet-loader" id="plannerSheetLoader" aria-hidden="true"></div>
       <iframe class="planner-sheet-frame" id="plannerSheetFrame" src="" title="모임 플래너"></iframe>
@@ -308,12 +308,9 @@
 
   <!-- 모임원 프로필 센터모달 -->
   <div class="record-iframe-modal member-profiles-modal" id="memberProfilesModal" aria-hidden="true">
-    <div class="record-iframe-dim" id="memberProfilesDim"></div>
-    <div class="record-iframe-panel">
-      <header class="intro-wizard-head">
-        <h2>모임원 프로필</h2>
-        <button aria-label="모임원 프로필 닫기" class="intro-wizard-close" id="memberProfilesClose" type="button">✕</button>
-      </header>
+    <div class="record-iframe-dim center-modal-backdrop" id="memberProfilesDim"></div>
+    <div class="record-iframe-panel center-modal-shell">
+      <button aria-label="모임원 프로필 닫기" class="record-iframe-close" id="memberProfilesClose" type="button">✕</button>
       <div class="member-profiles-body">
         <div class="record-iframe-loader" id="memberProfilesLoader" aria-hidden="true"></div>
         <iframe class="record-iframe-frame" id="memberProfilesFrame" src="" title="모임원 프로필"></iframe>
@@ -328,8 +325,8 @@
 
   <!-- 기록 남기기 센터모달 -->
   <div class="record-iframe-modal" id="recordIframeModal" aria-hidden="true">
-    <div class="record-iframe-dim" id="recordIframeDim"></div>
-    <div class="record-iframe-panel">
+    <div class="record-iframe-dim center-modal-backdrop" id="recordIframeDim"></div>
+    <div class="record-iframe-panel center-modal-shell">
       <button aria-label="기록 창 닫기" class="record-iframe-close" id="recordIframeClose" type="button">✕</button>
       <div class="record-iframe-loader" id="recordIframeLoader" aria-hidden="true"></div>
       <iframe class="record-iframe-frame" id="recordIframeFrame" src="" title="기록 남기기"></iframe>
@@ -558,8 +555,8 @@
 <!-- =========================
      # RECOMMEND OVERLAY
 ========================= -->
-<div class="recommend-overlay" id="recommendOverlay">
-  <div class="recommend-overlay-panel">
+<div class="recommend-overlay center-modal-backdrop" id="recommendOverlay">
+  <div class="recommend-overlay-panel center-modal-shell">
     <div class="recommend-overlay-header">
       <span class="recommend-overlay-title">추천 게임 전체보기</span>
       <button aria-label="추천 목록 닫기" class="recommend-overlay-close" type="button">✕</button>
@@ -578,11 +575,11 @@
 >
 
   <div
-    class="game-sheet-dim"
+    class="game-sheet-dim center-modal-backdrop"
     id="closeGameSheetDim"
   ></div>
 
-  <div class="game-sheet-panel">
+  <div class="game-sheet-panel center-modal-shell">
 
     <button aria-label="게임 정보 닫기"
       class="game-sheet-close"
@@ -619,6 +616,7 @@
   <script src="./assets/js/achievements.js"></script>
   <script src="./assets/js/page-labels.js"></script>
   <script src="./assets/js/script-nav.js"></script>
+  <script src="./assets/js/modal-stack-host.js"></script>
   <script src="./assets/js/game-sheet.js"></script>
   <script src="./assets/js/booklet-courses-data.js"></script>
   <script src="./assets/js/index-page.js"></script>

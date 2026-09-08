@@ -63,7 +63,7 @@
 - 실제 화면 표시명: 모임원 프로필
 - 주요 코드 대응: `assets/js/index-page.js`의 홈 모달 초기화·`openModal()` / `#memberProfilesModal` / `.record-iframe-panel` / `pages/club/club-intro.html`
 - 구분: 모임원 카드에서 다른 사용자의 내 보드나 프로필 보드로 이동하는 navigation과는 별도 진입점이다.
-- 주의: 부모의 `.intro-wizard-head`에 있는 모임원 프로필은 현재 제목만 표시하는 제목줄이다. iframe 내부의 모임원 프로필 카드와 구분한다.
+- 주의: 부모의 제목만 표시하던 `.intro-wizard-head`는 제거되었고, 현재는 닫기 제어만 유지한다. iframe 내부의 모임원 프로필 카드와 구분한다.
 
 ### 홈 플래너 모달
 
@@ -93,13 +93,15 @@
 - 사용자가 만나는 곳: 게임정보 모달의 게임 위치 버튼
 - 실제 화면 표시명: 게임 위치
 - 주요 코드 대응: `assets/js/game-sheet.js`의 `openShelfSheet()` / `.shelf-sheet-overlay` / `.shelf-sheet-box` / `pages/game/game-location.html`
-- 구분: 게임정보 모달의 외곽틀과 별도인 중첩 시트다. 이번 센터모달 통일 작업에서 자동으로 같은 대상으로 묶지 않는다.
+- 구분: 게임정보 모달 위에 child center modal로 쌓이며, `← 게임 위치`로 게임정보 모달에 복귀한다. 위치 목록 안에서 다시 열리는 별도 기능 UI와는 구분한다.
 
 ## 2. 공통 UI 용어
 
 ### 센터모달
 
 현재 페이지 위에 백드랍을 깔고 화면 중앙 또는 중앙에 가까운 위치에 큰 패널을 여는 UX 분류명이다. 특정 구현 class명이 아니다.
+
+센터모달 사이를 이동하는 경우에는 모달 스택을 사용한다. `drill-down` 자식은 `←`(또는 ESC)로 한 단계만 이전 모달로 돌아간다. 별도 기능을 여는 `overlay` 자식의 `×`도 현재 top frame 하나만 닫아 바로 아래 modal의 DOM·스크롤·선택 상태를 보존한다. 부모는 DOM·스크롤·선택 상태를 보존한 채 inactive로 남고, 최상단 모달만 포인터·키보드·백드랍 입력을 받는다. 백드랍은 root가 한 번만 소유한다. 자식 모달은 투명한 입력 레이어와 panel만 추가하므로 push·pop 단계에 따라 dim·blur 강도가 바뀌지 않는다.
 
 ### 시트
 

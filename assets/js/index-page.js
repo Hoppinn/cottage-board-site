@@ -218,6 +218,7 @@ function _recommendCardHtml(game, index){
 }
 
 function openRecommendOverlay(){
+  if (window.CottageModalStack?.request('recommend-all', {}, { presentation: 'overlay' })) return;
   window.CottageDB?.trackEvent('home_recommend_all_click');
   const overlay = document.getElementById("recommendOverlay");
   const list    = document.getElementById("recommendOverlayList");
@@ -296,12 +297,18 @@ function openRecommendOverlay(){
 }
 
 function closeRecommendOverlay(){
+  if (window.CottageModalStack?.pop()) return;
   const overlay = document.getElementById("recommendOverlay");
   if(!overlay) return;
   overlay.classList.remove("is-open");
   window.popActiveView?.(overlay._activeViewToken);
   overlay._activeViewToken = null;
   document.body.style.overflow = "";
+}
+
+const _recommendStackState = window.CottageModalStack?.state?.();
+if (_recommendStackState?.frame === 'child' && _recommendStackState.kind === 'recommend-all') {
+  requestAnimationFrame(() => window.CottageModalStack.runLocal(openRecommendOverlay));
 }
 
 
@@ -347,6 +354,35 @@ const recommendFilter =
 const closeRecommendOverlayButton =
   document.querySelector('.recommend-overlay-close');
 
+
+/*
+ * Temporary visual comparison tool for the profile modal backdrop.
+ * Remove after the A/B/C visual choice is finalized; this does not change
+ * the shared modal CSS or the default backdrop values.
+ */
+window.testBoardBackdrop = function (mode) {
+  const panel = document.querySelector('.profile-panel');
+  if (!panel) {
+    console.warn('[testBoardBackdrop] 내 보드 모달이 열려 있지 않습니다.');
+    return false;
+  }
+
+  const presets = {
+    A: { background: 'rgba(0,0,0,.45)', blur: 'none' },
+    B: { background: 'rgba(0,0,0,.45)', blur: 'blur(1.5px)' },
+    C: { background: 'rgba(20,18,14,.5)', blur: 'blur(2px)' }
+  };
+  const preset = presets[String(mode).toUpperCase()];
+  if (!preset) {
+    console.warn('[testBoardBackdrop] A, B, C 중 하나를 입력하세요.');
+    return false;
+  }
+
+  panel.style.background = preset.background;
+  panel.style.backdropFilter = preset.blur;
+  panel.style.webkitBackdropFilter = preset.blur;
+  return true;
+};
 
 /* =========================
    # RECOMMEND TABS (추천 코스 / 게임 더 찾기)
@@ -1254,7 +1290,8 @@ function toDateStr(d) {
     // index.html#recommend 로 직접 진입 시 추천 섹션 자동 열기.
     // 히어로 통계 텍스트가 늦게 채워지며 #recommend 위쪽 높이가 바뀌므로,
     // 통계 반영(성공/실패 무관)이 끝난 뒤에 스크롤 위치를 계산해야 정확하다.
-    if (location.hash === '#recommend' && document.getElementById('recommend')) {
+    const _hashParams = new URLSearchParams(location.hash.slice(1));
+    if ((location.hash === '#recommend' || _hashParams.has('recommend')) && document.getElementById('recommend')) {
       openRecommendSectionOnTab('course');
     }
   }
@@ -1665,6 +1702,7 @@ window.addEventListener('cottage-meeting-changed', () => { _meetingReload?.(); }
   if (!modal || !openBtn) return;
 
   let preloaded = false;
+  let stackHost = null;
   // 활성 뷰 체류시간 추적(3차) — club-schedule.html?embed=true를 iframe으로 보여주는 홈 전용
   // 모달. day-detail.js의 #__plannerModal(같은 iframe 소스, 다른 진입점)과 같은 이유로
   // 'planner-register' 키를 공유한다 — 등록/수정 빠른진입뿐 아니라 주간뷰만 보는 일반 오픈도
@@ -1678,7 +1716,7 @@ window.addEventListener('cottage-meeting-changed', () => { _meetingReload?.(); }
   function preload() {
     if (preloaded) return;
     preloaded = true;
-    frame.src = './pages/club/club-schedule.html?embed=true';
+    frame.src = './pages/club/club-schedule.html?embed=1&modalStack=1&modalFrame=root#embed=1&modalStack=1&modalFrame=root';
   }
   window.addEventListener('kakao-auth-ready', preload);
 
@@ -1725,6 +1763,7 @@ window.addEventListener('cottage-meeting-changed', () => { _meetingReload?.(); }
     }
   };
   function closeModal() {
+    stackHost?.clear();
     modal.setAttribute('aria-hidden', 'true');
     modal.classList.remove('is-open');
     // ⚠️ is-quick-entry는 여기서 제거하지 말 것 — is-open 제거는 opacity 0.25s로 페이드되는데,
@@ -1773,6 +1812,13 @@ window.addEventListener('cottage-meeting-changed', () => { _meetingReload?.(); }
     }
   });
 
+  stackHost = window.CottageModalStackHost?.create({
+    container: modal,
+    rootFrame: frame,
+    rootShell: modal.querySelector('.planner-sheet-panel'),
+    isOpen: () => modal.classList.contains('is-open'),
+    onRootClose: closeModal,
+  });
   openBtn.addEventListener('click', () => { window.CottageDB?.trackEvent('home_meeting_planner_click'); openModal(); });
   dim.addEventListener('click', closeModal);
   closeBtn.addEventListener('click', closeModal);
@@ -1790,9 +1836,16 @@ window.addEventListener('cottage-meeting-changed', () => { _meetingReload?.(); }
   if (!modal || !frame || !dim || !closeBtn || !openBtn) return;
 
   // localhost의 extensionless redirect가 query를 버려도 hash 표식은 남는다.
-  const introSrc = './pages/club/club-intro.html?embed=1#embed=1';
+  const introSrc = './pages/club/club-intro.html?embed=1&modalStack=1&modalFrame=root#embed=1&modalStack=1&modalFrame=root';
   let viewToken = null;
   let viewActive = false;
+  let stackHost = null;
+  let wizardOpen = false;
+
+  function setWizardOpen(open) {
+    wizardOpen = !!open;
+    closeBtn.setAttribute('aria-label', wizardOpen ? '작성 닫기' : '모임원 프로필 닫기');
+  }
 
   // iframe은 script-nav.js의 embedded-frame 가드로 자체 세션 추적을 하지 않는다.
   // 부모가 기존 실페이지 key만 push/pop해 홈 체류와 프로필 열람 체류를 나눈다.
@@ -1823,6 +1876,13 @@ window.addEventListener('cottage-meeting-changed', () => { _meetingReload?.(); }
   // 배경·×·ESC는 이 경로만 호출한다. viewActive 가드가 같은 token의 중복 pop을 막는다.
   function closeModal() {
     if (!modal.classList.contains('is-open')) return;
+    // root iframe의 위저드는 기존 local renderer가 소유한다. 같은 좌표의 부모 X는
+    // 위저드가 열린 동안 root를 닫지 않고 그 renderer의 닫기 경로만 요청한다.
+    if (wizardOpen) {
+      frame.contentWindow?.postMessage({ type: 'cottage-close-profile-wizard' }, '*');
+      return;
+    }
+    stackHost?.clear();
     modal.setAttribute('aria-hidden', 'true');
     modal.classList.remove('is-open');
     document.body.style.overflow = '';
@@ -1837,15 +1897,26 @@ window.addEventListener('cottage-meeting-changed', () => { _meetingReload?.(); }
   }
 
   frame.addEventListener('load', () => {
+    setWizardOpen(false);
     frame.classList.add('is-ready');
     if (loader) loader.style.display = 'none';
+  });
+  window.addEventListener('message', event => {
+    if (event.source !== frame.contentWindow) return;
+    if (event.data?.type === 'cottage-profile-wizard-state') {
+      setWizardOpen(event.data.open);
+    }
+  });
+  stackHost = window.CottageModalStackHost?.create({
+    container: modal,
+    rootFrame: frame,
+    rootShell: modal.querySelector('.record-iframe-panel'),
+    isOpen: () => modal.classList.contains('is-open'),
+    onRootClose: closeModal,
   });
   openBtn.addEventListener('click', openModal);
   dim.addEventListener('click', closeModal);
   closeBtn.addEventListener('click', closeModal);
-  document.addEventListener('keydown', e => {
-    if (e.key === 'Escape') closeModal();
-  });
 })();
 
 

@@ -236,6 +236,8 @@ assets/js/
 ├── header.js                   # 헤더 HTML 주입(로고·메뉴·검색버튼) + embed 모드 처리(query/hash의 embed=1 시 헤더 미삽입,
 │                               #   내부 .html 링크 클릭에 embed=1 자동 전파). data-index="true" 스크립트 속성으로
 │                               #   index.html vs 하위 페이지 상대경로 분기. 상세는 §2-A "embed 모드"
+├── modal-stack-host.js         # 홈페이지 기능·플래너 보기·모임원 프로필 root의 공통 parent frame stack host
+│                               #   (route registry, top source 검증, push/pop, inert, child active-view)
 ├── supabase-config.js          # Supabase URL + anonKey 설정 (window.SUPABASE_CONFIG)
 ├── supabase-client.js          # DB 접근 모듈 (window.CottageDB, window._cottageSess, window.escH 노출)
 │                               # 방문자 추적(__visitor__), 체류시간, 비로그인 heartbeat 포함
@@ -351,9 +353,13 @@ embed 모드에서는 `header.js`가 `document` 클릭을 가로채 내부 `.htm
 사용 페이지:
 - `game-location.html` — `openShelfSheet(url)`이 `?embed=1&highlight=GAMEID` URL로 호출
 - `guide.html` — `openGuideOverlay(href)` 내부에서 `?embed=1` 자동 추가
-- `index.html` 홈 코티지 모임의 `모임원 프로필`은 `club-intro.html?embed=1#embed=1`을 기존 `record-iframe-modal` 규격으로 연다. localhost의 extensionless redirect가 query를 버려도 hash 표식으로 iframe의 `body.embed-mode`를 유지한다. 부모 모달의 얇은 고정 `모임원 프로필` header 아래 iframe 본문만 스크롤하며, embed 상태는 iframe 안의 독립 페이지 chrome(공통 header·breadcrumb·mini hero·footer)만 숨긴다. iframe 자체는 frame guard로 추적하지 않고, 부모가 기존 `club-intro` active-view 키를 열기 1회 push·모든 닫기 경로에서 같은 token 1회 pop해 체류 구간만 분할한다.
+- `index.html` 홈 코티지 모임의 `모임원 프로필`은 `club-intro.html?embed=1#embed=1`을 기존 `record-iframe-modal` 규격으로 연다. localhost의 extensionless redirect가 query를 버려도 hash 표식으로 iframe의 `body.embed-mode`를 유지한다. 부모 모달은 제목 전용 header를 두지 않고 닫기 제어와 iframe 본문을 바로 보여주며, embed 상태는 iframe 안의 독립 페이지 chrome(공통 header·breadcrumb·mini hero·footer)만 숨긴다. iframe 자체는 frame guard로 추적하지 않고, 부모가 기존 `club-intro` active-view 키를 열기 1회 push·모든 닫기 경로에서 같은 token 1회 pop해 체류 구간만 분할한다.
 
 ⚠️ **헤더 높이 기반 CSS는 `body.embed-mode{--header-total-h:0px}` 하나로 다 안 잡힌다** — 이 재정의는 **body의 자손**에게만 적용되고, `html{scroll-padding-top:var(--header-total-h)}`(style.css 81번째 줄)처럼 **`<html>` 자신에** 선언된 속성은 `<body>`가 그 조상이라 변수 재정의가 거꾸로 안 흐른다(2026-08-10, `game-location.html`의 `shelf=` 자동 스크롤이 헤더 없는 embed 화면에서도 매번 52px씩 못 미치던 사건 — `html:has(body.embed-mode){scroll-padding-top:0}`로 별도 수정, 현재 사용하는 작업 규칙 파일의 반복 패치 정지 규칙에도 기록). **새 embed 대응 CSS를 `<html>` 셀렉터에 선언하려면 `body.embed-mode` 변수 재정의로는 안 되고 `html:has(body.embed-mode)`(또는 JS로 `<html>`에도 클래스 부여)가 필요하다.**
+
+### embed 화면의 chrome 경계
+
+홈 센터모달이나 `pages/info/guide.html`의 `#guideIframeOverlay`에서 독립 페이지를 임베드할 때는 해당 페이지의 글로벌 header/footer, breadcrumb, hero, page title을 숨기고 실제 기능 UI부터 시작한다. `game-reviews.html`의 기록 탭, `club-schedule.html`의 주간 플래너 UI, `requests.html`의 요청 폼처럼 기능 역할을 하는 UI는 유지한다. 직접 URL로 들어간 독립 페이지에서는 이 embed 규칙을 적용하지 않는다.
 
 ### openShelfSheet (game-sheet.js)
 
@@ -372,8 +378,10 @@ embed 모드에서는 `header.js`가 `document` 클릭을 가로채 내부 `.htm
 
 ### openGuideOverlay (pages/info/guide.html)
 
-이용안내 카드 클릭 → 해당 페이지를 인앱 iframe 오버레이(z:9000, 92dvh)로 표시.  
+이용안내 카드 클릭 → 해당 페이지를 인앱 iframe 오버레이(z:9000, viewport에서 상단 36px·하단 12px을 남기는 외곽틀)로 표시.
 `?embed=1` 자동 추가 → 로드된 페이지의 헤더/푸터 자동 숨김.
+
+홈페이지 기능·플래너 보기·모임원 프로필의 iframe root는 `assets/js/modal-stack-host.js`의 공통 Modal Stack Host를 사용한다. `modalStack=1` frame의 기존 `openGameSheet`/`openGameRecordSheet`/`openRecommendOverlay`/`openShelfSheet`/룰 허브/`openDateMeetingModal`/`openProfilePanel`은 local center modal 대신 `{ kind, payload, presentation }` push를 요청한다. parent는 source가 현재 top iframe인지 확인하고 같은 viewport 외곽의 child iframe shell을 필요한 depth만큼 쌓으며, 아래 frame은 inert 상태로 DOM·scroll을 보존한다. `overlay`는 우상단 ×를 쓰는 별도 modal이고, 게임정보의 게임위치·게임안내만 `drilldown`으로 좌상단 ←를 쓴다. ←·ESC·×는 모두 top frame 하나만 pop한다. backdrop은 root overlay 하나만 소유한다. child iframe bootstrap은 기존 deep-link/component를 `runLocal()`로 한 번만 연다. `guide-child-mode`는 header 초기 실행에서 붙여 child의 원 페이지 첫 paint가 보이지 않게 하며, homepage 기능 root의 `.course-sticky-bar`만 static으로 보정한다. 직접 URL과 일반 embed에는 이 위임을 적용하지 않는다.
 
 ---
 

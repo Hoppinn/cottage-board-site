@@ -521,12 +521,14 @@
       wizardNav.hidden = false;
       wizard.classList.add('is-open');
       wizard.setAttribute('aria-hidden', 'false');
+      if (window.parent !== window) window.parent.postMessage({ type: 'cottage-profile-wizard-state', open: true }, '*');
       showWizardStep(1);
       setTimeout(() => document.getElementById('introNickname').focus(), 0);
     }
     function closeWizard() {
       wizard.classList.remove('is-open');
       wizard.setAttribute('aria-hidden', 'true');
+      if (window.parent !== window) window.parent.postMessage({ type: 'cottage-profile-wizard-state', open: false }, '*');
       if (document.documentElement.classList.contains('intro-wizard-embed')) {
         window.parent.postMessage({ type: 'cottage-close-profile-wizard' }, '*');
       }
@@ -927,6 +929,7 @@
     };
     window.addEventListener('message', e => {
       if (e.data?.type === 'cottage-open-profile-intro-wizard') document.getElementById('introWizardOpenBtn')?.click();
+      if (e.data?.type === 'cottage-close-profile-wizard') closeWizard();
     });
 
     // 임베드 진입은 URL 자동열기가 아니라, 데이터 준비 뒤 부모가 보내는 기존 버튼 클릭으로만 연다.
