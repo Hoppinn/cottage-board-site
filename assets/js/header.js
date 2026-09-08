@@ -30,6 +30,8 @@
     if (_stackValue === '1' && _stackFrame === 'root') document.body.classList.add('modal-stack-root');
     if (_stackValue === '1' && _stackFrame === 'child') {
       document.body.classList.add('guide-child-mode');
+      // child chrome 예외는 URL 자체가 아니라 Host가 지정한 route kind에만 한정한다.
+      if (/^[a-z-]+$/.test(_stackKind)) document.body.classList.add(`modal-stack-kind-${_stackKind}`);
       document.addEventListener('keydown', function (e) {
         if (e.key !== 'Escape') return;
         if (window.CottageModalStack.pop()) {
