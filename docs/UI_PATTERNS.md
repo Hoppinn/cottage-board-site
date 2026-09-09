@@ -16,6 +16,8 @@
 
 ## 공통 용어
 
+`game-sheet` canonical surface가 iframe 안에서 열릴 때는 renderer가 geometry를 바꾸지 않는다. direct iframe owner가 `data-ui-surface-geometry-owner`로 full available area를 제공하고, child의 active state는 공통 message bridge로 전달한다. 따라서 renderer·surface·surface geometry owner는 별도 축이다.
+
 | 용어 | 의미 |
 |---|---|
 | outer geometry | viewport 기준 position, inset, width/height, radius, overflow처럼 화면의 외곽틀을 결정하는 값 |

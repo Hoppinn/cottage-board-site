@@ -18,6 +18,36 @@
   });
   let _localStackOpenDepth = 0;
 
+  function _setChildSurfaceGeometry(event) {
+    const data = event.data;
+    if (data?.type !== 'cottage-functional-surface-state' || data.surface !== 'game-sheet') return;
+    if (event.origin !== location.origin) return;
+    const frame = Array.from(document.querySelectorAll('iframe'))
+      .find(candidate => candidate.contentWindow === event.source);
+    const owner = frame?.closest('[data-ui-surface-geometry-owner]');
+    if (!owner) return;
+    if (data.active) owner.dataset.uiFunctionalSurface = data.surface;
+    else delete owner.dataset.uiFunctionalSurface;
+  }
+
+  function _publishLocalSurfaceGeometry() {
+    if (window.parent === window) return;
+    const active = !!document.querySelector('.game-sheet.is-active');
+    window.parent.postMessage({ type: 'cottage-functional-surface-state', surface: 'game-sheet', active }, location.origin);
+  }
+  window.addEventListener('message', _setChildSurfaceGeometry);
+  const _surfaceStateObserver = new MutationObserver(_publishLocalSurfaceGeometry);
+  const _surfaceDiscoveryObserver = new MutationObserver(_watchLocalSurfaceGeometry);
+  function _watchLocalSurfaceGeometry() {
+    const sheet = document.querySelector('.game-sheet');
+    if (!sheet) return;
+    _surfaceStateObserver.observe(sheet, { attributes: true, attributeFilter: ['class'] });
+    _surfaceDiscoveryObserver.disconnect();
+    _publishLocalSurfaceGeometry();
+  }
+  _surfaceDiscoveryObserver.observe(document.documentElement, { childList: true, subtree: true });
+  _watchLocalSurfaceGeometry();
+
   // A Host child reuses an existing page/component renderer. Annotate concrete
   // roles once so CSS can follow ownership instead of route or tag names.
   function _applyHostChildContract() {

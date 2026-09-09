@@ -7844,6 +7844,15 @@ body[data-ui-geometry-owner="host"] [data-ui-geometry="host-fill"]{
 }
 body[data-ui-geometry-owner="host"] .dd-overlay[data-ui-layer="host-transparent"]{padding:0!important;}
 
+/* A canonical local surface cannot escape its iframe. When game-sheet is active,
+   its immediate iframe owner supplies the full available coordinate space while
+   keeping the parent modal's backdrop and lifecycle. */
+[data-ui-surface-geometry-owner][data-ui-functional-surface="game-sheet"]{
+  position:fixed!important;inset:0!important;width:auto!important;max-width:none!important;
+  height:auto!important;max-height:none!important;margin:0!important;border-radius:0!important;
+  background:transparent!important;box-shadow:none!important;overflow:hidden!important;
+}
+
 /* Parent Modal Stack Host: each child is a sibling frame over the same root backdrop.
    Its shell deliberately repeats the established viewport center-modal geometry. */
 /* Host child는 root modal의 flex/padding 좌표계가 아니라 항상 viewport를 기준으로 덮는다. */

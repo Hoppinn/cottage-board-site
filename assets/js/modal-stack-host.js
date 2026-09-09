@@ -79,7 +79,7 @@
       layer.dataset.stackKind = kind;
       layer.dataset.presentation = mode;
       layer.dataset.uiGeometryVariant = geometry;
-      layer.innerHTML = `<div class="modal-stack-frame-shell center-modal-shell" data-ui-structure="host-child-frame" data-ui-geometry-owner="host" data-ui-geometry-variant="${geometry}" data-ui-navigation="${mode}" data-ui-chrome-owner="host" data-ui-flow-close-owner="${flowId ? 'host' : 'none'}" data-ui-navigation-back-owner="${mode === 'drilldown' ? 'host' : 'none'}" role="dialog" aria-modal="true">
+      layer.innerHTML = `<div class="modal-stack-frame-shell center-modal-shell" data-ui-structure="host-child-frame" data-ui-surface-geometry-owner data-ui-geometry-owner="host" data-ui-geometry-variant="${geometry}" data-ui-navigation="${mode}" data-ui-chrome-owner="host" data-ui-flow-close-owner="${flowId ? 'host' : 'none'}" data-ui-navigation-back-owner="${mode === 'drilldown' ? 'host' : 'none'}" role="dialog" aria-modal="true">
         ${mode === 'drilldown'
           ? '<button class="modal-stack-frame-back" data-ui-chrome="navigation-back" type="button" aria-label="이전 화면으로 돌아가기">←</button>' : ''}
         <button class="modal-stack-frame-close" data-ui-chrome="flow-close" type="button" aria-label="${flowId ? '게임 탐색 닫기' : '닫기'}">✕</button>
