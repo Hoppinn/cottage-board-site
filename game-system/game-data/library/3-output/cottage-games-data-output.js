@@ -87204,7 +87204,7 @@ const gameData = {
       "ratingEnabled": true,
       "boardId": "스위트랜드"
     },
-    "abbr": "스위"
+    "abbr": "스윗"
   }
 };
 
