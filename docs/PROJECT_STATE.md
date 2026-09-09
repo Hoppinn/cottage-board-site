@@ -14,7 +14,6 @@
 
 ## 2. NEXT (자동 착수 금지)
 
-1. **관리자 페이지 추적 범위** — `관리자페이지 → 페이지탭 → 페이지 추적`에서 center modal/bottom sheet 등 functional surface 행동이 보이지 않는다. 부모 단위 방문·체류와 iframe 안 실제 행동 이벤트의 기존 원칙을 보존하면서, 필요한 event 정의·소비자·검증 경로를 먼저 확정한다.
 2. **nested profile underlying scroll boundary** — `모임원프로필페이지 → 개인카드 상세보기 → 프로필보드`에서 최하단 반복 아래 scroll 또는 최상단 반복 위 scroll이 underlying 모임원프로필페이지로 넘어가지 않는지 확인한다. 동일 scroll-owner/boundary 구조의 center modal·bottom sheet·subsheet·nested overlay만 비교하고, 사이트 전체 overlay 문제로 일반화하지 않는다. iPhone/Safari도 확인 대상이며 wizard overscroll과는 별개다.
 3. **게임 데이터 확인** — 보유게임 스위트랜드 추가, 파수꾼 `도착예정 → 쉬운협력게임`, 페야의늪 `도착예정 → 헤비매니아` 요구를 데이터 정본과 대조한다. 현재 출력은 파수꾼=`active/incoming`, 페야의늪=`active/heavy_strategy`이며 스위트랜드 일치 항목은 미확인이다.
 4. **가입경로 보드라이프** — `member_intros.join_sources` 허용 목록·입력 UI·표시 라벨·최신 RPC 마이그레이션을 함께 바꾸는 Red Plan 승인 후 구현한다.
