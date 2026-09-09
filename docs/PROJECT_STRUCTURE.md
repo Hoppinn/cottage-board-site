@@ -558,10 +558,11 @@ game-reviews.html — 기록 입력 탭
 
 [page_sessions 지속시간 writer]
   script-nav.js PAGE SESSION TRACKER ← visibilitychange / pagehide / 활성 뷰 push·pop
-    현재 페이지·활성 뷰 구간을 3초 이상일 때 keepalive POST
+    현재 presentation/view stack의 최상단 active view 하나만 현재 구간으로 누적하여 3초 이상일 때 keepalive POST
+    새 view push 시 직전 top 구간을 끝내고 새 view만 기록; top view pop 시 바로 아래 view(없으면 메인) 기록을 재개
     실제 duration_sec > 0을 쓰는 유일한 writer
     surface owner는 push가 돌려준 token으로만 pop하며 stale close는 현재 top view를 닫지 않음
-    embedded iframe은 writer/token owner가 아니고 parent가 open 1회 push·close 1회 pop
+    embedded iframe도 최상단 active view가 될 수 있으나 writer/token owner는 아니고 parent가 open 1회 push·close 1회 pop
 
 [비로그인 방문자 추적]
   cottage-auth-changed 이벤트 없거나 user=null → _startAnonHeartbeat()
