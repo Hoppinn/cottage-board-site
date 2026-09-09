@@ -3,6 +3,15 @@
 (function () {
   const scriptUrl = document.currentScript?.src || location.href;
   const siteRoot = new URL('../../', scriptUrl);
+  const childKinds = {
+    'recommend-all': { route: 'index.html' },
+    'game-info': { route: 'index.html', flow: 'game' },
+    'game-record': { route: 'pages/game/game-reviews.html', flow: 'game' },
+    'game-location': { route: 'pages/game/game-location.html', flow: 'game' },
+    'game-rule': { route: 'index.html', flow: 'game' },
+    meeting: { route: 'pages/club/club-schedule.html', geometry: 'compact' },
+    profile: { route: 'index.html' },
+  };
   const activeViews = {
     'recommend-all': 'recommend-all',
     'game-info': 'game-sheet',
@@ -14,22 +23,15 @@
   };
 
   function stackUrl(kind, payload = {}, presentation = 'overlay') {
-    const routes = {
-      'recommend-all': 'index.html',
-      'game-info': 'index.html',
-      'game-record': 'pages/game/game-reviews.html',
-      'game-location': 'pages/game/game-location.html',
-      'game-rule': 'index.html',
-      meeting: 'pages/club/club-schedule.html',
-      profile: 'index.html',
-    };
-    if (!routes[kind]) return '';
-    const url = new URL(routes[kind], siteRoot);
+    const config = childKinds[kind];
+    if (!config) return '';
+    const url = new URL(config.route, siteRoot);
     url.searchParams.set('embed', '1');
     url.searchParams.set('modalStack', '1');
     url.searchParams.set('modalFrame', 'child');
     url.searchParams.set('stackKind', kind);
     url.searchParams.set('stackPresentation', presentation === 'drilldown' ? 'drilldown' : 'overlay');
+    url.searchParams.set('stackGeometry', config.geometry || 'standard');
     Object.entries(payload || {}).forEach(([key, value]) => {
       if (value !== undefined && value !== null && value !== '') url.searchParams.set(key, String(value));
     });
@@ -47,6 +49,7 @@
       this.isOpen = isOpen || (() => true);
       this.onRootClose = onRootClose || (() => {});
       this.frames = [{ frame: rootFrame, shell: rootShell, root: true, token: null }];
+      this.nextFlowId = 0;
       this._onMessage = this._onMessage.bind(this);
       this._onKeydown = this._onKeydown.bind(this);
       window.addEventListener('message', this._onMessage);
@@ -72,31 +75,40 @@
     }
 
     push(kind, payload, presentation = 'overlay') {
+      const config = childKinds[kind];
+      if (!config) return false;
       const mode = presentation === 'drilldown' ? 'drilldown' : 'overlay';
       const src = stackUrl(kind, payload, mode);
       if (!src || !this.isOpen()) return false;
       const previous = this.top();
+      const flowId = config.flow && previous?.flow === config.flow
+        ? previous.flowId
+        : config.flow ? `${config.flow}-${++this.nextFlowId}` : null;
+      const geometry = config.geometry || 'standard';
       this._setInactive(previous, true);
       const layer = document.createElement('div');
       layer.className = `modal-stack-frame-layer modal-stack-frame-layer--${mode}`;
       layer.dataset.stackKind = kind;
       layer.dataset.presentation = mode;
-      layer.innerHTML = `<div class="modal-stack-frame-shell center-modal-shell" data-ui-structure="host-child-frame" data-ui-geometry-owner="host" data-ui-navigation="${mode}" data-ui-chrome-owner="host" role="dialog" aria-modal="true">
+      layer.dataset.uiGeometryVariant = geometry;
+      layer.innerHTML = `<div class="modal-stack-frame-shell center-modal-shell" data-ui-structure="host-child-frame" data-ui-geometry-owner="host" data-ui-geometry-variant="${geometry}" data-ui-navigation="${mode}" data-ui-chrome-owner="host" data-ui-flow-close-owner="${flowId ? 'host' : 'none'}" data-ui-navigation-back-owner="${mode === 'drilldown' ? 'host' : 'none'}" role="dialog" aria-modal="true">
         ${mode === 'drilldown'
-          ? '<button class="modal-stack-frame-back" data-ui-chrome="host-control" type="button" aria-label="이전 화면으로 돌아가기">←</button>'
-          : '<button class="modal-stack-frame-close" data-ui-chrome="host-control" type="button" aria-label="닫기">✕</button>'}
+          ? '<button class="modal-stack-frame-back" data-ui-chrome="navigation-back" type="button" aria-label="이전 화면으로 돌아가기">←</button>' : ''}
+        <button class="modal-stack-frame-close" data-ui-chrome="flow-close" type="button" aria-label="${flowId ? '게임 탐색 닫기' : '닫기'}">✕</button>
         <iframe class="modal-stack-frame" src="${src}" allow="camera;microphone"></iframe>
       </div>`;
       const shell = layer.querySelector('.modal-stack-frame-shell');
       const frame = layer.querySelector('iframe');
       this.container.appendChild(layer);
       const token = window.pushActiveView?.(window.COTTAGE_ACTIVE_VIEWS?.[activeViews[kind]]?.key) ?? null;
-      const entry = { layer, shell, frame, root: false, token, presentation: mode };
+      const entry = { layer, shell, frame, root: false, token, presentation: mode, flow: config.flow || null, flowId };
       this.frames.push(entry);
       layer.querySelector('.modal-stack-frame-back')?.addEventListener('click', () => this.pop());
-      // An independent overlay sits above the previous frame. Its X removes only
-      // this top frame so the previous modal's DOM, scroll, and selection remain.
-      layer.querySelector('.modal-stack-frame-close')?.addEventListener('click', () => this.pop());
+      // Flow close and one-step back are separate contracts. A game drilldown
+      // keeps both controls: ← returns one frame, X removes the whole game flow.
+      layer.querySelector('.modal-stack-frame-close')?.addEventListener('click', () => {
+        if (flowId) this.closeFlow(flowId); else this.pop();
+      });
       return true;
     }
 
@@ -111,6 +123,15 @@
     }
 
     clear() { while (this.hasChildren()) this.pop(); }
+
+    closeFlow(flowId) {
+      let closed = false;
+      while (this.hasChildren() && this.top()?.flowId === flowId) {
+        this.pop();
+        closed = true;
+      }
+      return closed;
+    }
 
     // Root owners retain their existing close lifecycle. Child overlay X buttons
     // use pop(), so this remains available only to an explicit root close path.
@@ -130,7 +151,8 @@
       // game-location.html keeps its existing iframe message contract. At stack depth it
       // becomes one more parent frame instead of opening a local game sheet.
       if (event.data?.action === 'openGame' && event.data?.gameId) {
-        this.push('game-info', { game: decodeURIComponent(String(event.data.gameId)) }, 'overlay');
+        const presentation = this.top()?.flow === 'game' ? 'drilldown' : 'overlay';
+        this.push('game-info', { game: decodeURIComponent(String(event.data.gameId)) }, presentation);
       }
     }
 

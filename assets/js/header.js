@@ -6,6 +6,7 @@
   const _stackFrame = _embedQuery.get('modalFrame') || _embedHash.get('modalFrame') || '';
   const _stackKind = _embedQuery.get('stackKind') || _embedHash.get('stackKind') || '';
   const _stackPresentation = _embedQuery.get('stackPresentation') || _embedHash.get('stackPresentation') || 'overlay';
+  const _stackGeometry = _embedQuery.get('stackGeometry') || _embedHash.get('stackGeometry') || 'standard';
   let _localStackOpenDepth = 0;
 
   // A Host child reuses an existing page/component renderer. Annotate concrete
@@ -20,6 +21,7 @@
     body.dataset.uiGeometryOwner = 'host';
     body.dataset.uiNavigation = _stackPresentation === 'drilldown' ? 'drilldown' : 'overlay';
     body.dataset.uiChromeOwner = 'mixed';
+    body.dataset.uiGeometryVariant = _stackGeometry === 'compact' ? 'compact' : 'standard';
     body.dataset.uiScrollBoundary = 'child';
 
     set('.site-header, .site-footer, .breadcrumb, .page-hero, .inner-page-title', 'uiChrome', 'global');
@@ -36,7 +38,7 @@
     set('.game-sheet-scroll, .rule-hub-scroll, .recommend-overlay-list, .profile-panel-body, .profile-subsheet-body, .dd-modal-scroll', 'uiScrollOwner', 'feature');
   }
   window.CottageModalStack = {
-    state: () => ({ enabled: _stackValue === '1', frame: _stackFrame, kind: _stackKind, presentation: _stackPresentation, query: _embedQuery, hash: _embedHash }),
+    state: () => ({ enabled: _stackValue === '1', frame: _stackFrame, kind: _stackKind, presentation: _stackPresentation, geometry: _stackGeometry, query: _embedQuery, hash: _embedHash }),
     request: (kind, payload = {}, options = {}) => {
       if (_stackValue !== '1' || _localStackOpenDepth || window.parent === window) return false;
       const presentation = options?.presentation === 'drilldown' ? 'drilldown' : 'overlay';

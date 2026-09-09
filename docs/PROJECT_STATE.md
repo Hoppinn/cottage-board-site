@@ -17,7 +17,7 @@
 
 ## 1. NOW
 
-- **공통 Modal Stack Host** — `docs/plans/modal-stack-host-plan.md`의 기존 host 구조를 유지한다. games 위치·안내만 ← drill-down이며, 전체보기·플래너·보드·모임 조율은 × overlay다. A는 사용자 실화면에서 해결 확인됐고, 독립 overlay 요청은 명시적으로 `presentation: 'overlay'`를 전달하며 호출처 없는 `openProfilePanel()`의 옛 `stackChild` 분기는 제거했다. profile child의 내 보드·프로필 보드·모임 보드는 Host shell 외곽을 다시 적용하지 않고 iframe 전체를 채운다. ←와 ESC는 top frame 하나만 복귀하고, ×는 현재 top frame 하나만 닫아 아래 frame 상태를 보존한다. 기존 모임원 프로필 작성·수정 wizard 경로와 내 보드 내부 ← navigation은 보존한다. 남은 검증은 대표 overlay/drill-down 경로의 실제 동작 확인이다.
+- **공통 Modal Stack Host** — `docs/plans/modal-stack-host-plan.md`의 기존 host 구조를 유지한다. game flow는 Host-owned flow-close X와 one-step ←를 분리해 drilldown에서도 둘 다 유지하며, X는 현재 contiguous game flow를 닫고 ←/ESC는 top frame 하나만 복귀한다. Host shell geometry owner와 `standard`/`compact` variant도 분리했고 모임조율 child는 compact variant를 쓴다. profile child의 내 보드·프로필 보드·모임 보드는 Host shell 외곽을 다시 적용하지 않고 iframe 전체를 채운다. 기존 모임원 프로필 작성·수정 wizard 경로와 내 보드 내부 ← navigation은 보존한다. 사용자 smoke 재확인 대기는 추천·플레이기록·내 보드·모임플래너의 game flow와 모임조율 compact geometry다.
 
 ## 2. NEXT (자동 착수 금지)
 

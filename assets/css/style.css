@@ -7852,6 +7852,12 @@ body[data-ui-geometry-owner="host"] .dd-overlay[data-ui-layer="host-transparent"
 .modal-stack-frame{width:100%;height:100%;border:0;flex:1;}
 .modal-stack-frame-back{position:absolute;top:10px;left:12px;z-index:3;border:0;border-radius:8px;padding:4px 8px;background:rgba(255,255,255,.88);color:var(--green);cursor:pointer;font-size:22px;line-height:1;}
 .modal-stack-frame-close{position:absolute;top:10px;right:12px;z-index:3;border:0;padding:4px;background:none;color:var(--ink);cursor:pointer;font-size:18px;line-height:1;}
+/* Geometry ownership and size are independent. Any compact Host child uses
+   this shell variant; child renderers still fill the iframe and own no inset. */
+.modal-stack-frame-shell[data-ui-geometry-variant="compact"]{
+  left:50%;right:auto;top:50%;bottom:auto;width:min(88vw,440px);height:min(72dvh,440px);
+  max-height:calc(100dvh - 32px);transform:translate(-50%,-50%);
+}
 
 /*
  * 모바일 센터모달 공통 외곽틀.

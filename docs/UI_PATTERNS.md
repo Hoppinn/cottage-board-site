@@ -73,13 +73,13 @@ Host는 root iframe을 첫 frame으로 보존하고 child frame을 sibling으로
 
 | 책임 | owner / 계약 |
 |---|---|
-| outer geometry | Modal Stack Host shell (`.modal-stack-frame-shell`)만 소유한다. |
+| outer geometry | Modal Stack Host shell (`.modal-stack-frame-shell`)만 소유한다. `standard`/`compact` geometry variant는 shell 형태를 고르며 ownership과 별개다. |
 | inner layout | child iframe의 기존 renderer. child renderer는 local `0,0` fill과 기능 layout만 소유한다. |
 | scroll | child renderer의 intended scroll area (`.game-sheet-scroll`, `.rule-hub-scroll`, `.recommend-overlay-list`, profile body 등). Host layer/shell/iframe element를 application scroll owner로 만들지 않는다. |
-| chrome | Host가 top-level × 또는 ←를 소유한다. child의 function header는 유지할 수 있으나, duplicate outer close/back/title-only page chrome은 child mode에서 제거·위임한다. |
+| chrome | Host가 flow-close X와 navigation-back ←를 별도 책임으로 소유한다. child의 function header는 유지할 수 있으나, duplicate outer close/back/title-only page chrome은 child mode에서 제거·위임한다. |
 | backdrop | Host root의 단일 backdrop. child renderer는 transparent local layer만 가질 수 있고 second dim/blur를 만들지 않는다. |
 | navigation | Host client `request()`가 parent Host에 child push를 요청한다. child 내부의 진짜 local navigation은 local owner에게 남긴다. |
-| close/back | Host ×/←/ESC는 top frame 하나만 pop한다. child-local close/back handler가 Host top frame과 같은 역할을 중복 소유하지 않는다. |
+| close/back | 일반 Host ×/←/ESC는 top frame 하나를 처리한다. game flow X는 contiguous game flow 전체를 닫고, game drilldown의 ←/ESC는 top frame 하나만 pop한다. child-local close/back handler가 Host 책임을 중복 소유하지 않는다. |
 
 ### P3 embed chrome policy
 
@@ -109,11 +109,11 @@ P3 child 중 `presentation: 'overlay'`가 붙는 frame이다.
 
 | 책임 | owner / 계약 |
 |---|---|
-| outer geometry / backdrop / top interaction | Host |
+| outer geometry / backdrop / top interaction | Host standard or compact shell variant |
 | inner layout / intended scroll | child renderer |
-| chrome | Host ×; child function header는 필요하면 유지 |
+| chrome | Host ×; game flow root의 X는 flow close, child function header는 필요하면 유지 |
 | navigation | Independent Overlay |
-| close/back | ×/ESC = top frame one-pop. root modal 전체 close나 local parent navigation으로 해석하지 않는다. |
+| close/back | non-game ×/ESC = top frame one-pop. game flow root X는 그 flow를 닫으며, root modal 전체 close나 local parent navigation으로 해석하지 않는다. |
 
 현재 대상: 추천 전체보기, 게임정보, 게임기록 상세, 모임 조율, 내 보드/read-only member board.
 
@@ -123,11 +123,11 @@ P3 child 중 `presentation: 'drilldown'`이 붙는 frame이다.
 
 | 책임 | owner / 계약 |
 |---|---|
-| outer geometry / backdrop / top interaction | Host |
+| outer geometry / backdrop / top interaction | Host standard or compact shell variant |
 | inner layout / intended scroll | child renderer |
-| chrome | Host ←. child는 같은 단계 복귀를 위한 independent outer ←/×를 새로 만들지 않는다. |
+| chrome | Host ← for one-step navigation; game flow drilldown also keeps Host X for flow close. child는 같은 단계 복귀/flow close를 위한 independent outer control을 새로 만들지 않는다. |
 | navigation | Drilldown |
-| close/back | ←/ESC = 직전 Host frame 한 단계 pop |
+| close/back | ←/ESC = 직전 Host frame 한 단계 pop; game flow X = game flow root까지 닫기 |
 
 현재 대상은 게임정보 → 게임위치와 게임정보 → 게임안내뿐이다. 이 제한은 UX 일반화가 아니라 현재 `openShelfSheet()`와 `_openRuleHubModal()`의 explicit `presentation: 'drilldown'` 호출에 근거한다.
 
@@ -210,7 +210,7 @@ The day-detail planner and homepage planner share an iframe source but are not i
 | 프로필 보드 / 모임 보드 | P6; may be inside P3 child | Local Navigation | profile owns parent/subsheet; no Host push | `.profile-subsheet-body` | code confirmed / runtime needed |
 | 프로필 작성/수정 wizard | iframe-internal local exception under P2 | Local Navigation / wizard-local flow | wizard owns internal layer; parent X delegates while wizard active | exact wizard body needs runtime | close delegation runtime confirmed; geometry/scroll needed |
 | 홈 모임 플래너 | P2 | root modal close; child semantics vary | planner root owns shell/backdrop, Host owns pushed child | iframe document/local planner sheets | code confirmed / runtime needed |
-| 모임 조율 | P8 when local; P3+P4 when stacked | Independent Overlay | local `dd` chrome or Host × | local modal body needs measurement | code confirmed / runtime needed |
+| 모임 조율 | P8 when local; P3+P4 when stacked | Independent Overlay | local `dd` chrome or Host compact-shell × | local modal body needs measurement | code confirmed / runtime needed |
 | day-detail 플래너/quick entry | P7 | local iframe modal flow | `#__plannerModal` owner remains distinct from home planner | iframe/local sheet needs measurement | code confirmed / runtime needed |
 
 ## Implemented reuse hooks
