@@ -14,18 +14,17 @@
 
 ## 2. NEXT (자동 착수 금지)
 
-1. **관리자 페이지 추적 범위** — `관리자페이지 → 페이지탭 → 페이지 추적`에서 center modal/bottom sheet 행동이 보이지 않는다. 부모 단위 방문·체류와 iframe 안 실제 행동 이벤트의 기존 원칙을 보존하면서, 필요한 event 정의·소비자·검증 경로를 먼저 확정한다.
-2. **가입경로 보드라이프** — `member_intros.join_sources` 허용 목록·입력 UI·표시 라벨·최신 RPC 마이그레이션을 함께 바꾸는 Red Plan 승인 후 구현한다.
-3. **게임 데이터 확인** — 스위트랜드 보유 여부와 파수꾼·페야의늪 위치를 데이터 정본 및 사용자 기대 위치와 대조한다. 현재 출력은 파수꾼=`active/incoming`, 페야의늪=`active/heavy_strategy`이며 스위트랜드 일치 항목은 미확인이다.
-4. **홈페이지 기능 게임정보 geometry** — `홈페이지 기능 → 추천게임찾기 → 게임정보`에서 game-sheet가 parent modal 안의 작은 geometry로 보인다는 사용자 보고를 재현 경로의 request origin·ancestor renderer 탐색·containing block 기준으로 조사한다. 이전 static/commit 결과만으로 해결 처리하지 않는다.
-5. **플래너 → 내 보드 close flicker** — 내 보드 close 뒤 parent planner surface가 순간 깜빡이는 문제를 조사한다. `홈 플래너 → 플래너 보기`와 `홈페이지 기능 → 모임 플래너`가 같은 canonical planner document/lifecycle인지 먼저 판정하고, parent DOM·scroll·geometry·visibility·loaded state 보존을 기준으로 한다.
-6. **게임위치 surface** — `게임정보 → 게임위치`가 게임방법보다 늦게 보이는 문제와 남은 scroll bug를 같은 iframe surface lifecycle으로 조사한다. document boot·ready/visible·payload 전달과 실제 scroll owner/boundary를 함께 확정한다.
-7. **모임 보드 → 플래너 미리보기 scroll** — 중간 scroll position에서 시작하는 문제의 target, 이벤트, 실제 scroll owner와 클릭 전후 rect를 측정한 뒤 수정 범위를 정한다.
-8. **플레이 기록 accordion 위치 보정** — 열린 accordion header 높이 변화와 페이지 하단의 `compensateHeaderPosition` 실패를 target header viewport top 기준으로 조사한다.
-9. **내 보드 sub-sheet 최하단 overscroll/헤더 끌림** — `내 보드 → 프로필 보드 또는 모임 보드 → 최하단 반복 scroll`에서만 `.profile-subsheet`·iframe `html/body`·`.profile-panel`의 실제 scroll owner를 측정한다. profile wizard나 일반 center modal/bottom sheet의 전역 scroll-chain 문제로 확대하지 않는다.
-10. **홈페이지 기능 child route 공통화 리팩터링** — 기능별 위임 분기와 URL 조립을 공통 child 요청/route registry 계약으로 정리하는 별도 Plan 후보다. 독립 URL·일반 embed·작은 sheet는 유지한다.
-11. **추천 전체보기 상단 과대 영역** — `홈페이지 기능 → 추천게임찾기 → 게임 더 찾기 → 전체보기`의 Host X와 제목 영역이 중복 점유하는지 사용자와 같은 URL·viewport에서 shell/header/divider rect로 먼저 판정한다.
-12. **AGENTS canonical 기능 재사용·embed/iframe 원칙 점검** — 현재 AGENTS에는 기존 진입점·호출 경로·renderer 확인, iframe 공통 회귀 검증, 부모 단위 방문/체류와 iframe 행동 이벤트 보존 원칙이 있다. canonical functional-surface/geometry ownership을 명시 규칙으로 추가할 필요가 있는지는 실제 누락 사례와 중복 여부를 별도 검토한 뒤 판단한다.
+1. **nested planner/profile → 내 보드 interaction ownership** — profile-panel은 ancestor document의 visual stack 최상단에 표시되지만, pointer/click/wheel/touch/scroll이 아래 planner·profile board에 전달된다. presentation stack과 interaction layer owner가 분리된 공통 문제로, 실제 hit target·iframe/Host interception·backdrop·pointer-events·scroll owner/boundary를 측정해 topmost functional surface가 입력까지 소유하도록 한다. parent DOM/geometry/scroll/lifecycle은 보존한다.
+2. **관리자 페이지 추적 범위** — `관리자페이지 → 페이지탭 → 페이지 추적`에서 center modal/bottom sheet 등 functional surface 행동이 보이지 않는다. 부모 단위 방문·체류와 iframe 안 실제 행동 이벤트의 기존 원칙을 보존하면서, 필요한 event 정의·소비자·검증 경로를 먼저 확정한다.
+3. **nested profile underlying scroll boundary** — `모임원프로필페이지 → 개인카드 상세보기 → 프로필보드`에서 최하단 반복 아래 scroll 또는 최상단 반복 위 scroll이 underlying 모임원프로필페이지로 넘어가지 않는지 확인한다. 동일 scroll-owner/boundary 구조의 center modal·bottom sheet·subsheet·nested overlay만 비교하고, 사이트 전체 overlay 문제로 일반화하지 않는다. iPhone/Safari도 확인 대상이며 wizard overscroll과는 별개다.
+4. **게임 데이터 확인** — 보유게임 스위트랜드 추가, 파수꾼 `도착예정 → 쉬운협력게임`, 페야의늪 `도착예정 → 헤비매니아` 요구를 데이터 정본과 대조한다. 현재 출력은 파수꾼=`active/incoming`, 페야의늪=`active/heavy_strategy`이며 스위트랜드 일치 항목은 미확인이다.
+5. **가입경로 보드라이프** — `member_intros.join_sources` 허용 목록·입력 UI·표시 라벨·최신 RPC 마이그레이션을 함께 바꾸는 Red Plan 승인 후 구현한다.
+6. **모임 보드 → 플래너 미리보기 scroll** — 진입 시 중간 scroll position에서 시작하는 문제의 target, 이벤트, 실제 scroll owner와 클릭 전후 rect를 측정한 뒤 플래너의 올바른 시작 위치로 수정한다.
+7. **플레이 기록 accordion 위치 보정** — 날짜별/모임별 accordion의 열린 header가 닫힌 상태보다 높아지지 않게 하고, 페이지 하단에서도 `compensateHeaderPosition`이 클릭 header viewport 위치를 유지하도록 실제 부족 scroll 여유를 조사한다.
+8. **게임위치 scroll boundary** — geometry와 표시 지연은 사용자 실화면 통과했다. 별도로 남은 game-location scroll bug가 있으면 실제 scroll owner/boundary와 iframe/local overlay 전달 경로를 확인한다.
+9. **홈페이지 기능 child route 공통화 리팩터링** — 기능별 위임 분기와 URL 조립을 공통 child 요청/route registry 계약으로 정리하는 별도 Plan 후보다. 독립 URL·일반 embed·작은 sheet는 유지한다.
+10. **추천 전체보기 상단 과대 영역** — `홈페이지 기능 → 추천게임찾기 → 게임 더 찾기 → 전체보기`의 Host X와 제목 영역이 중복 점유하는지 사용자와 같은 URL·viewport에서 shell/header/divider rect로 먼저 판정한다.
+11. **AGENTS canonical 기능 재사용·embed/iframe 원칙 점검** — embed는 기존 기능의 표시 방식이며 duplicate renderer/state/handler를 만들지 않고 canonical renderer·markup·state·validation·save·auth·event logic을 우선 재사용한다는 원칙이 현재 AGENTS에 충분히 있는지 검토한다. embed 분기는 layout/chrome 숨김으로 최소화하고, preload가 auth·진입 가능 여부·user flow를 바꾸지 않으며 인증은 실제 제한 action 가까이에 둔다는 점도 확인한다. 새 embed 전용 구조가 필요하면 canonical 재사용 불가 사유를 먼저 명시한다. 이번에는 AGENTS를 수정하지 않는다.
 
 ## 3. BACKLOG (자동 착수 금지)
 
