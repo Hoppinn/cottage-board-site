@@ -17,8 +17,8 @@
 
 ## 1. NOW
 
-- **게임정보 canonical surface** — 홈페이지 기능의 추천게임찾기·플레이기록·내 보드·모임플래너 어느 진입점에서도 `openGameSheet()`/`.game-sheet` local bottom-sheet renderer를 사용한다. Modal Stack Host는 게임정보·기록·위치·안내 iframe child route를 만들지 않으며, geometry owner와 functional surface를 분리한다. 사용자 확인 대기: 네 진입점의 게임정보와 게임 A→B/기록/위치/안내 local flow.
-- **공통 Modal Stack Host** — `docs/plans/modal-stack-host-plan.md`의 기존 host 구조를 유지한다. game flow는 Host-owned flow-close X와 one-step ←를 분리해 drilldown에서도 둘 다 유지하며, X는 현재 contiguous game flow를 닫고 ←/ESC는 top frame 하나만 복귀한다. Host shell geometry owner와 `standard`/`compact` variant도 분리했고 모임조율 child는 compact variant를 쓴다. profile child의 내 보드·프로필 보드·모임 보드는 Host shell 외곽을 다시 적용하지 않고 iframe 전체를 채운다. 기존 모임원 프로필 작성·수정 wizard 경로와 내 보드 내부 ← navigation은 보존한다. 사용자 smoke 재확인 대기는 추천·플레이기록·내 보드·모임플래너의 game flow와 모임조율 compact geometry다.
+- **게임정보 canonical surface** — 홈페이지 기능의 추천게임찾기·플레이기록·내 보드·모임플래너 어느 진입점에서도 `openGameSheet()`/`.game-sheet` local bottom-sheet renderer를 사용한다. Modal Stack Host는 게임정보·기록·위치·안내 iframe child route를 만들지 않으며, geometry owner와 functional surface를 분리한다. 게임시트가 열린 동안에도 추천 전체보기의 parent modal outer geometry는 유지한다. 사용자 확인 대기: 네 진입점의 게임정보와 게임 A→B/기록/위치/안내 local flow.
+- **공통 Modal Stack Host** — `docs/plans/modal-stack-host-plan.md`의 기존 host 구조를 유지한다. game flow는 Host-owned flow-close X와 one-step ←를 분리해 drilldown에서도 둘 다 유지하며, X는 현재 contiguous game flow를 닫고 ←/ESC는 top frame 하나만 복귀한다. child route는 추천 전체보기만 유지한다. 내 보드/읽기 전용 프로필은 `openProfilePanel()` local surface, 모임 조율은 `openDateMeetingModal()` compact local surface를 현재 document에서 재사용하며 Host child iframe을 만들지 않는다. 기존 모임원 프로필 작성·수정 wizard와 내 보드 내부 `_openSubSheet()` ← navigation은 보존한다. 사용자 확인 대기: 다른 modal/context → 내 보드의 lifecycle, 내 보드 하위 board navigation, planner context → 모임 조율 compact geometry.
 
 ## 2. NEXT (자동 착수 금지)
 
