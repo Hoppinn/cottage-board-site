@@ -250,6 +250,14 @@ function _requestModalStack(kind, payload, options) {
   return window.CottageModalStack?.request(kind, payload, options) === true;
 }
 
+function _requestAncestorFunctionalSurface(surface, payload) {
+  const stack = window.CottageModalStack?.state?.();
+  if (stack?.frame !== 'child' || window.parent === window) return false;
+  const request = { surface, payload, handled: false };
+  window.parent.dispatchEvent(new window.parent.CustomEvent('cottage-functional-surface-request', { detail: request }));
+  return request.handled;
+}
+
 function ensureGameSheet() {
   if (document.getElementById('gameSheet')) return;
   const wrap = document.createElement('div');
@@ -667,6 +675,7 @@ function _buildSameDesignerHtml(gameKey, detail) {
 
 function openGameSheet(gameKey, restoreScroll = false, fromKey = null, noAnim = false){
   const guideGame = window.gameData?.[gameKey];
+  if (_requestAncestorFunctionalSurface('game-sheet', { mode: 'info', gameKey, restoreScroll, fromKey, noAnim })) return;
   if (_requestModalStack(guideGame ? 'game-info' : 'game-record', { game: String(gameKey || '') }, { presentation: 'overlay' })) return;
   if (_gameSheetNavBack) {
     _gameSheetNavBack = false;
@@ -1050,6 +1059,7 @@ function closeGameSheet(){
 
 // ── 게임평/기록 전용 바텀시트 ────────────────────────────────────────
 function openGameRecordSheet(gameKey) {
+  if (_requestAncestorFunctionalSurface('game-sheet', { mode: 'record', gameKey })) return;
   if (_requestModalStack('game-record', { game: String(gameKey || '') }, { presentation: 'overlay' })) return;
   if (!gameSheet || !gameSheetContent) return;
   _currentSheetGameKey = gameKey;
@@ -3026,6 +3036,17 @@ Object.assign(window, {
 Object.defineProperty(window, 'gameSheet', {
   get: function () { return gameSheet; },
   configurable: true,
+});
+
+window.addEventListener('cottage-functional-surface-open', event => {
+  const request = event.detail;
+  if (request?.surface !== 'game-sheet' || request.handled) return;
+  const { mode = 'info', gameKey, restoreScroll = false, fromKey = null, noAnim = false } = request.payload || {};
+  if (!gameKey) return;
+  ensureGameSheet();
+  request.handled = true;
+  if (mode === 'record') openGameRecordSheet(gameKey);
+  else openGameSheet(gameKey, restoreScroll, fromKey, noAnim);
 });
 
 })();

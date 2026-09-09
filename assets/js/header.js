@@ -24,7 +24,7 @@
   const _canonicalLocalSurfaceStates = Object.freeze({
     // Parent geometry is opt-in. A game sheet is an independent local overlay:
     // its prepare/ready handshake must not reclassify the preserved parent shell.
-    'game-sheet': { nodeSelector: '.game-sheet', isActive: node => node.classList.contains('is-active'), parentGeometry: 'preserve' },
+    'game-sheet': { nodeSelector: '.game-sheet', isActive: node => node.classList.contains('is-active'), parentGeometry: 'preserve', portal: 'ancestor' },
     'profile-panel': { nodeSelector: '#profilePanel', isActive: () => true, parentGeometry: 'available' },
     'meeting-adjust': { nodeSelector: '#__ddModal', isActive: node => node.classList.contains('is-open'), parentGeometry: 'preserve' },
   });
@@ -69,6 +69,20 @@
     window.parent.postMessage({ type: 'cottage-functional-surface-prepare', surface }, location.origin);
   }
 
+  // A Host child cannot paint outside its iframe. Independent functional
+  // surfaces therefore claim the already-open ancestor document's canonical
+  // renderer; the preserved child frame remains untouched underneath it.
+  function _forwardFunctionalSurfaceRequest(event) {
+    const request = event.detail;
+    const surface = _surfaceState(request?.surface);
+    if (!surface || surface.portal !== 'ancestor' || request.handled) return;
+    if (_stackFrame === 'child' && window.parent !== window) {
+      window.parent.dispatchEvent(new window.parent.CustomEvent('cottage-functional-surface-request', { detail: request }));
+      return;
+    }
+    window.dispatchEvent(new CustomEvent('cottage-functional-surface-open', { detail: request }));
+  }
+
   function _publishLocalSurfaceGeometry() {
     if (window.parent === window) return;
     Object.entries(_canonicalLocalSurfaceStates).forEach(([surface, { nodeSelector, isActive }]) => {
@@ -78,6 +92,7 @@
   }
   window.addEventListener('message', _setChildSurfaceGeometry);
   window.addEventListener('message', _completeLocalSurfaceGeometry);
+  window.addEventListener('cottage-functional-surface-request', _forwardFunctionalSurfaceRequest);
   const _surfaceStateObservers = new Map();
   const _surfaceDiscoveryObserver = new MutationObserver(_watchLocalSurfaceGeometry);
   function _watchLocalSurfaceGeometry() {
