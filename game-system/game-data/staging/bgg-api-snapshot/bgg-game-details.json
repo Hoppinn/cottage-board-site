@@ -42768,6 +42768,67 @@
       ]
     }
   },
+  "425445": {
+    "bggId": "425445",
+    "title": "Sweet Lands",
+    "image": "https://cf.geekdo-images.com/qmCyTIgGhdSON0bMUk8qjQ__original/img/NEfd_QHVVzORADKrXdkffvIYBVw=/0x0/filters:format(jpeg)/pic8329173.jpg",
+    "thumbnail": "https://cf.geekdo-images.com/qmCyTIgGhdSON0bMUk8qjQ__small/img/7NwXv2G1UPErGTvHHm-R6wdYsoY=/fit-in/200x150/filters:strip_icc()/pic8329173.jpg",
+    "description": "Welcome to &ldquo;Sweet Lands&rdquo;, the kingdom of delightful confections! The former king has succumbed to his gluttonous love for sweets, leaving behind a final decree. Summoned by this royal edict, you and your fellow players are challenged to build the most magnificent city &mdash; and if you succeed, you will ascend as the new ruler of Sweet Lands. Gather the support of various townsfolk and navigate through fierce competition to create the richest and most prosperous city of sweets!\n\nSweet Lands is a heavyweight Euro-style game with over 200 cards, 14 unique characters, and 449 wooden tokens. During the game, each player develops Cities on their Map Board whilst advancing on their Prosperity Tracks. After 5 rounds, the game ends and the player with the most Victory Points is the winner!\n\n&mdash;description from the publisher",
+    "yearpublished": "2025",
+    "minplayers": "1",
+    "minage": "14",
+    "maxplayers": "4",
+    "playingtime": "200",
+    "minplaytime": "100",
+    "maxplaytime": "200",
+    "averageweight": "4.1754",
+    "average": "8.16541",
+    "bayesaverage": "6.6204",
+    "usersrated": "1939",
+    "rank": "1070",
+    "designers": [
+      "Totsuca Chuo"
+    ],
+    "artists": [
+      "Tatsuki Asano",
+      "Brownie120"
+    ],
+    "publishers": [
+      "uchibacoya",
+      "CrowD Games",
+      "Devir",
+      "PD-Verlag",
+      "Pixie Games",
+      "Rosiness",
+      "Yellowstar Games"
+    ],
+    "categories": [
+      "City Building",
+      "Economic",
+      "Fantasy",
+      "Industry / Manufacturing"
+    ],
+    "mechanics": [
+      "Hexagon Grid",
+      "Solo / Solitaire Game",
+      "Tile Placement",
+      "Variable Player Powers",
+      "Worker Placement"
+    ],
+    "suggested_numplayers": {
+      "best": [
+        2
+      ],
+      "recommended": [
+        1,
+        3
+      ],
+      "not_recommended": [
+        4,
+        4
+      ]
+    }
+  },
   "426314": {
     "bggId": "426314",
     "title": "Betty Botter Bought Some Butter",

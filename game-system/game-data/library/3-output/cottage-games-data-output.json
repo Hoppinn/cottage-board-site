@@ -33615,17 +33615,11 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "categoriesKo": [
-        "타일게임"
-      ],
+      "categoriesKo": [],
       "mechanics": [
         "손패털기"
       ],
-      "mechanicsKo": [
-        "패 관리",
-        "패턴 만들기",
-        "세트 수집"
-      ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": "패를 한 장 뽑고 한 장 버리며 6장의 족보를 만드는 게임입니다.\n7가지 족보를 먼저 완성해 '로그'를 외치거나, 페어 큐와 트리플 큐를 이용해 손패를 2장까지 줄여 또 다른 방식의 로그를 노릴 수 있습니다.\n\n단순히 좋은 패를 기다리는 것뿐 아니라 앞사람이 버리는 패를 보고 페어 큐를 노리고, 특수패와 큐널티를 이용해 마지막 순간까지 승부를 뒤집을 수 있습니다.\n\n진행: 1장 뽑기 → 족보 확인 → 1장 버리기\n조건을 만족하면 페어 큐 / 트리플 큐 / 로그 선언"
@@ -77985,9 +77979,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "incoming",
-      "shelfLabel": "발매후 도착예정",
-      "shelfFullLabel": "발매후 도착예정",
+      "shelfGroupId": "easy_coop",
+      "shelfLabel": "쉬운 협력게임",
+      "shelfFullLabel": "라이트패밀리게임 - 쉬운 협력게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.43,
       "moodTags": [
@@ -87077,5 +87071,139 @@
       "boardId": "아르낙의잊혀진유적"
     },
     "abbr": "아르낙"
+  },
+  "스위트랜드": {
+    "id": "스위트랜드",
+    "title": {
+      "display": "스위트랜드",
+      "owned": "스위트랜드",
+      "bgg": "Sweet Lands"
+    },
+    "bgg": {
+      "id": "425445",
+      "matchStatus": "forced",
+      "year": "2025",
+      "rating": 8.16541,
+      "weight": 4.1754,
+      "minPlayers": 1,
+      "maxPlayers": 4,
+      "bestPlayers": [
+        2
+      ],
+      "recommendedPlayers": [
+        1,
+        3
+      ],
+      "notRecommendedPlayers": [
+        4,
+        4
+      ],
+      "playingTime": 200,
+      "minPlayTime": 100,
+      "maxPlayTime": 200,
+      "categories": [
+        "City Building",
+        "Economic",
+        "Fantasy",
+        "Industry / Manufacturing"
+      ],
+      "categoriesKo": [
+        "도시 건설",
+        "경제",
+        "판타지",
+        "산업"
+      ],
+      "mechanics": [
+        "Hexagon Grid",
+        "Solo / Solitaire Game",
+        "Tile Placement",
+        "Variable Player Powers",
+        "Worker Placement"
+      ],
+      "mechanicsKo": [
+        "헥사곤 격자",
+        "솔로 게임",
+        "타일 배치",
+        "비대칭 능력",
+        "워커 배치"
+      ],
+      "designers": [
+        "Totsuca Chuo"
+      ],
+      "description": "Welcome to &ldquo;Sweet Lands&rdquo;, the kingdom of delightful confections! The former king has succumbed to his gluttonous love for sweets, leaving behind a final decree. Summoned by this royal edict, you and your fellow players are challenged to build the most magnificent city &mdash; and if you succeed, you will ascend as the new ruler of Sweet Lands. Gather the support of various townsfolk and navigate through fierce competition to create the richest and most prosperous city of sweets!\n\nSweet Lands is a heavyweight Euro-style game with over 200 cards, 14 unique characters, and 449 wooden tokens. During the game, each player develops Cities on their Map Board whilst advancing on their Prosperity Tracks. After 5 rounds, the game ends and the player with the most Victory Points is the winner!\n\n&mdash;description from the publisher",
+      "descriptionKo": "\"스윗 랜즈\"에 오신 것을 환영합니다. 맛있는 과자의 왕국입니다! 전임 왕이 과자에 대한 탐욕에 빠져 세상을 떠났고, 최후의 칙령을 남겼습니다. 이 왕실의 명령으로 소환된 당신과 다른 플레이어들은 가장 화려한 도시를 건설하도록 도전받습니다. 성공하면 스윗 랜즈의 새로운 통치자가 될 것입니다. 다양한 주민들의 지지를 얻고 치열한 경쟁을 헤쳐나가며 가장 풍요롭고 번영하는 과자의 도시를 만들어보세요!\n\n스윗 랜즈는 200장 이상의 카드, 14명의 독특한 캐릭터, 449개의 목재 토큰으로 이루어진 헤비급 유로 게임입니다. 게임 진행 중 각 플레이어는 지도판에서 도시를 개발하며 번영 트랙을 진행합니다. 5라운드 후 게임이 끝나고 가장 많은 승점을 획득한 플레이어가 우승자입니다!"
+    },
+    "cottage": {
+      "status": "active",
+      "shelfGroupId": "two_player_best",
+      "shelfLabel": "2인 베스트게임",
+      "shelfFullLabel": "2인 베스트게임",
+      "difficultyId": "hardcore",
+      "difficultyWeight": 4.1754,
+      "moodTags": [
+        "immersive"
+      ],
+      "playTags": [
+        "puzzle",
+        "strategy"
+      ],
+      "situationTags": [
+        "experienced",
+        "long_stay",
+        "couple",
+        "group"
+      ],
+      "interactionTags": [
+        "competitive",
+        "turn_based",
+        "silent_focus"
+      ],
+      "relationshipTags": [],
+      "manualTags": [],
+      "autoTags": [
+        "immersive",
+        "puzzle",
+        "strategy",
+        "experienced",
+        "long_stay",
+        "couple",
+        "group",
+        "competitive",
+        "turn_based",
+        "silent_focus"
+      ],
+      "displayTags": [
+        "머리쓰게",
+        "빠져들게",
+        "경쟁형"
+      ],
+      "summaryKo": "다양한 주민의 지지를 얻어 가장 번영하는 과자 도시를 건설하는 게임.",
+      "comment": {
+        "text": "",
+        "source": "none"
+      },
+      "ruleSummary": {
+        "text": "",
+        "source": "none"
+      },
+      "recommendPoint": {
+        "text": "",
+        "source": "none"
+      },
+      "caution": "",
+      "youtubeUrl": ""
+    },
+    "images": {
+      "main": "https://cf.geekdo-images.com/qmCyTIgGhdSON0bMUk8qjQ__original/img/NEfd_QHVVzORADKrXdkffvIYBVw=/0x0/filters:format(jpeg)/pic8329173.jpg",
+      "thumbnail": "https://cf.geekdo-images.com/qmCyTIgGhdSON0bMUk8qjQ__small/img/7NwXv2G1UPErGTvHHm-R6wdYsoY=/fit-in/200x150/filters:strip_icc()/pic8329173.jpg",
+      "source": "bgg",
+      "type": "jpg"
+    },
+    "community": {
+      "reviewEnabled": true,
+      "ratingEnabled": true,
+      "boardId": "스위트랜드"
+    },
+    "abbr": "스위"
   }
 }

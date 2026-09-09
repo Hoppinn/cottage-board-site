@@ -11924,7 +11924,7 @@
     "bggId": "228855",
     "matchStatus": "forced",
     "status": "ready",
-    "location": "발매후 도착예정",
+    "location": "쉬운 협력",
     "difficulty": 2.4275,
     "difficultyWeight": 2.43,
     "rating": 7.24036,
@@ -13295,6 +13295,25 @@
       1,
       2,
       4
+    ]
+  },
+  {
+    "id": "스위트랜드",
+    "ownedName": "스위트랜드",
+    "titleEn": "Sweet Lands",
+    "bggId": "425445",
+    "matchStatus": "forced",
+    "status": "ready",
+    "location": "2인",
+    "difficulty": 4.1754,
+    "difficultyWeight": 0,
+    "rating": 8.16541,
+    "bestPlayers": [
+      2
+    ],
+    "recommendedPlayers": [
+      1,
+      3
     ]
   }
 ]

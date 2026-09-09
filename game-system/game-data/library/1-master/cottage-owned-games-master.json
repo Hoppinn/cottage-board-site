@@ -1,7 +1,7 @@
 {
   "version": 1,
   "source": "cottageboard-master",
-  "updatedAt": "2026-08-13T06:51:28.501Z",
+  "updatedAt": "2026-09-09T15:17:00.442Z",
   "games": {
     "7원더스": {
       "id": "7원더스",
@@ -123,7 +123,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.680Z",
-      "updatedAt": "2026-08-13T06:51:28.503Z",
+      "updatedAt": "2026-09-09T15:17:00.443Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -217,7 +217,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.681Z",
-      "updatedAt": "2026-08-13T06:51:28.503Z",
+      "updatedAt": "2026-09-09T15:17:00.444Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -316,7 +316,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.681Z",
-      "updatedAt": "2026-08-13T06:51:28.503Z",
+      "updatedAt": "2026-09-09T15:17:00.444Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -377,7 +377,7 @@
       "mechanicsKo": [],
       "status": "pending-cache",
       "createdAt": "2026-05-23T17:43:25.681Z",
-      "updatedAt": "2026-08-13T06:51:28.503Z",
+      "updatedAt": "2026-09-09T15:17:00.444Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -465,7 +465,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.681Z",
-      "updatedAt": "2026-08-13T06:51:28.504Z",
+      "updatedAt": "2026-09-09T15:17:00.444Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -571,7 +571,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.681Z",
-      "updatedAt": "2026-08-13T06:51:28.504Z",
+      "updatedAt": "2026-09-09T15:17:00.444Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -652,7 +652,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.681Z",
-      "updatedAt": "2026-08-13T06:51:28.504Z",
+      "updatedAt": "2026-09-09T15:17:00.444Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -777,7 +777,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.681Z",
-      "updatedAt": "2026-08-13T06:51:28.504Z",
+      "updatedAt": "2026-09-09T15:17:00.444Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -873,7 +873,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.681Z",
-      "updatedAt": "2026-08-13T06:51:28.504Z",
+      "updatedAt": "2026-09-09T15:17:00.444Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -961,7 +961,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.681Z",
-      "updatedAt": "2026-08-13T06:51:28.504Z",
+      "updatedAt": "2026-09-09T15:17:00.445Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -1066,7 +1066,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.681Z",
-      "updatedAt": "2026-08-13T06:51:28.505Z",
+      "updatedAt": "2026-09-09T15:17:00.445Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -1141,7 +1141,7 @@
       "mechanicsKo": [],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.681Z",
-      "updatedAt": "2026-08-13T06:51:28.505Z",
+      "updatedAt": "2026-09-09T15:17:00.445Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -1214,7 +1214,7 @@
       "mechanicsKo": [],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.681Z",
-      "updatedAt": "2026-08-13T06:51:28.505Z",
+      "updatedAt": "2026-09-09T15:17:00.445Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -1318,7 +1318,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.681Z",
-      "updatedAt": "2026-08-13T06:51:28.505Z",
+      "updatedAt": "2026-09-09T15:17:00.445Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -1464,7 +1464,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.681Z",
-      "updatedAt": "2026-08-13T06:51:28.505Z",
+      "updatedAt": "2026-09-09T15:17:00.445Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -1560,7 +1560,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.681Z",
-      "updatedAt": "2026-08-13T06:51:28.505Z",
+      "updatedAt": "2026-09-09T15:17:00.445Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -1651,7 +1651,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.681Z",
-      "updatedAt": "2026-08-13T06:51:28.505Z",
+      "updatedAt": "2026-09-09T15:17:00.445Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -1774,7 +1774,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.681Z",
-      "updatedAt": "2026-08-13T06:51:28.505Z",
+      "updatedAt": "2026-09-09T15:17:00.445Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -1887,7 +1887,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.681Z",
-      "updatedAt": "2026-08-13T06:51:28.505Z",
+      "updatedAt": "2026-09-09T15:17:00.445Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -1998,7 +1998,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.681Z",
-      "updatedAt": "2026-08-13T06:51:28.505Z",
+      "updatedAt": "2026-09-09T15:17:00.445Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -2094,7 +2094,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.681Z",
-      "updatedAt": "2026-08-13T06:51:28.505Z",
+      "updatedAt": "2026-09-09T15:17:00.445Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -2225,7 +2225,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.681Z",
-      "updatedAt": "2026-08-13T06:51:28.505Z",
+      "updatedAt": "2026-09-09T15:17:00.445Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -2332,7 +2332,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.681Z",
-      "updatedAt": "2026-08-13T06:51:28.505Z",
+      "updatedAt": "2026-09-09T15:17:00.445Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -2425,7 +2425,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.681Z",
-      "updatedAt": "2026-08-13T06:51:28.505Z",
+      "updatedAt": "2026-09-09T15:17:00.445Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -2522,7 +2522,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.681Z",
-      "updatedAt": "2026-08-13T06:51:28.505Z",
+      "updatedAt": "2026-09-09T15:17:00.445Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -2654,7 +2654,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.681Z",
-      "updatedAt": "2026-08-13T06:51:28.505Z",
+      "updatedAt": "2026-09-09T15:17:00.445Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -2777,7 +2777,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.681Z",
-      "updatedAt": "2026-08-13T06:51:28.505Z",
+      "updatedAt": "2026-09-09T15:17:00.445Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -2870,7 +2870,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.681Z",
-      "updatedAt": "2026-08-13T06:51:28.505Z",
+      "updatedAt": "2026-09-09T15:17:00.445Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -2994,7 +2994,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.681Z",
-      "updatedAt": "2026-08-13T06:51:28.505Z",
+      "updatedAt": "2026-09-09T15:17:00.445Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -3098,7 +3098,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.681Z",
-      "updatedAt": "2026-08-13T06:51:28.505Z",
+      "updatedAt": "2026-09-09T15:17:00.445Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -3245,7 +3245,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.681Z",
-      "updatedAt": "2026-08-13T06:51:28.505Z",
+      "updatedAt": "2026-09-09T15:17:00.445Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -3349,7 +3349,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.681Z",
-      "updatedAt": "2026-08-13T06:51:28.505Z",
+      "updatedAt": "2026-09-09T15:17:00.446Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -3479,7 +3479,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.681Z",
-      "updatedAt": "2026-08-13T06:51:28.506Z",
+      "updatedAt": "2026-09-09T15:17:00.446Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -3574,7 +3574,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.681Z",
-      "updatedAt": "2026-08-13T06:51:28.506Z",
+      "updatedAt": "2026-09-09T15:17:00.446Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -3704,7 +3704,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.681Z",
-      "updatedAt": "2026-08-13T06:51:28.506Z",
+      "updatedAt": "2026-09-09T15:17:00.446Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -3817,7 +3817,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.681Z",
-      "updatedAt": "2026-08-13T06:51:28.506Z",
+      "updatedAt": "2026-09-09T15:17:00.446Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -3944,7 +3944,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.681Z",
-      "updatedAt": "2026-08-13T06:51:28.506Z",
+      "updatedAt": "2026-09-09T15:17:00.446Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -4088,7 +4088,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.681Z",
-      "updatedAt": "2026-08-13T06:51:28.508Z",
+      "updatedAt": "2026-09-09T15:17:00.446Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -4220,7 +4220,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.681Z",
-      "updatedAt": "2026-08-13T06:51:28.508Z",
+      "updatedAt": "2026-09-09T15:17:00.446Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -4320,7 +4320,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.681Z",
-      "updatedAt": "2026-08-13T06:51:28.508Z",
+      "updatedAt": "2026-09-09T15:17:00.446Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -4411,7 +4411,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.681Z",
-      "updatedAt": "2026-08-13T06:51:28.508Z",
+      "updatedAt": "2026-09-09T15:17:00.446Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -4503,7 +4503,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.681Z",
-      "updatedAt": "2026-08-13T06:51:28.508Z",
+      "updatedAt": "2026-09-09T15:17:00.446Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -4639,7 +4639,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.681Z",
-      "updatedAt": "2026-08-13T06:51:28.508Z",
+      "updatedAt": "2026-09-09T15:17:00.446Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -4748,7 +4748,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.681Z",
-      "updatedAt": "2026-08-13T06:51:28.508Z",
+      "updatedAt": "2026-09-09T15:17:00.446Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -4849,7 +4849,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.681Z",
-      "updatedAt": "2026-08-13T06:51:28.508Z",
+      "updatedAt": "2026-09-09T15:17:00.446Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -4973,7 +4973,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.681Z",
-      "updatedAt": "2026-08-13T06:51:28.508Z",
+      "updatedAt": "2026-09-09T15:17:00.446Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -5070,7 +5070,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.681Z",
-      "updatedAt": "2026-08-13T06:51:28.508Z",
+      "updatedAt": "2026-09-09T15:17:00.446Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -5181,7 +5181,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.681Z",
-      "updatedAt": "2026-08-13T06:51:28.508Z",
+      "updatedAt": "2026-09-09T15:17:00.446Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -5326,7 +5326,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.681Z",
-      "updatedAt": "2026-08-13T06:51:28.508Z",
+      "updatedAt": "2026-09-09T15:17:00.446Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -5439,7 +5439,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.681Z",
-      "updatedAt": "2026-08-13T06:51:28.508Z",
+      "updatedAt": "2026-09-09T15:17:00.446Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -5552,7 +5552,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.681Z",
-      "updatedAt": "2026-08-13T06:51:28.508Z",
+      "updatedAt": "2026-09-09T15:17:00.446Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -5660,7 +5660,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.681Z",
-      "updatedAt": "2026-08-13T06:51:28.508Z",
+      "updatedAt": "2026-09-09T15:17:00.446Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -5799,7 +5799,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.681Z",
-      "updatedAt": "2026-08-13T06:51:28.508Z",
+      "updatedAt": "2026-09-09T15:17:00.446Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -5938,7 +5938,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.681Z",
-      "updatedAt": "2026-08-13T06:51:28.508Z",
+      "updatedAt": "2026-09-09T15:17:00.446Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -6061,7 +6061,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.681Z",
-      "updatedAt": "2026-08-13T06:51:28.508Z",
+      "updatedAt": "2026-09-09T15:17:00.446Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -6167,7 +6167,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.681Z",
-      "updatedAt": "2026-08-13T06:51:28.508Z",
+      "updatedAt": "2026-09-09T15:17:00.446Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -6306,7 +6306,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.681Z",
-      "updatedAt": "2026-08-13T06:51:28.509Z",
+      "updatedAt": "2026-09-09T15:17:00.446Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -6431,7 +6431,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.681Z",
-      "updatedAt": "2026-08-13T06:51:28.509Z",
+      "updatedAt": "2026-09-09T15:17:00.446Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -6556,7 +6556,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.681Z",
-      "updatedAt": "2026-08-13T06:51:28.509Z",
+      "updatedAt": "2026-09-09T15:17:00.446Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -6661,7 +6661,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.681Z",
-      "updatedAt": "2026-08-13T06:51:28.509Z",
+      "updatedAt": "2026-09-09T15:17:00.446Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -6756,7 +6756,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.681Z",
-      "updatedAt": "2026-08-13T06:51:28.509Z",
+      "updatedAt": "2026-09-09T15:17:00.446Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -6862,7 +6862,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.681Z",
-      "updatedAt": "2026-08-13T06:51:28.509Z",
+      "updatedAt": "2026-09-09T15:17:00.446Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -6973,7 +6973,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.681Z",
-      "updatedAt": "2026-08-13T06:51:28.510Z",
+      "updatedAt": "2026-09-09T15:17:00.446Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -7088,7 +7088,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.681Z",
-      "updatedAt": "2026-08-13T06:51:28.510Z",
+      "updatedAt": "2026-09-09T15:17:00.446Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -7157,7 +7157,7 @@
       "mechanicsKo": [],
       "status": "pending-cache",
       "createdAt": "2026-05-23T17:43:25.681Z",
-      "updatedAt": "2026-08-13T06:51:28.510Z",
+      "updatedAt": "2026-09-09T15:17:00.446Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -7236,7 +7236,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.681Z",
-      "updatedAt": "2026-08-13T06:51:28.510Z",
+      "updatedAt": "2026-09-09T15:17:00.446Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -7361,7 +7361,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.681Z",
-      "updatedAt": "2026-08-13T06:51:28.510Z",
+      "updatedAt": "2026-09-09T15:17:00.446Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -7480,7 +7480,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.681Z",
-      "updatedAt": "2026-08-13T06:51:28.510Z",
+      "updatedAt": "2026-09-09T15:17:00.446Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -7568,7 +7568,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.681Z",
-      "updatedAt": "2026-08-13T06:51:28.510Z",
+      "updatedAt": "2026-09-09T15:17:00.446Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -7670,7 +7670,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.681Z",
-      "updatedAt": "2026-08-13T06:51:28.510Z",
+      "updatedAt": "2026-09-09T15:17:00.446Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -7777,7 +7777,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.681Z",
-      "updatedAt": "2026-08-13T06:51:28.510Z",
+      "updatedAt": "2026-09-09T15:17:00.446Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -7863,7 +7863,7 @@
       "mechanicsKo": [],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.510Z",
+      "updatedAt": "2026-09-09T15:17:00.447Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -7978,7 +7978,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.510Z",
+      "updatedAt": "2026-09-09T15:17:00.447Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -8065,7 +8065,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.510Z",
+      "updatedAt": "2026-09-09T15:17:00.447Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -8177,7 +8177,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.510Z",
+      "updatedAt": "2026-09-09T15:17:00.447Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -8291,7 +8291,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.510Z",
+      "updatedAt": "2026-09-09T15:17:00.447Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -8375,7 +8375,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.510Z",
+      "updatedAt": "2026-09-09T15:17:00.447Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -8466,7 +8466,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.510Z",
+      "updatedAt": "2026-09-09T15:17:00.447Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -8550,7 +8550,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.510Z",
+      "updatedAt": "2026-09-09T15:17:00.447Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -8642,7 +8642,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.510Z",
+      "updatedAt": "2026-09-09T15:17:00.447Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -8723,7 +8723,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.510Z",
+      "updatedAt": "2026-09-09T15:17:00.447Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -8834,7 +8834,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.510Z",
+      "updatedAt": "2026-09-09T15:17:00.447Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -8925,7 +8925,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.510Z",
+      "updatedAt": "2026-09-09T15:17:00.447Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -9034,7 +9034,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.510Z",
+      "updatedAt": "2026-09-09T15:17:00.447Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -9133,7 +9133,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.510Z",
+      "updatedAt": "2026-09-09T15:17:00.447Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -9247,7 +9247,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.510Z",
+      "updatedAt": "2026-09-09T15:17:00.447Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -9386,7 +9386,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.511Z",
+      "updatedAt": "2026-09-09T15:17:00.447Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -9497,7 +9497,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.511Z",
+      "updatedAt": "2026-09-09T15:17:00.447Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -9607,7 +9607,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.511Z",
+      "updatedAt": "2026-09-09T15:17:00.447Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -9713,7 +9713,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.511Z",
+      "updatedAt": "2026-09-09T15:17:00.447Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -9800,7 +9800,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.511Z",
+      "updatedAt": "2026-09-09T15:17:00.447Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -9896,7 +9896,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.511Z",
+      "updatedAt": "2026-09-09T15:17:00.447Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -9987,7 +9987,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.514Z",
+      "updatedAt": "2026-09-09T15:17:00.447Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -10092,7 +10092,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.514Z",
+      "updatedAt": "2026-09-09T15:17:00.447Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -10192,7 +10192,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.514Z",
+      "updatedAt": "2026-09-09T15:17:00.447Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -10278,7 +10278,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.514Z",
+      "updatedAt": "2026-09-09T15:17:00.447Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -10402,7 +10402,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.514Z",
+      "updatedAt": "2026-09-09T15:17:00.447Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -10505,7 +10505,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.514Z",
+      "updatedAt": "2026-09-09T15:17:00.447Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -10609,7 +10609,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.514Z",
+      "updatedAt": "2026-09-09T15:17:00.447Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -10703,7 +10703,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.514Z",
+      "updatedAt": "2026-09-09T15:17:00.447Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -10817,7 +10817,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.514Z",
+      "updatedAt": "2026-09-09T15:17:00.447Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -10907,7 +10907,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.514Z",
+      "updatedAt": "2026-09-09T15:17:00.447Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -10990,7 +10990,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.514Z",
+      "updatedAt": "2026-09-09T15:17:00.447Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -11099,7 +11099,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.514Z",
+      "updatedAt": "2026-09-09T15:17:00.447Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -11191,7 +11191,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.514Z",
+      "updatedAt": "2026-09-09T15:17:00.447Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -11297,7 +11297,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.514Z",
+      "updatedAt": "2026-09-09T15:17:00.447Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -11390,7 +11390,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.514Z",
+      "updatedAt": "2026-09-09T15:17:00.447Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -11499,7 +11499,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.514Z",
+      "updatedAt": "2026-09-09T15:17:00.447Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -11616,7 +11616,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.514Z",
+      "updatedAt": "2026-09-09T15:17:00.447Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -11718,7 +11718,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.514Z",
+      "updatedAt": "2026-09-09T15:17:00.447Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -11818,7 +11818,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.514Z",
+      "updatedAt": "2026-09-09T15:17:00.447Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -11908,7 +11908,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.514Z",
+      "updatedAt": "2026-09-09T15:17:00.447Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -12010,7 +12010,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.514Z",
+      "updatedAt": "2026-09-09T15:17:00.447Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -12131,7 +12131,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.514Z",
+      "updatedAt": "2026-09-09T15:17:00.447Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -12227,7 +12227,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.514Z",
+      "updatedAt": "2026-09-09T15:17:00.447Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -12336,7 +12336,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.515Z",
+      "updatedAt": "2026-09-09T15:17:00.447Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -12508,7 +12508,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.515Z",
+      "updatedAt": "2026-09-09T15:17:00.447Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -12597,7 +12597,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.515Z",
+      "updatedAt": "2026-09-09T15:17:00.447Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -12662,7 +12662,7 @@
       "mechanicsKo": [],
       "status": "pending-cache",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.515Z",
+      "updatedAt": "2026-09-09T15:17:00.447Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -12749,7 +12749,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.515Z",
+      "updatedAt": "2026-09-09T15:17:00.447Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -12861,7 +12861,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.515Z",
+      "updatedAt": "2026-09-09T15:17:00.447Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -12978,7 +12978,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.515Z",
+      "updatedAt": "2026-09-09T15:17:00.447Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -13082,7 +13082,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.515Z",
+      "updatedAt": "2026-09-09T15:17:00.447Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -13189,7 +13189,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.515Z",
+      "updatedAt": "2026-09-09T15:17:00.447Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -13270,7 +13270,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.515Z",
+      "updatedAt": "2026-09-09T15:17:00.447Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -13364,7 +13364,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.515Z",
+      "updatedAt": "2026-09-09T15:17:00.448Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -13451,7 +13451,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.515Z",
+      "updatedAt": "2026-09-09T15:17:00.448Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -13563,7 +13563,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.515Z",
+      "updatedAt": "2026-09-09T15:17:00.448Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -13713,7 +13713,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.515Z",
+      "updatedAt": "2026-09-09T15:17:00.448Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -13844,7 +13844,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.515Z",
+      "updatedAt": "2026-09-09T15:17:00.448Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -13932,7 +13932,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.515Z",
+      "updatedAt": "2026-09-09T15:17:00.448Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -14026,7 +14026,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.515Z",
+      "updatedAt": "2026-09-09T15:17:00.448Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -14152,7 +14152,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.516Z",
+      "updatedAt": "2026-09-09T15:17:00.448Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -14309,7 +14309,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.516Z",
+      "updatedAt": "2026-09-09T15:17:00.448Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -14412,7 +14412,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.516Z",
+      "updatedAt": "2026-09-09T15:17:00.448Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -14520,7 +14520,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.516Z",
+      "updatedAt": "2026-09-09T15:17:00.448Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -14608,7 +14608,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.516Z",
+      "updatedAt": "2026-09-09T15:17:00.448Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -14715,7 +14715,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.516Z",
+      "updatedAt": "2026-09-09T15:17:00.448Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -14805,7 +14805,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.516Z",
+      "updatedAt": "2026-09-09T15:17:00.448Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -14907,7 +14907,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.516Z",
+      "updatedAt": "2026-09-09T15:17:00.448Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -15038,7 +15038,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.516Z",
+      "updatedAt": "2026-09-09T15:17:00.448Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -15129,7 +15129,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.516Z",
+      "updatedAt": "2026-09-09T15:17:00.448Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -15243,7 +15243,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.516Z",
+      "updatedAt": "2026-09-09T15:17:00.448Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -15338,7 +15338,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.516Z",
+      "updatedAt": "2026-09-09T15:17:00.448Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -15451,7 +15451,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.516Z",
+      "updatedAt": "2026-09-09T15:17:00.448Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -15583,7 +15583,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.516Z",
+      "updatedAt": "2026-09-09T15:17:00.448Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -15673,7 +15673,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.516Z",
+      "updatedAt": "2026-09-09T15:17:00.448Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -15754,7 +15754,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.516Z",
+      "updatedAt": "2026-09-09T15:17:00.448Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -15849,7 +15849,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.516Z",
+      "updatedAt": "2026-09-09T15:17:00.448Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -15977,7 +15977,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.516Z",
+      "updatedAt": "2026-09-09T15:17:00.448Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -16061,7 +16061,7 @@
       "mechanicsKo": [],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.516Z",
+      "updatedAt": "2026-09-09T15:17:00.448Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -16162,7 +16162,7 @@
       "mechanicsKo": [],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.516Z",
+      "updatedAt": "2026-09-09T15:17:00.448Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -16249,7 +16249,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.516Z",
+      "updatedAt": "2026-09-09T15:17:00.448Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -16356,7 +16356,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.516Z",
+      "updatedAt": "2026-09-09T15:17:00.448Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -16464,7 +16464,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.516Z",
+      "updatedAt": "2026-09-09T15:17:00.448Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -16553,7 +16553,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.516Z",
+      "updatedAt": "2026-09-09T15:17:00.448Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -16631,7 +16631,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.516Z",
+      "updatedAt": "2026-09-09T15:17:00.448Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -16743,7 +16743,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.516Z",
+      "updatedAt": "2026-09-09T15:17:00.448Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -16838,7 +16838,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.516Z",
+      "updatedAt": "2026-09-09T15:17:00.448Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -16926,7 +16926,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.516Z",
+      "updatedAt": "2026-09-09T15:17:00.448Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -17010,7 +17010,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.516Z",
+      "updatedAt": "2026-09-09T15:17:00.448Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -17109,7 +17109,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.516Z",
+      "updatedAt": "2026-09-09T15:17:00.448Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -17192,7 +17192,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.516Z",
+      "updatedAt": "2026-09-09T15:17:00.448Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -17298,7 +17298,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.516Z",
+      "updatedAt": "2026-09-09T15:17:00.448Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -17405,7 +17405,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.516Z",
+      "updatedAt": "2026-09-09T15:17:00.448Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -17503,7 +17503,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.516Z",
+      "updatedAt": "2026-09-09T15:17:00.448Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -17617,7 +17617,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.517Z",
+      "updatedAt": "2026-09-09T15:17:00.448Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -17762,7 +17762,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.517Z",
+      "updatedAt": "2026-09-09T15:17:00.448Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -17868,7 +17868,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.517Z",
+      "updatedAt": "2026-09-09T15:17:00.448Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -17972,7 +17972,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.517Z",
+      "updatedAt": "2026-09-09T15:17:00.448Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -18073,7 +18073,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.517Z",
+      "updatedAt": "2026-09-09T15:17:00.448Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -18187,7 +18187,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.517Z",
+      "updatedAt": "2026-09-09T15:17:00.448Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -18279,7 +18279,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.517Z",
+      "updatedAt": "2026-09-09T15:17:00.448Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -18361,7 +18361,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.517Z",
+      "updatedAt": "2026-09-09T15:17:00.448Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -18416,7 +18416,7 @@
       "mechanicsKo": [],
       "status": "pending-cache",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.517Z",
+      "updatedAt": "2026-09-09T15:17:00.448Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -18530,7 +18530,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.517Z",
+      "updatedAt": "2026-09-09T15:17:00.448Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -18624,7 +18624,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.517Z",
+      "updatedAt": "2026-09-09T15:17:00.448Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -18728,7 +18728,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.517Z",
+      "updatedAt": "2026-09-09T15:17:00.448Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -18819,7 +18819,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.517Z",
+      "updatedAt": "2026-09-09T15:17:00.448Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -18936,7 +18936,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.517Z",
+      "updatedAt": "2026-09-09T15:17:00.448Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -19051,7 +19051,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.517Z",
+      "updatedAt": "2026-09-09T15:17:00.448Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -19148,7 +19148,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.517Z",
+      "updatedAt": "2026-09-09T15:17:00.448Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -19276,7 +19276,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.517Z",
+      "updatedAt": "2026-09-09T15:17:00.448Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -19367,7 +19367,7 @@
       "mechanicsKo": [],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.517Z",
+      "updatedAt": "2026-09-09T15:17:00.449Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -19458,7 +19458,7 @@
       "mechanicsKo": [],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.517Z",
+      "updatedAt": "2026-09-09T15:17:00.449Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -19573,7 +19573,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.517Z",
+      "updatedAt": "2026-09-09T15:17:00.449Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -19687,7 +19687,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.517Z",
+      "updatedAt": "2026-09-09T15:17:00.449Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -19800,7 +19800,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.517Z",
+      "updatedAt": "2026-09-09T15:17:00.449Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -19886,7 +19886,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.517Z",
+      "updatedAt": "2026-09-09T15:17:00.449Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -19978,7 +19978,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.517Z",
+      "updatedAt": "2026-09-09T15:17:00.449Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -20086,7 +20086,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.517Z",
+      "updatedAt": "2026-09-09T15:17:00.449Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -20187,7 +20187,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.517Z",
+      "updatedAt": "2026-09-09T15:17:00.449Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -20284,7 +20284,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.517Z",
+      "updatedAt": "2026-09-09T15:17:00.449Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -20394,7 +20394,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.517Z",
+      "updatedAt": "2026-09-09T15:17:00.449Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -20500,7 +20500,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.517Z",
+      "updatedAt": "2026-09-09T15:17:00.449Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -20602,7 +20602,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.517Z",
+      "updatedAt": "2026-09-09T15:17:00.449Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -20690,7 +20690,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.517Z",
+      "updatedAt": "2026-09-09T15:17:00.449Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -20799,7 +20799,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.517Z",
+      "updatedAt": "2026-09-09T15:17:00.449Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -20931,7 +20931,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.517Z",
+      "updatedAt": "2026-09-09T15:17:00.449Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -21043,7 +21043,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.517Z",
+      "updatedAt": "2026-09-09T15:17:00.449Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -21161,7 +21161,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.517Z",
+      "updatedAt": "2026-09-09T15:17:00.449Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -21258,7 +21258,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.517Z",
+      "updatedAt": "2026-09-09T15:17:00.449Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -21378,7 +21378,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.517Z",
+      "updatedAt": "2026-09-09T15:17:00.449Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -21504,7 +21504,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.517Z",
+      "updatedAt": "2026-09-09T15:17:00.449Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -21616,7 +21616,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.517Z",
+      "updatedAt": "2026-09-09T15:17:00.449Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -21737,7 +21737,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.518Z",
+      "updatedAt": "2026-09-09T15:17:00.449Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -21881,7 +21881,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.518Z",
+      "updatedAt": "2026-09-09T15:17:00.449Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -21973,7 +21973,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.518Z",
+      "updatedAt": "2026-09-09T15:17:00.449Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -22080,7 +22080,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.518Z",
+      "updatedAt": "2026-09-09T15:17:00.449Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -22183,7 +22183,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.518Z",
+      "updatedAt": "2026-09-09T15:17:00.449Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -22280,7 +22280,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.518Z",
+      "updatedAt": "2026-09-09T15:17:00.449Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -22374,7 +22374,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.518Z",
+      "updatedAt": "2026-09-09T15:17:00.449Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -22465,7 +22465,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.518Z",
+      "updatedAt": "2026-09-09T15:17:00.449Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -22561,7 +22561,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.518Z",
+      "updatedAt": "2026-09-09T15:17:00.449Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -22689,7 +22689,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.518Z",
+      "updatedAt": "2026-09-09T15:17:00.449Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -22785,7 +22785,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.518Z",
+      "updatedAt": "2026-09-09T15:17:00.449Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -22868,7 +22868,7 @@
       "mechanicsKo": [],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.518Z",
+      "updatedAt": "2026-09-09T15:17:00.449Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -22973,7 +22973,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.518Z",
+      "updatedAt": "2026-09-09T15:17:00.449Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -23111,7 +23111,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.518Z",
+      "updatedAt": "2026-09-09T15:17:00.449Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -23243,7 +23243,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.518Z",
+      "updatedAt": "2026-09-09T15:17:00.449Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -23358,7 +23358,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.518Z",
+      "updatedAt": "2026-09-09T15:17:00.449Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -23485,7 +23485,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.518Z",
+      "updatedAt": "2026-09-09T15:17:00.449Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -23597,7 +23597,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.518Z",
+      "updatedAt": "2026-09-09T15:17:00.449Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -23689,7 +23689,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.518Z",
+      "updatedAt": "2026-09-09T15:17:00.449Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -23774,7 +23774,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.518Z",
+      "updatedAt": "2026-09-09T15:17:00.449Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -23853,7 +23853,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.518Z",
+      "updatedAt": "2026-09-09T15:17:00.449Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -23936,7 +23936,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.518Z",
+      "updatedAt": "2026-09-09T15:17:00.449Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -23991,7 +23991,7 @@
       "mechanicsKo": [],
       "status": "pending-cache",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.518Z",
+      "updatedAt": "2026-09-09T15:17:00.449Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -24050,7 +24050,7 @@
       "mechanicsKo": [],
       "status": "pending-cache",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.518Z",
+      "updatedAt": "2026-09-09T15:17:00.449Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -24140,7 +24140,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.518Z",
+      "updatedAt": "2026-09-09T15:17:00.449Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -24233,7 +24233,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.518Z",
+      "updatedAt": "2026-09-09T15:17:00.449Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -24333,7 +24333,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.518Z",
+      "updatedAt": "2026-09-09T15:17:00.449Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -24436,7 +24436,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.518Z",
+      "updatedAt": "2026-09-09T15:17:00.449Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -24539,7 +24539,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.518Z",
+      "updatedAt": "2026-09-09T15:17:00.449Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -24627,7 +24627,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.518Z",
+      "updatedAt": "2026-09-09T15:17:00.449Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -24722,7 +24722,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.518Z",
+      "updatedAt": "2026-09-09T15:17:00.449Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -24779,7 +24779,7 @@
       "mechanicsKo": [],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.518Z",
+      "updatedAt": "2026-09-09T15:17:00.449Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -24880,7 +24880,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.518Z",
+      "updatedAt": "2026-09-09T15:17:00.449Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -25002,7 +25002,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.518Z",
+      "updatedAt": "2026-09-09T15:17:00.449Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -25087,7 +25087,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.518Z",
+      "updatedAt": "2026-09-09T15:17:00.449Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -25181,7 +25181,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.518Z",
+      "updatedAt": "2026-09-09T15:17:00.450Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -25284,7 +25284,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.518Z",
+      "updatedAt": "2026-09-09T15:17:00.450Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -25339,7 +25339,7 @@
       "mechanicsKo": [],
       "status": "pending-cache",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.519Z",
+      "updatedAt": "2026-09-09T15:17:00.450Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -25416,7 +25416,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.519Z",
+      "updatedAt": "2026-09-09T15:17:00.450Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -25477,17 +25477,11 @@
       "youtubeUrl": "https://www.youtube.com/watch?v=-MgXsMg1V0g",
       "summaryKo": "마작패처럼 묵직한 타일을 뽑고 버리며, 포커처럼 족보를 먼저 완성하는 핸드관리 게임",
       "descriptionKo": "패를 한 장 뽑고 한 장 버리며 6장의 족보를 만드는 게임입니다.\n7가지 족보를 먼저 완성해 '로그'를 외치거나, 페어 큐와 트리플 큐를 이용해 손패를 2장까지 줄여 또 다른 방식의 로그를 노릴 수 있습니다.\n\n단순히 좋은 패를 기다리는 것뿐 아니라 앞사람이 버리는 패를 보고 페어 큐를 노리고, 특수패와 큐널티를 이용해 마지막 순간까지 승부를 뒤집을 수 있습니다.\n\n진행: 1장 뽑기 → 족보 확인 → 1장 버리기\n조건을 만족하면 페어 큐 / 트리플 큐 / 로그 선언",
-      "categoriesKo": [
-        "타일게임"
-      ],
-      "mechanicsKo": [
-        "패 관리",
-        "패턴 만들기",
-        "세트 수집"
-      ],
+      "categoriesKo": [],
+      "mechanicsKo": [],
       "status": "pending-cache",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.519Z",
+      "updatedAt": "2026-09-09T15:17:00.450Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -25635,7 +25629,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.519Z",
+      "updatedAt": "2026-09-09T15:17:00.450Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -25763,7 +25757,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.519Z",
+      "updatedAt": "2026-09-09T15:17:00.450Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -25890,7 +25884,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.519Z",
+      "updatedAt": "2026-09-09T15:17:00.450Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -26077,7 +26071,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.519Z",
+      "updatedAt": "2026-09-09T15:17:00.450Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -26191,7 +26185,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.519Z",
+      "updatedAt": "2026-09-09T15:17:00.450Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -26320,7 +26314,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.519Z",
+      "updatedAt": "2026-09-09T15:17:00.450Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -26430,7 +26424,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.519Z",
+      "updatedAt": "2026-09-09T15:17:00.450Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -26549,7 +26543,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.519Z",
+      "updatedAt": "2026-09-09T15:17:00.450Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -26654,7 +26648,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.519Z",
+      "updatedAt": "2026-09-09T15:17:00.450Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -26748,7 +26742,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.519Z",
+      "updatedAt": "2026-09-09T15:17:00.450Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -26862,7 +26856,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.519Z",
+      "updatedAt": "2026-09-09T15:17:00.450Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -26945,7 +26939,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.519Z",
+      "updatedAt": "2026-09-09T15:17:00.450Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -27063,7 +27057,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.519Z",
+      "updatedAt": "2026-09-09T15:17:00.450Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -27148,7 +27142,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.519Z",
+      "updatedAt": "2026-09-09T15:17:00.450Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -27253,7 +27247,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.519Z",
+      "updatedAt": "2026-09-09T15:17:00.450Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -27380,7 +27374,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-08-13T06:51:28.519Z",
+      "updatedAt": "2026-09-09T15:17:00.450Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -27470,7 +27464,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.519Z",
+      "updatedAt": "2026-09-09T15:17:00.450Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -27579,7 +27573,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.519Z",
+      "updatedAt": "2026-09-09T15:17:00.450Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -27666,7 +27660,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.519Z",
+      "updatedAt": "2026-09-09T15:17:00.450Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -27754,7 +27748,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.519Z",
+      "updatedAt": "2026-09-09T15:17:00.450Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -27860,7 +27854,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.519Z",
+      "updatedAt": "2026-09-09T15:17:00.450Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -27963,7 +27957,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.519Z",
+      "updatedAt": "2026-09-09T15:17:00.450Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -28049,7 +28043,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.519Z",
+      "updatedAt": "2026-09-09T15:17:00.450Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -28200,7 +28194,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.519Z",
+      "updatedAt": "2026-09-09T15:17:00.450Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -28312,7 +28306,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.519Z",
+      "updatedAt": "2026-09-09T15:17:00.450Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -28401,7 +28395,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.519Z",
+      "updatedAt": "2026-09-09T15:17:00.450Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -28506,7 +28500,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.519Z",
+      "updatedAt": "2026-09-09T15:17:00.450Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -28616,7 +28610,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.519Z",
+      "updatedAt": "2026-09-09T15:17:00.450Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -28698,7 +28692,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.519Z",
+      "updatedAt": "2026-09-09T15:17:00.450Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -28807,7 +28801,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.519Z",
+      "updatedAt": "2026-09-09T15:17:00.450Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -28936,7 +28930,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.519Z",
+      "updatedAt": "2026-09-09T15:17:00.450Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -29033,7 +29027,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.519Z",
+      "updatedAt": "2026-09-09T15:17:00.450Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -29162,7 +29156,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.519Z",
+      "updatedAt": "2026-09-09T15:17:00.450Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -29225,7 +29219,7 @@
       "mechanicsKo": [],
       "status": "pending-cache",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.520Z",
+      "updatedAt": "2026-09-09T15:17:00.450Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -29322,7 +29316,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.520Z",
+      "updatedAt": "2026-09-09T15:17:00.450Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -29417,7 +29411,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.520Z",
+      "updatedAt": "2026-09-09T15:17:00.450Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -29502,7 +29496,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.520Z",
+      "updatedAt": "2026-09-09T15:17:00.450Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -29594,7 +29588,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.520Z",
+      "updatedAt": "2026-09-09T15:17:00.450Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -29686,7 +29680,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.520Z",
+      "updatedAt": "2026-09-09T15:17:00.450Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -29801,7 +29795,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.520Z",
+      "updatedAt": "2026-09-09T15:17:00.450Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -29902,7 +29896,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.520Z",
+      "updatedAt": "2026-09-09T15:17:00.450Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -30001,7 +29995,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.520Z",
+      "updatedAt": "2026-09-09T15:17:00.450Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -30113,7 +30107,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.520Z",
+      "updatedAt": "2026-09-09T15:17:00.450Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -30209,7 +30203,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.520Z",
+      "updatedAt": "2026-09-09T15:17:00.450Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -30315,7 +30309,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.520Z",
+      "updatedAt": "2026-09-09T15:17:00.450Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -30430,7 +30424,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.520Z",
+      "updatedAt": "2026-09-09T15:17:00.450Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -30558,7 +30552,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.520Z",
+      "updatedAt": "2026-09-09T15:17:00.450Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -30675,7 +30669,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.520Z",
+      "updatedAt": "2026-09-09T15:17:00.450Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -30775,7 +30769,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.520Z",
+      "updatedAt": "2026-09-09T15:17:00.450Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -30872,7 +30866,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.520Z",
+      "updatedAt": "2026-09-09T15:17:00.450Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -30993,7 +30987,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.520Z",
+      "updatedAt": "2026-09-09T15:17:00.451Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -31093,7 +31087,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.520Z",
+      "updatedAt": "2026-09-09T15:17:00.451Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -31207,7 +31201,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.520Z",
+      "updatedAt": "2026-09-09T15:17:00.451Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -31323,7 +31317,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.520Z",
+      "updatedAt": "2026-09-09T15:17:00.451Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -31409,7 +31403,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.520Z",
+      "updatedAt": "2026-09-09T15:17:00.451Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -31494,7 +31488,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.520Z",
+      "updatedAt": "2026-09-09T15:17:00.451Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -31606,7 +31600,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.520Z",
+      "updatedAt": "2026-09-09T15:17:00.451Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -31713,7 +31707,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.520Z",
+      "updatedAt": "2026-09-09T15:17:00.451Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -31798,7 +31792,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-29T16:22:47.884Z",
-      "updatedAt": "2026-08-13T06:51:28.520Z",
+      "updatedAt": "2026-09-09T15:17:00.451Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -31911,7 +31905,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.520Z",
+      "updatedAt": "2026-09-09T15:17:00.451Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -32009,7 +32003,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.520Z",
+      "updatedAt": "2026-09-09T15:17:00.451Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -32109,7 +32103,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.520Z",
+      "updatedAt": "2026-09-09T15:17:00.451Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -32220,7 +32214,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.520Z",
+      "updatedAt": "2026-09-09T15:17:00.451Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -32310,7 +32304,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.520Z",
+      "updatedAt": "2026-09-09T15:17:00.451Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -32386,7 +32380,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.520Z",
+      "updatedAt": "2026-09-09T15:17:00.451Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -32490,7 +32484,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.520Z",
+      "updatedAt": "2026-09-09T15:17:00.451Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -32609,7 +32603,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.520Z",
+      "updatedAt": "2026-09-09T15:17:00.451Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -32692,7 +32686,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.520Z",
+      "updatedAt": "2026-09-09T15:17:00.451Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -32796,7 +32790,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.520Z",
+      "updatedAt": "2026-09-09T15:17:00.451Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -32894,7 +32888,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.520Z",
+      "updatedAt": "2026-09-09T15:17:00.451Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -33036,7 +33030,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.520Z",
+      "updatedAt": "2026-09-09T15:17:00.451Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -33164,7 +33158,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.521Z",
+      "updatedAt": "2026-09-09T15:17:00.451Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -33253,7 +33247,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.521Z",
+      "updatedAt": "2026-09-09T15:17:00.451Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -33349,7 +33343,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.521Z",
+      "updatedAt": "2026-09-09T15:17:00.451Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -33453,7 +33447,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.521Z",
+      "updatedAt": "2026-09-09T15:17:00.451Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -33540,7 +33534,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.521Z",
+      "updatedAt": "2026-09-09T15:17:00.451Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -33635,7 +33629,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.521Z",
+      "updatedAt": "2026-09-09T15:17:00.451Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -33735,7 +33729,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.521Z",
+      "updatedAt": "2026-09-09T15:17:00.451Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -33842,7 +33836,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.521Z",
+      "updatedAt": "2026-09-09T15:17:00.451Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -33959,7 +33953,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.521Z",
+      "updatedAt": "2026-09-09T15:17:00.451Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -34054,7 +34048,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.521Z",
+      "updatedAt": "2026-09-09T15:17:00.451Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -34148,7 +34142,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.521Z",
+      "updatedAt": "2026-09-09T15:17:00.451Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -34250,7 +34244,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.521Z",
+      "updatedAt": "2026-09-09T15:17:00.451Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -34349,7 +34343,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.521Z",
+      "updatedAt": "2026-09-09T15:17:00.451Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -34470,7 +34464,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.521Z",
+      "updatedAt": "2026-09-09T15:17:00.451Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -34606,7 +34600,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.521Z",
+      "updatedAt": "2026-09-09T15:17:00.451Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -34693,7 +34687,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.521Z",
+      "updatedAt": "2026-09-09T15:17:00.451Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -34793,7 +34787,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.521Z",
+      "updatedAt": "2026-09-09T15:17:00.451Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -34908,7 +34902,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.521Z",
+      "updatedAt": "2026-09-09T15:17:00.451Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -35015,7 +35009,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.521Z",
+      "updatedAt": "2026-09-09T15:17:00.451Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -35113,7 +35107,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.521Z",
+      "updatedAt": "2026-09-09T15:17:00.451Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -35211,7 +35205,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.521Z",
+      "updatedAt": "2026-09-09T15:17:00.451Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -35343,7 +35337,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.521Z",
+      "updatedAt": "2026-09-09T15:17:00.451Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -35449,7 +35443,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.521Z",
+      "updatedAt": "2026-09-09T15:17:00.451Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -35565,7 +35559,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.521Z",
+      "updatedAt": "2026-09-09T15:17:00.451Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -35634,7 +35628,7 @@
       "mechanicsKo": [],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.521Z",
+      "updatedAt": "2026-09-09T15:17:00.451Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -35725,7 +35719,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.521Z",
+      "updatedAt": "2026-09-09T15:17:00.451Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -35813,7 +35807,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.521Z",
+      "updatedAt": "2026-09-09T15:17:00.451Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -35946,7 +35940,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.521Z",
+      "updatedAt": "2026-09-09T15:17:00.451Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -36064,7 +36058,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.521Z",
+      "updatedAt": "2026-09-09T15:17:00.451Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -36182,7 +36176,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.521Z",
+      "updatedAt": "2026-09-09T15:17:00.451Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -36284,7 +36278,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.521Z",
+      "updatedAt": "2026-09-09T15:17:00.451Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -36372,7 +36366,7 @@
       "mechanicsKo": [],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.521Z",
+      "updatedAt": "2026-09-09T15:17:00.451Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -36465,7 +36459,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.521Z",
+      "updatedAt": "2026-09-09T15:17:00.451Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -36573,7 +36567,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.521Z",
+      "updatedAt": "2026-09-09T15:17:00.451Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -36685,7 +36679,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.521Z",
+      "updatedAt": "2026-09-09T15:17:00.451Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -36782,7 +36776,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.522Z",
+      "updatedAt": "2026-09-09T15:17:00.451Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -36869,7 +36863,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.522Z",
+      "updatedAt": "2026-09-09T15:17:00.451Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -36966,7 +36960,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.522Z",
+      "updatedAt": "2026-09-09T15:17:00.452Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -37085,7 +37079,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.522Z",
+      "updatedAt": "2026-09-09T15:17:00.452Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -37195,7 +37189,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.522Z",
+      "updatedAt": "2026-09-09T15:17:00.452Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -37309,7 +37303,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.522Z",
+      "updatedAt": "2026-09-09T15:17:00.452Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -37453,7 +37447,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.522Z",
+      "updatedAt": "2026-09-09T15:17:00.452Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -37561,7 +37555,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.522Z",
+      "updatedAt": "2026-09-09T15:17:00.452Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -37690,7 +37684,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.522Z",
+      "updatedAt": "2026-09-09T15:17:00.452Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -37788,7 +37782,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.522Z",
+      "updatedAt": "2026-09-09T15:17:00.452Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -37893,7 +37887,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.522Z",
+      "updatedAt": "2026-09-09T15:17:00.452Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -37971,7 +37965,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.522Z",
+      "updatedAt": "2026-09-09T15:17:00.452Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -38055,7 +38049,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.524Z",
+      "updatedAt": "2026-09-09T15:17:00.452Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -38169,7 +38163,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.525Z",
+      "updatedAt": "2026-09-09T15:17:00.452Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -38285,7 +38279,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.525Z",
+      "updatedAt": "2026-09-09T15:17:00.452Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -38382,7 +38376,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.525Z",
+      "updatedAt": "2026-09-09T15:17:00.452Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -38477,7 +38471,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.525Z",
+      "updatedAt": "2026-09-09T15:17:00.452Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -38572,7 +38566,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.525Z",
+      "updatedAt": "2026-09-09T15:17:00.452Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -38661,7 +38655,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.525Z",
+      "updatedAt": "2026-09-09T15:17:00.452Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -38775,7 +38769,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.525Z",
+      "updatedAt": "2026-09-09T15:17:00.452Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -38848,7 +38842,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.525Z",
+      "updatedAt": "2026-09-09T15:17:00.452Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -38949,7 +38943,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.525Z",
+      "updatedAt": "2026-09-09T15:17:00.452Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -39066,7 +39060,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.525Z",
+      "updatedAt": "2026-09-09T15:17:00.452Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -39173,7 +39167,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.525Z",
+      "updatedAt": "2026-09-09T15:17:00.452Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -39257,7 +39251,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.525Z",
+      "updatedAt": "2026-09-09T15:17:00.452Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -39343,7 +39337,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.525Z",
+      "updatedAt": "2026-09-09T15:17:00.452Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -39431,7 +39425,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.525Z",
+      "updatedAt": "2026-09-09T15:17:00.452Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -39534,7 +39528,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.525Z",
+      "updatedAt": "2026-09-09T15:17:00.452Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -39650,7 +39644,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.525Z",
+      "updatedAt": "2026-09-09T15:17:00.452Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -39762,7 +39756,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.525Z",
+      "updatedAt": "2026-09-09T15:17:00.452Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -39858,7 +39852,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.525Z",
+      "updatedAt": "2026-09-09T15:17:00.452Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -39989,7 +39983,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.525Z",
+      "updatedAt": "2026-09-09T15:17:00.452Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -40090,7 +40084,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.525Z",
+      "updatedAt": "2026-09-09T15:17:00.452Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -40206,7 +40200,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.525Z",
+      "updatedAt": "2026-09-09T15:17:00.452Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -40301,7 +40295,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.525Z",
+      "updatedAt": "2026-09-09T15:17:00.452Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -40400,7 +40394,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.525Z",
+      "updatedAt": "2026-09-09T15:17:00.452Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -40519,7 +40513,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.525Z",
+      "updatedAt": "2026-09-09T15:17:00.452Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -40649,7 +40643,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.525Z",
+      "updatedAt": "2026-09-09T15:17:00.452Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -40771,7 +40765,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.525Z",
+      "updatedAt": "2026-09-09T15:17:00.452Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -40906,7 +40900,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.525Z",
+      "updatedAt": "2026-09-09T15:17:00.452Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -41030,7 +41024,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.525Z",
+      "updatedAt": "2026-09-09T15:17:00.452Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -41123,7 +41117,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.526Z",
+      "updatedAt": "2026-09-09T15:17:00.452Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -41214,7 +41208,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.526Z",
+      "updatedAt": "2026-09-09T15:17:00.452Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -41309,7 +41303,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.526Z",
+      "updatedAt": "2026-09-09T15:17:00.452Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -41421,7 +41415,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.526Z",
+      "updatedAt": "2026-09-09T15:17:00.452Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -41519,7 +41513,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.526Z",
+      "updatedAt": "2026-09-09T15:17:00.452Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -41574,7 +41568,7 @@
       "mechanicsKo": [],
       "status": "pending-cache",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.526Z",
+      "updatedAt": "2026-09-09T15:17:00.452Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -41662,7 +41656,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.526Z",
+      "updatedAt": "2026-09-09T15:17:00.452Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -41759,7 +41753,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.526Z",
+      "updatedAt": "2026-09-09T15:17:00.452Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -41880,7 +41874,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.526Z",
+      "updatedAt": "2026-09-09T15:17:00.452Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -41975,7 +41969,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.526Z",
+      "updatedAt": "2026-09-09T15:17:00.452Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -42079,7 +42073,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.526Z",
+      "updatedAt": "2026-09-09T15:17:00.452Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -42169,7 +42163,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.526Z",
+      "updatedAt": "2026-09-09T15:17:00.452Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -42290,7 +42284,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.526Z",
+      "updatedAt": "2026-09-09T15:17:00.452Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -42406,7 +42400,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.526Z",
+      "updatedAt": "2026-09-09T15:17:00.452Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -42515,7 +42509,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.526Z",
+      "updatedAt": "2026-09-09T15:17:00.452Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -42596,7 +42590,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.526Z",
+      "updatedAt": "2026-09-09T15:17:00.452Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -42701,7 +42695,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.526Z",
+      "updatedAt": "2026-09-09T15:17:00.452Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -42797,7 +42791,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.526Z",
+      "updatedAt": "2026-09-09T15:17:00.452Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -42895,7 +42889,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.526Z",
+      "updatedAt": "2026-09-09T15:17:00.452Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -42994,7 +42988,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.526Z",
+      "updatedAt": "2026-09-09T15:17:00.452Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -43092,7 +43086,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.526Z",
+      "updatedAt": "2026-09-09T15:17:00.453Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -43190,7 +43184,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.526Z",
+      "updatedAt": "2026-09-09T15:17:00.453Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -43310,7 +43304,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.526Z",
+      "updatedAt": "2026-09-09T15:17:00.453Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -43403,7 +43397,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.526Z",
+      "updatedAt": "2026-09-09T15:17:00.453Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -43531,7 +43525,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.526Z",
+      "updatedAt": "2026-09-09T15:17:00.453Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -43638,7 +43632,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.526Z",
+      "updatedAt": "2026-09-09T15:17:00.453Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -43722,7 +43716,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.526Z",
+      "updatedAt": "2026-09-09T15:17:00.453Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -43781,7 +43775,7 @@
       "mechanicsKo": [],
       "status": "pending-cache",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.526Z",
+      "updatedAt": "2026-09-09T15:17:00.453Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -43900,7 +43894,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.526Z",
+      "updatedAt": "2026-09-09T15:17:00.453Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -44006,7 +44000,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.526Z",
+      "updatedAt": "2026-09-09T15:17:00.453Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -44109,7 +44103,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.526Z",
+      "updatedAt": "2026-09-09T15:17:00.453Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -44217,7 +44211,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.526Z",
+      "updatedAt": "2026-09-09T15:17:00.453Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -44314,7 +44308,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.526Z",
+      "updatedAt": "2026-09-09T15:17:00.453Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -44421,7 +44415,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.526Z",
+      "updatedAt": "2026-09-09T15:17:00.453Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -44522,7 +44516,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.526Z",
+      "updatedAt": "2026-09-09T15:17:00.453Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -44637,7 +44631,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.526Z",
+      "updatedAt": "2026-09-09T15:17:00.453Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -44757,7 +44751,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.527Z",
+      "updatedAt": "2026-09-09T15:17:00.453Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -44881,7 +44875,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.527Z",
+      "updatedAt": "2026-09-09T15:17:00.453Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -44995,7 +44989,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.527Z",
+      "updatedAt": "2026-09-09T15:17:00.453Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -45120,7 +45114,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.527Z",
+      "updatedAt": "2026-09-09T15:17:00.453Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -45206,7 +45200,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.527Z",
+      "updatedAt": "2026-09-09T15:17:00.453Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -45307,7 +45301,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-08-13T06:51:28.527Z",
+      "updatedAt": "2026-09-09T15:17:00.453Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -45416,7 +45410,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.684Z",
-      "updatedAt": "2026-08-13T06:51:28.527Z",
+      "updatedAt": "2026-09-09T15:17:00.453Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -45507,7 +45501,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.684Z",
-      "updatedAt": "2026-08-13T06:51:28.527Z",
+      "updatedAt": "2026-09-09T15:17:00.453Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -45636,7 +45630,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.684Z",
-      "updatedAt": "2026-08-13T06:51:28.527Z",
+      "updatedAt": "2026-09-09T15:17:00.453Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -45725,7 +45719,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.684Z",
-      "updatedAt": "2026-08-13T06:51:28.527Z",
+      "updatedAt": "2026-09-09T15:17:00.453Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -45845,7 +45839,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.684Z",
-      "updatedAt": "2026-08-13T06:51:28.527Z",
+      "updatedAt": "2026-09-09T15:17:00.453Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -45950,7 +45944,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.684Z",
-      "updatedAt": "2026-08-13T06:51:28.527Z",
+      "updatedAt": "2026-09-09T15:17:00.453Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -46048,7 +46042,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.684Z",
-      "updatedAt": "2026-08-13T06:51:28.527Z",
+      "updatedAt": "2026-09-09T15:17:00.453Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -46145,7 +46139,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.684Z",
-      "updatedAt": "2026-08-13T06:51:28.527Z",
+      "updatedAt": "2026-09-09T15:17:00.453Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -46245,7 +46239,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.684Z",
-      "updatedAt": "2026-08-13T06:51:28.527Z",
+      "updatedAt": "2026-09-09T15:17:00.453Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -46341,7 +46335,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.684Z",
-      "updatedAt": "2026-08-13T06:51:28.527Z",
+      "updatedAt": "2026-09-09T15:17:00.453Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -46463,7 +46457,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.684Z",
-      "updatedAt": "2026-08-13T06:51:28.527Z",
+      "updatedAt": "2026-09-09T15:17:00.453Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -46575,7 +46569,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.684Z",
-      "updatedAt": "2026-08-13T06:51:28.527Z",
+      "updatedAt": "2026-09-09T15:17:00.453Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -46658,7 +46652,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.684Z",
-      "updatedAt": "2026-08-13T06:51:28.527Z",
+      "updatedAt": "2026-09-09T15:17:00.453Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -46773,7 +46767,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.684Z",
-      "updatedAt": "2026-08-13T06:51:28.527Z",
+      "updatedAt": "2026-09-09T15:17:00.453Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -46828,7 +46822,7 @@
       "mechanicsKo": [],
       "status": "pending-cache",
       "createdAt": "2026-05-23T17:43:25.684Z",
-      "updatedAt": "2026-08-13T06:51:28.528Z",
+      "updatedAt": "2026-09-09T15:17:00.453Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -46936,7 +46930,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.684Z",
-      "updatedAt": "2026-08-13T06:51:28.528Z",
+      "updatedAt": "2026-09-09T15:17:00.453Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -47028,7 +47022,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.684Z",
-      "updatedAt": "2026-08-13T06:51:28.528Z",
+      "updatedAt": "2026-09-09T15:17:00.453Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -47114,7 +47108,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.684Z",
-      "updatedAt": "2026-08-13T06:51:28.528Z",
+      "updatedAt": "2026-09-09T15:17:00.453Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -47209,7 +47203,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.684Z",
-      "updatedAt": "2026-08-13T06:51:28.528Z",
+      "updatedAt": "2026-09-09T15:17:00.453Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -47319,7 +47313,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.684Z",
-      "updatedAt": "2026-08-13T06:51:28.528Z",
+      "updatedAt": "2026-09-09T15:17:00.453Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -47424,7 +47418,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.684Z",
-      "updatedAt": "2026-08-13T06:51:28.528Z",
+      "updatedAt": "2026-09-09T15:17:00.453Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -47555,7 +47549,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.684Z",
-      "updatedAt": "2026-08-13T06:51:28.528Z",
+      "updatedAt": "2026-09-09T15:17:00.453Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -47663,7 +47657,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.684Z",
-      "updatedAt": "2026-08-13T06:51:28.528Z",
+      "updatedAt": "2026-09-09T15:17:00.453Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -47781,7 +47775,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.684Z",
-      "updatedAt": "2026-08-13T06:51:28.528Z",
+      "updatedAt": "2026-09-09T15:17:00.453Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -47878,7 +47872,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.684Z",
-      "updatedAt": "2026-08-13T06:51:28.528Z",
+      "updatedAt": "2026-09-09T15:17:00.453Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -47990,7 +47984,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.684Z",
-      "updatedAt": "2026-08-13T06:51:28.528Z",
+      "updatedAt": "2026-09-09T15:17:00.453Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -48080,7 +48074,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.684Z",
-      "updatedAt": "2026-08-13T06:51:28.528Z",
+      "updatedAt": "2026-09-09T15:17:00.453Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -48161,7 +48155,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.684Z",
-      "updatedAt": "2026-08-13T06:51:28.528Z",
+      "updatedAt": "2026-09-09T15:17:00.453Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -48264,7 +48258,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.684Z",
-      "updatedAt": "2026-08-13T06:51:28.528Z",
+      "updatedAt": "2026-09-09T15:17:00.453Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -48374,7 +48368,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.684Z",
-      "updatedAt": "2026-08-13T06:51:28.528Z",
+      "updatedAt": "2026-09-09T15:17:00.453Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -48478,7 +48472,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.684Z",
-      "updatedAt": "2026-08-13T06:51:28.528Z",
+      "updatedAt": "2026-09-09T15:17:00.453Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -48583,7 +48577,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.684Z",
-      "updatedAt": "2026-08-13T06:51:28.528Z",
+      "updatedAt": "2026-09-09T15:17:00.453Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -48712,7 +48706,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.684Z",
-      "updatedAt": "2026-08-13T06:51:28.528Z",
+      "updatedAt": "2026-09-09T15:17:00.453Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -48800,7 +48794,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.684Z",
-      "updatedAt": "2026-08-13T06:51:28.528Z",
+      "updatedAt": "2026-09-09T15:17:00.453Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -48905,7 +48899,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.684Z",
-      "updatedAt": "2026-08-13T06:51:28.528Z",
+      "updatedAt": "2026-09-09T15:17:00.453Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -49021,7 +49015,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.684Z",
-      "updatedAt": "2026-08-13T06:51:28.528Z",
+      "updatedAt": "2026-09-09T15:17:00.453Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -49118,7 +49112,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.684Z",
-      "updatedAt": "2026-08-13T06:51:28.528Z",
+      "updatedAt": "2026-09-09T15:17:00.453Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -49206,7 +49200,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.684Z",
-      "updatedAt": "2026-08-13T06:51:28.528Z",
+      "updatedAt": "2026-09-09T15:17:00.453Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -49327,7 +49321,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.684Z",
-      "updatedAt": "2026-08-13T06:51:28.528Z",
+      "updatedAt": "2026-09-09T15:17:00.453Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -49410,7 +49404,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.684Z",
-      "updatedAt": "2026-08-13T06:51:28.528Z",
+      "updatedAt": "2026-09-09T15:17:00.453Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -49503,7 +49497,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.684Z",
-      "updatedAt": "2026-08-13T06:51:28.528Z",
+      "updatedAt": "2026-09-09T15:17:00.453Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -49611,7 +49605,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.684Z",
-      "updatedAt": "2026-08-13T06:51:28.529Z",
+      "updatedAt": "2026-09-09T15:17:00.453Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -49733,7 +49727,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.684Z",
-      "updatedAt": "2026-08-13T06:51:28.529Z",
+      "updatedAt": "2026-09-09T15:17:00.453Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -49855,7 +49849,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.684Z",
-      "updatedAt": "2026-08-13T06:51:28.529Z",
+      "updatedAt": "2026-09-09T15:17:00.453Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -49954,7 +49948,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.684Z",
-      "updatedAt": "2026-08-13T06:51:28.529Z",
+      "updatedAt": "2026-09-09T15:17:00.453Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -50042,7 +50036,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.684Z",
-      "updatedAt": "2026-08-13T06:51:28.529Z",
+      "updatedAt": "2026-09-09T15:17:00.453Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -50142,7 +50136,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.684Z",
-      "updatedAt": "2026-08-13T06:51:28.529Z",
+      "updatedAt": "2026-09-09T15:17:00.453Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -50249,7 +50243,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.684Z",
-      "updatedAt": "2026-08-13T06:51:28.529Z",
+      "updatedAt": "2026-09-09T15:17:00.453Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -50365,7 +50359,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.684Z",
-      "updatedAt": "2026-08-13T06:51:28.529Z",
+      "updatedAt": "2026-09-09T15:17:00.453Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -50455,7 +50449,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.684Z",
-      "updatedAt": "2026-08-13T06:51:28.529Z",
+      "updatedAt": "2026-09-09T15:17:00.453Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -50551,7 +50545,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.684Z",
-      "updatedAt": "2026-08-13T06:51:28.529Z",
+      "updatedAt": "2026-09-09T15:17:00.453Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -50664,7 +50658,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.684Z",
-      "updatedAt": "2026-08-13T06:51:28.529Z",
+      "updatedAt": "2026-09-09T15:17:00.453Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -50804,7 +50798,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.684Z",
-      "updatedAt": "2026-08-13T06:51:28.529Z",
+      "updatedAt": "2026-09-09T15:17:00.453Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -50914,7 +50908,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.684Z",
-      "updatedAt": "2026-08-13T06:51:28.529Z",
+      "updatedAt": "2026-09-09T15:17:00.453Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -51011,7 +51005,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.684Z",
-      "updatedAt": "2026-08-13T06:51:28.529Z",
+      "updatedAt": "2026-09-09T15:17:00.453Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -51168,7 +51162,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.685Z",
-      "updatedAt": "2026-08-13T06:51:28.529Z",
+      "updatedAt": "2026-09-09T15:17:00.453Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -51259,7 +51253,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.685Z",
-      "updatedAt": "2026-08-13T06:51:28.529Z",
+      "updatedAt": "2026-09-09T15:17:00.453Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -51376,7 +51370,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.686Z",
-      "updatedAt": "2026-08-13T06:51:28.529Z",
+      "updatedAt": "2026-09-09T15:17:00.453Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -51460,7 +51454,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.686Z",
-      "updatedAt": "2026-08-13T06:51:28.529Z",
+      "updatedAt": "2026-09-09T15:17:00.453Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -51559,7 +51553,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.686Z",
-      "updatedAt": "2026-08-13T06:51:28.529Z",
+      "updatedAt": "2026-09-09T15:17:00.453Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -51657,7 +51651,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.686Z",
-      "updatedAt": "2026-08-13T06:51:28.529Z",
+      "updatedAt": "2026-09-09T15:17:00.453Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -51764,7 +51758,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.686Z",
-      "updatedAt": "2026-08-13T06:51:28.529Z",
+      "updatedAt": "2026-09-09T15:17:00.453Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -51852,7 +51846,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.686Z",
-      "updatedAt": "2026-08-13T06:51:28.529Z",
+      "updatedAt": "2026-09-09T15:17:00.453Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -51961,7 +51955,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.686Z",
-      "updatedAt": "2026-08-13T06:51:28.529Z",
+      "updatedAt": "2026-09-09T15:17:00.453Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -52265,7 +52259,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.686Z",
-      "updatedAt": "2026-08-13T06:51:28.529Z",
+      "updatedAt": "2026-09-09T15:17:00.453Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -52378,7 +52372,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.686Z",
-      "updatedAt": "2026-08-13T06:51:28.529Z",
+      "updatedAt": "2026-09-09T15:17:00.453Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -52478,7 +52472,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.686Z",
-      "updatedAt": "2026-08-13T06:51:28.529Z",
+      "updatedAt": "2026-09-09T15:17:00.453Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -52571,7 +52565,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.686Z",
-      "updatedAt": "2026-08-13T06:51:28.529Z",
+      "updatedAt": "2026-09-09T15:17:00.454Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -52676,7 +52670,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.686Z",
-      "updatedAt": "2026-08-13T06:51:28.529Z",
+      "updatedAt": "2026-09-09T15:17:00.454Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -52799,7 +52793,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.686Z",
-      "updatedAt": "2026-08-13T06:51:28.529Z",
+      "updatedAt": "2026-09-09T15:17:00.454Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -52937,7 +52931,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.686Z",
-      "updatedAt": "2026-08-13T06:51:28.529Z",
+      "updatedAt": "2026-09-09T15:17:00.454Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -53031,7 +53025,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.686Z",
-      "updatedAt": "2026-08-13T06:51:28.530Z",
+      "updatedAt": "2026-09-09T15:17:00.454Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -53127,7 +53121,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.686Z",
-      "updatedAt": "2026-08-13T06:51:28.530Z",
+      "updatedAt": "2026-09-09T15:17:00.454Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -53241,7 +53235,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.686Z",
-      "updatedAt": "2026-08-13T06:51:28.530Z",
+      "updatedAt": "2026-09-09T15:17:00.454Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -53332,7 +53326,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.686Z",
-      "updatedAt": "2026-08-13T06:51:28.530Z",
+      "updatedAt": "2026-09-09T15:17:00.454Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -53423,7 +53417,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.686Z",
-      "updatedAt": "2026-08-13T06:51:28.530Z",
+      "updatedAt": "2026-09-09T15:17:00.454Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -53520,7 +53514,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.686Z",
-      "updatedAt": "2026-08-13T06:51:28.530Z",
+      "updatedAt": "2026-09-09T15:17:00.454Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -53691,7 +53685,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.686Z",
-      "updatedAt": "2026-08-13T06:51:28.530Z",
+      "updatedAt": "2026-09-09T15:17:00.454Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -53798,7 +53792,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.686Z",
-      "updatedAt": "2026-08-13T06:51:28.530Z",
+      "updatedAt": "2026-09-09T15:17:00.454Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -53894,7 +53888,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.686Z",
-      "updatedAt": "2026-08-13T06:51:28.530Z",
+      "updatedAt": "2026-09-09T15:17:00.454Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -54011,7 +54005,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.686Z",
-      "updatedAt": "2026-08-13T06:51:28.530Z",
+      "updatedAt": "2026-09-09T15:17:00.454Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -54121,7 +54115,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.686Z",
-      "updatedAt": "2026-08-13T06:51:28.530Z",
+      "updatedAt": "2026-09-09T15:17:00.454Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -54234,7 +54228,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.686Z",
-      "updatedAt": "2026-08-13T06:51:28.530Z",
+      "updatedAt": "2026-09-09T15:17:00.454Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -54319,7 +54313,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.686Z",
-      "updatedAt": "2026-08-13T06:51:28.530Z",
+      "updatedAt": "2026-09-09T15:17:00.454Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -54415,7 +54409,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.686Z",
-      "updatedAt": "2026-08-13T06:51:28.530Z",
+      "updatedAt": "2026-09-09T15:17:00.454Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -54507,7 +54501,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.686Z",
-      "updatedAt": "2026-08-13T06:51:28.530Z",
+      "updatedAt": "2026-09-09T15:17:00.454Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -54614,7 +54608,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.686Z",
-      "updatedAt": "2026-08-13T06:51:28.530Z",
+      "updatedAt": "2026-09-09T15:17:00.454Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -54733,7 +54727,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.686Z",
-      "updatedAt": "2026-08-13T06:51:28.530Z",
+      "updatedAt": "2026-09-09T15:17:00.454Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -54830,7 +54824,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.686Z",
-      "updatedAt": "2026-08-13T06:51:28.530Z",
+      "updatedAt": "2026-09-09T15:17:00.454Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -54943,7 +54937,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.686Z",
-      "updatedAt": "2026-08-13T06:51:28.530Z",
+      "updatedAt": "2026-09-09T15:17:00.455Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -55043,7 +55037,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.686Z",
-      "updatedAt": "2026-08-13T06:51:28.530Z",
+      "updatedAt": "2026-09-09T15:17:00.455Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -55168,7 +55162,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.686Z",
-      "updatedAt": "2026-08-13T06:51:28.530Z",
+      "updatedAt": "2026-09-09T15:17:00.455Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -55254,7 +55248,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.686Z",
-      "updatedAt": "2026-08-13T06:51:28.530Z",
+      "updatedAt": "2026-09-09T15:17:00.455Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -55354,7 +55348,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.686Z",
-      "updatedAt": "2026-08-13T06:51:28.530Z",
+      "updatedAt": "2026-09-09T15:17:00.455Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -55445,7 +55439,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.686Z",
-      "updatedAt": "2026-08-13T06:51:28.530Z",
+      "updatedAt": "2026-09-09T15:17:00.455Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -55562,7 +55556,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.686Z",
-      "updatedAt": "2026-08-13T06:51:28.530Z",
+      "updatedAt": "2026-09-09T15:17:00.455Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -55668,7 +55662,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.686Z",
-      "updatedAt": "2026-08-13T06:51:28.530Z",
+      "updatedAt": "2026-09-09T15:17:00.455Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -55758,7 +55752,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.686Z",
-      "updatedAt": "2026-08-13T06:51:28.530Z",
+      "updatedAt": "2026-09-09T15:17:00.455Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -55845,7 +55839,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.686Z",
-      "updatedAt": "2026-08-13T06:51:28.530Z",
+      "updatedAt": "2026-09-09T15:17:00.455Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -55952,7 +55946,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.686Z",
-      "updatedAt": "2026-08-13T06:51:28.530Z",
+      "updatedAt": "2026-09-09T15:17:00.455Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -56064,7 +56058,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.686Z",
-      "updatedAt": "2026-08-13T06:51:28.530Z",
+      "updatedAt": "2026-09-09T15:17:00.455Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -56155,7 +56149,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.686Z",
-      "updatedAt": "2026-08-13T06:51:28.530Z",
+      "updatedAt": "2026-09-09T15:17:00.455Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -56258,7 +56252,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.686Z",
-      "updatedAt": "2026-08-13T06:51:28.530Z",
+      "updatedAt": "2026-09-09T15:17:00.455Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -56363,7 +56357,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.686Z",
-      "updatedAt": "2026-08-13T06:51:28.530Z",
+      "updatedAt": "2026-09-09T15:17:00.455Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -56484,7 +56478,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.686Z",
-      "updatedAt": "2026-08-13T06:51:28.530Z",
+      "updatedAt": "2026-09-09T15:17:00.455Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -56584,7 +56578,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.686Z",
-      "updatedAt": "2026-08-13T06:51:28.530Z",
+      "updatedAt": "2026-09-09T15:17:00.455Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -56692,7 +56686,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.686Z",
-      "updatedAt": "2026-08-13T06:51:28.531Z",
+      "updatedAt": "2026-09-09T15:17:00.455Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -56805,7 +56799,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.686Z",
-      "updatedAt": "2026-08-13T06:51:28.531Z",
+      "updatedAt": "2026-09-09T15:17:00.455Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -56929,7 +56923,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.686Z",
-      "updatedAt": "2026-08-13T06:51:28.531Z",
+      "updatedAt": "2026-09-09T15:17:00.455Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -57014,7 +57008,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.686Z",
-      "updatedAt": "2026-08-13T06:51:28.531Z",
+      "updatedAt": "2026-09-09T15:17:00.455Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -57110,7 +57104,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.686Z",
-      "updatedAt": "2026-08-13T06:51:28.531Z",
+      "updatedAt": "2026-09-09T15:17:00.455Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -57215,7 +57209,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.686Z",
-      "updatedAt": "2026-08-13T06:51:28.531Z",
+      "updatedAt": "2026-09-09T15:17:00.455Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -57313,7 +57307,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.686Z",
-      "updatedAt": "2026-08-13T06:51:28.531Z",
+      "updatedAt": "2026-09-09T15:17:00.455Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -57397,7 +57391,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.686Z",
-      "updatedAt": "2026-08-13T06:51:28.531Z",
+      "updatedAt": "2026-09-09T15:17:00.455Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -57518,7 +57512,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.686Z",
-      "updatedAt": "2026-08-13T06:51:28.531Z",
+      "updatedAt": "2026-09-09T15:17:00.455Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -57625,7 +57619,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.686Z",
-      "updatedAt": "2026-08-13T06:51:28.531Z",
+      "updatedAt": "2026-09-09T15:17:00.455Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -57733,7 +57727,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.686Z",
-      "updatedAt": "2026-08-13T06:51:28.531Z",
+      "updatedAt": "2026-09-09T15:17:00.455Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -57858,7 +57852,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.686Z",
-      "updatedAt": "2026-08-13T06:51:28.531Z",
+      "updatedAt": "2026-09-09T15:17:00.455Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -57921,7 +57915,7 @@
       "mechanicsKo": [],
       "status": "pending-cache",
       "createdAt": "2026-05-23T17:43:25.686Z",
-      "updatedAt": "2026-08-13T06:51:28.531Z",
+      "updatedAt": "2026-09-09T15:17:00.455Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -57984,7 +57978,7 @@
       "mechanicsKo": [],
       "status": "pending-cache",
       "createdAt": "2026-05-23T17:43:25.686Z",
-      "updatedAt": "2026-08-13T06:51:28.531Z",
+      "updatedAt": "2026-09-09T15:17:00.455Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -58039,7 +58033,7 @@
       "mechanicsKo": [],
       "status": "pending-cache",
       "createdAt": "2026-05-23T17:43:25.686Z",
-      "updatedAt": "2026-08-13T06:51:28.531Z",
+      "updatedAt": "2026-09-09T15:17:00.455Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -58094,7 +58088,7 @@
       "mechanicsKo": [],
       "status": "pending-cache",
       "createdAt": "2026-05-23T17:43:25.686Z",
-      "updatedAt": "2026-08-13T06:51:28.531Z",
+      "updatedAt": "2026-09-09T15:17:00.455Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -58194,7 +58188,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.686Z",
-      "updatedAt": "2026-08-13T06:51:28.531Z",
+      "updatedAt": "2026-09-09T15:17:00.455Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -58299,7 +58293,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.686Z",
-      "updatedAt": "2026-08-13T06:51:28.531Z",
+      "updatedAt": "2026-09-09T15:17:00.455Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -58420,7 +58414,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.686Z",
-      "updatedAt": "2026-08-13T06:51:28.531Z",
+      "updatedAt": "2026-09-09T15:17:00.455Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -58561,7 +58555,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.686Z",
-      "updatedAt": "2026-08-13T06:51:28.531Z",
+      "updatedAt": "2026-09-09T15:17:00.455Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -58672,7 +58666,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.686Z",
-      "updatedAt": "2026-08-13T06:51:28.531Z",
+      "updatedAt": "2026-09-09T15:17:00.455Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -58798,7 +58792,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.686Z",
-      "updatedAt": "2026-08-13T06:51:28.531Z",
+      "updatedAt": "2026-09-09T15:17:00.455Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -58904,7 +58898,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.686Z",
-      "updatedAt": "2026-08-13T06:51:28.531Z",
+      "updatedAt": "2026-09-09T15:17:00.455Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -58980,7 +58974,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.686Z",
-      "updatedAt": "2026-08-13T06:51:28.531Z",
+      "updatedAt": "2026-09-09T15:17:00.455Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -59081,7 +59075,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.686Z",
-      "updatedAt": "2026-08-13T06:51:28.531Z",
+      "updatedAt": "2026-09-09T15:17:00.455Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -59197,7 +59191,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.686Z",
-      "updatedAt": "2026-08-13T06:51:28.531Z",
+      "updatedAt": "2026-09-09T15:17:00.455Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -59296,7 +59290,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.686Z",
-      "updatedAt": "2026-08-13T06:51:28.531Z",
+      "updatedAt": "2026-09-09T15:17:00.455Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -59385,7 +59379,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.686Z",
-      "updatedAt": "2026-08-13T06:51:28.531Z",
+      "updatedAt": "2026-09-09T15:17:00.455Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -59502,7 +59496,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.686Z",
-      "updatedAt": "2026-08-13T06:51:28.531Z",
+      "updatedAt": "2026-09-09T15:17:00.455Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -59630,7 +59624,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.686Z",
-      "updatedAt": "2026-08-13T06:51:28.531Z",
+      "updatedAt": "2026-09-09T15:17:00.455Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -59744,7 +59738,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.686Z",
-      "updatedAt": "2026-08-13T06:51:28.531Z",
+      "updatedAt": "2026-09-09T15:17:00.455Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -59836,7 +59830,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.686Z",
-      "updatedAt": "2026-08-13T06:51:28.531Z",
+      "updatedAt": "2026-09-09T15:17:00.455Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -59944,7 +59938,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.686Z",
-      "updatedAt": "2026-08-13T06:51:28.531Z",
+      "updatedAt": "2026-09-09T15:17:00.455Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -60067,7 +60061,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.686Z",
-      "updatedAt": "2026-08-13T06:51:28.531Z",
+      "updatedAt": "2026-09-09T15:17:00.455Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -60143,7 +60137,7 @@
       "thumbnail": "https://cf.geekdo-images.com/E_-9WT4_6-kABS796Q-piA__small/img/l-LKCyGEkwhPpyW2zQCyA9Kh1SY=/fit-in/200x150/filters:strip_icc()/pic4162054.png",
       "description": "The Kingdom is in grave danger. Powerful enemies are conspiring to resurrect the vile and powerful Unhallowed that your party has just slain. Now you, the mighty adventurers of the land, must visit these summoning locations and defeat the hordes of creatures behind this evil plot. It falls to four mighty adventurers, each of whom has a unique set of skills, to band together once more to vanquish this evil before the Unhallowed consume the world in darkness.\n\nIn Set a Watch, players must band together and clear out nine locations to stop the acolytes from breaking the seals holding back the evil Unhallowed. Every round you will visit a new location and pick an adventurer to rest and take camp actions. The rest of the party will take watch and battle a line of monsters trying to make their way into camp using your dice and unique character abilities.  Manipulating the creature line is essential to solving each round&rsquo;s combat puzzle.  It is a battle to stay alive and keep the campfire burning! Use your wits and skill to fight for the light or all will perish in the darkness.\n\nIf the Adventurers on Watch all become exhausted, the game is over.  If you can survive all 9 rounds of the game and the final Horde, you win!",
       "difficultyWeight": 2.43,
-      "location": "발매후 도착예정",
+      "location": "쉬운 협력",
       "sourceMechanism": "던전크롤링",
       "sourceRating": 7.2,
       "supportsLargeGroup": false,
@@ -60166,7 +60160,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.687Z",
-      "updatedAt": "2026-08-13T06:51:28.531Z",
+      "updatedAt": "2026-09-09T15:17:00.455Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -60291,7 +60285,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.687Z",
-      "updatedAt": "2026-08-13T06:51:28.531Z",
+      "updatedAt": "2026-09-09T15:17:00.455Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -60384,7 +60378,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.687Z",
-      "updatedAt": "2026-08-13T06:51:28.531Z",
+      "updatedAt": "2026-09-09T15:17:00.455Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -60489,7 +60483,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.687Z",
-      "updatedAt": "2026-08-13T06:51:28.532Z",
+      "updatedAt": "2026-09-09T15:17:00.455Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -60601,7 +60595,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.687Z",
-      "updatedAt": "2026-08-13T06:51:28.532Z",
+      "updatedAt": "2026-09-09T15:17:00.455Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -60730,7 +60724,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.687Z",
-      "updatedAt": "2026-08-13T06:51:28.532Z",
+      "updatedAt": "2026-09-09T15:17:00.455Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -60876,7 +60870,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.687Z",
-      "updatedAt": "2026-08-13T06:51:28.532Z",
+      "updatedAt": "2026-09-09T15:17:00.455Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -60983,7 +60977,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.687Z",
-      "updatedAt": "2026-08-13T06:51:28.532Z",
+      "updatedAt": "2026-09-09T15:17:00.455Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -61072,7 +61066,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.687Z",
-      "updatedAt": "2026-08-13T06:51:28.532Z",
+      "updatedAt": "2026-09-09T15:17:00.455Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -61171,7 +61165,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.687Z",
-      "updatedAt": "2026-08-13T06:51:28.532Z",
+      "updatedAt": "2026-09-09T15:17:00.455Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -61279,7 +61273,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.687Z",
-      "updatedAt": "2026-08-13T06:51:28.532Z",
+      "updatedAt": "2026-09-09T15:17:00.455Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -61379,7 +61373,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.687Z",
-      "updatedAt": "2026-08-13T06:51:28.532Z",
+      "updatedAt": "2026-09-09T15:17:00.455Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -61479,7 +61473,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.687Z",
-      "updatedAt": "2026-08-13T06:51:28.532Z",
+      "updatedAt": "2026-09-09T15:17:00.455Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -61539,7 +61533,7 @@
       "mechanicsKo": [],
       "status": "pending-cache",
       "createdAt": "2026-05-23T17:43:25.687Z",
-      "updatedAt": "2026-08-13T06:51:28.532Z",
+      "updatedAt": "2026-09-09T15:17:00.455Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -61639,7 +61633,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.687Z",
-      "updatedAt": "2026-08-13T06:51:28.532Z",
+      "updatedAt": "2026-09-09T15:17:00.455Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -61733,7 +61727,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.687Z",
-      "updatedAt": "2026-08-13T06:51:28.532Z",
+      "updatedAt": "2026-09-09T15:17:00.455Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -61847,7 +61841,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.687Z",
-      "updatedAt": "2026-08-13T06:51:28.532Z",
+      "updatedAt": "2026-09-09T15:17:00.455Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -61966,7 +61960,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.687Z",
-      "updatedAt": "2026-08-13T06:51:28.532Z",
+      "updatedAt": "2026-09-09T15:17:00.455Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -62090,7 +62084,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.687Z",
-      "updatedAt": "2026-08-13T06:51:28.532Z",
+      "updatedAt": "2026-09-09T15:17:00.455Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -62205,7 +62199,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.687Z",
-      "updatedAt": "2026-08-13T06:51:28.532Z",
+      "updatedAt": "2026-09-09T15:17:00.455Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -62302,7 +62296,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.687Z",
-      "updatedAt": "2026-08-13T06:51:28.532Z",
+      "updatedAt": "2026-09-09T15:17:00.455Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -62357,7 +62351,7 @@
       "mechanicsKo": [],
       "status": "pending-cache",
       "createdAt": "2026-05-23T17:43:25.687Z",
-      "updatedAt": "2026-08-13T06:51:28.532Z",
+      "updatedAt": "2026-09-09T15:17:00.455Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -62481,7 +62475,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.687Z",
-      "updatedAt": "2026-08-13T06:51:28.532Z",
+      "updatedAt": "2026-09-09T15:17:00.456Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -62580,7 +62574,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.687Z",
-      "updatedAt": "2026-08-13T06:51:28.532Z",
+      "updatedAt": "2026-09-09T15:17:00.456Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -62656,7 +62650,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.687Z",
-      "updatedAt": "2026-08-13T06:51:28.532Z",
+      "updatedAt": "2026-09-09T15:17:00.456Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -62763,7 +62757,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.687Z",
-      "updatedAt": "2026-08-13T06:51:28.532Z",
+      "updatedAt": "2026-09-09T15:17:00.456Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -62857,7 +62851,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.687Z",
-      "updatedAt": "2026-08-13T06:51:28.532Z",
+      "updatedAt": "2026-09-09T15:17:00.456Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -62954,7 +62948,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.687Z",
-      "updatedAt": "2026-08-13T06:51:28.532Z",
+      "updatedAt": "2026-09-09T15:17:00.456Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -63063,7 +63057,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.687Z",
-      "updatedAt": "2026-08-13T06:51:28.532Z",
+      "updatedAt": "2026-09-09T15:17:00.456Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -63164,7 +63158,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.687Z",
-      "updatedAt": "2026-08-13T06:51:28.532Z",
+      "updatedAt": "2026-09-09T15:17:00.456Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -63281,7 +63275,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.687Z",
-      "updatedAt": "2026-08-13T06:51:28.532Z",
+      "updatedAt": "2026-09-09T15:17:00.456Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -63386,7 +63380,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.687Z",
-      "updatedAt": "2026-08-13T06:51:28.532Z",
+      "updatedAt": "2026-09-09T15:17:00.456Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -63477,7 +63471,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.687Z",
-      "updatedAt": "2026-08-13T06:51:28.532Z",
+      "updatedAt": "2026-09-09T15:17:00.456Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -63588,7 +63582,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.687Z",
-      "updatedAt": "2026-08-13T06:51:28.532Z",
+      "updatedAt": "2026-09-09T15:17:00.456Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -63709,7 +63703,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.687Z",
-      "updatedAt": "2026-08-13T06:51:28.532Z",
+      "updatedAt": "2026-09-09T15:17:00.456Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -63811,7 +63805,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.687Z",
-      "updatedAt": "2026-08-13T06:51:28.532Z",
+      "updatedAt": "2026-09-09T15:17:00.456Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -63914,7 +63908,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.687Z",
-      "updatedAt": "2026-08-13T06:51:28.532Z",
+      "updatedAt": "2026-09-09T15:17:00.456Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -64024,7 +64018,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.687Z",
-      "updatedAt": "2026-08-13T06:51:28.532Z",
+      "updatedAt": "2026-09-09T15:17:00.456Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -64131,7 +64125,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.687Z",
-      "updatedAt": "2026-08-13T06:51:28.532Z",
+      "updatedAt": "2026-09-09T15:17:00.456Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -64251,7 +64245,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.687Z",
-      "updatedAt": "2026-08-13T06:51:28.532Z",
+      "updatedAt": "2026-09-09T15:17:00.456Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -64346,7 +64340,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.687Z",
-      "updatedAt": "2026-08-13T06:51:28.533Z",
+      "updatedAt": "2026-09-09T15:17:00.456Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -64450,7 +64444,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.687Z",
-      "updatedAt": "2026-08-13T06:51:28.533Z",
+      "updatedAt": "2026-09-09T15:17:00.456Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -64566,7 +64560,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.687Z",
-      "updatedAt": "2026-08-13T06:51:28.533Z",
+      "updatedAt": "2026-09-09T15:17:00.456Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -64671,7 +64665,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.687Z",
-      "updatedAt": "2026-08-13T06:51:28.533Z",
+      "updatedAt": "2026-09-09T15:17:00.456Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -64778,7 +64772,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.687Z",
-      "updatedAt": "2026-08-13T06:51:28.533Z",
+      "updatedAt": "2026-09-09T15:17:00.456Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -64865,7 +64859,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.687Z",
-      "updatedAt": "2026-08-13T06:51:28.533Z",
+      "updatedAt": "2026-09-09T15:17:00.456Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -64958,7 +64952,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.687Z",
-      "updatedAt": "2026-08-13T06:51:28.533Z",
+      "updatedAt": "2026-09-09T15:17:00.456Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -65061,7 +65055,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.687Z",
-      "updatedAt": "2026-08-13T06:51:28.533Z",
+      "updatedAt": "2026-09-09T15:17:00.456Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -65135,7 +65129,7 @@
       "mechanicsKo": [],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.687Z",
-      "updatedAt": "2026-08-13T06:51:28.533Z",
+      "updatedAt": "2026-09-09T15:17:00.456Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -65237,7 +65231,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.687Z",
-      "updatedAt": "2026-08-13T06:51:28.533Z",
+      "updatedAt": "2026-09-09T15:17:00.456Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -65347,7 +65341,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.687Z",
-      "updatedAt": "2026-08-13T06:51:28.533Z",
+      "updatedAt": "2026-09-09T15:17:00.456Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -65402,7 +65396,7 @@
       "mechanicsKo": [],
       "status": "pending-cache",
       "createdAt": "2026-05-23T17:43:25.687Z",
-      "updatedAt": "2026-08-13T06:51:28.533Z",
+      "updatedAt": "2026-09-09T15:17:00.456Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -65505,7 +65499,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.687Z",
-      "updatedAt": "2026-08-13T06:51:28.533Z",
+      "updatedAt": "2026-09-09T15:17:00.456Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -65624,7 +65618,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.687Z",
-      "updatedAt": "2026-08-13T06:51:28.533Z",
+      "updatedAt": "2026-09-09T15:17:00.456Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -65731,7 +65725,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.687Z",
-      "updatedAt": "2026-08-13T06:51:28.533Z",
+      "updatedAt": "2026-09-09T15:17:00.456Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -65854,7 +65848,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.687Z",
-      "updatedAt": "2026-08-13T06:51:28.533Z",
+      "updatedAt": "2026-09-09T15:17:00.456Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -65959,7 +65953,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.687Z",
-      "updatedAt": "2026-08-13T06:51:28.533Z",
+      "updatedAt": "2026-09-09T15:17:00.456Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -66081,7 +66075,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.687Z",
-      "updatedAt": "2026-08-13T06:51:28.533Z",
+      "updatedAt": "2026-09-09T15:17:00.456Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -66173,7 +66167,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.687Z",
-      "updatedAt": "2026-08-13T06:51:28.533Z",
+      "updatedAt": "2026-09-09T15:17:00.456Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -66265,7 +66259,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.687Z",
-      "updatedAt": "2026-08-13T06:51:28.533Z",
+      "updatedAt": "2026-09-09T15:17:00.456Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -66361,7 +66355,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.687Z",
-      "updatedAt": "2026-08-13T06:51:28.533Z",
+      "updatedAt": "2026-09-09T15:17:00.456Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -66455,7 +66449,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.687Z",
-      "updatedAt": "2026-08-13T06:51:28.533Z",
+      "updatedAt": "2026-09-09T15:17:00.456Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -66557,7 +66551,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-31T01:33:50.348Z",
-      "updatedAt": "2026-08-13T06:51:28.533Z",
+      "updatedAt": "2026-09-09T15:17:00.456Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -66659,7 +66653,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-31T01:33:55.275Z",
-      "updatedAt": "2026-08-13T06:51:28.533Z",
+      "updatedAt": "2026-09-09T15:17:00.456Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -66714,7 +66708,7 @@
       "mechanicsKo": [],
       "status": "pending-cache",
       "createdAt": "2026-05-31T01:33:58.017Z",
-      "updatedAt": "2026-08-13T06:51:28.533Z",
+      "updatedAt": "2026-09-09T15:17:00.456Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -66804,7 +66798,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-31T01:34:00.566Z",
-      "updatedAt": "2026-08-13T06:51:28.533Z",
+      "updatedAt": "2026-09-09T15:17:00.456Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -66859,7 +66853,7 @@
       "mechanicsKo": [],
       "status": "pending-cache",
       "createdAt": "2026-06-08T16:41:56.543Z",
-      "updatedAt": "2026-08-13T06:51:28.533Z",
+      "updatedAt": "2026-09-09T15:17:00.456Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -66941,7 +66935,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-06-17T16:11:14.291Z",
-      "updatedAt": "2026-08-13T06:51:28.533Z",
+      "updatedAt": "2026-09-09T15:17:00.456Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -67025,7 +67019,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-06-17T16:12:51.438Z",
-      "updatedAt": "2026-08-13T06:51:28.533Z",
+      "updatedAt": "2026-09-09T15:17:00.456Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -67162,7 +67156,105 @@
       ],
       "status": "ready",
       "createdAt": "2026-06-21T09:24:54.179Z",
-      "updatedAt": "2026-08-13T06:51:28.533Z",
+      "updatedAt": "2026-09-09T15:17:00.456Z",
+      "source": {
+        "base": "xlsx-import",
+        "overrides": [
+          "ownedName",
+          "titleKo",
+          "bestPlayers",
+          "recommendedPlayers"
+        ]
+      }
+    },
+    "스위트랜드": {
+      "id": "스위트랜드",
+      "ownedName": "스위트랜드",
+      "titleKo": "스위트랜드",
+      "titleEn": "Sweet Lands",
+      "bggId": "425445",
+      "matchStatus": "forced",
+      "yearPublished": 2025,
+      "minPlayers": 1,
+      "maxPlayers": 4,
+      "playingTime": 200,
+      "minPlayTime": 100,
+      "maxPlayTime": 200,
+      "minAge": 14,
+      "difficulty": 4.1754,
+      "rating": 8.16541,
+      "bayesRating": 6.6204,
+      "usersRated": 1939,
+      "rank": 1070,
+      "designers": [
+        "Totsuca Chuo"
+      ],
+      "artists": [
+        "Tatsuki Asano",
+        "Brownie120"
+      ],
+      "publishers": [
+        "uchibacoya",
+        "CrowD Games",
+        "Devir",
+        "PD-Verlag",
+        "Pixie Games",
+        "Rosiness",
+        "Yellowstar Games"
+      ],
+      "categories": [
+        "City Building",
+        "Economic",
+        "Fantasy",
+        "Industry / Manufacturing"
+      ],
+      "mechanics": [
+        "Hexagon Grid",
+        "Solo / Solitaire Game",
+        "Tile Placement",
+        "Variable Player Powers",
+        "Worker Placement"
+      ],
+      "recommendedPlayers": [
+        1,
+        3
+      ],
+      "bestPlayers": [
+        2
+      ],
+      "notRecommendedPlayers": [
+        4,
+        4
+      ],
+      "image": "https://cf.geekdo-images.com/qmCyTIgGhdSON0bMUk8qjQ__original/img/NEfd_QHVVzORADKrXdkffvIYBVw=/0x0/filters:format(jpeg)/pic8329173.jpg",
+      "thumbnail": "https://cf.geekdo-images.com/qmCyTIgGhdSON0bMUk8qjQ__small/img/7NwXv2G1UPErGTvHHm-R6wdYsoY=/fit-in/200x150/filters:strip_icc()/pic8329173.jpg",
+      "description": "Welcome to &ldquo;Sweet Lands&rdquo;, the kingdom of delightful confections! The former king has succumbed to his gluttonous love for sweets, leaving behind a final decree. Summoned by this royal edict, you and your fellow players are challenged to build the most magnificent city &mdash; and if you succeed, you will ascend as the new ruler of Sweet Lands. Gather the support of various townsfolk and navigate through fierce competition to create the richest and most prosperous city of sweets!\n\nSweet Lands is a heavyweight Euro-style game with over 200 cards, 14 unique characters, and 449 wooden tokens. During the game, each player develops Cities on their Map Board whilst advancing on their Prosperity Tracks. After 5 rounds, the game ends and the player with the most Victory Points is the winner!\n\n&mdash;description from the publisher",
+      "difficultyWeight": 0,
+      "location": "2인",
+      "sourceMechanism": "",
+      "sourceRating": 0,
+      "supportsLargeGroup": false,
+      "comment": "",
+      "tags": [],
+      "youtubeUrl": "",
+      "summaryKo": "다양한 주민의 지지를 얻어 가장 번영하는 과자 도시를 건설하는 게임.",
+      "descriptionKo": "\"스윗 랜즈\"에 오신 것을 환영합니다. 맛있는 과자의 왕국입니다! 전임 왕이 과자에 대한 탐욕에 빠져 세상을 떠났고, 최후의 칙령을 남겼습니다. 이 왕실의 명령으로 소환된 당신과 다른 플레이어들은 가장 화려한 도시를 건설하도록 도전받습니다. 성공하면 스윗 랜즈의 새로운 통치자가 될 것입니다. 다양한 주민들의 지지를 얻고 치열한 경쟁을 헤쳐나가며 가장 풍요롭고 번영하는 과자의 도시를 만들어보세요!\n\n스윗 랜즈는 200장 이상의 카드, 14명의 독특한 캐릭터, 449개의 목재 토큰으로 이루어진 헤비급 유로 게임입니다. 게임 진행 중 각 플레이어는 지도판에서 도시를 개발하며 번영 트랙을 진행합니다. 5라운드 후 게임이 끝나고 가장 많은 승점을 획득한 플레이어가 우승자입니다!",
+      "categoriesKo": [
+        "도시 건설",
+        "경제",
+        "판타지",
+        "산업"
+      ],
+      "mechanicsKo": [
+        "헥사곤 격자",
+        "솔로 게임",
+        "타일 배치",
+        "비대칭 능력",
+        "워커 배치"
+      ],
+      "status": "ready",
+      "createdAt": "2026-09-09T15:14:37.454Z",
+      "updatedAt": "2026-09-09T15:17:00.456Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
