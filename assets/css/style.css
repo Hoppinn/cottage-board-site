@@ -2102,6 +2102,8 @@ body.recommend-page main{
   display:block;
 }
 html[data-ui-functional-surface-pending="game-sheet"] .game-sheet.is-active{visibility:hidden;}
+html[data-ui-functional-surface-pending="profile-panel"] #profilePanel,
+html[data-ui-functional-surface-pending="meeting-adjust"] #__ddModal{visibility:hidden;}
 
 .game-sheet-dim{
   position:absolute;
@@ -7845,10 +7847,10 @@ body[data-ui-geometry-owner="host"] [data-ui-geometry="host-fill"]{
 }
 body[data-ui-geometry-owner="host"] .dd-overlay[data-ui-layer="host-transparent"]{padding:0!important;}
 
-/* A canonical local surface cannot escape its iframe. When game-sheet is active,
-   its immediate iframe owner supplies the full available coordinate space while
-   keeping the parent modal's backdrop and lifecycle. */
-[data-ui-surface-geometry-owner][data-ui-functional-surface="game-sheet"]{
+/* A canonical local surface keeps its parent context's outer geometry. Only a
+   profile panel needs a full available owner; game-sheet remains within the
+   existing modal so the preserved parent surface never resizes underneath it. */
+[data-ui-surface-geometry-owner][data-ui-functional-surface="profile-panel"]{
   position:fixed!important;inset:0!important;width:auto!important;max-width:none!important;
   height:auto!important;max-height:none!important;margin:0!important;border-radius:0!important;
   background:transparent!important;box-shadow:none!important;overflow:hidden!important;

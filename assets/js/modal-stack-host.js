@@ -5,13 +5,9 @@
   const siteRoot = new URL('../../', scriptUrl);
   const childKinds = {
     'recommend-all': { route: 'index.html' },
-    meeting: { route: 'pages/club/club-schedule.html', geometry: 'compact' },
-    profile: { route: 'index.html' },
   };
   const activeViews = {
     'recommend-all': 'recommend-all',
-    meeting: 'day-detail',
-    profile: 'other-board',
   };
 
   function stackUrl(kind, payload = {}, presentation = 'overlay') {

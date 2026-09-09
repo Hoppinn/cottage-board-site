@@ -1475,6 +1475,7 @@
   window.openDateMeetingModal = function (voteDate, votes, voteGames, opts = {}) {
     if (_requestMeetingStackOverlay(voteDate)) return;
     document.getElementById('__ddModal')?.remove();
+    window.CottageModalStack?.prepareFunctionalSurface?.('meeting-adjust');
     const el = document.createElement('div');
     el.id = '__ddModal';
     el.className = 'dd-overlay dd-overlay--under-board planner-modal-overlay is-open';

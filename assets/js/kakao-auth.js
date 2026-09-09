@@ -2046,6 +2046,7 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
       <p class="profile-panel-loading">불러오는 중...</p>
     </div>
   </div>`;
+  window.CottageModalStack?.prepareFunctionalSurface?.('profile-panel');
   document.body.appendChild(panel);
   _trackPvOnce(readOnly ? 'other-board' : 'my-board');
   // 활성 뷰 체류시간 추적(2026-08-18, PLAN_active_view_tracking.md 1차) — 토큰을 패널
@@ -3504,22 +3505,6 @@ async function openOtherMeetingSheet(userId, opts = {}) {
 }
 
 window.openOtherMeetingSheet = openOtherMeetingSheet;
-
-const _modalStackProfile = window.CottageModalStack?.state?.();
-if (_modalStackProfile?.frame === 'child' && _modalStackProfile.kind === 'profile') {
-  let _guideProfileOpened = false;
-  const openGuideProfileChild = () => {
-    if (_guideProfileOpened) return;
-    const userId = _modalStackProfile.query.get('user') || _modalStackProfile.hash.get('user') || '';
-    const autoSubsheet = _modalStackProfile.query.get('subsheet') || _modalStackProfile.hash.get('subsheet') || '';
-    const readOnly = (_modalStackProfile.query.get('readonly') || _modalStackProfile.hash.get('readonly')) === '1';
-    if (!readOnly && !getKakaoUser()) return;
-    _guideProfileOpened = true;
-    window.CottageModalStack.runLocal(() => openProfilePanel(autoSubsheet || null, { userId: userId || null, readOnly }));
-  };
-  window.addEventListener('kakao-auth-ready', openGuideProfileChild);
-  requestAnimationFrame(openGuideProfileChild);
-}
 
 document.addEventListener('DOMContentLoaded', initKakaoAuth);
 

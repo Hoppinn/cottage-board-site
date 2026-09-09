@@ -15,29 +15,40 @@
     'game-record': 'game-sheet',
     'game-location': 'game-sheet',
     'game-rule': 'game-sheet',
+    profile: 'profile-panel',
+    meeting: 'meeting-adjust',
   });
-  // A local surface may sit above a Host child without becoming that Host
-  // frame. Its own close must therefore not pop the preserved parent frame.
+  // A local surface may sit above a Host context without becoming a Host frame.
+  // The node selector owns state detection only; renderer and geometry remain
+  // feature/parent responsibilities respectively.
   const _canonicalLocalSurfaceStates = Object.freeze({
-    'game-sheet': '.game-sheet.is-active',
+    'game-sheet': { nodeSelector: '.game-sheet', isActive: node => node.classList.contains('is-active') },
+    'profile-panel': { nodeSelector: '#profilePanel', isActive: () => true },
+    'meeting-adjust': { nodeSelector: '#__ddModal', isActive: node => node.classList.contains('is-open') },
   });
   let _localStackOpenDepth = 0;
 
+  function _surfaceState(surface) {
+    return _canonicalLocalSurfaceStates[surface] || null;
+  }
+
   function _hasActiveCanonicalLocalSurface() {
-    return Object.values(_canonicalLocalSurfaceStates)
-      .some(selector => !!document.querySelector(selector));
+    return Object.values(_canonicalLocalSurfaceStates).some(({ nodeSelector, isActive }) => {
+      const node = document.querySelector(nodeSelector);
+      return !!node && isActive(node);
+    });
   }
 
   function _setChildSurfaceGeometry(event) {
     const data = event.data;
-    if (!['cottage-functional-surface-state', 'cottage-functional-surface-prepare'].includes(data?.type) || data.surface !== 'game-sheet') return;
+    if (!['cottage-functional-surface-state', 'cottage-functional-surface-prepare'].includes(data?.type) || !_surfaceState(data.surface)) return;
     if (event.origin !== location.origin) return;
     const frame = Array.from(document.querySelectorAll('iframe'))
       .find(candidate => candidate.contentWindow === event.source);
     const owner = frame?.closest('[data-ui-surface-geometry-owner]');
     if (owner) {
       if (data.type === 'cottage-functional-surface-prepare' || data.active) owner.dataset.uiFunctionalSurface = data.surface;
-      else delete owner.dataset.uiFunctionalSurface;
+      else if (owner.dataset.uiFunctionalSurface === data.surface) delete owner.dataset.uiFunctionalSurface;
     }
     if (data.type === 'cottage-functional-surface-prepare') {
       event.source?.postMessage({ type: 'cottage-functional-surface-ready', surface: data.surface }, event.origin);
@@ -45,30 +56,42 @@
   }
 
   function _completeLocalSurfaceGeometry(event) {
-    if (event.origin !== location.origin || event.data?.type !== 'cottage-functional-surface-ready' || event.data.surface !== 'game-sheet') return;
+    if (event.origin !== location.origin || event.data?.type !== 'cottage-functional-surface-ready' || !_surfaceState(event.data.surface)) return;
+    if (document.documentElement.dataset.uiFunctionalSurfacePending !== event.data.surface) return;
     delete document.documentElement.dataset.uiFunctionalSurfacePending;
   }
 
   function _prepareLocalSurfaceGeometry(surface) {
-    if (surface !== 'game-sheet' || window.parent === window) return;
+    if (!_surfaceState(surface) || window.parent === window) return;
     document.documentElement.dataset.uiFunctionalSurfacePending = surface;
     window.parent.postMessage({ type: 'cottage-functional-surface-prepare', surface }, location.origin);
   }
 
   function _publishLocalSurfaceGeometry() {
     if (window.parent === window) return;
-    const active = !!document.querySelector('.game-sheet.is-active');
-    window.parent.postMessage({ type: 'cottage-functional-surface-state', surface: 'game-sheet', active }, location.origin);
+    Object.entries(_canonicalLocalSurfaceStates).forEach(([surface, { nodeSelector, isActive }]) => {
+      const node = document.querySelector(nodeSelector);
+      window.parent.postMessage({ type: 'cottage-functional-surface-state', surface, active: !!node && isActive(node) }, location.origin);
+    });
   }
   window.addEventListener('message', _setChildSurfaceGeometry);
   window.addEventListener('message', _completeLocalSurfaceGeometry);
-  const _surfaceStateObserver = new MutationObserver(_publishLocalSurfaceGeometry);
+  const _surfaceStateObservers = new Map();
   const _surfaceDiscoveryObserver = new MutationObserver(_watchLocalSurfaceGeometry);
   function _watchLocalSurfaceGeometry() {
-    const sheet = document.querySelector('.game-sheet');
-    if (!sheet) return;
-    _surfaceStateObserver.observe(sheet, { attributes: true, attributeFilter: ['class'] });
-    _surfaceDiscoveryObserver.disconnect();
+    Object.entries(_canonicalLocalSurfaceStates).forEach(([surface, { nodeSelector }]) => {
+      const node = document.querySelector(nodeSelector);
+      const observed = _surfaceStateObservers.get(surface);
+      if (observed?.node === node) return;
+      observed?.observer.disconnect();
+      if (!node) {
+        _surfaceStateObservers.delete(surface);
+        return;
+      }
+      const observer = new MutationObserver(_publishLocalSurfaceGeometry);
+      observer.observe(node, { attributes: true, attributeFilter: ['class'] });
+      _surfaceStateObservers.set(surface, { node, observer });
+    });
     _publishLocalSurfaceGeometry();
   }
   _surfaceDiscoveryObserver.observe(document.documentElement, { childList: true, subtree: true });

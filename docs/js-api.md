@@ -11,13 +11,14 @@
 | 함수 | 계약 |
 |---|---|
 | `state()` | `{ enabled, frame: 'root'|'child', kind, presentation: 'overlay'|'drilldown', geometry: 'standard'|'compact', query, hash }`를 반환한다. presentation과 geometry는 Host가 child URL에 전달한 navigation semantics와 shell variant다. |
-| `request(kind, payload, { presentation }?)` | 현재 frame을 유지한 채 parent Modal Stack Host에 push를 요청한다. `presentation`은 기본 `overlay`(우상단 ×를 쓰는 별도 center modal)이며, `drilldown`만 좌상단 ←로 이전 frame에 복귀한다. host 밖과 canonical-local surface kind(`game-info`, `game-record`, `game-location`, `game-rule`)에서는 `false`를 반환해 호출자의 기존 local renderer를 사용한다. |
-| `pop()` | child frame에서만 parent에 최상단 한 장의 pop을 요청한다. ←·ESC·Host ×가 이 동작을 사용하며 root/host 밖이면 `false`. |
+| `request(kind, payload, { presentation }?)` | 현재 frame을 유지한 채 parent Modal Stack Host에 push를 요청한다. `presentation`은 기본 `overlay`(우상단 ×를 쓰는 별도 center modal)이며, `drilldown`만 좌상단 ←로 이전 frame에 복귀한다. host 밖과 canonical-local surface kind(`game-info`, `game-record`, `game-location`, `game-rule`, `profile`, `meeting`)에서는 `false`를 반환해 호출자의 기존 local renderer를 사용한다. |
+| `pop()` | child frame에서만 parent에 최상단 한 장의 pop을 요청한다. active canonical local surface가 있으면 `false`를 반환해 그 surface의 local close가 우선한다. |
+| `prepareFunctionalSurface(surface)` | registered canonical local surface가 표시 직전에 호출한다. direct parent에게 `prepare`를 보내 geometry/context ready 응답 뒤 첫 paint를 보이게 한다. |
 | `runLocal(fn)` | Host child bootstrap이 기존 open 함수를 최초 한 번 local 실행해야 할 때만 사용한다. bootstrap 중 push 재귀를 막는다. canonical-local surface는 별도 Host bootstrap 없이 기존 호출자가 바로 연다. |
 
 ## window.CottageModalStackHost (modal-stack-host.js)
 
-parent root modal이 `create({ container, rootFrame, rootShell, isOpen })`으로 만드는 공통 frame host다. `push(kind,payload,presentation)`와 `pop()`은 공개 소비자용이 아니라 host lifecycle용이며, message source가 top iframe과 일치할 때만 처리한다. route registry는 `geometry` metadata를 함께 갖고, `push()`는 child URL에 `stackPresentation`/`stackGeometry`를 전달하고 Host shell에 ownership marker를 붙인다. route는 `recommend-all`, `meeting`, `profile`의 기존 deep-link/component만 재사용한다. 게임정보/기록/위치/안내는 Host route가 아니라 이미 열린 document의 canonical `game-sheet` local flow다.
+parent root modal이 `create({ container, rootFrame, rootShell, isOpen })`으로 만드는 공통 frame host다. `push(kind,payload,presentation)`와 `pop()`은 공개 소비자용이 아니라 host lifecycle용이며, message source가 top iframe과 일치할 때만 처리한다. route registry는 `geometry` metadata를 함께 갖고, `push()`는 child URL에 `stackPresentation`/`stackGeometry`를 전달하고 Host shell에 ownership marker를 붙인다. current child route is `recommend-all` only. 게임정보/기록/위치/안내, 내 보드/읽기 전용 프로필, 모임 조율은 Host route가 아니라 이미 열린 document의 registered canonical local surface flow다.
 
 ## window.CottageDB (supabase-client.js)
 

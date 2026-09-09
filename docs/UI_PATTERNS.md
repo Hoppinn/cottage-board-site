@@ -12,11 +12,11 @@
 3. overlay / local navigation / drilldown 중 navigation semantics를 별도 축으로 붙인다.
 4. 실제 runtime verification이 끝나지 않은 scroll·geometry 세부값은 이 문서를 근거로 확정하지 않는다.
 
-따라서 `Host child iframe`은 구조 Pattern이고, `overlay`와 `drilldown`은 그 위에 붙는 navigation semantics/presentation이다. functional renderer/surface는 또 다른 축이다: 같은 기능은 parent가 달라도 canonical renderer를 유지하며, 게임정보 계열은 `game-sheet` local surface를 쓴다. 반대로 profile local subsheet는 navigation semantics가 local navigation이면서 별도 구조 Pattern이다.
+따라서 `Host child iframe`은 구조 Pattern이고, `overlay`와 `drilldown`은 그 위에 붙는 navigation semantics/presentation이다. functional renderer/surface는 또 다른 축이다: 같은 기능은 parent가 달라도 canonical renderer를 유지한다. `game-sheet`, `profile-panel`, `meeting-adjust`는 새 Host child document가 아니라 이미 열린 document의 local surface이며, profile local subsheet는 그 안에서 local navigation을 계속 소유한다.
 
 ## 공통 용어
 
-`game-sheet` canonical surface가 iframe 안에서 열릴 때는 renderer가 geometry를 바꾸지 않는다. direct iframe owner가 `data-ui-surface-geometry-owner`로 full available area를 제공하고, child의 active state는 공통 message bridge로 전달한다. open은 `prepare → owner geometry → ready → first visible paint` handshake를 거쳐 작은 iframe geometry가 먼저 보이지 않으며, 기존 local parent renderer(예: 추천 전체보기)는 닫거나 교체하지 않는다. active canonical local surface의 close/ESC는 Host frame pop보다 우선하며, 그 surface가 닫힌 뒤에만 Host-owned outer close가 frame을 닫을 수 있다. 따라서 renderer·surface·surface geometry owner·close owner는 별도 축이다.
+Canonical local surface registry는 `game-sheet`, `profile-panel`, `meeting-adjust`를 등록한다. renderer가 geometry를 바꾸지 않으며, direct iframe owner는 필요할 때 `data-ui-surface-geometry-owner`로 available area를 제공하되 preserved parent의 outer geometry는 바꾸지 않는다. 모든 registered surface는 `prepare → owner geometry → ready → first visible paint` handshake를 거쳐 first paint를 안정화한다. `profile-panel`은 parent available context에서 기존 local panel을 재사용하고, `meeting-adjust`는 feature-owned compact variant를 유지하며, `game-sheet`는 parent modal context 안에 남는다. active canonical local surface의 close/ESC는 Host frame pop보다 우선하며, 그 surface가 닫힌 뒤에만 Host-owned outer close가 frame을 닫을 수 있다. 따라서 functional renderer·surface·geometry variant·geometry owner·parent context·close owner는 별도 축이다.
 
 | 용어 | 의미 |
 |---|---|
