@@ -14,8 +14,8 @@
 
 | 분류 | 대상 route | top chrome / 종료 |
 |---|---|---|
-| drill-down | `game-info → game-location`, `game-info → game-rule` | 좌상단 ←, `pop()`으로 이전 게임정보 복귀 |
-| 독립 overlay | `recommend-all → game-info`, `game-location → game-info`, 플래너 보기·홈페이지 기능·모임원 프로필 root에서 여는 `game-info`/`game-record`/`recommend-all`/`meeting`/`profile` | 우상단 ×, `pop()`으로 현재 top frame만 닫아 아래 frame 복귀 |
+| drill-down | 게임정보·기록 안에서 다시 여는 `game-info`/`game-record`, `game-info → game-location`, `game-info → game-rule` | 좌상단 ←, `pop()`으로 직전 게임 화면 복귀 |
+| 독립 overlay | `recommend-all → game-info`, 플래너 보기·홈페이지 기능·모임원 프로필 root에서 처음 여는 `game-info`/`game-record`/`recommend-all`/`meeting`/`profile` | 우상단 ×, `pop()`으로 현재 top frame만 닫아 아래 frame 복귀 |
 
 내 보드의 프로필 보드·모임 보드 등은 `profile` iframe **안**에서 유지되는 기존 local navigation이다. profile overlay 자체의 ×는 현재 modal stack 전체를 종료하고, 보드 내부 ←는 내 보드로만 복귀한다.
 
@@ -37,7 +37,7 @@
 
 보존: 독립 URL local modal, game-info root의 짧은 slide-up, 표준 외곽(좌우 10px·상단 36px·하단 12px·18px radius), single backdrop, quick-entry·댓글·사진·작성 보조 UI, 내 보드 내부 sub-sheet navigation.
 
-위험요소: ×를 local close handler가 연쇄 실행하도록 두면 아래 modal까지 닫힐 수 있다. Host ×·←·ESC는 모두 `pop()`만 쓰게 분리한다. 반대로 모든 `request()`를 drill-down으로 두면 정책이 회귀한다. 기본값을 `overlay`로 두고 game-location/rule 두 caller만 명시적으로 drilldown 지정해 이를 피한다.
+위험요소: ×를 local close handler가 연쇄 실행하도록 두면 아래 modal까지 닫힐 수 있다. Host ×·←·ESC는 모두 `pop()`만 쓰게 분리한다. 반대로 최초 게임 진입까지 drill-down으로 두면 추천 전체보기 복귀가 사라진다. 현재 game frame 안에서만 후속 게임정보·기록 요청을 drilldown으로 정해 이를 피한다.
 
 롤백: host의 `presentation` 처리와 두 explicit caller만 되돌리면 기존 전부-← 동작으로 복귀한다. route registry·iframe bootstrap·center shell CSS는 삭제하지 않는다.
 
@@ -87,8 +87,8 @@ parent host는 message source가 현재 top frame의 `contentWindow`인 경우�
 | kind | parent-level child iframe | presentation | 기존 재사용 bootstrap |
 |---|---|---|
 | `recommend-all` | `index.html` | overlay | `stackKind=recommend-all` → 기존 `openRecommendOverlay()` |
-| `game-info` | `index.html` | overlay | `stackKind=game-info&game=` → 기존 `openGameSheet()` |
-| `game-record` | `pages/game/game-reviews.html` | overlay | `stackKind=game-record&game=` → 기존 기록 open 함수 |
+| `game-info` | `index.html` | 최초 진입 overlay / game flow 내부 drilldown | `stackKind=game-info&game=` → 기존 `openGameSheet()` |
+| `game-record` | `pages/game/game-reviews.html` | 최초 진입 overlay / game flow 내부 drilldown | `stackKind=game-record&game=` → 기존 기록 open 함수 |
 | `game-location` | `pages/game/game-location.html` | drilldown | 기존 location 페이지의 `highlight=` deep-link |
 | `game-rule` | `index.html` | drilldown | `stackKind=game-rule&game=` → 기존 game rule hub open 함수 |
 | `meeting` | `pages/club/club-schedule.html` | overlay | `stackKind=meeting&date=` → 기존 `openDateMeetingModal()` |
