@@ -571,7 +571,7 @@
   let recordsLoaded = false;
   let recordsData = null;
   let currentView = 'date';
-  // 회원 전체의 현재 닉네임 → userId. loadRecords에서 1회 채운다(renderRecords는 7곳에서 불리는
+  // 회원 전체의 현재 닉네임·본명 → userId. loadRecords에서 1회 채운다(renderRecords는 7곳에서 불리는
   // 동기 재렌더라 그 안에서 조회하면 안 됨). 참여자 태그 클릭 진입점이 이 맵을 쓴다.
   let _profileNickMap = new Map();
   function _setUniqueNicknameMap(map, nickname, userId) {
@@ -606,7 +606,9 @@
       recordsData = _recs;
       _profileNickMap = new Map();
       for (const p of _profiles) {
-        if (p.user_id && p.nickname) _setUniqueNicknameMap(_profileNickMap, p.nickname, p.user_id);
+        if (!p.user_id) continue;
+        if (p.nickname) _setUniqueNicknameMap(_profileNickMap, p.nickname, p.user_id);
+        if (p.real_name) _setUniqueNicknameMap(_profileNickMap, p.real_name, p.user_id);
       }
       // (014) 각 기록에 매인 남의 게임평을 한 번에 로드 — 기록 id로 묶어 buildSessionBody가 읽는다.
       _recordCommentsMap = new Map();
@@ -993,7 +995,7 @@
     const _restoreState = _pendingBoardState; _pendingBoardState = null;
     const user = window.getKakaoUser?.();
 
-    // 닉네임 → userId 맵: 회원 전체(현재 닉네임)를 깔고, 기록의 recorder 정보(당시 닉네임)로 보강.
+    // identity 별칭 → userId 맵: 회원 전체(현재 닉네임·본명)를 깔고, 기록의 recorder 정보(당시 닉네임)로 보강.
     // 종전엔 recorder만 썼는데, 그러면 "기록을 한 번도 등록한 적 없는 회원"이 맵에 없어 참여자로
     // 태그만 된 이름이 조용히 클릭 불가였다(커서도 안 바뀜). 반대로 profiles만 쓰면 닉네임을 바꾼
     // 회원의 옛 이름(player_names에 텍스트로 박혀 있음)이 안 잡히므로 둘 다 필요하다.

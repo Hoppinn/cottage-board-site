@@ -148,11 +148,11 @@ characters_basic/rare/{id}.png       ← rare_lightning, season_spring, cottage_
 
 - 하루에 여러 기록이 있어도 1일
 - 날짜 기준: `played_at` 우선, 없으면 `created_at` KST 변환 (`+9h`)
-- 카운팅 대상: `user_id` 작성자 + `player_names` ILIKE 닉네임 포함 참여자
+- 카운팅 대상: `user_id` 작성자 + `player_names`의 쉼표 토큰 참여자. participant resolver가 `profiles.nickname`·`profiles.real_name`의 유일한 `normalizeNick` identity 키와 정확히 일치시킨 토큰만 포함한다. ILIKE는 후보 수집에만 쓰며 원문·부분문자열만으로는 귀속하지 않는다.
 
 ## 판정 한계 (임시 방식)
 
-player_names 텍스트 기반 카운팅 — 닉네임 변경/동명이인/부분매칭 오탐 가능.
+player_names 텍스트 기반 카운팅 — 별도 participant 테이블이 아니므로 기록 당시의 닉네임·본명 별칭이 현재 profiles에 없으면 해소하지 못한다. 유일 identity 키와 정확 토큰 판정으로 동명이인·부분매칭 자동 귀속은 막는다.
 
 장기 전환 목표: `game_play_participants` 테이블
 ```

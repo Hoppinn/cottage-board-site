@@ -6,15 +6,25 @@ function normalizeNick(value) {
   return String(value ?? '').trim().replace(/\s+/g, '').toLowerCase();
 }
 
+function identityKeys(profile) {
+  return [...new Set([profile.nickname, profile.real_name].map(normalizeNick).filter(Boolean))];
+}
+
 function matchesPlayerNames(playerNames, nickname, profiles, userId) {
-  const key = normalizeNick(nickname);
-  const matches = profiles.filter(profile => normalizeNick(profile.nickname) === key);
-  const uniqueTarget = matches.length === 1 && String(matches[0].user_id) === String(userId);
+  const target = profiles.find(profile => String(profile.user_id) === String(userId));
+  const identitiesByKey = new Map();
+  for (const profile of profiles) {
+    for (const key of identityKeys(profile)) {
+      if (!identitiesByKey.has(key)) identitiesByKey.set(key, new Set());
+      identitiesByKey.get(key).add(String(profile.user_id));
+    }
+  }
+  const uniqueTargetKeys = new Set(identityKeys(target)
+    .filter(key => identitiesByKey.get(key)?.size === 1 && identitiesByKey.get(key).has(String(userId))));
   return String(playerNames || '').split(',').map(token => token.trim()).some(token => {
     if (!token) return false;
-    return uniqueTarget
-      ? normalizeNick(token) === key
-      : token.toLowerCase() === String(nickname).trim().toLowerCase();
+    return token.toLowerCase() === String(nickname).trim().toLowerCase()
+      || uniqueTargetKeys.has(normalizeNick(token));
   });
 }
 
@@ -31,6 +41,16 @@ assert.equal(matchesPlayerNames('덕지', '덕 지', [
   { user_id: 'a', nickname: '덕 지' },
   { user_id: 'b', nickname: '덕지' },
 ], 'a'), false, '정규화 충돌 자동 연결 차단');
+assert.equal(matchesPlayerNames('서은희', '써니', [
+  { user_id: 'sunny', nickname: '써니', real_name: '서은희' },
+], 'sunny'), true, '본명 토큰을 유일한 회원 닉네임으로 연결');
+assert.equal(matchesPlayerNames('서 은 희', '써니', [
+  { user_id: 'sunny', nickname: '써니', real_name: '서은희' },
+], 'sunny'), true, '본명 공백 변형 연결');
+assert.equal(matchesPlayerNames('서은희', '써니', [
+  { user_id: 'sunny', nickname: '써니', real_name: '서은희' },
+  { user_id: 'other', nickname: '서은희' },
+], 'sunny'), false, '본명-닉네임 충돌 자동 연결 차단');
 
 const clientSource = fs.readFileSync(path.join(__dirname, '../assets/js/supabase-client.js'), 'utf8');
 for (const name of ['getMyStats', 'getMyNotifications', 'getUserPlayedGames', 'getUserParticipationCount', 'getUserUniqueDayCount']) {

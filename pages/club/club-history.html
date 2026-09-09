@@ -171,7 +171,9 @@
         else if (nickUserMap.get(key) !== id) nickUserMap.set(key, null);
       };
       for (const p of profiles) {
-        if (p.user_id && p.nickname) addUniqueNick(p.nickname, p.user_id);
+        if (!p.user_id) continue;
+        if (p.nickname) addUniqueNick(p.nickname, p.user_id);
+        if (p.real_name) addUniqueNick(p.real_name, p.user_id);
       }
       for (const r of records) {
         if (r.user_id && r.nickname) addUniqueNick(r.nickname, r.user_id);

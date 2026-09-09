@@ -115,26 +115,41 @@ window._cottageSess = (function () {
     return String(token || '').trim().toLowerCase() === String(nickname || '').trim().toLowerCase();
   }
 
+  // 현재 표시 닉네임과 가입 때 저장한 본명은 같은 회원 identity의 별칭이다.
+  // 어느 별칭 키든 다른 회원과 충돌하면 그 키는 정규화 연결에 쓰지 않는다.
+  function _getIdentityKeys(profile) {
+    return [...new Set([profile?.nickname, profile?.real_name]
+      .map(_normalizeNickname)
+      .filter(Boolean))];
+  }
+
   async function _getParticipantRows(userId, nickname, columns) {
     if (!nickname) return { data: [], error: null };
     try {
-      const { data: profiles, error: profileError } = await db.from('profiles').select('user_id,nickname');
+      const { data: profiles, error: profileError } = await db.from('profiles').select('user_id,nickname,real_name');
       if (profileError) return { data: [], error: profileError };
-      const key = _normalizeNickname(nickname);
-      const matchedProfiles = (profiles || []).filter(profile => _normalizeNickname(profile.nickname) === key);
-      const isUniqueTarget = matchedProfiles.length === 1 && String(matchedProfiles[0].user_id) === String(userId);
-      const pattern = isUniqueTarget
-        ? _buildNicknameCandidatePattern(nickname)
-        : `%${_escapeLike(nickname)}%`;
-      if (!pattern) return { data: [], error: null };
+      const targetProfile = (profiles || []).find(profile => String(profile.user_id) === String(userId));
+      const identitiesByKey = new Map();
+      for (const profile of profiles || []) {
+        for (const key of _getIdentityKeys(profile)) {
+          if (!identitiesByKey.has(key)) identitiesByKey.set(key, new Set());
+          identitiesByKey.get(key).add(String(profile.user_id));
+        }
+      }
+      const uniqueTargetKeys = new Set(_getIdentityKeys(targetProfile)
+        .filter(key => identitiesByKey.get(key)?.size === 1 && identitiesByKey.get(key).has(String(userId))));
+      const candidatePatterns = new Set([
+        `%${_escapeLike(nickname)}%`,
+        ...[...uniqueTargetKeys].map(key => _buildNicknameCandidatePattern(key)),
+      ].filter(Boolean));
+      if (!candidatePatterns.size) return { data: [], error: null };
       const { data, error } = await db.from('game_play_records')
         .select(columns.includes('player_names') ? columns : `${columns},player_names`)
-        .ilike('player_names', pattern)
+        .or([...candidatePatterns].map(pattern => `player_names.ilike.${pattern}`).join(','))
         .order('created_at', { ascending: false });
       if (error) return { data: [], error };
       const filtered = (data || []).filter(row => _splitPlayerNames(row.player_names).some(token => {
-        if (isUniqueTarget) return _normalizeNickname(token) === key;
-        return _rawNicknameTokenEqual(token, nickname);
+        return _rawNicknameTokenEqual(token, nickname) || uniqueTargetKeys.has(_normalizeNickname(token));
       }));
       return { data: filtered, error: null };
     } catch (error) {
