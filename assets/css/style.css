@@ -6762,7 +6762,7 @@ html:not(.intro-wizard-embed) body.embed-mode .intro-wizard-close{display:none!i
 .intro-wizard-progress{margin:0 0 2px;color:var(--green-2);font-size:12px;font-weight:800;}
 .intro-wizard-close,.intro-wizard-prev{border:0;background:none;color:var(--muted);font-family:inherit;font-weight:800;cursor:pointer;}
 .intro-wizard-close{padding:6px;font-size:18px;line-height:1;}
-.intro-wizard-body{flex:1 1 auto;min-height:0;overflow-y:auto;padding:20px;}
+.intro-wizard-body{flex:1 1 auto;min-height:0;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;padding:20px;}
 .intro-wizard-step{display:none;}
 .intro-wizard-step.is-active{display:block;}
 .intro-wizard-step h3{margin-bottom:16px;}

@@ -19,6 +19,7 @@
 
 - **게임정보 canonical surface** — 홈페이지 기능의 추천게임찾기·플레이기록·내 보드·모임플래너 어느 진입점에서도 `openGameSheet()`/`.game-sheet` local bottom-sheet renderer를 사용한다. Modal Stack Host는 게임정보·기록·위치·안내 iframe child route를 만들지 않으며, geometry owner와 functional surface를 분리한다. Independent Overlay인 게임시트의 prepare/ready는 parent geometry owner를 재분류하지 않아 추천 전체보기의 outer geometry를 보존한다. 사용자 확인 대기: 네 진입점의 게임정보와 게임 A→B/기록/위치/안내 local flow.
 - **공통 Modal Stack Host** — `docs/plans/modal-stack-host-plan.md`의 기존 host 구조를 유지한다. game flow는 Host-owned flow-close X와 one-step ←를 분리해 drilldown에서도 둘 다 유지하며, X는 현재 contiguous game flow를 닫고 ←/ESC는 top frame 하나만 복귀한다. child route는 추천 전체보기만 유지한다. 내 보드/읽기 전용 프로필은 `openProfilePanel()` local surface, 모임 조율은 `openDateMeetingModal()` compact local surface를 현재 document에서 재사용하며 Host child iframe을 만들지 않는다. 기존 모임원 프로필 작성·수정 wizard와 내 보드 내부 `_openSubSheet()` ← navigation은 보존한다. 사용자 확인 대기: 다른 modal/context → 내 보드의 lifecycle, 내 보드 하위 board navigation, planner context → 모임 조율 compact geometry.
+- **프로필 작성/수정 wizard scroll** — `club-intro.html`의 `.intro-wizard-body`가 유일한 flex scroll owner(`min-height:0`, `overflow-y:auto`)이며 `overscroll-behavior:contain`으로 하단 scroll chain을 parent profile/modal로 넘기지 않는다. wizard header·footer와 parent X close delegation은 유지한다. 사용자 확인 대기: wizard 최하단에서 계속 scroll해 parent profile/modal이 움직이지 않는지.
 
 ## 2. NEXT (자동 착수 금지)
 
