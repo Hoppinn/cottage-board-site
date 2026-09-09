@@ -2001,6 +2001,13 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
     const snap = await window.CottageDB?.getProfileSnapshot?.(user.id);
     if (snap?.nickname) user.nickname = snap.nickname;
   }
+  // member_intros.nickname은 모임원 카드와 같은 공개 표시명 정본이다. 대상의 stable user_id로
+  // 먼저 읽어 profiles의 카카오명/실명이 공개 제목이나 participant 집계를 덮지 않게 한다.
+  const meetingProfilePromise = (window.CottageDB?.getProfileBoardData?.(String(user.id))
+    || window.CottageDB?.getMeetingProfile?.(String(user.id))
+    || Promise.resolve(null)).catch(() => null);
+  const canonicalProfile = await meetingProfilePromise;
+  if (readOnly && canonicalProfile?.nickname) user.nickname = canonicalProfile.nickname;
   // 편집 컨트롤 HTML 생략 헬퍼 (읽기전용이면 '' 반환)
   const _ro = html => (readOnly ? '' : html);
   // P4 오너 게이트: **보는 사람(self)이 오너 + 남의 보드(readOnly) + 대상이 오너가 아닐 때만**.
@@ -2129,7 +2136,7 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
   // likedGames/curiousGames를 따로 조회하지 않는다 — getMeetingProfile이 내부에서 같은
   // getUserLikedGamesAll/getUserCuriousGamesAll를 부르므로 예전엔 같은 쿼리를 한 Promise.all에서
   // 두 번 쏘고 결과를 별도 배열로 들고 있었다. 그 중복이 크로스보드 stale의 실체였다(R10b).
-  const [stats, notifs, _codexResult, userStats, voucherBalance, voucherProducts, voucherHistory, allBioSuggestions, _upcomingCardVotes, _upcomingCardGames, meetingProfile, _noticeAckKeys] = await Promise.all([
+  const [stats, notifs, _codexResult, userStats, voucherBalance, voucherProducts, voucherHistory, allBioSuggestions, _upcomingCardVotes, _upcomingCardGames, _noticeAckKeys] = await Promise.all([
     window.CottageDB.getMyStats(String(user.id), user.nickname || null),
     // 알림·교환권은 비공개 → 읽기전용에서는 조회하지 않음(개인정보)
     readOnly ? Promise.resolve([]) : (window.CottageDB.getMyNotifications?.(String(user.id), user.nickname || null, _sessForNotif.notifSeenAt || null, _sessForNotif.newGameSeenAt || null) || Promise.resolve([])),
@@ -2141,10 +2148,10 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
     (window.CottageDB?.getAllBioTagSuggestions?.() || Promise.resolve([])).catch(() => []),
     (window.CottageDB?.getMeetingVotes?.(_upcomingStart, _upcomingEnd) || Promise.resolve([])).catch(() => []),
     (window.CottageDB?.getMeetingVoteGames?.(_upcomingStart, _upcomingEnd) || Promise.resolve([])).catch(() => []),
-    (window.CottageDB?.getProfileBoardData?.(String(user.id)) || window.CottageDB?.getMeetingProfile?.(String(user.id)) || Promise.resolve(null)).catch(() => null),
     // 전체공지·교환권공지 확인 여부 — 기기 간 동기화용(로컬 세션만으론 재노출됨)
     readOnly ? Promise.resolve([]) : (window.CottageDB?.getNoticeAckKeys?.(String(user.id)) || Promise.resolve([])).catch(() => []),
   ]);
+  const meetingProfile = canonicalProfile;
   // 읽기전용: 대상 유저 닉네임을 stats.profile에서 확정 후 헤더 갱신
   if (readOnly && !user.nickname) {
     user.nickname = stats?.profile?.nickname || '회원';

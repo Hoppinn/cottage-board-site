@@ -1397,6 +1397,7 @@ async function initRecentPlay() {
       if (!p.user_id) continue;
       if (p.nickname) _addUniqueNick(p.nickname, p.user_id);
       if (p.real_name) _addUniqueNick(p.real_name, p.user_id);
+      if (p.public_nickname) _addUniqueNick(p.public_nickname, p.user_id);
     }
     for (const rec of records) { if (rec.user_id && rec.nickname) _addUniqueNick(rec.nickname, rec.user_id); }
     // 이 기록이 내 것(또는 오너)인지 — 사진 삭제 권한

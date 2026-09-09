@@ -609,6 +609,7 @@
         if (!p.user_id) continue;
         if (p.nickname) _setUniqueNicknameMap(_profileNickMap, p.nickname, p.user_id);
         if (p.real_name) _setUniqueNicknameMap(_profileNickMap, p.real_name, p.user_id);
+        if (p.public_nickname) _setUniqueNicknameMap(_profileNickMap, p.public_nickname, p.user_id);
       }
       // (014) 각 기록에 매인 남의 게임평을 한 번에 로드 — 기록 id로 묶어 buildSessionBody가 읽는다.
       _recordCommentsMap = new Map();

@@ -757,10 +757,10 @@
         return `
         <div class="intro-card-news${clickable ? ' intro-card-news--clickable' : ''}" data-id="${r.id}" data-user-id="${escHtml(r.user_id || '')}" data-color="${escHtml(r.card_color||'')}" data-idx="${idx}">
           <div class="intro-card-news-head">
-            ${clickable ? `<button class="intro-card-news-identity" data-user-id="${escHtml(r.user_id)}" type="button" aria-label="${escHtml(r.nickname)} 내 보드 열기"><span class="intro-card-news-avatar">${repAvatar}</span><strong class="intro-card-news-name">${escHtml(r.nickname)}</strong></button>` : `<div class="intro-card-news-identity"><span class="intro-card-news-avatar">${repAvatar}</span><strong class="intro-card-news-name">${escHtml(r.nickname)}</strong></div>`}
+            ${clickable ? `<button class="intro-card-news-identity" data-user-id="${escHtml(r.user_id)}" data-nickname="${escHtml(r.nickname)}" type="button" aria-label="${escHtml(r.nickname)} 내 보드 열기"><span class="intro-card-news-avatar">${repAvatar}</span><strong class="intro-card-news-name">${escHtml(r.nickname)}</strong></button>` : `<div class="intro-card-news-identity"><span class="intro-card-news-avatar">${repAvatar}</span><strong class="intro-card-news-name">${escHtml(r.nickname)}</strong></div>`}
             ${actions}
           </div>
-          <div class="intro-card-news-body"${clickable ? ` data-user-id="${escHtml(r.user_id)}" role="button" tabindex="0" aria-label="${escHtml(r.nickname)} 프로필 보드 열기"` : ''}>
+          <div class="intro-card-news-body"${clickable ? ` data-user-id="${escHtml(r.user_id)}" data-nickname="${escHtml(r.nickname)}" role="button" tabindex="0" aria-label="${escHtml(r.nickname)} 프로필 보드 열기"` : ''}>
             ${r.expectation || r._bio ? `<p class="intro-card-news-message">${escHtml(r.expectation || r._bio)}</p>` : ''}
             ${introCardSummary('🎲', '주 취향', gameTypes)}
             ${introCardSummary('⚖️', '주 난이도', depthSummary)}
@@ -783,7 +783,7 @@
         head.addEventListener('click', e => {
           e.preventDefault();
           e.stopPropagation();
-          window.openOtherProfileSheet?.(head.dataset.userId);
+          window.openOtherProfileSheet?.(head.dataset.userId, { nickname: head.dataset.nickname });
         });
       });
       el.querySelectorAll('.intro-card-news-body[data-user-id]').forEach(cardBody => {
@@ -792,7 +792,7 @@
           if (e.type === 'keydown' && e.target !== cardBody) return;
           e.preventDefault();
           e.stopPropagation();
-          window.openOtherProfileSheet?.(cardBody.dataset.userId, { autoSubsheet: 'taste' });
+          window.openOtherProfileSheet?.(cardBody.dataset.userId, { autoSubsheet: 'taste', nickname: cardBody.dataset.nickname });
         };
         cardBody.addEventListener('click', openProfileBoard);
         cardBody.addEventListener('keydown', openProfileBoard);

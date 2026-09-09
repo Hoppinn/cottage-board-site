@@ -117,8 +117,8 @@ window._cottageSess = (function () {
 
   // 현재 표시 닉네임과 가입 때 저장한 본명은 같은 회원 identity의 별칭이다.
   // 어느 별칭 키든 다른 회원과 충돌하면 그 키는 정규화 연결에 쓰지 않는다.
-  function _getIdentityKeys(profile) {
-    return [...new Set([profile?.nickname, profile?.real_name]
+  function _getIdentityKeys(profile, publicNickname = null) {
+    return [...new Set([profile?.nickname, profile?.real_name, publicNickname]
       .map(_normalizeNickname)
       .filter(Boolean))];
   }
@@ -126,17 +126,25 @@ window._cottageSess = (function () {
   async function _getParticipantRows(userId, nickname, columns) {
     if (!nickname) return { data: [], error: null };
     try {
-      const { data: profiles, error: profileError } = await db.from('profiles').select('user_id,nickname,real_name');
+      const [profileRes, introRes] = await Promise.all([
+        db.from('profiles').select('user_id,nickname,real_name'),
+        db.from('member_intros').select('user_id,nickname'),
+      ]);
+      const { data: profiles, error: profileError } = profileRes;
       if (profileError) return { data: [], error: profileError };
+      if (introRes.error) return { data: [], error: introRes.error };
+      const publicNickByUserId = new Map((introRes.data || [])
+        .filter(intro => intro.user_id && intro.nickname)
+        .map(intro => [String(intro.user_id), intro.nickname]));
       const targetProfile = (profiles || []).find(profile => String(profile.user_id) === String(userId));
       const identitiesByKey = new Map();
       for (const profile of profiles || []) {
-        for (const key of _getIdentityKeys(profile)) {
+        for (const key of _getIdentityKeys(profile, publicNickByUserId.get(String(profile.user_id)))) {
           if (!identitiesByKey.has(key)) identitiesByKey.set(key, new Set());
           identitiesByKey.get(key).add(String(profile.user_id));
         }
       }
-      const uniqueTargetKeys = new Set(_getIdentityKeys(targetProfile)
+      const uniqueTargetKeys = new Set(_getIdentityKeys(targetProfile, publicNickByUserId.get(String(userId)))
         .filter(key => identitiesByKey.get(key)?.size === 1 && identitiesByKey.get(key).has(String(userId))));
       const candidatePatterns = new Set([
         `%${_escapeLike(nickname)}%`,
@@ -1625,9 +1633,19 @@ window._cottageSess = (function () {
 
   async function getAllProfiles() {
     try {
-      const { data, error } = await db.from('profiles').select('*').order('last_seen_at', { ascending: false });
-      if (error) console.error('[getAllProfiles]', error);
-      return data || [];
+      const [profileRes, introRes] = await Promise.all([
+        db.from('profiles').select('*').order('last_seen_at', { ascending: false }),
+        db.from('member_intros').select('user_id,nickname'),
+      ]);
+      if (profileRes.error) console.error('[getAllProfiles:profiles]', profileRes.error);
+      if (introRes.error) console.error('[getAllProfiles:member_intros]', introRes.error);
+      const publicNickByUserId = new Map((introRes.data || [])
+        .filter(intro => intro.user_id && intro.nickname)
+        .map(intro => [String(intro.user_id), intro.nickname]));
+      return (profileRes.data || []).map(profile => ({
+        ...profile,
+        public_nickname: publicNickByUserId.get(String(profile.user_id)) || null,
+      }));
     } catch (err) { console.error('[getAllProfiles]', err); return []; }
   }
 

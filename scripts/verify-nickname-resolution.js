@@ -7,7 +7,7 @@ function normalizeNick(value) {
 }
 
 function identityKeys(profile) {
-  return [...new Set([profile.nickname, profile.real_name].map(normalizeNick).filter(Boolean))];
+  return [...new Set([profile.nickname, profile.real_name, profile.public_nickname].map(normalizeNick).filter(Boolean))];
 }
 
 function matchesPlayerNames(playerNames, nickname, profiles, userId) {
@@ -42,7 +42,7 @@ assert.equal(matchesPlayerNames('덕지', '덕 지', [
   { user_id: 'b', nickname: '덕지' },
 ], 'a'), false, '정규화 충돌 자동 연결 차단');
 assert.equal(matchesPlayerNames('서은희', '써니', [
-  { user_id: 'sunny', nickname: '써니', real_name: '서은희' },
+  { user_id: 'sunny', nickname: '서은희(Sun...)', real_name: '서은희', public_nickname: '써니' },
 ], 'sunny'), true, '본명 토큰을 유일한 회원 닉네임으로 연결');
 assert.equal(matchesPlayerNames('서 은 희', '써니', [
   { user_id: 'sunny', nickname: '써니', real_name: '서은희' },
@@ -51,6 +51,9 @@ assert.equal(matchesPlayerNames('서은희', '써니', [
   { user_id: 'sunny', nickname: '써니', real_name: '서은희' },
   { user_id: 'other', nickname: '서은희' },
 ], 'sunny'), false, '본명-닉네임 충돌 자동 연결 차단');
+assert.equal(matchesPlayerNames('써니', '써니', [
+  { user_id: 'sunny', nickname: '서은희(Sun...)', public_nickname: '써니' },
+], 'sunny'), true, '모임원 공개 닉네임도 stable user_id의 identity 별칭으로 연결');
 
 const clientSource = fs.readFileSync(path.join(__dirname, '../assets/js/supabase-client.js'), 'utf8');
 for (const name of ['getMyStats', 'getMyNotifications', 'getUserPlayedGames', 'getUserParticipationCount', 'getUserUniqueDayCount']) {
@@ -60,5 +63,19 @@ for (const name of ['getMyStats', 'getMyNotifications', 'getUserPlayedGames', 'g
   const body = clientSource.slice(start, next === -1 ? undefined : next);
   assert.ok(body.includes('_getParticipantRows('), `${name} 공통 참여자 판정 사용`);
 }
+const participantStart = clientSource.indexOf('async function _getParticipantRows');
+const participantEnd = clientSource.indexOf('\n  // 기록 추가', participantStart);
+const participantBody = clientSource.slice(participantStart, participantEnd);
+assert.ok(participantBody.includes("member_intros').select('user_id,nickname')"), '참여자 resolver가 모임원 공개 nickname 별칭을 조회');
+assert.ok(participantBody.includes('publicNickByUserId'), '참여자 resolver가 stable user_id별 공개 nickname을 병합');
+
+const introSource = fs.readFileSync(path.join(__dirname, '../pages/club/club-intro.html'), 'utf8');
+assert.ok(introSource.includes('data-nickname="${escHtml(r.nickname)}"'), '모임원 카드가 canonical nickname을 stable user_id와 함께 보존');
+assert.ok(introSource.includes('nickname: head.dataset.nickname'), '모임원 헤더 클릭이 canonical nickname을 상세로 전달');
+assert.ok(introSource.includes("autoSubsheet: 'taste', nickname: cardBody.dataset.nickname"), '모임원 본문 클릭도 같은 canonical nickname을 전달');
+
+const authSource = fs.readFileSync(path.join(__dirname, '../assets/js/kakao-auth.js'), 'utf8');
+assert.ok(authSource.includes('const meetingProfilePromise ='), 'read-only 상세가 stable user_id의 공개 프로필을 먼저 조회');
+assert.ok(authSource.indexOf('const meetingProfilePromise =') < authSource.indexOf('window.CottageDB.getMyStats(String(user.id), user.nickname || null)'), '공개 nickname 확정 뒤 같은 stable user_id로 통계 조회');
 
 console.log('PASS nickname resolution fixtures');
