@@ -14,6 +14,8 @@
 
 ## 2. NEXT (자동 착수 금지)
 
+1. **Active-view 페이지 분석 실사용 검증** — active-view 구현은 완료됐다. 일반 사용자가 대표 센터모달·바텀시트·iframe surface를 열고 닫은 뒤 active-view key가 `page_sessions`에 기록되고 관리자 페이지의 `페이지` 분석에 표시되는지 확인한다. 관리자 계정 자체의 analytics 제외와는 별개다. 상세: [PLAN_active_view_tracking.md](PLAN_active_view_tracking.md).
+
 2. **nested profile underlying scroll boundary** — `모임원프로필페이지 → 개인카드 상세보기 → 프로필보드`에서 최하단 반복 아래 scroll 또는 최상단 반복 위 scroll이 underlying 모임원프로필페이지로 넘어가지 않는지 확인한다. 동일 scroll-owner/boundary 구조의 center modal·bottom sheet·subsheet·nested overlay만 비교하고, 사이트 전체 overlay 문제로 일반화하지 않는다. iPhone/Safari도 확인 대상이며 wizard overscroll과는 별개다.
 3. **게임 데이터 확인** — 보유게임 스위트랜드 추가, 파수꾼 `도착예정 → 쉬운협력게임`, 페야의늪 `도착예정 → 헤비매니아` 요구를 데이터 정본과 대조한다. 현재 출력은 파수꾼=`active/incoming`, 페야의늪=`active/heavy_strategy`이며 스위트랜드 일치 항목은 미확인이다.
 4. **가입경로 보드라이프** — `member_intros.join_sources` 허용 목록·입력 UI·표시 라벨·최신 RPC 마이그레이션을 함께 바꾸는 Red Plan 승인 후 구현한다.
