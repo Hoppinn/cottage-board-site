@@ -93,7 +93,7 @@
 - 사용자가 만나는 곳: 게임정보 모달의 게임 위치 버튼
 - 실제 화면 표시명: 게임 위치
 - 주요 코드 대응: `assets/js/game-sheet.js`의 `openShelfSheet()` / `.shelf-sheet-overlay` / `.shelf-sheet-box` / `pages/game/game-location.html`
-- 구분: 게임정보 모달 위에 child center modal로 쌓이며, `← 게임 위치`로 게임정보 모달에 복귀한다. 위치 목록 안에서 다시 열리는 별도 기능 UI와는 구분한다.
+- 구분: 게임정보 모달 위에 local iframe 시트로 쌓이며, `← 게임 위치`로 게임정보 모달에 복귀한다. Host 문맥에서는 ancestor presentation을 요청할 뿐 Host child frame으로 승격하지 않는다. 위치 목록 안에서 다시 열리는 별도 기능 UI와는 구분한다.
 
 ## 2. 공통 UI 용어
 
@@ -101,7 +101,7 @@
 
 현재 페이지 위에 백드랍을 깔고 화면 중앙 또는 중앙에 가까운 위치에 큰 패널을 여는 UX 분류명이다. 특정 구현 class명이 아니다.
 
-센터모달 사이를 이동하는 경우에는 모달 스택을 사용한다. `drill-down` 자식은 `←`(또는 ESC)로 한 단계만 이전 모달로 돌아간다. 별도 기능을 여는 `overlay` 자식의 `×`도 현재 top frame 하나만 닫아 바로 아래 modal의 DOM·스크롤·선택 상태를 보존한다. 부모는 DOM·스크롤·선택 상태를 보존한 채 inactive로 남고, 최상단 모달만 포인터·키보드·백드랍 입력을 받는다. 백드랍은 root가 한 번만 소유한다. 자식 모달은 투명한 입력 레이어와 panel만 추가하므로 push·pop 단계에 따라 dim·blur 강도가 바뀌지 않는다.
+센터모달 사이의 실제 Host child route는 현재 `recommend-all` 하나다. 이 frame은 `×`/ESC로 top frame 하나만 닫고, 아래 root DOM·스크롤·선택 상태를 보존한다. 부모는 inactive로 남고 최상단 frame만 포인터·키보드·백드랍 입력을 받으며, backdrop은 root가 한 번만 소유한다. 게임의 `←` drilldown과 profile local navigation은 각각 기존 local owner가 처리하므로, UX가 비슷하다는 이유로 Host stack으로 분류하지 않는다.
 
 ### 시트
 

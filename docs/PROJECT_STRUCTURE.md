@@ -368,10 +368,12 @@ embed 모드에서는 `header.js`가 `document` 클릭을 가로채 내부 `.htm
 
 게임 상세시트 위에 게임위치 페이지를 바텀시트로 표시하는 스택 내비게이션.
 
+`openShelfSheet()`는 기존 dim/panel/scroll tree를 유지하는 local sheet이며 새 Host frame으로 승격하지 않는다. Host 문맥에서는 `CottageFunctionalSurface.requestAncestor()`가 ancestor presentation을 요청해 requesting Host 바로 위 local layer를 계산한다. 새 전역 고정 z-index를 부여하지 않으며, presentation stack과 local navigation의 정본은 [UI_PATTERNS.md](UI_PATTERNS.md) P3-B다.
+
 ```
 게임시트(A) 열림
   → openShelfSheet(?embed=1&highlight=A) 호출
-  → 선반 오버레이(z:9600) 표시 — 선반에서 게임 칩 클릭
+  → 선반 오버레이 표시 — 선반에서 게임 칩 클릭
   → postMessage({ action:'openGame', gameId }) 수신
   → 선반 z:0 + pointerEvents:none (숨김)
   → openGameSheet(B) 호출
@@ -557,6 +559,8 @@ game-reviews.html — 기록 입력 탭
   script-nav.js PAGE SESSION TRACKER ← visibilitychange / pagehide / 활성 뷰 push·pop
     현재 페이지·활성 뷰 구간을 3초 이상일 때 keepalive POST
     실제 duration_sec > 0을 쓰는 유일한 writer
+    surface owner는 push가 돌려준 token으로만 pop하며 stale close는 현재 top view를 닫지 않음
+    embedded iframe은 writer/token owner가 아니고 parent가 open 1회 push·close 1회 pop
 
 [비로그인 방문자 추적]
   cottage-auth-changed 이벤트 없거나 user=null → _startAnonHeartbeat()

@@ -312,10 +312,10 @@ window.escH = (s) => String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;')
 |------|--------|------|
 | `window.COTTAGE_PAGE_SLUG(pathname)` | — (함수) | **저장용 SSOT** (#14). `page_sessions.page`에 넣을 슬러그를 만든다. `script-nav.js` 세션 트래커와 `supabase-client.js` `_startAnonHeartbeat`이 **둘 다 이 함수**를 쓴다 |
 | `window.COTTAGE_PAGE_LABELS` | slug (예: `'about'`) | **표시용 SSOT.** requests-admin.html의 `page_views`·`page_sessions` 양쪽 화면이 전부 이 맵으로 이름을 붙인다 |
-| `window.COTTAGE_ACTIVE_VIEWS` | 활성 뷰 key | 장시간 모달·시트의 `{key,label,v2Only}` registry. lifecycle은 각 소유 파일이 `pushActiveView`/`popActiveView`로 유지하며, `label`은 `COTTAGE_PAGE_LABELS`에서 파생한다. `v2Only:true`는 반드시 `MemberAnalytics.V2_ONLY_PAGE_KEYS`에 있어야 한다 |
+| `window.COTTAGE_ACTIVE_VIEWS` | 활성 뷰 key | 장시간 모달·시트의 `{key,label,v2Only}` registry. lifecycle은 각 surface owner가 `pushActiveView`/`popActiveView`로 유지하며, `label`은 `COTTAGE_PAGE_LABELS`에서 파생한다. `pushActiveView()`가 돌려준 token은 그 owner scope에 보관하고 같은 token으로만 pop한다. stale/unknown token 또는 현재 stack에 없는 token은 무시되어 다른 surface의 active view를 닫지 않는다. `v2Only:true`는 반드시 `MemberAnalytics.V2_ONLY_PAGE_KEYS`에 있어야 한다 |
 | `window.COTTAGE_PAGE_LABELS_BY_PATH` | pathname | ⚠️ **앱 코드에 소비처가 없다** (2026-07-21, #28). 마지막 용도였던 `page_sessions.referrer` 저장이 `COTTAGE_SESSION_REF`로 바뀌면서 비었고, 지금 읽는 건 `scripts/audit-page-buckets.js` 하나뿐이다. **그래서 삭제하지 않았다** — 지우려면 그 스크립트를 먼저 옮길 것 |
 
-홈 iframe 모달에서 실제 독립 페이지를 보여줄 때는 별도 가상 key를 만들지 않고 registry의 실페이지 key를 쓴다. 현재 `game-reviews`, `club-intro`는 `v2Only:false`이며, iframe 자신은 embedded-frame guard로 추적하지 않고 부모가 open 1회 push·close 1회 pop한다.
+홈 iframe 모달에서 실제 독립 페이지를 보여줄 때는 별도 가상 key를 만들지 않고 registry의 실페이지 key를 쓴다. 현재 `game-reviews`, `club-intro`는 `v2Only:false`이며, iframe 자신은 embedded-frame guard로 duration writer와 active-view API를 소유하지 않는다. 부모 surface owner가 open 1회 push·close 1회 pop하고, iframe은 parent message로만 view 상태를 알린다. 같은 embedded surface를 별도 `page_sessions` writer 또는 독립 active-view stack으로 추적하지 않는다.
 
 🚨 **표시 라벨을 DB에 저장하지 않는다** (#14, 2026-07-20). 예전엔 트래커가 `BY_PATH`의 한글 라벨을 `page_sessions.page`에 그대로 넣어서, **라벨을 개명할 때마다 같은 페이지가 새 버킷으로 쪼개졌다**(11,777행이 42종으로 흩어짐). 지금은 **저장=슬러그 / 표시=라벨**로 분리돼 있어 `COTTAGE_PAGE_LABELS` 값은 자유롭게 고쳐도 데이터가 안 갈린다.
 

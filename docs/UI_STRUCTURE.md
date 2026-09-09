@@ -17,7 +17,7 @@
 |---|---|
 | Outer container / layer | standalone/root page, root center-modal, root iframe modal, Modal Stack Host child frame, root modal 내부 local overlay, profile local subsheet, bottom-sheet-style local overlay |
 | Rendering method | same-document static/renderer, iframe document, iframe 안에서 기존 renderer 재사용, local component/subsheet, 기존 page DOM 재사용 |
-| Parent / child | root, Host independent child frame, Host drilldown child frame, root modal 내부 local overlay, profile local navigation child, standalone |
+| Parent / child | root, current Host independent child frame, root modal 내부 local overlay, profile local navigation child, standalone |
 | Geometry owner | viewport root overlay/shell, Modal Stack Host shell, profile parent panel, local overlay box; Host child mode에서는 child가 outer geometry를 다시 소유하지 않아야 함 |
 | Presentation / layer owner | current document for local surfaces, or the nearest already-loaded ancestor canonical renderer for a registry surface with `presentationOwner: 'ancestor'`. When needed, `presentationStack` separately defines the renderer's position relative to the requesting Host layer. Neither changes the preserved parent outer geometry. |
 | Functional renderer / surface | feature-owned renderer type is independent from geometry and presentation owner. `game-info`/record use `game-sheet`; game-location uses `openShelfSheet()`; profile uses `profile-panel`; meeting-adjust uses `meeting-adjust`. A presentation portal reuses the existing canonical renderer and its local close never pops the preserved parent frame. The parent owns only its outer context; `meeting-adjust` keeps its compact variant. |
@@ -42,7 +42,7 @@
 | 게임기록 (독립 페이지) | `/pages/game/game-reviews.html` | standalone/root page | same document, may be embedded as above | root or 홈 iframe | page layout / parent iframe shell | page document | standalone header; iframe parent close | `.inner-page`, `.game-sheet-panel` | `game-reviews.js`, `openGameRecordSheet()` | active | 코드 확인됨 / runtime 필요 |
 | 게임기록 상세 | 게임기록 item/thumbnail | local `game-sheet` bottom sheet | canonical existing `openGameRecordSheet()` renderer in the current document | 게임기록 | `.game-sheet-panel` local functional surface | game sheet scroll area | local game sheet close | `.game-sheet`, `.game-sheet-panel` | `openGameRecordSheet()` | canonical local | 코드 확인됨 / runtime 필요 |
 | 내 보드 | header/login/profile entry | local profile panel; Host iframe에서는 ancestor presentation layer directly above requesting Host | canonical `openProfilePanel()` renderer, reused without a Host child document | standalone page, planner/member-profile/guide root context | `.profile-panel-box` is feature layout; parent shell geometry remains unchanged | `.profile-panel-body` | local `.profile-panel-close`; parent outer × remains parent-owned | `#profilePanel`, `.profile-panel`, `.profile-panel-box`, `.profile-panel-body` | `openProfilePanel()` | canonical local + ancestor presentation stack | code confirmed; user speed/visual verification needed |
-| 프로필 보드 | 내 보드 카드 | profile local subsheet | local component | 내 보드 | `.profile-subsheet-box`; Host child mode fills Host frame, remains local navigation | `.profile-subsheet-body` | profile subsheet ←; its close is hidden in Host child mode | `#profileSubSheet`, `.profile-subsheet-box`, `.profile-subsheet-body` | `_openSubSheet('프로필 보드', ...)` | active local navigation | 코드 확인됨 / runtime 필요 |
+| 프로필 보드 | 내 보드 카드 | profile local subsheet | local component | 내 보드 | `.profile-subsheet-box`; parent profile panel geometry and local navigation are retained | `.profile-subsheet-body` | profile subsheet ←; local profile close path remains owner | `#profileSubSheet`, `.profile-subsheet-box`, `.profile-subsheet-body` | `_openSubSheet('프로필 보드', ...)` | active local navigation | 코드 확인됨 / runtime 필요 |
 | 모임 보드 | 내 보드 카드 / member profile route | profile local subsheet | local component | 내 보드 or read-only member board | same as 프로필 보드 | `.profile-subsheet-body` | same as 프로필 보드 | same selectors | `_openSubSheet('모임 보드', ...)`, `openOtherMeetingSheet()` | active local navigation | 코드 확인됨 / runtime 필요; overscroll is NEXT |
 | 모임원 프로필 | 홈 모임원 보기 | root iframe modal + Modal Stack Host root | iframe `pages/club/club-intro.html` | 홈페이지 | `.record-iframe-panel`; Host child frame for stack requests | root iframe document | parent `#memberProfilesClose`; when wizard open it delegates to child | `#memberProfilesModal`, `#memberProfilesFrame`, `#memberProfilesClose` | member-profile modal init, `CottageModalStackHost.create()` | active Host root | root X → wizard close delegation **runtime 확인됨** per 2026-09-09 state |
 | 프로필 작성/수정 wizard | 모임원 프로필 iframe entry | iframe-internal local layer | local component in `club-intro.html` | 모임원 프로필 root iframe | `.intro-wizard` local container (not promoted to Host frame) | `.intro-wizard-body` (`min-height:0`, `overflow-y:auto`, `overscroll-behavior:contain`); open 동안 root `html/body` is locked | iframe wizard close; parent X delegates while wizard open | `.intro-wizard`, `.intro-wizard-body`, `.intro-wizard-close` | `cottage-profile-wizard-state`, `cottage-close-profile-wizard` messages | active local exception | runtime close delegation 확인됨; lower-boundary root-scroll lock user verification needed |
@@ -76,7 +76,7 @@ These are document/root-layout owners unless embedded by another structure.
 - 홈 모임 플래너
 - 홈 모임원 프로필
 
-All use a root iframe and create a Host. Their root shell remains the outer geometry owner; Host owns only pushed child frames and does not add another backdrop.
+All use a root iframe and create a Host. Their root shell remains the outer geometry owner; Host owns only pushed child frames and does not add another backdrop. The current Host child-route registry contains `recommend-all` only.
 
 ### Root iframe modal without Modal Stack Host
 
@@ -86,19 +86,15 @@ It has a root iframe and its own close/lightbox coordination, but current code d
 
 ### Modal Stack Host child iframe
 
-- 추천 전체보기 / 게임 더 찾기
-- 모임 조율
-- 내 보드 / read-only member board
+- 추천 전체보기 / 게임 더 찾기 (`recommend-all`)
 
-These overlap with the iframe-document group. Their child iframe invokes an existing renderer through `stackKind`; it is not a newly copied page.
+This is the only current Host child route. Its child iframe invokes the existing renderer through `stackKind`; it is not a newly copied page. 모임 조율, 내 보드/read-only member board, and game surfaces are canonical local surfaces in the already-open document, not Host child routes.
 
 ### Host overlay frame
 
-- 추천 전체보기
-- 모임 조율
-- 내 보드 / read-only member board
+- 추천 전체보기 (`recommend-all`)
 
-They use Host-owned outer geometry and Host-owned ×, while their prior frame stays inert below them.
+This is the only current Host overlay frame. It uses Host-owned outer geometry and Host-owned ×, while its prior frame stays inert below it.
 
 ### Profile local navigation/subsheet
 
@@ -107,11 +103,11 @@ They use Host-owned outer geometry and Host-owned ×, while their prior frame st
 - 내 보드 → 기록 보드
 - 내 보드 → 함께한 시간 / 수집 보드 / 알림 / 교환권 / 회원 분석
 
-This is not a Host push. It makes `#profileSubSheet`, makes the parent `#profilePanel` inert, and restores that parent on ←/ESC. When the profile panel itself is a Host child, child mode removes only duplicate outer geometry/chrome; the subsheet relationship remains local.
+This is not a Host push. It makes `#profileSubSheet`, makes the parent `#profilePanel` inert, and restores that parent on ←/ESC. A profile panel requested from a Host context retains its portal/root geometry and the subsheet relationship remains local.
 
 ### Local iframe modal not currently a Host child
 
-- 게임정보 → 게임위치 in non-stack contexts (`#shelfSheetOverlay`)
+- 게임정보 → 게임위치 (`#shelfSheetOverlay`; Host 문맥에서는 ancestor presentation)
 - day-detail → 모임 플래너/등록·수정 (`#__plannerModal`)
 - 홈 플레이기록 modal
 
@@ -119,7 +115,7 @@ These use their own overlay/shell lifecycle. They must not be assumed to be equi
 
 ### Local same-document overlay
 
-- 게임정보 → 게임안내 in non-stack contexts (`#ruleHubModal`)
+- 게임정보 → 게임안내 (`#ruleHubModal`)
 - 게임정보 / 게임기록 local sheet
 - 모임 조율 local `#__ddModal`
 
@@ -129,29 +125,29 @@ These use their own overlay/shell lifecycle. They must not be assumed to be equi
 |---|---|---|---|
 | Game information formerly had Host child routes and local sheets | `CottageModalStack.request()` now returns `false` for the `game-sheet` functional surface and Host has no game route | resolved duplicate renderer | every parent uses the existing local game-sheet flow |
 | Planner has two root iframe modal owners for the same `club-schedule.html` | homepage `#plannerSheetModal` versus `day-detail.js` `#__plannerModal`; comments explicitly protect their message sources | intentional legacy/local fallback | retain; they differ in root lifecycle and quick-entry behavior |
-| Profile local subsheet retains `.center-modal-shell` although it can live inside a Host child | shared `data-ui-geometry="host-fill"` neutralizes `.profile-subsheet-box` geometry | compatibility hotspot, not evidence of a second Host frame | retain; runtime-check scroll/overscroll separately |
+| Profile local subsheet retains `.center-modal-shell` while its parent may be portalled through ancestor presentation | subsheet stays in the profile feature's local tree and inherits the profile panel layer | compatibility hotspot, not evidence of a Host frame | retain; runtime-check scroll/overscroll separately |
 | Root/child chrome can share physical coordinates for member-profile wizard | postmortem measured iframe `.intro-wizard-close` and parent `#memberProfilesClose`; parent now delegates while wizard open | resolved ownership exception | retain delegation; do not classify as ordinary click-through |
 | Stack child iframe uses broad `guide-child-mode` name even outside guide | `header.js` adds it for every `modalFrame=child` | naming legacy / investigation candidate | no rename in this inventory |
 | `game-location` child keeps page `main` | classifier marks it functional content rather than global page content | route-specific content-source distinction | retain; its source is a page main, unlike component renderers |
-| Existing Host plan says host roots include three roots, while route registry has seven child kinds | source code confirms the distinction | documentation interpretation risk | this inventory separates root hosts from child kinds |
+| Host roots and child routes are distinct inventories | `modal-stack-host.js` has three root callers but the current child-route registry contains only `recommend-all` | documentation interpretation risk | keep root hosts and child registry separate |
 
 ## Implemented common markers
 
-`header.js` classifies every `modalStack=1&modalFrame=child` document before its renderer opens, then observes renderer insertion. The Host passes `stackPresentation=overlay|drilldown`; the parent shell carries the same ownership data. CSS reads these markers rather than a route class, page name, or HTML tag.
+`header.js` classifies the current `modalStack=1&modalFrame=child` document (`recommend-all`) before its renderer opens, then observes renderer insertion. The Host passes its overlay presentation data and the parent shell carries the same ownership data. CSS reads these markers rather than a route class, page name, or HTML tag. Generic marker support is not a child-route registry.
 
 | marker | scope | contract |
 |---|---|---|
-| `data-ui-structure="host-child"` | child `body` | P3/P4/P5 compatibility boundary; legacy `guide-child-mode` remains only for old non-contract rules. |
+| `data-ui-structure="host-child"` | current `recommend-all` child `body` | P3/P4 compatibility boundary; legacy `guide-child-mode` remains only for old non-contract rules. |
 | `data-ui-geometry-owner="host"` + `data-ui-geometry-variant="standard|compact"` + `data-ui-geometry="host-fill"` | Host shell, child body, reused Host child renderer box | Host is the only outer geometry owner; variant selects the Host shell shape, renderer fills iframe `0,0` and does not reapply center-modal inset/radius/shadow. |
-| `data-ui-functional-surface="game-sheet"` | game child body and `.game-sheet` renderer nodes | functional surface is distinct from outer geometry. Existing game-sheet DOM retains its local geometry, chrome, scroll, and lifecycle; Host does not create a game child iframe. |
+| `data-ui-functional-surface="game-sheet"` | canonical game renderer nodes | functional surface is distinct from outer geometry. Existing game-sheet DOM retains its local geometry, chrome, scroll, and lifecycle; Host does not create a game child iframe. |
 | `presentationOwner: 'ancestor'` + `CottageFunctionalSurface.requestAncestor()` | canonical functional-surface registry and caller | presentation portal selects an already-loaded ancestor document's same renderer for `game-sheet`, `profile-panel`, or `game-location`; it does not change `data-ui-surface-geometry-owner`, geometry variant, or parent shell. |
 | `data-ui-presentation-layer-owner="host"` + `presentationStack: 'above-requesting-host'` | `ModalStackHost` container and ancestor canonical surface request | the Host container supplies the requesting layer's computed z-index; game-sheet/profile-panel/game-location render directly above it. A portalled profile panel passes that relative layer to its body-sibling local subsheet. This is a semantic relative stack position, not a route selector or global z-index escalation. |
 | `data-ui-layer="host-transparent"` | reused local overlay/layer/backdrop | child layer can render content but does not create a second dim/blur or outer viewport geometry. |
 | `data-ui-chrome="global|global-content|host-duplicate|functional"` | page chrome and renderer controls | only global/duplicate chrome is suppressed; functional header, tab, search/filter, sticky control, and profile local back remain. |
-| `data-ui-flow-close-owner` + `data-ui-navigation-back-owner` + `data-ui-navigation="overlay|drilldown|local"` | Host shell/control, child body/profile local back | flow close and one-step back are independent: game flow root has X; its drilldown has ← + X; local remains inside its feature owner. |
+| `data-ui-flow-close-owner` + `data-ui-navigation-back-owner` + `data-ui-navigation="overlay|drilldown|local"` | Host shell/control, child body/profile local back | Host child close and local one-step back are independent. The current `recommend-all` frame uses Host close; game and profile navigation remains inside its feature owner. |
 | `data-ui-scroll-owner="feature"` + `data-ui-scroll-boundary="child"` | intended component scroll areas + child body | records the Host/child boundary without changing individual overflow or overscroll behavior. |
 
-The concrete renderer selector list is deliberately centralised in the classifier. Host child renderers receive shared geometry/chrome/scroll roles, while the game-sheet surface is explicitly excluded from Host outer-geometry and duplicate-chrome reset so its native local flow remains intact.
+The concrete renderer selector list is deliberately centralised in the classifier. The current Host child renderer receives shared geometry/chrome/scroll roles, while the game-sheet surface is explicitly excluded from Host outer-geometry and duplicate-chrome reset so its native local flow remains intact.
 
 ## Runtime verification queue
 
