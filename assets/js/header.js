@@ -5,9 +5,38 @@
   const _stackValue = _embedQuery.get('modalStack') || _embedHash.get('modalStack');
   const _stackFrame = _embedQuery.get('modalFrame') || _embedHash.get('modalFrame') || '';
   const _stackKind = _embedQuery.get('stackKind') || _embedHash.get('stackKind') || '';
+  const _stackPresentation = _embedQuery.get('stackPresentation') || _embedHash.get('stackPresentation') || 'overlay';
   let _localStackOpenDepth = 0;
+
+  // A Host child reuses an existing page/component renderer. Annotate concrete
+  // roles once so CSS can follow ownership instead of route or tag names.
+  function _applyHostChildContract() {
+    const body = document.body;
+    if (!body || _stackValue !== '1' || _stackFrame !== 'child') return;
+    const set = (selector, name, value) => document.querySelectorAll(selector)
+      .forEach(el => { el.dataset[name] = value; });
+
+    body.dataset.uiStructure = 'host-child';
+    body.dataset.uiGeometryOwner = 'host';
+    body.dataset.uiNavigation = _stackPresentation === 'drilldown' ? 'drilldown' : 'overlay';
+    body.dataset.uiChromeOwner = 'mixed';
+    body.dataset.uiScrollBoundary = 'child';
+
+    set('.site-header, .site-footer, .breadcrumb, .page-hero, .inner-page-title', 'uiChrome', 'global');
+    if (_stackKind === 'game-location') {
+      set('main', 'uiContentRole', 'functional');
+    } else {
+      set('main, #recommend, .inner-page', 'uiChrome', 'global-content');
+    }
+    set('.game-sheet-panel, .dd-meeting-modal, .recommend-overlay-panel, .profile-panel-box, .profile-subsheet-box, .rule-hub-box', 'uiGeometry', 'host-fill');
+    set('.game-sheet, .game-sheet-dim, .dd-overlay, .recommend-overlay, .profile-panel, .profile-subsheet, .rule-hub-overlay', 'uiLayer', 'host-transparent');
+    set('.game-sheet-close, .sheet-sticky-close, .dd-meeting-header .dd-x-btn, .recommend-overlay-close, .profile-panel-close, .profile-subsheet-close, .profile-subsheet-title, .rule-hub-back', 'uiChrome', 'host-duplicate');
+    set('.recommend-overlay-header, .profile-subsheet-header, .profile-subsheet-back', 'uiChrome', 'functional');
+    set('.profile-subsheet-back', 'uiNavigation', 'local');
+    set('.game-sheet-scroll, .rule-hub-scroll, .recommend-overlay-list, .profile-panel-body, .profile-subsheet-body, .dd-modal-scroll', 'uiScrollOwner', 'feature');
+  }
   window.CottageModalStack = {
-    state: () => ({ enabled: _stackValue === '1', frame: _stackFrame, kind: _stackKind, query: _embedQuery, hash: _embedHash }),
+    state: () => ({ enabled: _stackValue === '1', frame: _stackFrame, kind: _stackKind, presentation: _stackPresentation, query: _embedQuery, hash: _embedHash }),
     request: (kind, payload = {}, options = {}) => {
       if (_stackValue !== '1' || _localStackOpenDepth || window.parent === window) return false;
       const presentation = options?.presentation === 'drilldown' ? 'drilldown' : 'overlay';
@@ -32,6 +61,8 @@
       document.body.classList.add('guide-child-mode');
       // child chrome 예외는 URL 자체가 아니라 Host가 지정한 route kind에만 한정한다.
       if (/^[a-z-]+$/.test(_stackKind)) document.body.classList.add(`modal-stack-kind-${_stackKind}`);
+      _applyHostChildContract();
+      new MutationObserver(_applyHostChildContract).observe(document.body, { childList: true, subtree: true });
       document.addEventListener('keydown', function (e) {
         if (e.key !== 'Escape') return;
         if (window.CottageModalStack.pop()) {

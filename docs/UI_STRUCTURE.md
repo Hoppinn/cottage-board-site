@@ -9,7 +9,7 @@
 - **코드 확인**은 현재 HTML, JS 호출, 생성 DOM, CSS selector를 대조했다. 문서의 과거 설명은 보조 증거로만 썼다.
 - **runtime 확인됨**은 2026-09-09 Modal Stack postmortem에서 실제 화면/rect로 확인된 경로만 뜻한다. 나머지 `코드 확인됨 / runtime 필요`는 이번 inventory에서 런타임을 추측으로 채우지 않았다는 뜻이다.
 - **geometry owner**는 가장 바깥 position, size, inset을 결정하는 주체다. child가 동일한 geometry를 다시 적용하면 `중복`으로 표시한다.
-- `body.guide-child-mode`는 Modal Stack child iframe에만 붙는 compatibility mode다. 기존 renderer가 만드는 outer shell/backdrop/chrome을 content-only 형태로 바꾸기 위한 CSS 경계다.
+- `body.guide-child-mode`는 Modal Stack child iframe에만 붙는 legacy compatibility class다. 실제 공통 CSS 경계는 `header.js`가 child `body`와 renderer node에 붙이는 `data-ui-*` marker다.
 
 ## 구조 축의 실제 타입
 
@@ -146,22 +146,26 @@ These use their own overlay/shell lifecycle. They must not be assumed to be equi
 | Same game-location function has Host drilldown and a legacy local iframe sheet branch | `openShelfSheet()` first requests Host, then creates `#shelfSheetOverlay` when unavailable | intentional dual structure | retain; future rule must branch on Host availability |
 | Same game-rule function has Host drilldown and local same-DOM overlay | `_openRuleHubModal()` requests Host then creates `#ruleHubModal` | intentional dual structure | retain; do not merge without a separate plan |
 | Planner has two root iframe modal owners for the same `club-schedule.html` | homepage `#plannerSheetModal` versus `day-detail.js` `#__plannerModal`; comments explicitly protect their message sources | intentional legacy/local fallback | retain; they differ in root lifecycle and quick-entry behavior |
-| Profile local subsheet retains `.center-modal-shell` although it can live inside a Host child | `guide-child-mode` explicitly neutralizes `.profile-subsheet-box` geometry | compatibility hotspot, not evidence of a second Host frame | retain; runtime-check scroll/overscroll separately |
+| Profile local subsheet retains `.center-modal-shell` although it can live inside a Host child | shared `data-ui-geometry="host-fill"` neutralizes `.profile-subsheet-box` geometry | compatibility hotspot, not evidence of a second Host frame | retain; runtime-check scroll/overscroll separately |
 | Root/child chrome can share physical coordinates for member-profile wizard | postmortem measured iframe `.intro-wizard-close` and parent `#memberProfilesClose`; parent now delegates while wizard open | resolved ownership exception | retain delegation; do not classify as ordinary click-through |
 | Stack child iframe uses broad `guide-child-mode` name even outside guide | `header.js` adds it for every `modalFrame=child` | naming legacy / investigation candidate | no rename in this inventory |
-| `game-location` child uniquely restores page `main` | `.modal-stack-kind-game-location main` exception | route-specific rendering exception | retain; its source is a page main, unlike component renderers |
+| `game-location` child keeps page `main` | classifier marks it functional content rather than global page content | route-specific content-source distinction | retain; its source is a page main, unlike component renderers |
 | Existing Host plan says host roots include three roots, while route registry has seven child kinds | source code confirms the distinction | documentation interpretation risk | this inventory separates root hosts from child kinds |
 
-## Candidate common rules (not UI_PATTERNS decisions)
+## Implemented common markers
 
-These are only structure-derived candidates for a later approved rule set.
+`header.js` classifies every `modalStack=1&modalFrame=child` document before its renderer opens, then observes renderer insertion. The Host passes `stackPresentation=overlay|drilldown`; the parent shell carries the same ownership data. CSS reads these markers rather than a route class, page name, or HTML tag.
 
-1. **Host child iframe**: outer position, size, inset, backdrop, top-frame interaction, and Host ×/← belong to the Host; reused child renderers should fill the iframe and must not reapply center-modal geometry.
-2. **Host drilldown**: use the same Host shell as the prior frame, with a Host-owned ←; only `game-location` and `game-rule` currently qualify.
-3. **Host overlay**: use a Host-owned × that pops one frame; do not infer that it closes the root modal or local navigation below it.
-4. **Profile local subsheet**: retain parent profile ownership and local ←/ESC restore behavior; opening it should not create a new Host frame even when the parent profile is inside Host.
-5. **Iframe alone is insufficient for grouping**: root iframe modals, Host child iframes, and local iframe overlays have different geometry and chrome owners; rules must start from parent/layer ownership, not iframe status.
-6. **Duplicate chrome requires explicit ownership**: for embedded/Host paths, distinguish functional local headers from outer close/back chrome before hiding or delegating controls.
+| marker | scope | contract |
+|---|---|---|
+| `data-ui-structure="host-child"` | child `body` | P3/P4/P5 compatibility boundary; legacy `guide-child-mode` remains only for old non-contract rules. |
+| `data-ui-geometry-owner="host"` + `data-ui-geometry="host-fill"` | child body + reused outer renderer box | Host is the only outer geometry owner; renderer fills iframe `0,0` and does not reapply center-modal inset/radius/shadow. |
+| `data-ui-layer="host-transparent"` | reused local overlay/layer/backdrop | child layer can render content but does not create a second dim/blur or outer viewport geometry. |
+| `data-ui-chrome="global|global-content|host-duplicate|functional"` | page chrome and renderer controls | only global/duplicate chrome is suppressed; functional header, tab, search/filter, sticky control, and profile local back remain. |
+| `data-ui-navigation="overlay|drilldown|local"` | child body/Host shell/profile local back | overlay is an independent top frame, drilldown returns one Host frame, local stays inside its feature owner. |
+| `data-ui-scroll-owner="feature"` + `data-ui-scroll-boundary="child"` | intended component scroll areas + child body | records the Host/child boundary without changing individual overflow or overscroll behavior. |
+
+The concrete renderer selector list is deliberately centralised in the classifier: game sheet, recommendation, meeting coordination, profile panel/subsheet, and rule hub all receive the same geometry/chrome/scroll roles. `game-location` is the one content-source distinction: its `main` gets `data-ui-content-role="functional"`, while other reused pages mark their base page content as global content.
 
 ## Runtime verification queue
 

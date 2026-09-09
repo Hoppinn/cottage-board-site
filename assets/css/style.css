@@ -7828,115 +7828,21 @@ body.embed-mode #recommend{display:block !important;}
   line-height:1;
 }
 .guide-iframe-shell.is-stack-inactive{pointer-events:none;}
-/* 홈페이지 기능 child의 외곽 규격은 parent shell 하나만 소유한다. 기존 컴포넌트는
-   그 안에서 본문만 렌더하며 별도 dim·닫기 제어를 만들지 않는다. */
-body.guide-child-mode main,
-body.guide-child-mode .site-header,
-body.guide-child-mode .site-footer,
-body.guide-child-mode #recommend,
-body.guide-child-mode .inner-page{display:none!important;}
-/* 게임 위치는 일반 page main이 곧 child의 기능 본문이다. */
-body.guide-child-mode.modal-stack-kind-game-location main{display:block!important;}
-body.guide-child-mode .game-sheet{position:absolute;inset:0;width:auto;height:auto;}
-body.guide-child-mode .game-sheet-dim,
-body.guide-child-mode .dd-overlay{background:transparent!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;}
-body.guide-child-mode .game-sheet-panel{
-  left:0!important;
-  right:0!important;
-  top:0!important;
-  bottom:0!important;
-  border-radius:0!important;
-  box-shadow:none!important;
-  animation:none!important;
+/* Host child contracts are role based. header.js labels the existing renderer
+   nodes; this block must not infer ownership from a page name or an HTML tag. */
+body[data-ui-structure~="host-child"] [data-ui-chrome="global"],
+body[data-ui-structure~="host-child"] [data-ui-chrome="global-content"],
+body[data-ui-structure~="host-child"] [data-ui-chrome="host-duplicate"]{display:none!important;}
+body[data-ui-geometry-owner="host"] [data-ui-layer="host-transparent"]{
+  position:absolute!important;inset:0!important;width:auto!important;height:auto!important;
+  background:transparent!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;
 }
-body.guide-child-mode .game-sheet-close,
-body.guide-child-mode .sheet-sticky-close,
-body.guide-child-mode .dd-meeting-header .dd-x-btn{display:none!important;}
-body.guide-child-mode .dd-overlay{position:absolute!important;inset:0!important;padding:0!important;}
-body.guide-child-mode .dd-meeting-modal{
-  width:100%!important;
-  height:100%!important;
-  max-height:none!important;
-  border-radius:0!important;
+body[data-ui-geometry-owner="host"] [data-ui-geometry="host-fill"]{
+  position:absolute!important;inset:0!important;width:auto!important;max-width:none!important;
+  height:auto!important;max-height:none!important;margin:0!important;border-radius:0!important;
+  box-shadow:none!important;animation:none!important;
 }
-body.guide-child-mode .recommend-overlay{
-  position:absolute!important;
-  inset:0!important;
-  background:transparent!important;
-  backdrop-filter:none!important;
-  -webkit-backdrop-filter:none!important;
-}
-body.guide-child-mode .recommend-overlay-panel{
-  width:100%!important;
-  max-width:none!important;
-  height:100%!important;
-  max-height:none!important;
-  margin:0!important;
-  border-radius:0!important;
-  box-shadow:none!important;
-}
-body.guide-child-mode .recommend-overlay-close,
-body.guide-child-mode .profile-panel-close{display:none!important;}
-/* Host chrome owns stack navigation: drill-down uses its common ← and an
-   independent overlay uses its common ×. Title-only inner rows disappear,
-   while headers that identify the game or board itself stay. */
-/* 추천 전체보기의 header는 독립 페이지 chrome이 아니라 목록 scroll과 분리된
-   화면 기능 header다. Host X만 local close button 대신 사용한다. */
-body.guide-child-mode .recommend-overlay-header{display:flex!important;}
-body.guide-child-mode .profile-panel{
-  position:absolute!important;
-  inset:0!important;
-  background:transparent!important;
-  backdrop-filter:none!important;
-  -webkit-backdrop-filter:none!important;
-}
-/* The host owns the only center-modal outer shell. Profile root and its local
-   board subviews both carry .center-modal-shell, so neither may reapply the
-   mobile 10px / 36px / 12px geometry inside the child iframe. */
-body.guide-child-mode .profile-panel-box,
-body.guide-child-mode .profile-subsheet-box{
-  position:absolute!important;
-  inset:0!important;
-  width:auto!important;
-  max-width:none!important;
-  height:auto!important;
-  max-height:none!important;
-  margin:0!important;
-  border-radius:0!important;
-  box-shadow:none!important;
-}
-/* 플래너의 참여자/내 보드는 기존 profilePanel 안에서 모임 보드를 자동으로 연다.
-   guide child에서는 그 보드도 같은 child shell 전체를 쓰게 해 작은 두 번째 모달 외곽을 만들지 않는다. */
-body.guide-child-mode .profile-subsheet{
-  position:absolute!important;
-  inset:0!important;
-  background:transparent!important;
-  backdrop-filter:none!important;
-  -webkit-backdrop-filter:none!important;
-}
-/* profile overlay 안의 보드 전환은 host overlay가 아니라 내 보드의 내부 navigation이다.
-   제목·닫기만 감추고, 이 보드가 어디에서 왔는지 보여 주는 ← identity는 남긴다. */
-body.guide-child-mode .profile-subsheet-close,
-body.guide-child-mode .profile-subsheet-title{display:none!important;}
-body.guide-child-mode .profile-subsheet-header{display:grid!important;}
-body.guide-child-mode .profile-subsheet-back{display:flex!important;}
-body.guide-child-mode .rule-hub-overlay{
-  position:absolute!important;
-  inset:0!important;
-  background:transparent!important;
-  backdrop-filter:none!important;
-  -webkit-backdrop-filter:none!important;
-}
-body.guide-child-mode .rule-hub-box{
-  width:100%!important;
-  max-width:none!important;
-  height:100%!important;
-  max-height:none!important;
-  margin:0!important;
-  border-radius:0!important;
-  box-shadow:none!important;
-}
-body.guide-child-mode .rule-hub-back{display:none!important;}
+body[data-ui-geometry-owner="host"] .dd-overlay[data-ui-layer="host-transparent"]{padding:0!important;}
 
 /* Parent Modal Stack Host: each child is a sibling frame over the same root backdrop.
    Its shell deliberately repeats the established viewport center-modal geometry. */

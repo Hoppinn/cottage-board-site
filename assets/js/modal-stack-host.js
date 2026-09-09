@@ -13,7 +13,7 @@
     profile: 'other-board',
   };
 
-  function stackUrl(kind, payload = {}) {
+  function stackUrl(kind, payload = {}, presentation = 'overlay') {
     const routes = {
       'recommend-all': 'index.html',
       'game-info': 'index.html',
@@ -29,6 +29,7 @@
     url.searchParams.set('modalStack', '1');
     url.searchParams.set('modalFrame', 'child');
     url.searchParams.set('stackKind', kind);
+    url.searchParams.set('stackPresentation', presentation === 'drilldown' ? 'drilldown' : 'overlay');
     Object.entries(payload || {}).forEach(([key, value]) => {
       if (value !== undefined && value !== null && value !== '') url.searchParams.set(key, String(value));
     });
@@ -71,19 +72,19 @@
     }
 
     push(kind, payload, presentation = 'overlay') {
-      const src = stackUrl(kind, payload);
-      if (!src || !this.isOpen()) return false;
       const mode = presentation === 'drilldown' ? 'drilldown' : 'overlay';
+      const src = stackUrl(kind, payload, mode);
+      if (!src || !this.isOpen()) return false;
       const previous = this.top();
       this._setInactive(previous, true);
       const layer = document.createElement('div');
       layer.className = `modal-stack-frame-layer modal-stack-frame-layer--${mode}`;
       layer.dataset.stackKind = kind;
       layer.dataset.presentation = mode;
-      layer.innerHTML = `<div class="modal-stack-frame-shell center-modal-shell" role="dialog" aria-modal="true">
+      layer.innerHTML = `<div class="modal-stack-frame-shell center-modal-shell" data-ui-structure="host-child-frame" data-ui-geometry-owner="host" data-ui-navigation="${mode}" data-ui-chrome-owner="host" role="dialog" aria-modal="true">
         ${mode === 'drilldown'
-          ? '<button class="modal-stack-frame-back" type="button" aria-label="이전 화면으로 돌아가기">←</button>'
-          : '<button class="modal-stack-frame-close" type="button" aria-label="닫기">✕</button>'}
+          ? '<button class="modal-stack-frame-back" data-ui-chrome="host-control" type="button" aria-label="이전 화면으로 돌아가기">←</button>'
+          : '<button class="modal-stack-frame-close" data-ui-chrome="host-control" type="button" aria-label="닫기">✕</button>'}
         <iframe class="modal-stack-frame" src="${src}" allow="camera;microphone"></iframe>
       </div>`;
       const shell = layer.querySelector('.modal-stack-frame-shell');

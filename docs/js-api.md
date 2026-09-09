@@ -10,14 +10,14 @@
 
 | 함수 | 계약 |
 |---|---|
-| `state()` | `{ enabled, frame: 'root'|'child', kind, query, hash }`를 반환한다. |
+| `state()` | `{ enabled, frame: 'root'|'child', kind, presentation: 'overlay'|'drilldown', query, hash }`를 반환한다. presentation은 Host가 child URL에 전달한 navigation semantics다. |
 | `request(kind, payload, { presentation }?)` | 현재 frame을 유지한 채 parent Modal Stack Host에 push를 요청한다. `presentation`은 기본 `overlay`(우상단 ×를 쓰는 별도 center modal)이며, `drilldown`만 좌상단 ←로 이전 frame에 복귀한다. host 밖이면 `false`. |
 | `pop()` | child frame에서만 parent에 최상단 한 장의 pop을 요청한다. ←·ESC·Host ×가 이 동작을 사용하며 root/host 밖이면 `false`. |
 | `runLocal(fn)` | stack child bootstrap이 기존 open 함수를 최초 한 번 local 실행할 때만 사용한다. bootstrap 중 push 재귀를 막고, 이후 사용자 open은 다시 host push가 된다. |
 
 ## window.CottageModalStackHost (modal-stack-host.js)
 
-parent root modal이 `create({ container, rootFrame, rootShell, isOpen })`으로 만드는 공통 frame host다. `push(kind,payload,presentation)`와 `pop()`은 공개 소비자용이 아니라 host lifecycle용이며, message source가 top iframe과 일치할 때만 처리한다. `drilldown`의 ←·ESC와 `overlay`의 ×는 모두 `pop()`으로 최상단 frame만 복귀한다. route는 `recommend-all`, `game-info`, `game-record`, `game-location`, `game-rule`, `meeting`, `profile`의 기존 deep-link/component를 재사용한다.
+parent root modal이 `create({ container, rootFrame, rootShell, isOpen })`으로 만드는 공통 frame host다. `push(kind,payload,presentation)`와 `pop()`은 공개 소비자용이 아니라 host lifecycle용이며, message source가 top iframe과 일치할 때만 처리한다. `push()`는 child URL에 `stackPresentation`을 전달하고 Host shell에 `data-ui-*` ownership marker를 붙인다. `drilldown`의 ←·ESC와 `overlay`의 ×는 모두 `pop()`으로 최상단 frame만 복귀한다. route는 `recommend-all`, `game-info`, `game-record`, `game-location`, `game-rule`, `meeting`, `profile`의 기존 deep-link/component를 재사용한다.
 
 ## window.CottageDB (supabase-client.js)
 

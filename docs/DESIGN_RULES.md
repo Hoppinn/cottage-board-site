@@ -8,6 +8,8 @@
 
 사람이 읽는 화면·UI 표준명은 [PROJECT_GLOSSARY.md](PROJECT_GLOSSARY.md)를 따른다. 모바일 센터모달 외곽틀을 새로 정리할 때는 게임정보 모달(`.game-sheet` 계열)의 현재 규격을 기준으로 하며, 내부 기능헤더·iframe lifecycle·하위 시트는 별도 계약으로 보존한다. 모임원 프로필 root iframe에서 여는 작성·수정은 부모 shell 안을 채우고, 내 보드의 `wizardOnly` iframe은 기존 위저드 레이아웃을 보존한다.
 
+Modal Stack Host child의 outer geometry/chrome CSS는 page-name·HTML tag selector가 아니라 `data-ui-geometry-owner`, `data-ui-geometry`, `data-ui-layer`, `data-ui-chrome` role marker를 사용한다. Host가 outer geometry와 ×/←를 소유하고 child renderer는 iframe `0,0`의 기능 layout만 소유한다. 기능 header·tab·search/filter·sticky control과 profile local ←는 global/duplicate chrome 숨김에 포함하지 않는다. scroll owner marker는 책임을 나타낼 뿐 개별 overflow/overscroll을 Host scroll로 바꾸지 않는다.
+
 ## 1. 브랜드 팔레트
 
 - 기준 색상: `--green: #7a4828` (갈색), `--bg: #fffdf8` (베이지), `--paper: #fffaf0` (아이보리)

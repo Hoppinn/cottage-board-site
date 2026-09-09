@@ -83,7 +83,7 @@ Host는 root iframe을 첫 frame으로 보존하고 child frame을 sibling으로
 
 ### P3 embed chrome policy
 
-`modalFrame=child`의 `guide-child-mode`는 현재 구현상의 compatibility mode다. 다음은 tag 이름으로 숨기는 규칙이 아니라 **역할** 기준이다.
+`modalFrame=child`의 `guide-child-mode`는 legacy compatibility class다. `header.js`가 child body/renderer에 붙이는 `data-ui-*` marker가 실제 CSS hook이며, 다음은 tag 이름으로 숨기는 규칙이 아니라 **역할** 기준이다.
 
 숨길/위임할 대상:
 
@@ -97,7 +97,7 @@ Host는 root iframe을 첫 frame으로 보존하고 child frame을 sibling으로
 - 기능 header, tab, search/filter, sticky function control
 - 사용자 identity나 보드 상태처럼 feature 자체를 식별하는 header
 
-현재 code evidence는 `body.guide-child-mode`가 global page chrome을 숨기고, game sheet/recommend/profile/rule/meeting renderer의 outer geometry·duplicate chrome을 content-only로 바꾸는 데 있다. `game-location`은 `main`이 실제 기능 content이므로 child mode에서도 예외적으로 유지한다. 이 예외는 `main` tag라는 이유가 아니라 route의 content source가 page `main`이기 때문이다.
+현재 구현은 `data-ui-chrome="global|global-content|host-duplicate"`만 숨기고, `data-ui-chrome="functional"`은 유지한다. game sheet/recommend/profile/rule/meeting renderer는 `data-ui-geometry="host-fill"`과 `data-ui-layer="host-transparent"`으로 content-only가 된다. `game-location`은 `main` 태그라서가 아니라 page `main`이 실제 기능 content source이므로 `data-ui-content-role="functional"`으로 분류한다.
 
 ### P3 geometry invariant
 
@@ -213,13 +213,13 @@ The day-detail planner and homepage planner share an iframe source but are not i
 | 모임 조율 | P8 when local; P3+P4 when stacked | Independent Overlay | local `dd` chrome or Host × | local modal body needs measurement | code confirmed / runtime needed |
 | day-detail 플래너/quick entry | P7 | local iframe modal flow | `#__plannerModal` owner remains distinct from home planner | iframe/local sheet needs measurement | code confirmed / runtime needed |
 
-## Reuse candidates for a later implementation plan
+## Implemented reuse hooks
 
 | candidate | applies to | current code evidence / remaining page-specific branch |
 |---|---|---|
-| semantic Host-child mode marker | all P3/P4/P5 child iframes | generic runtime state is `modalStack=1`, `modalFrame=child`, but styling uses legacy name `guide-child-mode` plus route class |
-| shared iframe-fill/outer-geometry reset | P3 child renderers | separate selectors reset game sheet, recommendation, profile/subsheet, rule hub, meeting overlay; all encode the same “Host owns outer” contract |
-| embed chrome policy helper | P3 child renderers | global chrome and duplicate modal chrome are currently hidden through page/feature selectors; function headers need a deliberate preserve list |
+| semantic Host-child marker | all P3/P4/P5 child iframes | child body gets structure, geometry owner, navigation, chrome owner, and scroll-boundary data; `guide-child-mode` remains legacy only |
+| shared iframe-fill/outer-geometry reset | P3 child renderers | central classifier marks reused outer boxes `data-ui-geometry="host-fill"`; one CSS rule applies Host ownership |
+| embed chrome policy helper | P3 child renderers | classifier marks global, duplicate Host chrome, and functional chrome separately; CSS hides only the first two |
 | presentation helper | P4/P5 | `presentation: 'overlay'|'drilldown'` already exists at Host request boundary; callers still directly encode their presentation choices |
 | close/back routing contract | P2–P8 | Host one-pop, profile local restore, and local iframe close each have distinct handlers; a shared classifier could prevent wrong owner routing without merging lifecycles |
 | profile subsheet scroll contract | P6 | `_openSubSheet()` centrally creates header/body and CSS centralizes `.profile-subsheet-body`; actual bottom-boundary runtime data is still needed |
