@@ -2033,7 +2033,7 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
   const _existingWasReadOnly = existing?.classList.contains('profile-panel--readonly');
   // 기존 패널을 자기 close 핸들러를 안 거치고 강제로 치우는 경로 — 그 패널이 push해둔
   // activeView도 여기서 같이 pop해야 한다(토큰은 DOM 노드에 저장돼 있어 이 클로저 밖에서도 접근 가능).
-  if (existing) { window.removeEventListener('cottage-meeting-changed', existing._meetingPreviewRefresh); window.removeEventListener('cottage-profile-intro-saved', existing._profileIntroRefresh); window.popActiveView?.(existing._viewToken); existing.remove(); document.getElementById('profileSubSheet')?.remove(); if (!readOnly && !_existingWasReadOnly) return; }
+  if (existing) { window.removeEventListener('cottage-meeting-changed', existing._meetingPreviewRefresh); window.removeEventListener('cottage-profile-intro-saved', existing._profileIntroRefresh); window.popActiveView?.(existing._viewToken); existing._restorePresentationInteraction?.(); existing.remove(); document.getElementById('profileSubSheet')?.remove(); if (!readOnly && !_existingWasReadOnly) return; }
 
   const panel = document.createElement('div');
   panel.id = 'profilePanel';
@@ -2041,6 +2041,17 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
   if (_presentationStack?.position === 'above-requesting-host' && Number.isFinite(_presentationStack.zIndex)) {
     panel.dataset.uiPresentationStack = _presentationStack.position;
     panel.style.zIndex = String(_presentationStack.zIndex + 1);
+  }
+  const interactionOwner = _presentationStack?.interactionOwner;
+  if (interactionOwner?.isConnected) {
+    const wasInert = interactionOwner.inert;
+    interactionOwner.inert = true;
+    interactionOwner.dataset.uiPresentationInteractionOwner = 'blocked';
+    panel._restorePresentationInteraction = () => {
+      if (!interactionOwner.isConnected) return;
+      interactionOwner.inert = wasInert;
+      delete interactionOwner.dataset.uiPresentationInteractionOwner;
+    };
   }
   panel._onClose = typeof onClose === 'function' ? onClose : null;
   const isOwnerUser = String(user.id) === String(OWNER_KAKAO_ID);
@@ -2075,6 +2086,7 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
     if (activeSub?._closeStackChild) activeSub._closeStackChild();
     else activeSub?.remove();
     _popView();
+    panel._restorePresentationInteraction?.();
     panel.remove();
     // 부모의 inert 해제는 child DOM을 먼저 제거한 뒤에만 한다. 같은 click의 아래 레이어 전달을 막는다.
     panel._onClose?.();
@@ -2099,6 +2111,7 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
     if (activeSub?._closeStackChild) activeSub._closeStackChild();
     else activeSub?.remove();
     _popView();
+    panel._restorePresentationInteraction?.();
     panel.remove();
     // restoreScroll=true(보던 지점으로) + noAnim=true(올라오는 연출 없이) — 원래 있던 시트로 돌아가는 것이므로
     if (backTo.type === 'gameSheet') { window.ensureGameSheet?.(); window.openGameSheet?.(backTo.gameKey, true, null, true); }

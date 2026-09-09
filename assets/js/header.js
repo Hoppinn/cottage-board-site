@@ -95,7 +95,7 @@
     const layerOwner = frame?.closest('[data-ui-presentation-layer-owner]');
     const zIndex = Number.parseInt(layerOwner ? getComputedStyle(layerOwner).zIndex : '', 10);
     if (!layerOwner || !Number.isFinite(zIndex)) return;
-    request.presentationStack = { position: surface.presentationStack, zIndex };
+    request.presentationStack = { position: surface.presentationStack, zIndex, interactionOwner: layerOwner };
   }
 
   function _requestAncestorFunctionalSurface(surfaceName, payload) {

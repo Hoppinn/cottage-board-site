@@ -4435,6 +4435,7 @@ html:has(body.embed-mode) { scroll-padding-top: 0; }
 .shelf-sheet-title{font-size:16px;font-weight:700;color:#5a3418;flex:1;}
 .shelf-sheet-iframe{flex:1;width:100%;border:none;}
 .profile-panel{position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:var(--z-profile);display:flex;align-items:flex-end;justify-content:center;}
+[data-ui-presentation-interaction-owner="blocked"]{pointer-events:none!important;}
 .profile-panel-box{background:#fff;border-radius:18px;width:100%;max-width:480px;padding:0 20px 0;height:calc(100vh - 48px);height:calc(100dvh - 48px);max-height:calc(100vh - 48px);max-height:calc(100dvh - 48px);overflow:hidden;display:flex;flex-direction:column;margin:0 10px 16px;}
 .profile-panel-box{position:relative;}
 .profile-panel-body{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;padding-bottom:32px;margin-right:-20px;padding-right:20px;}
