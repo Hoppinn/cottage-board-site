@@ -6728,6 +6728,7 @@ html:has(body.embed-mode) { scroll-padding-top: 0; }
 }
 .intro-wizard-overlay.is-open{display:flex;}
 html.intro-wizard-embed,html.intro-wizard-embed body{background:transparent!important;overflow:hidden;}
+html.intro-wizard-open,html.intro-wizard-open body{overflow:hidden;overscroll-behavior:none;}
 html.intro-wizard-embed .club-breadcrumb,html.intro-wizard-embed .page-mini-hero,html.intro-wizard-embed .intro-form-card,html.intro-wizard-embed .intro-card-grid,html.intro-wizard-embed .site-footer{display:none!important;}
 /* 프로필 보드 iframe은 일반 페이지 요소만 숨긴다. 실제 6단계 wizard footer는
    showWizardStep()이 hidden을 해제한 뒤 반드시 자체 grid를 유지해야 한다. */
@@ -6735,6 +6736,7 @@ html.intro-wizard-embed .intro-wizard-nav:not([hidden]){display:grid!important;v
 /* 홈 모임원 프로필 root iframe의 작성·수정은 부모 shell 안을 채운다.
    내 보드의 wizardOnly iframe(html.intro-wizard-embed)은 원래 자기 위저드 레이아웃을 유지한다. */
 html:not(.intro-wizard-embed) body.embed-mode .intro-wizard-overlay{position:absolute;inset:0;padding:0;background:transparent;align-items:stretch;}
+html:not(.intro-wizard-embed) body.embed-mode.intro-wizard-open .intro-wizard-overlay{position:fixed;}
 html:not(.intro-wizard-embed) body.embed-mode .intro-wizard{width:100%;max-width:none;height:100%;max-height:none;border-radius:0;box-shadow:none;}
 html:not(.intro-wizard-embed) body.embed-mode .intro-wizard-close{display:none!important;}
 .intro-wizard{

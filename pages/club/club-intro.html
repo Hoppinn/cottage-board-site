@@ -519,6 +519,8 @@
       wizardIsEdit = edit;
       wizardComplete.hidden = true;
       wizardNav.hidden = false;
+      document.documentElement.classList.add('intro-wizard-open');
+      document.body.classList.add('intro-wizard-open');
       wizard.classList.add('is-open');
       wizard.setAttribute('aria-hidden', 'false');
       if (window.parent !== window) window.parent.postMessage({ type: 'cottage-profile-wizard-state', open: true }, '*');
@@ -526,6 +528,8 @@
       setTimeout(() => document.getElementById('introNickname').focus(), 0);
     }
     function closeWizard() {
+      document.documentElement.classList.remove('intro-wizard-open');
+      document.body.classList.remove('intro-wizard-open');
       wizard.classList.remove('is-open');
       wizard.setAttribute('aria-hidden', 'true');
       if (window.parent !== window) window.parent.postMessage({ type: 'cottage-profile-wizard-state', open: false }, '*');
