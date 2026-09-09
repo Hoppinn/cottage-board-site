@@ -16,7 +16,7 @@
 
 ## 공통 용어
 
-Canonical local surface registry는 `game-sheet`, `profile-panel`, `meeting-adjust`를 등록한다. renderer가 geometry를 바꾸지 않으며, direct iframe owner는 필요할 때 `data-ui-surface-geometry-owner`로 available area를 제공하되 preserved parent의 outer geometry는 바꾸지 않는다. 모든 registered surface는 `prepare → owner geometry → ready → first visible paint` handshake를 거쳐 first paint를 안정화한다. `profile-panel`은 parent available context에서 기존 local panel을 재사용하고, `meeting-adjust`는 feature-owned compact variant를 유지하며, `game-sheet`는 parent modal context 안에 남는다. active canonical local surface의 close/ESC는 Host frame pop보다 우선하며, 그 surface가 닫힌 뒤에만 Host-owned outer close가 frame을 닫을 수 있다. 따라서 functional renderer·surface·geometry variant·geometry owner·parent context·close owner는 별도 축이다.
+Canonical local surface registry는 `game-sheet`, `profile-panel`, `meeting-adjust`를 등록한다. renderer가 geometry를 바꾸지 않으며, direct iframe owner는 surface가 명시적으로 opt-in한 경우에만 `data-ui-surface-geometry-owner`로 available area를 제공한다. 모든 registered surface는 `prepare → ready → first visible paint` handshake를 거쳐 first paint를 안정화한다. `profile-panel`은 parent available context에서 기존 local panel을 재사용하고, `meeting-adjust`는 feature-owned compact variant를 유지하며, `game-sheet`는 Independent Overlay로서 parent modal context 안에 남고 parent owner를 재분류하지 않는다. active canonical local surface의 close/ESC는 Host frame pop보다 우선하며, 그 surface가 닫힌 뒤에만 Host-owned outer close가 frame을 닫을 수 있다. 따라서 functional renderer·surface·geometry variant·geometry owner·parent context·close owner는 별도 축이다.
 
 | 용어 | 의미 |
 |---|---|

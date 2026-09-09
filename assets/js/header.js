@@ -22,9 +22,11 @@
   // The node selector owns state detection only; renderer and geometry remain
   // feature/parent responsibilities respectively.
   const _canonicalLocalSurfaceStates = Object.freeze({
-    'game-sheet': { nodeSelector: '.game-sheet', isActive: node => node.classList.contains('is-active') },
-    'profile-panel': { nodeSelector: '#profilePanel', isActive: () => true },
-    'meeting-adjust': { nodeSelector: '#__ddModal', isActive: node => node.classList.contains('is-open') },
+    // Parent geometry is opt-in. A game sheet is an independent local overlay:
+    // its prepare/ready handshake must not reclassify the preserved parent shell.
+    'game-sheet': { nodeSelector: '.game-sheet', isActive: node => node.classList.contains('is-active'), parentGeometry: 'preserve' },
+    'profile-panel': { nodeSelector: '#profilePanel', isActive: () => true, parentGeometry: 'available' },
+    'meeting-adjust': { nodeSelector: '#__ddModal', isActive: node => node.classList.contains('is-open'), parentGeometry: 'preserve' },
   });
   let _localStackOpenDepth = 0;
 
@@ -46,7 +48,7 @@
     const frame = Array.from(document.querySelectorAll('iframe'))
       .find(candidate => candidate.contentWindow === event.source);
     const owner = frame?.closest('[data-ui-surface-geometry-owner]');
-    if (owner) {
+    if (owner && _surfaceState(data.surface).parentGeometry === 'available') {
       if (data.type === 'cottage-functional-surface-prepare' || data.active) owner.dataset.uiFunctionalSurface = data.surface;
       else if (owner.dataset.uiFunctionalSurface === data.surface) delete owner.dataset.uiFunctionalSurface;
     }
