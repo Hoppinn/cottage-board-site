@@ -1,26 +1,31 @@
 # PROJECT_STATE — 코티지보드 현재 상태
 
-최종 갱신: 2026-09-09
+최종 갱신: 2026-09-10
 
 > 이 문서는 세션을 다시 시작할 수 있게 **열린 상태와 그 재개 맥락**만 보관한다. 완료한 변경·검증의 상세는 git commit, 계속 유효한 구조·데이터 계약은 도메인 문서가 정본이다. 완료 목록·커밋 목록·세션 회고는 여기서 제거한다.
 
 ## 0. 현재 상태
 
-- 시간 단위 표시: `profiles.total_minutes`의 legacy 이름과 실제 seconds 단위를 코드·도메인 문서에 명시하고, 오너 전용 회원 분석의 60배 표시를 수정했다. 관리자와 회원 분석의 `page_sessions` 경로 비교는 별도 보류 후보다.
-- 상세 Plan: [보드 상호작용 회귀](plans/board-interaction-regressions-plan.md) · [모임 참여 데이터](plans/meeting-participation-data-plan.md) · [닉네임 해소 보정](plans/nickname-resolution-correction-plan.md)
-- 현재 단계: 최근 참여의 모임 단위 개편은 데이터 관계가 불명확해 구현 보류다. `game_play_records`에는 모임 ID가 없고 `meeting_votes`는 참여 등록이므로 날짜만으로 결합하지 않는다.
-- P2 완료: `player_names` 후보는 공백 사이 `%` 패턴으로 넓히고, 최종적으로 쉼표 토큰의 `normalizeNick` 정확 일치만 사용한다. 활동 통계·태그 알림·게임 도감·참여/함께한 날 업적과 참여자 링크에 같은 규칙을 적용했고, 충돌 키는 자동 연결하지 않는다. 원문 기록과 작성자 `user_id` 권한은 보존했으며 모임 참석을 추론하지 않았다. 읽기 전용 감사는 프로필 46개·기록 122개·충돌 0쌍, `덕 지` 0→20건/3→9일 및 `play_5·10·20` 신규 임계값 후보, `원철` 부분문자열 오탐 2→0건을 확인했다. 이번 세션에서 업적 지급 write는 실행하지 않았다.
-- 인수인계: 가장 어려웠던 게임은 기존 `profile_hardest_games` 정본을 유지하고 위저드 편집으로 이동한다. 최초 작성 쿠폰 partial unique 보장은 변경하지 않는다.
-- 승인 대기: 가입경로 `보드라이프` 추가 — `member_intros.join_sources` 허용 목록·입력 UI·표시 라벨·최신 RPC 마이그레이션을 함께 변경하는 Red Plan.
-- 최근 버그 닫힘: 게임도감 전체보기 전환 시 기존 항목이 3px 위로 이동하던 원인을 미리보기/전체 목록의 `margin-top` 차이로 확인하고 수정·커밋했다.
+- 현재 승인된 구현 작업은 없다. 완료한 구현·검증의 근거는 git과 [DEBUGGING_HISTORY.md](DEBUGGING_HISTORY.md), 구조 계약은 [UI_STRUCTURE.md](UI_STRUCTURE.md)·[UI_PATTERNS.md](UI_PATTERNS.md)를 정본으로 한다.
 
 ## 1. NOW
+
+- 없음.
+
 ## 2. NEXT (자동 착수 금지)
 
-1. **가입경로 보드라이프** — DB/RPC 변경 Plan 승인 후 구현한다.
-2. **홈페이지 기능 child route 공통화 리팩터링** — 현재 `guideStack=1`의 게임정보·기록·추천 전체보기·모임 조율·내 보드는 기존 원본 open 함수와 parent `guideChildSrc()`를 재사용하지만, 기능별 위임 분기와 URL 조립이 각 파일에 남아 있다. 영향 대상은 홈페이지 기능 root iframe에서 이후 추가될 center-modal 성격의 child 경로다. 별도 리팩터링 Plan 승인 뒤 `원본 open 함수 → 공통 child 요청({kind,payload}) → parent route registry → 기존 deep-link/component` 계약으로만 정리하고, 독립 URL·일반 embed·작은 sheet는 유지한다. 검증은 기존 5개 경로와 새 등록 경로에서 parent shell·←/ESC pop·root state 보존을 360×640으로 확인한다.
-3. **추천 전체보기 상단 과대 영역** — 사용자가 `홈페이지 기능 → 추천게임찾기 → 게임 더 찾기 → 전체보기` 실제 화면에서 Host X 영역과 `추천 게임 전체 443개` 제목 영역이 두 층으로 쌓여 과대하다고 확인했다. 목표는 기존 `recommend-overlay-header`와 Host X를 같은 상단 행으로 보여 shell top부터 목록 구분선까지를 compact하게 만드는 것이다. 다만 로컬 Chrome 자동 재현에서는 shell top 36px, Host X 46–72px, header 36–84px, 목록 시작 84px으로 총 48px 한 행이었으므로, URL/query·viewport·캐시/배포본 차이가 미확인이다. 재개 시 사용자와 같은 URL·viewport에서 shell/Host X/header/divider rect를 먼저 비교하고, 재현된 경우에만 중복 세로 점유를 최소 수정한다.
-4. **내 보드 sub-sheet 최하단 overscroll/헤더 끌림** — `내 보드 → 프로필 보드 또는 모임 보드 → 최하단 반복 scroll`에서 내부 콘텐츠 끝 뒤 상위 modal이 더 움직이고 고정헤더가 끌리는 문제를 profile edit wizard의 `.intro-wizard-body` overscroll과 혼동하지 않는다. 재개 시 `.profile-subsheet`·iframe `html/body`·`.profile-panel` wrapper의 scrollTop, scrollHeight/clientHeight, overflow/overscroll-behavior, sticky 기준과 target header rect를 실제 경로에서 측정한다. geometry/inset 해결사항은 유지하며, 실제 추가 scroll container를 확정한 뒤에만 수정·검증한다.
+1. **관리자 페이지 추적 범위** — `관리자페이지 → 페이지탭 → 페이지 추적`에서 center modal/bottom sheet 행동이 보이지 않는다. 부모 단위 방문·체류와 iframe 안 실제 행동 이벤트의 기존 원칙을 보존하면서, 필요한 event 정의·소비자·검증 경로를 먼저 확정한다.
+2. **가입경로 보드라이프** — `member_intros.join_sources` 허용 목록·입력 UI·표시 라벨·최신 RPC 마이그레이션을 함께 바꾸는 Red Plan 승인 후 구현한다.
+3. **게임 데이터 확인** — 스위트랜드 보유 여부와 파수꾼·페야의늪 위치를 데이터 정본 및 사용자 기대 위치와 대조한다. 현재 출력은 파수꾼=`active/incoming`, 페야의늪=`active/heavy_strategy`이며 스위트랜드 일치 항목은 미확인이다.
+4. **홈페이지 기능 게임정보 geometry** — `홈페이지 기능 → 추천게임찾기 → 게임정보`에서 game-sheet가 parent modal 안의 작은 geometry로 보인다는 사용자 보고를 재현 경로의 request origin·ancestor renderer 탐색·containing block 기준으로 조사한다. 이전 static/commit 결과만으로 해결 처리하지 않는다.
+5. **플래너 → 내 보드 close flicker** — 내 보드 close 뒤 parent planner surface가 순간 깜빡이는 문제를 조사한다. `홈 플래너 → 플래너 보기`와 `홈페이지 기능 → 모임 플래너`가 같은 canonical planner document/lifecycle인지 먼저 판정하고, parent DOM·scroll·geometry·visibility·loaded state 보존을 기준으로 한다.
+6. **게임위치 surface** — `게임정보 → 게임위치`가 게임방법보다 늦게 보이는 문제와 남은 scroll bug를 같은 iframe surface lifecycle으로 조사한다. document boot·ready/visible·payload 전달과 실제 scroll owner/boundary를 함께 확정한다.
+7. **모임 보드 → 플래너 미리보기 scroll** — 중간 scroll position에서 시작하는 문제의 target, 이벤트, 실제 scroll owner와 클릭 전후 rect를 측정한 뒤 수정 범위를 정한다.
+8. **플레이 기록 accordion 위치 보정** — 열린 accordion header 높이 변화와 페이지 하단의 `compensateHeaderPosition` 실패를 target header viewport top 기준으로 조사한다.
+9. **내 보드 sub-sheet 최하단 overscroll/헤더 끌림** — `내 보드 → 프로필 보드 또는 모임 보드 → 최하단 반복 scroll`에서만 `.profile-subsheet`·iframe `html/body`·`.profile-panel`의 실제 scroll owner를 측정한다. profile wizard나 일반 center modal/bottom sheet의 전역 scroll-chain 문제로 확대하지 않는다.
+10. **홈페이지 기능 child route 공통화 리팩터링** — 기능별 위임 분기와 URL 조립을 공통 child 요청/route registry 계약으로 정리하는 별도 Plan 후보다. 독립 URL·일반 embed·작은 sheet는 유지한다.
+11. **추천 전체보기 상단 과대 영역** — `홈페이지 기능 → 추천게임찾기 → 게임 더 찾기 → 전체보기`의 Host X와 제목 영역이 중복 점유하는지 사용자와 같은 URL·viewport에서 shell/header/divider rect로 먼저 판정한다.
+12. **AGENTS canonical 기능 재사용·embed/iframe 원칙 점검** — 현재 AGENTS에는 기존 진입점·호출 경로·renderer 확인, iframe 공통 회귀 검증, 부모 단위 방문/체류와 iframe 행동 이벤트 보존 원칙이 있다. canonical functional-surface/geometry ownership을 명시 규칙으로 추가할 필요가 있는지는 실제 누락 사례와 중복 여부를 별도 검토한 뒤 판단한다.
 
 ## 3. BACKLOG (자동 착수 금지)
 
@@ -49,14 +54,11 @@
 
 ## 5. DEFERRED / TRIGGER (자동 착수 금지)
 
-- **보드 sticky 헤더 우선순위** — P2 데이터 정합성 다음의 UI 작업 후보. ① 수집 보드의 업적·캐릭터·칭호·도감, ② 프로필 보드의 좋아하는 게임·해보고 싶은 게임 순으로 적용한다. 각 보드 scroll container 안에서 현재 섹션 하나만 고정하고, 기존 시각 스타일은 유지한다. ③ 모임 보드 `최근 참여`는 모임 단위 데이터 모델이 확정된 뒤에만 적용한다. 여러 보드를 건드리는 Yellow UI 작업이므로 착수 시 별도 Plan과 변경안 승인을 받는다.
+- **보드 sticky 헤더 우선순위** — 수집 보드와 프로필 보드의 UI 후보다. 각 보드 scroll container 안에서 현재 섹션 하나만 고정하며, 여러 보드를 건드리는 Yellow 작업이므로 별도 Plan과 변경안 승인 뒤에만 착수한다.
 - **Legacy naming migration** — 다음 점검: 현재 큰 기능 묶음 완료 후. 구조 안정화·의존관계 파악·회귀 검증·호환 전략·반복 혼선 여부를 함께 판단하며, 트리거는 검토 시작 시점일 뿐 실행 확정이 아니다. 상세 기준은 [명칭 정합성 조사 Plan](plans/naming-alignment-audit-plan.md)을 따른다.
 - **최근 참여 데이터 모델** — [모임 참여 데이터 Plan](plans/meeting-participation-data-plan.md)에 따라 데이터 관계와 범위를 먼저 확정한 뒤 재검토한다.
 - BGG 영구 미연결 게임의 수동 기본정보는 `build:master` 실행 시 초기화될 수 있다. 해당 작업 전 [PROJECT_STRUCTURE.md](PROJECT_STRUCTURE.md) 최상단의 보존 한계를 확인한다. 근본 해소는 별도 파이프라인 설계다.
 - `game_play_records`가 약 1,500행에 가까워지면 `getUserFirstRecordCount`의 RPC 전환을 재검토한다. 정확성 위험과 근거는 [REFACTOR_CHECKPOINT.md](REFACTOR_CHECKPOINT.md)에 있다.
-- 닉네임 보호·체류시간 원자 증가·다기기 프로필/사진 복원은 열린 작업이 아니라 현재 계약이다. [PROJECT_STRUCTURE.md](PROJECT_STRUCTURE.md) §3~5, [db-schema.md](db-schema.md) `increment_profile_counters`, [ls-schema.md](ls-schema.md)를 정본으로 사용한다.
-- `openProfilePanel`의 서브시트 라우팅·backTo·비동기 렌더 주의는 [js-api.md](js-api.md)를 정본으로 사용한다. 이 문서에 사본을 만들지 않는다.
-- `task-continue` 훅은 다음 긴 미완 작업에서만 검증한다: 작업 파일을 여는지, 질문 뒤 이어가는지, 진전 없이 반복하지 않는지. 실패하면 더 고치지 않고 훅을 폐기한다.
 
 ## 6. 작업별 정본
 
