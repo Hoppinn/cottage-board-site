@@ -16,7 +16,17 @@
     'game-location': 'game-sheet',
     'game-rule': 'game-sheet',
   });
+  // A local surface may sit above a Host child without becoming that Host
+  // frame. Its own close must therefore not pop the preserved parent frame.
+  const _canonicalLocalSurfaceStates = Object.freeze({
+    'game-sheet': '.game-sheet.is-active',
+  });
   let _localStackOpenDepth = 0;
+
+  function _hasActiveCanonicalLocalSurface() {
+    return Object.values(_canonicalLocalSurfaceStates)
+      .some(selector => !!document.querySelector(selector));
+  }
 
   function _setChildSurfaceGeometry(event) {
     const data = event.data;
@@ -103,6 +113,7 @@
       return true;
     },
     pop: () => {
+      if (_hasActiveCanonicalLocalSurface()) return false;
       if (_stackValue !== '1' || _stackFrame !== 'child' || window.parent === window) return false;
       window.parent.postMessage({ type: 'cottage-modal-stack-pop' }, '*');
       return true;

@@ -16,7 +16,7 @@
 
 ## 공통 용어
 
-`game-sheet` canonical surface가 iframe 안에서 열릴 때는 renderer가 geometry를 바꾸지 않는다. direct iframe owner가 `data-ui-surface-geometry-owner`로 full available area를 제공하고, child의 active state는 공통 message bridge로 전달한다. open은 `prepare → owner geometry → ready → first visible paint` handshake를 거쳐 작은 iframe geometry가 먼저 보이지 않으며, 기존 local parent renderer(예: 추천 전체보기)는 닫거나 교체하지 않는다. 따라서 renderer·surface·surface geometry owner는 별도 축이다.
+`game-sheet` canonical surface가 iframe 안에서 열릴 때는 renderer가 geometry를 바꾸지 않는다. direct iframe owner가 `data-ui-surface-geometry-owner`로 full available area를 제공하고, child의 active state는 공통 message bridge로 전달한다. open은 `prepare → owner geometry → ready → first visible paint` handshake를 거쳐 작은 iframe geometry가 먼저 보이지 않으며, 기존 local parent renderer(예: 추천 전체보기)는 닫거나 교체하지 않는다. active canonical local surface의 close/ESC는 Host frame pop보다 우선하며, 그 surface가 닫힌 뒤에만 Host-owned outer close가 frame을 닫을 수 있다. 따라서 renderer·surface·surface geometry owner·close owner는 별도 축이다.
 
 | 용어 | 의미 |
 |---|---|

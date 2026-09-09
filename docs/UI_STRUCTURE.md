@@ -20,7 +20,7 @@
 | Parent / child | root, Host independent child frame, Host drilldown child frame, root modal 내부 local overlay, profile local navigation child, standalone |
 | Geometry owner | viewport root overlay/shell, Modal Stack Host shell, profile parent panel, local overlay box; Host child mode에서는 child가 outer geometry를 다시 소유하지 않아야 함 |
 | Surface geometry owner / context | the immediate iframe owner that supplies a canonical surface's available coordinate area. When `game-sheet` is active, it expands to the full available area without replacing the renderer or changing the parent modal lifecycle. |
-| Functional renderer / surface | feature-owned renderer type is independent from geometry owner. `game-info`/record/location/rule use the canonical local `game-sheet` bottom-sheet surface in every parent context; `meeting` uses the compact center-modal Host surface when stacked. |
+| Functional renderer / surface | feature-owned renderer type is independent from geometry owner. `game-info`/record/location/rule use the canonical local `game-sheet` bottom-sheet surface in every parent context. While that local surface is active inside a Host child, its local close does not pop the preserved Host frame; only the Host-owned outer close may do so. `meeting` uses the compact center-modal Host surface when stacked. |
 | Scroll owner | page document, component body/list, iframe document, profile `.profile-subsheet-body`; 코드만으로 확정할 수 없는 nested/quick-entry 경로는 runtime verification 필요 |
 | Chrome owner | standalone page header, root modal/local component, Modal Stack Host, profile parent/subsheet header. Host iframe child에는 Host chrome과 child chrome이 공존할 수 있음 |
 
