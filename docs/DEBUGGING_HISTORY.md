@@ -357,3 +357,26 @@
 
 - 사용자 실화면에서 추천 전체보기의 geometry 유지, 독립 game-sheet 표시, 열기·닫기 흐름을 통과했다.
 - 사용자 실화면에서 wizard 최하단 overscroll 시 parent/root가 움직이지 않음을 통과했다.
+
+## 2026-09-10 - geometry preservation과 presentation placement 혼동 회귀
+
+증상:
+
+- planner iframe에서 내 보드를 열면 planner 깜빡임은 사라졌지만 profile-panel이 planner modal 안의 작은 modal로 표시됐다.
+- game-sheet에서 게임위치를 열면 local boot/payload 처리는 유지됐지만 shelf overlay가 game-info parent 안의 작은 modal로 표시됐다.
+
+원인:
+
+- 이전 수정은 `parentGeometry: 'preserve'`로 parent Host shell 재분류를 막았지만, child surface를 어느 document/layer에서 생성할지 정의하지 않았다. profile-panel은 presentation portal 등록이 없었고 game-location은 기존 local overlay만 만들었다.
+- 따라서 iframe 내부의 `position: fixed` renderer가 parent iframe viewport에 계속 갇혔다. geometry owner가 layer placement까지 해결한다고 취급한 것이 반복된 잘못된 사고방식이었다.
+
+해결:
+
+- canonical functional-surface registry에 `presentationOwner: 'ancestor'`를 명시하고 `CottageFunctionalSurface.requestAncestor()`를 추가했다. `game-sheet`, `profile-panel`, `game-location`은 Host iframe에서 이미 열린 ancestor document의 동일 canonical renderer에 presentation만 요청한다.
+- `openProfilePanel()`과 `openShelfSheet()`은 target renderer에서만 local 실행으로 재진입을 막는다. parent shell geometry, variant, DOM, scroll, lifecycle은 바꾸지 않았고 game-location의 hash payload와 lazy local boot도 유지했다.
+
+재발 방지:
+
+- 새 modal/embed/iframe functional surface는 구현 전에 canonical renderer, functional surface, outer context, geometry owner, geometry variant, presentation/layer owner, chrome/navigation owner, scroll owner/boundary를 각각 결정한다.
+- iframe의 `position: fixed`는 iframe viewport 밖으로 탈출하지 못한다. child를 크게 보이게 하려고 parent geometry를 fullscreen/available로 확대하지 않는다.
+- 정상 canonical renderer가 있으면 Host 전용 renderer/document를 새로 만들지 않고, independent overlay가 필요한 경우 presentation owner만 ancestor canonical renderer로 정한다.

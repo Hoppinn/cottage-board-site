@@ -105,6 +105,14 @@ Host는 root iframe을 첫 frame으로 보존하고 child frame을 sibling으로
 
 Parent/Host가 outer geometry를 소유하면 child는 같은 center-modal inset, fixed position, width/height, radius, backdrop를 다시 적용하지 않는다. child renderer의 box는 iframe `0,0`을 채운다. 이 계약은 2026-09-09에 profile child의 `.profile-panel-box.center-modal-shell`가 Host의 `10/36/12` geometry를 다시 적용해 발생한 실제 문제를 기준으로 한다.
 
+### P3-A functional surface presentation owner
+
+Geometry owner와 presentation/layer owner는 별도다. geometry owner는 surface rect와 variant를, presentation owner는 그 surface를 실제로 생성할 document/layer를 정한다. `header.js`의 canonical functional-surface registry에서 `presentationOwner: 'ancestor'`인 surface는 Host iframe 안에서 열릴 때 `CottageFunctionalSurface.requestAncestor()`로 이미 로드된 ancestor document의 같은 canonical renderer에 요청한다. parent Host shell은 preserve 상태로 남는다.
+
+- `game-sheet`, `profile-panel`, `game-location`은 현재 ancestor presentation owner를 가진다. renderer는 각각 기존 `openGameSheet()`, `openProfilePanel()`, `openShelfSheet()`이며 Host 전용 renderer/document를 만들지 않는다.
+- standalone 또는 일반 local context에서는 요청하지 않고 기존 local renderer/layer를 유지한다.
+- iframe 안의 `position: fixed`는 iframe viewport 밖으로 나갈 수 없다. child를 크게 보이게 하려고 parent geometry owner를 `available`/fullscreen으로 바꾸는 것은 금지한다.
+
 ## Pattern P4 — Host overlay frame
 
 P3 child 중 `presentation: 'overlay'`가 붙는 frame이다.
