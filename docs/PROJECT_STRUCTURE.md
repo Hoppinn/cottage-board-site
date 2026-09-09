@@ -20,6 +20,7 @@
 | UI 구조 inventory — 화면 위치·진입점·owner | [docs/UI_STRUCTURE.md](UI_STRUCTURE.md) |
 | UI presentation·modal·local navigation contract | [docs/UI_PATTERNS.md](UI_PATTERNS.md) |
 | stable identity·public nickname·participant resolver | [docs/js-api.md](js-api.md) §CottageDB identity contract |
+| 소유자용 쉬운 구조 안내 | [docs/OWNER_GUIDE.md](OWNER_GUIDE.md) |
 
 ---
 
