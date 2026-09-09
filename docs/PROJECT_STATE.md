@@ -6,7 +6,7 @@
 
 ## 0. 현재 상태
 
-- 현재 승인된 구현 작업은 없다. 완료한 구현·검증의 근거는 git과 [DEBUGGING_HISTORY.md](DEBUGGING_HISTORY.md), 구조 계약은 [UI_STRUCTURE.md](UI_STRUCTURE.md)·[UI_PATTERNS.md](UI_PATTERNS.md)를 정본으로 한다.
+- 현재 승인된 구현 작업은 없다. 최근 완료된 공통 계약은 Host-relative presentation stack inheritance와 stable `user_id`/public `member_intros.nickname` identity 분리다. 구조·navigation은 [UI_STRUCTURE.md](UI_STRUCTURE.md)·[UI_PATTERNS.md](UI_PATTERNS.md), identity·participant resolver는 [js-api.md](js-api.md)를 정본으로 쓴다. 완료 근거는 git과 [DEBUGGING_HISTORY.md](DEBUGGING_HISTORY.md)에 둔다.
 
 ## 1. NOW
 

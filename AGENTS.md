@@ -125,6 +125,8 @@ Codex를 포함한 코딩 에이전트가 이 프로젝트에서 따라야 할 �
 4. `git diff`로 코드·문서 정합성 확인
 5. 함께 커밋
 
+기능 수정 중 여러 경로가 따라야 할 새로운 공통 architecture·identity·navigation contract가 실제 코드와 검증으로 확립되면, 그 세션에서 해당 canonical 문서(또는 열린 작업의 최소 STATE 항목)에 원재료를 남긴다. 구현 세션은 결정을 보존하고, 대규모 MD 통합·중복 제거·문서 체계 변경은 별도 문서 작업으로 분리한다.
+
 | 변경 사항 | 갱신할 파일 |
 |---|---|
 | DB 테이블·컬럼·RPC·Storage 변경 | `docs/db-schema.md` |
@@ -439,6 +441,7 @@ DB 작업 전 `docs/db-schema.md`, 공개 함수 작업 전 `docs/js-api.md`를 
 
 - `achievements.id`
 - `game_play_records.game_id` (BGG ID)
+- 회원 identity의 `user_id` — 화면·통계·업적·도감·상세 보드에서 사람을 다시 찾는 기준
 
 이 ID들은 도감 완성률, 새 게임 경험 수, 캐릭터 해금, 플레이 통계의 기준이며 이미 사용자 자산이 연결돼 있다.
 
@@ -446,6 +449,7 @@ DB 작업 전 `docs/db-schema.md`, 공개 함수 작업 전 `docs/js-api.md`를 
 |---|---|
 | `rabbit_20` → `rabbit_explorer_20`처럼 업적 ID 변경 | 업적 `name`·설명·포인트 변경 |
 | 기존 플레이 기록의 BGG `game_id` 일괄 변경 | 신규 게임에 올바른 BGG ID 사용 |
+| nickname 문자열로 회원 identity 재탐색 | stable `user_id`로 조회하고, historical token은 js-api의 exact alias resolver만 보조 사용 |
 
 ID 변경이 불가피하면 기존 ID 유지, 별도 migration, 기존 사용자 데이터 이전 방안을 포함한 Plan 승인 후 진행한다.
 

@@ -148,7 +148,7 @@ characters_basic/rare/{id}.png       ← rare_lightning, season_spring, cottage_
 
 - 하루에 여러 기록이 있어도 1일
 - 날짜 기준: `played_at` 우선, 없으면 `created_at` KST 변환 (`+9h`)
-- 카운팅 대상: `user_id` 작성자 + `player_names`의 쉼표 토큰 참여자. participant resolver가 profiles의 `nickname`·`real_name` 및 같은 `user_id`의 `member_intros.nickname`(공개 canonical nickname)을 유일한 `normalizeNick` identity 키로 묶고, 정확히 일치시킨 토큰만 포함한다. ILIKE는 후보 수집에만 쓰며 원문·부분문자열만으로는 귀속하지 않는다.
+- 카운팅 대상: `user_id` 작성자 + `player_names`의 쉼표 토큰 참여자. identity/alias 해소의 정본은 [js-api.md](js-api.md)의 **Stable identity, public nickname, and historical participant contract**다. 이 축은 그 resolver의 정확 판정 결과만 소비한다.
 
 ## 판정 한계 (임시 방식)
 

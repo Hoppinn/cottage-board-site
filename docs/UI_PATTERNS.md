@@ -3,7 +3,7 @@
 최종 정리: 2026-09-09
 구조 정본: [UI_STRUCTURE.md](UI_STRUCTURE.md)
 
-이 문서는 `UI_STRUCTURE`에서 확인한 **실제 구조 그룹**에 공통 동작·소유 책임을 붙이는 계약 초안이다. 화면 이름이나 특정 selector의 CSS 예외 목록이 아니다. 구현 변경이나 최종 CSS/JS API 설계는 별도 승인 작업에서 다룬다.
+이 문서는 `UI_STRUCTURE`에서 확인한 **실제 구조 그룹**에 공통 동작·소유 책임을 붙이는 장기 계약 정본이다. 화면 이름이나 특정 selector의 CSS 예외 목록이 아니다. 구현 변경이나 최종 CSS/JS API 설계는 별도 승인 작업에서 다룬다.
 
 ## 적용 방법과 경계
 
@@ -113,6 +113,15 @@ Geometry owner와 presentation/layer owner는 별도다. geometry owner는 surfa
 - `game-sheet`, `profile-panel`, `game-location`은 `presentationStack: 'above-requesting-host'`도 가진다. `ModalStackHost`의 semantic layer owner에서 실제 z-index를 읽어 바로 한 단계 위에만 표시한다. profile의 `_openSubSheet()`는 body sibling local overlay이므로 portal된 panel의 relative layer를 한 단계 이어받는다. 모든 ancestor surface를 topmost로 올리거나 고정 큰 z-index를 쓰지 않는다.
 - standalone 또는 일반 local context에서는 요청하지 않고 기존 local renderer/layer를 유지한다.
 - iframe 안의 `position: fixed`는 iframe viewport 밖으로 나갈 수 없다. child를 크게 보이게 하려고 parent geometry owner를 `available`/fullscreen으로 바꾸는 것은 금지한다.
+
+### P3-B presentation stack inheritance
+
+child presentation surface는 독립적인 전역 `z-index`(예: `9200`, `9500`, `9999`)를 선택하지 않는다. requesting Host의 실제 presentation layer를 기준으로 바로 위 local layer를 계산·상속한다. 이는 geometry owner를 바꾸거나 Host frame을 하나 더 만드는 규칙이 아니다.
+
+- canonical `#profilePanel`은 requesting Host 바로 위에 표시한다. ancestor document로 portal되어도 panel 자체와 기존 dim/panel/scroll tree를 재사용한다.
+- DOM상 `body` sibling인 `#profileSubSheet`는 `_openSubSheet()`에서 active profile panel의 inherited local layer보다 한 단계 위에 표시한다. 프로필·모임·기록·수집·알림 등 모든 subsheet가 이 경로를 공유하며, subsheet를 Host modal/frame으로 승격하지 않는다.
+- `game-sheet`와 `game-location`도 ancestor presentation stack을 받아 requesting Host 바로 위에서 기존 renderer를 연다.
+- `←`, `×`, ESC와 profile local navigation은 기존 owner가 계속 처리한다. 보이는 순서 문제를 새 상태관리·route별 z-index·topmost escalation으로 우회하지 않는다.
 
 ## Pattern P4 — Host overlay frame
 
@@ -242,6 +251,7 @@ The day-detail planner and homepage planner share an iframe source but are not i
 - 게임정보/기록/위치/안내 are one canonical local `game-sheet` functional surface, including inside a Host child. They must not regain a Host iframe route merely to alter outer geometry or navigation chrome.
 - 홈 플래너 and day-detail planner share `club-schedule.html` but have different parent modal owners, message source guards, and quick-entry behavior.
 - Profile subsheets structurally remain local even when the profile parent is a Host child. Promoting them to Host frames would change their local ←/ESC contract.
+- Presentation order is Host-relative inheritance, not route-specific global z-index. A hidden child must be traced to its requesting Host/panel stack before changing any layer value.
 - 모임원 프로필 wizard has explicit parent-to-iframe close delegation because parent and child close controls can occupy the same physical coordinates. It is not an ordinary bubbling/click-through case.
 
 ## Runtime verification before implementation

@@ -1,5 +1,7 @@
 # Modal Stack Host 리팩터링 Plan
 
+> **상태: 완료된 구현 Plan / 역사 보존용.** 현재 presentation stack·modal·local navigation 계약은 [UI_PATTERNS.md](../UI_PATTERNS.md), 화면별 owner/entry는 [UI_STRUCTURE.md](../UI_STRUCTURE.md)가 정본이다. 이 문서는 Host 도입과 당시 검증의 경위를 보존하며, 새 구현의 활성 계획이 아니다.
+
 상태: portal·topmost close guard·profile wizard child 이관은 실제 회귀(흰 화면)를 받아 rollback 완료 / B는 실제 화면 해결 확인 / A는 실제 계측·최소 CSS 수정 후 실제 화면 해결 확인
 
 계측 정본: [Modal Stack A/B 계측 Plan](modal-stack-ab-measurement-plan.md), 실제 실패·측정 결과는 [DEBUGGING_HISTORY.md](../DEBUGGING_HISTORY.md). portal/fixed 같은 공통 구조 변경은 측정 전 다시 시도하지 않는다.
