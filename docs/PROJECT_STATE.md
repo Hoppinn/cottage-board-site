@@ -14,17 +14,15 @@
 
 ## 2. NEXT (자동 착수 금지)
 
-1. **Active-view 페이지 분석 실사용 검증** — active-view 구현은 완료됐다. 일반 사용자가 대표 센터모달·바텀시트·iframe surface를 열고 닫은 뒤 active-view key가 `page_sessions`에 기록되고 관리자 페이지의 `페이지` 분석에 표시되는지 확인한다. 관리자 계정 자체의 analytics 제외와는 별개다. 상세: [PLAN_active_view_tracking.md](PLAN_active_view_tracking.md).
-
-2. **nested profile underlying scroll boundary** — `모임원프로필페이지 → 개인카드 상세보기 → 프로필보드`에서 최하단 반복 아래 scroll 또는 최상단 반복 위 scroll이 underlying 모임원프로필페이지로 넘어가지 않는지 확인한다. 동일 scroll-owner/boundary 구조의 center modal·bottom sheet·subsheet·nested overlay만 비교하고, 사이트 전체 overlay 문제로 일반화하지 않는다. iPhone/Safari도 확인 대상이며 wizard overscroll과는 별개다.
-3. **게임 데이터 확인** — 보유게임 스위트랜드 추가, 파수꾼 `도착예정 → 쉬운협력게임`, 페야의늪 `도착예정 → 헤비매니아` 요구를 데이터 정본과 대조한다. 현재 출력은 파수꾼=`active/incoming`, 페야의늪=`active/heavy_strategy`이며 스위트랜드 일치 항목은 미확인이다.
-4. **가입경로 보드라이프** — `member_intros.join_sources` 허용 목록·입력 UI·표시 라벨·최신 RPC 마이그레이션을 함께 바꾸는 Red Plan 승인 후 구현한다.
-5. **모임 보드 → 플래너 미리보기 scroll** — 진입 시 중간 scroll position에서 시작하는 문제의 target, 이벤트, 실제 scroll owner와 클릭 전후 rect를 측정한 뒤 플래너의 올바른 시작 위치로 수정한다.
-6. **플레이 기록 accordion 위치 보정** — 날짜별/모임별 accordion의 열린 header가 닫힌 상태보다 높아지지 않게 하고, 페이지 하단에서도 `compensateHeaderPosition`이 클릭 header viewport 위치를 유지하도록 실제 부족 scroll 여유를 조사한다.
-7. **게임위치 scroll boundary** — geometry와 표시 지연은 사용자 실화면 통과했다. 별도로 남은 game-location scroll bug가 있으면 실제 scroll owner/boundary와 iframe/local overlay 전달 경로를 확인한다.
-8. **홈페이지 기능 child route 공통화 리팩터링** — 기능별 위임 분기와 URL 조립을 공통 child 요청/route registry 계약으로 정리하는 별도 Plan 후보다. 독립 URL·일반 embed·작은 sheet는 유지한다.
-9. **추천 전체보기 상단 과대 영역** — `홈페이지 기능 → 추천게임찾기 → 게임 더 찾기 → 전체보기`의 Host X와 제목 영역이 중복 점유하는지 사용자와 같은 URL·viewport에서 shell/header/divider rect로 먼저 판정한다.
-10. **AGENTS canonical 기능 재사용·embed/iframe 원칙 점검** — embed는 기존 기능의 표시 방식이며 duplicate renderer/state/handler를 만들지 않고 canonical renderer·markup·state·validation·save·auth·event logic을 우선 재사용한다는 원칙이 현재 AGENTS에 충분히 있는지 검토한다. embed 분기는 layout/chrome 숨김으로 최소화하고, preload가 auth·진입 가능 여부·user flow를 바꾸지 않으며 인증은 실제 제한 action 가까이에 둔다는 점도 확인한다. 새 embed 전용 구조가 필요하면 canonical 재사용 불가 사유를 먼저 명시한다. 이번에는 AGENTS를 수정하지 않는다.
+1. **nested profile underlying scroll boundary** — `모임원프로필페이지 → 개인카드 상세보기 → 프로필보드`에서 최하단 반복 아래 scroll 또는 최상단 반복 위 scroll이 underlying 모임원프로필페이지로 넘어가지 않는지 확인한다. 동일 scroll-owner/boundary 구조의 center modal·bottom sheet·subsheet·nested overlay만 비교하고, 사이트 전체 overlay 문제로 일반화하지 않는다. iPhone/Safari도 확인 대상이며 wizard overscroll과는 별개다.
+2. **게임 데이터 확인** — 보유게임 스위트랜드 추가, 파수꾼 `도착예정 → 쉬운협력게임`, 페야의늪 `도착예정 → 헤비매니아` 요구를 데이터 정본과 대조한다. 현재 출력은 파수꾼=`active/incoming`, 페야의늪=`active/heavy_strategy`이며 스위트랜드 일치 항목은 미확인이다.
+3. **가입경로 보드라이프** — `member_intros.join_sources` 허용 목록·입력 UI·표시 라벨·최신 RPC 마이그레이션을 함께 바꾸는 Red Plan 승인 후 구현한다.
+4. **모임 보드 → 플래너 미리보기 scroll** — 진입 시 중간 scroll position에서 시작하는 문제의 target, 이벤트, 실제 scroll owner와 클릭 전후 rect를 측정한 뒤 플래너의 올바른 시작 위치로 수정한다.
+5. **플레이 기록 accordion 위치 보정** — 날짜별/모임별 accordion의 열린 header가 닫힌 상태보다 높아지지 않게 하고, 페이지 하단에서도 `compensateHeaderPosition`이 클릭 header viewport 위치를 유지하도록 실제 부족 scroll 여유를 조사한다.
+6. **게임위치 scroll boundary** — geometry와 표시 지연은 사용자 실화면 통과했다. 별도로 남은 game-location scroll bug가 있으면 실제 scroll owner/boundary와 iframe/local overlay 전달 경로를 확인한다.
+7. **홈페이지 기능 child route 공통화 리팩터링** — 기능별 위임 분기와 URL 조립을 공통 child 요청/route registry 계약으로 정리하는 별도 Plan 후보다. 독립 URL·일반 embed·작은 sheet는 유지한다.
+8. **추천 전체보기 상단 과대 영역** — `홈페이지 기능 → 추천게임찾기 → 게임 더 찾기 → 전체보기`의 Host X와 제목 영역이 중복 점유하는지 사용자와 같은 URL·viewport에서 shell/header/divider rect로 먼저 판정한다.
+9. **AGENTS canonical 기능 재사용·embed/iframe 원칙 점검** — embed는 기존 기능의 표시 방식이며 duplicate renderer/state/handler를 만들지 않고 canonical renderer·markup·state·validation·save·auth·event logic을 우선 재사용한다는 원칙이 현재 AGENTS에 충분히 있는지 검토한다. embed 분기는 layout/chrome 숨김으로 최소화하고, preload가 auth·진입 가능 여부·user flow를 바꾸지 않으며 인증은 실제 제한 action 가까이에 둔다는 점도 확인한다. 새 embed 전용 구조가 필요하면 canonical 재사용 불가 사유를 먼저 명시한다. 이번에는 AGENTS를 수정하지 않는다.
 
 ## 3. BACKLOG (자동 착수 금지)
 
@@ -53,6 +51,7 @@
 
 ## 5. DEFERRED / TRIGGER (자동 착수 금지)
 
+- **Active-view 페이지 분석 실사용 검증** — 구현 완료, 정적 검증 완료, 격리 브라우저 전송 검증 완료. 남은 완료조건은 실제 일반 사용자 계정의 운영 surface(대표 센터모달·바텀시트·iframe) 행동 뒤 `page_sessions` 및 관리자 페이지 `페이지` 분석 표시를 확인하는 것이다. 현재 차단 조건은 일반 사용자 테스트 계정 없음이며, 일반 사용자 테스트 계정 확보 또는 실제 일반 사용자 검증 가능 시 재개한다. 상세: [PLAN_active_view_tracking.md](PLAN_active_view_tracking.md).
 - **보드 sticky 헤더 우선순위** — 수집 보드와 프로필 보드의 UI 후보다. 각 보드 scroll container 안에서 현재 섹션 하나만 고정하며, 여러 보드를 건드리는 Yellow 작업이므로 별도 Plan과 변경안 승인 뒤에만 착수한다.
 - **Legacy naming migration** — 다음 점검: 현재 큰 기능 묶음 완료 후. 구조 안정화·의존관계 파악·회귀 검증·호환 전략·반복 혼선 여부를 함께 판단하며, 트리거는 검토 시작 시점일 뿐 실행 확정이 아니다. 상세 기준은 [명칭 정합성 조사 Plan](plans/naming-alignment-audit-plan.md)을 따른다.
 - **최근 참여 데이터 모델** — [모임 참여 데이터 Plan](plans/meeting-participation-data-plan.md)에 따라 데이터 관계와 범위를 먼저 확정한 뒤 재검토한다.
