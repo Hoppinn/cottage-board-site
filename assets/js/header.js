@@ -20,14 +20,29 @@
 
   function _setChildSurfaceGeometry(event) {
     const data = event.data;
-    if (data?.type !== 'cottage-functional-surface-state' || data.surface !== 'game-sheet') return;
+    if (!['cottage-functional-surface-state', 'cottage-functional-surface-prepare'].includes(data?.type) || data.surface !== 'game-sheet') return;
     if (event.origin !== location.origin) return;
     const frame = Array.from(document.querySelectorAll('iframe'))
       .find(candidate => candidate.contentWindow === event.source);
     const owner = frame?.closest('[data-ui-surface-geometry-owner]');
-    if (!owner) return;
-    if (data.active) owner.dataset.uiFunctionalSurface = data.surface;
-    else delete owner.dataset.uiFunctionalSurface;
+    if (owner) {
+      if (data.type === 'cottage-functional-surface-prepare' || data.active) owner.dataset.uiFunctionalSurface = data.surface;
+      else delete owner.dataset.uiFunctionalSurface;
+    }
+    if (data.type === 'cottage-functional-surface-prepare') {
+      event.source?.postMessage({ type: 'cottage-functional-surface-ready', surface: data.surface }, event.origin);
+    }
+  }
+
+  function _completeLocalSurfaceGeometry(event) {
+    if (event.origin !== location.origin || event.data?.type !== 'cottage-functional-surface-ready' || event.data.surface !== 'game-sheet') return;
+    delete document.documentElement.dataset.uiFunctionalSurfacePending;
+  }
+
+  function _prepareLocalSurfaceGeometry(surface) {
+    if (surface !== 'game-sheet' || window.parent === window) return;
+    document.documentElement.dataset.uiFunctionalSurfacePending = surface;
+    window.parent.postMessage({ type: 'cottage-functional-surface-prepare', surface }, location.origin);
   }
 
   function _publishLocalSurfaceGeometry() {
@@ -36,6 +51,7 @@
     window.parent.postMessage({ type: 'cottage-functional-surface-state', surface: 'game-sheet', active }, location.origin);
   }
   window.addEventListener('message', _setChildSurfaceGeometry);
+  window.addEventListener('message', _completeLocalSurfaceGeometry);
   const _surfaceStateObserver = new MutationObserver(_publishLocalSurfaceGeometry);
   const _surfaceDiscoveryObserver = new MutationObserver(_watchLocalSurfaceGeometry);
   function _watchLocalSurfaceGeometry() {
@@ -91,6 +107,7 @@
       window.parent.postMessage({ type: 'cottage-modal-stack-pop' }, '*');
       return true;
     },
+    prepareFunctionalSurface: _prepareLocalSurfaceGeometry,
     runLocal: fn => {
       _localStackOpenDepth++;
       try { return fn(); } finally { _localStackOpenDepth--; }

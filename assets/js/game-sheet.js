@@ -502,6 +502,7 @@ function _openAndInitSheet(gameKey, restoreScroll, noAnim) {
   // 재생하면 새 시트가 열리는 것처럼 보인다. 시트는 display:none↔block이라 켤 때마다 애니메이션이
   // 무조건 재생되므로 클래스로 억제. 새로 여는 경우는 종전대로 올라온다.
   gameSheet.classList.toggle('no-anim', !!noAnim);
+  window.CottageModalStack?.prepareFunctionalSurface?.('game-sheet');
   gameSheet.classList.add('is-active');
   document.body.classList.add('sheet-open');
   _ensureGameSheetViewToken();

@@ -2101,6 +2101,7 @@ body.recommend-page main{
 .game-sheet.is-active{
   display:block;
 }
+html[data-ui-functional-surface-pending="game-sheet"] .game-sheet.is-active{visibility:hidden;}
 
 .game-sheet-dim{
   position:absolute;
