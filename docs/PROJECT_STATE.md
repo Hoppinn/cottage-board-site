@@ -7,7 +7,6 @@
 ## 0. 현재 상태
 
 - 시간 단위 표시: `profiles.total_minutes`의 legacy 이름과 실제 seconds 단위를 코드·도메인 문서에 명시하고, 오너 전용 회원 분석의 60배 표시를 수정했다. 관리자와 회원 분석의 `page_sessions` 경로 비교는 별도 보류 후보다.
-- NOW: Modal Stack Host의 portal·topmost close guard·`profile-wizard` child 이관은 실제 흰 화면 회귀를 받아 rollback했다. 실패 원인은 `docs/DEBUGGING_HISTORY.md`에 기록했다. 기존 frame/inert/single backdrop/iframe 상태 보존 구조와 코스 UI 변경은 유지한다. B(root X가 iframe 위저드 X처럼 hit되는 경로)는 iframe close 요청 위임 후 사용자 실화면에서 해결 확인됐다. A(`홈 → 프로필페이지 미리보기 → 내 보드`)는 `?modalDebug=1` 실제 계측으로 iframe 내부 `.profile-panel-box.center-modal-shell`의 중복 `10/36/12` 좌표가 원인임을 확인했고, child 안을 채우도록 최소 수정한 뒤 사용자 실화면 해결 확인을 받았다. 상세 측정·실패 가설은 `docs/DEBUGGING_HISTORY.md`를 정본으로 한다.
 - 상세 Plan: [보드 상호작용 회귀](plans/board-interaction-regressions-plan.md) · [모임 참여 데이터](plans/meeting-participation-data-plan.md) · [닉네임 해소 보정](plans/nickname-resolution-correction-plan.md)
 - 현재 단계: 최근 참여의 모임 단위 개편은 데이터 관계가 불명확해 구현 보류다. `game_play_records`에는 모임 ID가 없고 `meeting_votes`는 참여 등록이므로 날짜만으로 결합하지 않는다.
 - P2 완료: `player_names` 후보는 공백 사이 `%` 패턴으로 넓히고, 최종적으로 쉼표 토큰의 `normalizeNick` 정확 일치만 사용한다. 활동 통계·태그 알림·게임 도감·참여/함께한 날 업적과 참여자 링크에 같은 규칙을 적용했고, 충돌 키는 자동 연결하지 않는다. 원문 기록과 작성자 `user_id` 권한은 보존했으며 모임 참석을 추론하지 않았다. 읽기 전용 감사는 프로필 46개·기록 122개·충돌 0쌍, `덕 지` 0→20건/3→9일 및 `play_5·10·20` 신규 임계값 후보, `원철` 부분문자열 오탐 2→0건을 확인했다. 이번 세션에서 업적 지급 write는 실행하지 않았다.
@@ -16,11 +15,6 @@
 - 최근 버그 닫힘: 게임도감 전체보기 전환 시 기존 항목이 3px 위로 이동하던 원인을 미리보기/전체 목록의 `margin-top` 차이로 확인하고 수정·커밋했다.
 
 ## 1. NOW
-
-- **게임정보 canonical surface** — 홈페이지 기능의 추천게임찾기·플레이기록·내 보드·모임플래너 어느 진입점에서도 `openGameSheet()`/`.game-sheet` local bottom-sheet renderer를 사용한다. Modal Stack Host는 게임정보·기록·위치·안내 iframe child route를 만들지 않으며, geometry owner와 functional surface를 분리한다. Independent Overlay인 게임시트의 prepare/ready는 parent geometry owner를 재분류하지 않아 추천 전체보기의 outer geometry를 보존한다. Host child에서 열면 이미 열린 ancestor document의 canonical renderer로 portal되어 child iframe/content-box clipping 없이 자체 geometry를 쓴다. 사용자 확인 대기: 네 진입점의 게임정보와 게임 A→B/기록/위치/안내 local flow.
-- **공통 Modal Stack Host** — `docs/plans/modal-stack-host-plan.md`의 기존 host 구조를 유지한다. game flow는 Host-owned flow-close X와 one-step ←를 분리해 drilldown에서도 둘 다 유지하며, X는 현재 contiguous game flow를 닫고 ←/ESC는 top frame 하나만 복귀한다. child route는 추천 전체보기만 유지한다. 내 보드/읽기 전용 프로필은 `openProfilePanel()` local surface, 모임 조율은 `openDateMeetingModal()` compact local surface를 현재 document에서 재사용하며 Host child iframe을 만들지 않는다. 기존 모임원 프로필 작성·수정 wizard와 내 보드 내부 `_openSubSheet()` ← navigation은 보존한다. 사용자 확인 대기: 다른 modal/context → 내 보드의 lifecycle, 내 보드 하위 board navigation, planner context → 모임 조율 compact geometry.
-- **프로필 작성/수정 wizard scroll** — `club-intro.html`의 `.intro-wizard-body`가 유일한 flex scroll owner(`min-height:0`, `overflow-y:auto`)이며 `overscroll-behavior:contain`을 쓴다. 하단에서 움직이던 실제 parent는 embed root `html/body`였으므로 wizard open 동안에만 root scroll을 lock하고 overlay를 iframe viewport에 fixed로 둔다. wizard header·footer와 parent X close delegation은 유지한다. 사용자 확인 대기: wizard 최하단에서 계속 scroll해 parent profile/modal이 움직이지 않는지.
-
 ## 2. NEXT (자동 착수 금지)
 
 1. **게임 위치 자동 초점 2건·보유게임 1건** — 게임정보 모달에서 게임 위치 child로 들어갈 때 해당 shelf가 펼쳐지고, highlight 게임이 첫 항목인 상태로 shelf header가 iframe 상단에 와야 하나 실제 화면에서는 최상단에서 멈춘다. 실패한 시도: ① `scrollIntoView()` 호출 시점 rAF 조정, ② 좌표 기반 `window.scrollTo`, ③ `load` 뒤 재실행, ④ header rect를 반복 보정하는 방식. 모두 실제 런타임에서 해결되지 않았으며 제거했다. 재개 전에는 360px iframe의 최종 URL/query·`body.embed-mode`·shelf open 여부·highlight 첫 항목·shelf header/첫 게임 rect·실제 scroll container와 `scrollTop`을 함께 측정해 원인을 확정한다. `#embed=1` fallback은 localhost query 유실 회귀가 있어 측정 전 제거하지 않는다.

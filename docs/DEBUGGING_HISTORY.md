@@ -326,3 +326,34 @@
 
 - 공통 UI 변경은 실제 렌더 검증 또는 사용자가 실행할 수 있는 전체 회귀 경로를 함께 제시한다.
 - “가능성이 높다”와 “측정으로 확인했다”를 같은 수준의 근거로 보고하지 않는다.
+## 2026-09-09 - Modal Stack / canonical functional surface 및 wizard scroll closure
+
+증상:
+
+- 추천게임 → 게임 더 찾기 → 전체보기에서 게임정보를 열면 parent 전체보기의 geometry를 보존하면서도 game-sheet가 parent modal 안의 작은 surface로 표시됐다.
+- profile 작성·수정 wizard를 최하단까지 내린 뒤 계속 scroll하면 parent/root가 움직였다.
+
+최종 원인:
+
+- `position: fixed`인 game-sheet도 Host child iframe의 containing box 밖으로는 나갈 수 없었다. parent geometry 보존만으로는 child의 독립 geometry owner/layer를 확보하지 못했다.
+- 실제로 움직인 scroll owner는 `.intro-wizard-body`가 아니라 embed root `html/body`였다. wizard body의 `overscroll-behavior`만으로는 그 root scroll 경로를 차단할 수 없었다.
+
+최종 해결:
+
+- Host child의 functional-surface request를 ancestor document에 이미 열린 동일 canonical game-sheet renderer로 portal하여, parent geometry는 건드리지 않고 child는 독립 surface geometry를 사용하게 했다.
+- wizard lifecycle 동안 embed root scroll을 lock하고 wizard overlay를 iframe viewport 기준 `fixed`로 유지했다.
+
+왜 이전 수정만으로 부족했는가:
+
+- parent geometry preservation은 parent의 geometry owner 재분류를 막았지만, iframe 내부에 남은 child의 containing block/clipping은 해소하지 못했다.
+- wizard body에만 `overscroll-behavior: contain`을 적용한 것은 실제 root scroll owner를 lock하지 못했다.
+
+재발 방지:
+
+- Independent Overlay는 parent geometry owner 보존과 child의 독립 outer layer/geometry owner를 함께 확인한다.
+- nested scroll 문제는 child boundary CSS만으로 결론 내리지 않고 실제로 움직이는 document/root/panel/drag owner를 먼저 확정한다.
+
+실제 화면 검증:
+
+- 사용자 실화면에서 추천 전체보기의 geometry 유지, 독립 game-sheet 표시, 열기·닫기 흐름을 통과했다.
+- 사용자 실화면에서 wizard 최하단 overscroll 시 parent/root가 움직이지 않음을 통과했다.
