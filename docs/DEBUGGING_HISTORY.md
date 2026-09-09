@@ -380,3 +380,22 @@
 - 새 modal/embed/iframe functional surface는 구현 전에 canonical renderer, functional surface, outer context, geometry owner, geometry variant, presentation/layer owner, chrome/navigation owner, scroll owner/boundary를 각각 결정한다.
 - iframe의 `position: fixed`는 iframe viewport 밖으로 탈출하지 못한다. child를 크게 보이게 하려고 parent geometry를 fullscreen/available로 확대하지 않는다.
 - 정상 canonical renderer가 있으면 Host 전용 renderer/document를 새로 만들지 않고, independent overlay가 필요한 경우 presentation owner만 ancestor canonical renderer로 정한다.
+
+## 2026-09-10 - ancestor presentation portal의 stack position 누락
+
+증상:
+
+- planner iframe에서 ancestor document의 `openProfilePanel()` renderer가 실행돼 small modal clipping은 사라졌지만, profile-panel이 planner root modal 아래에 표시됐다.
+
+원인:
+
+- `presentationOwner: 'ancestor'`는 renderer document만 선택했고 그 document 안의 stacking position은 정하지 않았다. planner Host container는 `--z-shelf` layer에 있고 profile-panel의 기본 `--z-profile` layer는 그보다 아래라, sibling DOM insertion만으로는 ordering이 보장되지 않았다.
+
+해결:
+
+- `ModalStackHost` container를 `data-ui-presentation-layer-owner="host"`로 표시하고, profile-panel registry에 `presentationStack: 'above-requesting-host'`를 추가했다. portal request는 requesting iframe의 Host layer computed z-index를 전달하고, canonical profile renderer는 그 바로 한 단계 위에만 표시한다.
+
+재발 방지:
+
+- ancestor presentation을 쓰는 surface는 document owner와 stack position을 별도로 결정한다. document를 찾았다는 사실만으로 sibling stacking order가 보장된다고 가정하지 않는다.
+- relative stack position은 requesting Host에만 적용한다. route selector, unconditional high z-index, parent hide/reload/geometry mutation으로 ordering을 보정하지 않는다.

@@ -107,9 +107,10 @@ Parent/Host가 outer geometry를 소유하면 child는 같은 center-modal inset
 
 ### P3-A functional surface presentation owner
 
-Geometry owner와 presentation/layer owner는 별도다. geometry owner는 surface rect와 variant를, presentation owner는 그 surface를 실제로 생성할 document/layer를 정한다. `header.js`의 canonical functional-surface registry에서 `presentationOwner: 'ancestor'`인 surface는 Host iframe 안에서 열릴 때 `CottageFunctionalSurface.requestAncestor()`로 이미 로드된 ancestor document의 같은 canonical renderer에 요청한다. parent Host shell은 preserve 상태로 남는다.
+Geometry owner와 presentation/layer owner는 별도다. geometry owner는 surface rect와 variant를, presentation document owner는 그 surface를 실제로 생성할 document를 정한다. presentation stack position은 그 document 안에서 requesting Host surface에 대한 순서를 정한다. `header.js`의 canonical functional-surface registry에서 `presentationOwner: 'ancestor'`인 surface는 Host iframe 안에서 열릴 때 `CottageFunctionalSurface.requestAncestor()`로 이미 로드된 ancestor document의 같은 canonical renderer에 요청한다. parent Host shell은 preserve 상태로 남는다.
 
 - `game-sheet`, `profile-panel`, `game-location`은 현재 ancestor presentation owner를 가진다. renderer는 각각 기존 `openGameSheet()`, `openProfilePanel()`, `openShelfSheet()`이며 Host 전용 renderer/document를 만들지 않는다.
+- `profile-panel`은 `presentationStack: 'above-requesting-host'`도 가진다. `ModalStackHost`의 semantic layer owner에서 실제 z-index를 읽어 바로 한 단계 위에만 표시한다. 모든 ancestor surface를 topmost로 올리거나 고정 큰 z-index를 쓰지 않는다.
 - standalone 또는 일반 local context에서는 요청하지 않고 기존 local renderer/layer를 유지한다.
 - iframe 안의 `position: fixed`는 iframe viewport 밖으로 나갈 수 없다. child를 크게 보이게 하려고 parent geometry owner를 `available`/fullscreen으로 바꾸는 것은 금지한다.
 
