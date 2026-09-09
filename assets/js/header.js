@@ -24,8 +24,9 @@
   const _canonicalLocalSurfaceStates = Object.freeze({
     // Parent geometry is opt-in. A game sheet is an independent local overlay:
     // its prepare/ready handshake must not reclassify the preserved parent shell.
-    'game-sheet': { nodeSelector: '.game-sheet', isActive: node => node.classList.contains('is-active'), parentGeometry: 'preserve', portal: 'ancestor' },
-    'profile-panel': { nodeSelector: '#profilePanel', isActive: () => true, parentGeometry: 'preserve' },
+    'game-sheet': { nodeSelector: '.game-sheet', isActive: node => node.classList.contains('is-active'), parentGeometry: 'preserve', presentationOwner: 'ancestor' },
+    'profile-panel': { nodeSelector: '#profilePanel', isActive: () => true, parentGeometry: 'preserve', presentationOwner: 'ancestor' },
+    'game-location': { nodeSelector: '#shelfSheetOverlay', isActive: () => true, parentGeometry: 'preserve', presentationOwner: 'ancestor' },
     'meeting-adjust': { nodeSelector: '#__ddModal', isActive: node => node.classList.contains('is-open'), parentGeometry: 'preserve' },
   });
   let _localStackOpenDepth = 0;
@@ -69,18 +70,27 @@
     window.parent.postMessage({ type: 'cottage-functional-surface-prepare', surface }, location.origin);
   }
 
-  // A Host child cannot paint outside its iframe. Independent functional
-  // surfaces therefore claim the already-open ancestor document's canonical
-  // renderer; the preserved child frame remains untouched underneath it.
+  // Geometry ownership decides a surface's rect; presentation ownership decides
+  // which document may create that rect. A fixed node cannot escape its iframe,
+  // so an ancestor-owned presentation must claim an already-loaded canonical
+  // renderer instead of changing the parent Host shell's geometry.
   function _forwardFunctionalSurfaceRequest(event) {
     const request = event.detail;
     const surface = _surfaceState(request?.surface);
-    if (!surface || surface.portal !== 'ancestor' || request.handled) return;
+    if (!surface || surface.presentationOwner !== 'ancestor' || request.handled) return;
     if (_stackFrame === 'child' && window.parent !== window) {
       window.parent.dispatchEvent(new window.parent.CustomEvent('cottage-functional-surface-request', { detail: request }));
       return;
     }
     window.dispatchEvent(new CustomEvent('cottage-functional-surface-open', { detail: request }));
+  }
+
+  function _requestAncestorFunctionalSurface(surfaceName, payload) {
+    const surface = _surfaceState(surfaceName);
+    if (!surface || surface.presentationOwner !== 'ancestor' || _stackValue !== '1' || window.parent === window) return false;
+    const request = { surface: surfaceName, payload, handled: false };
+    window.parent.dispatchEvent(new window.parent.CustomEvent('cottage-functional-surface-request', { detail: request }));
+    return request.handled;
   }
 
   function _publishLocalSurfaceGeometry() {
@@ -164,6 +174,9 @@
       try { return fn(); } finally { _localStackOpenDepth--; }
     },
   };
+  window.CottageFunctionalSurface = Object.freeze({
+    requestAncestor: _requestAncestorFunctionalSurface,
+  });
   if (isEmbedValue(_embedQuery.get('embed')) || isEmbedValue(_embedHash.get('embed'))) {
     document.body.classList.add('embed-mode');
     // Parent stack child는 첫 paint부터 원 페이지 chrome을 숨긴다.

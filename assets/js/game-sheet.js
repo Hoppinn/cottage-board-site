@@ -251,14 +251,7 @@ function _requestModalStack(kind, payload, options) {
 }
 
 function _requestAncestorFunctionalSurface(surface, payload) {
-  const stack = window.CottageModalStack?.state?.();
-  // A Host root iframe is as unable to paint outside its containing box as a
-  // Host child iframe. The portal boundary is therefore the Host document,
-  // not the child-frame role.
-  if (!stack?.enabled || window.parent === window) return false;
-  const request = { surface, payload, handled: false };
-  window.parent.dispatchEvent(new window.parent.CustomEvent('cottage-functional-surface-request', { detail: request }));
-  return request.handled;
+  return window.CottageFunctionalSurface?.requestAncestor?.(surface, payload) === true;
 }
 
 function ensureGameSheet() {
@@ -425,7 +418,8 @@ function _openRuleHubModal(gameName, { sections: ruleSections, errorNote, photos
   }
 }
 
-function openShelfSheet(url) {
+function openShelfSheet(url, { presentationLocal = false } = {}) {
+  if (!presentationLocal && _requestAncestorFunctionalSurface('game-location', { url })) return;
   const stackUrl = new URL(url, location.href);
   if (_requestModalStack('game-location', {
     game: stackUrl.searchParams.get('highlight') || '',
@@ -3054,13 +3048,20 @@ Object.defineProperty(window, 'gameSheet', {
 
 window.addEventListener('cottage-functional-surface-open', event => {
   const request = event.detail;
-  if (request?.surface !== 'game-sheet' || request.handled) return;
-  const { mode = 'info', gameKey, restoreScroll = false, fromKey = null, noAnim = false } = request.payload || {};
-  if (!gameKey) return;
-  ensureGameSheet();
-  request.handled = true;
-  if (mode === 'record') openGameRecordSheet(gameKey);
-  else openGameSheet(gameKey, restoreScroll, fromKey, noAnim);
+  if (request?.surface === 'game-sheet' && !request.handled) {
+    const { mode = 'info', gameKey, restoreScroll = false, fromKey = null, noAnim = false } = request.payload || {};
+    if (!gameKey) return;
+    ensureGameSheet();
+    request.handled = true;
+    if (mode === 'record') openGameRecordSheet(gameKey);
+    else openGameSheet(gameKey, restoreScroll, fromKey, noAnim);
+  }
+  if (request?.surface === 'game-location' && !request.handled) {
+    const { url } = request.payload || {};
+    if (!url) return;
+    request.handled = true;
+    openShelfSheet(url, { presentationLocal: true });
+  }
 });
 
 })();
