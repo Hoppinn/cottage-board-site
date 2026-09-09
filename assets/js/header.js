@@ -24,9 +24,9 @@
   const _canonicalLocalSurfaceStates = Object.freeze({
     // Parent geometry is opt-in. A game sheet is an independent local overlay:
     // its prepare/ready handshake must not reclassify the preserved parent shell.
-    'game-sheet': { nodeSelector: '.game-sheet', isActive: node => node.classList.contains('is-active'), parentGeometry: 'preserve', presentationOwner: 'ancestor' },
+    'game-sheet': { nodeSelector: '.game-sheet', isActive: node => node.classList.contains('is-active'), parentGeometry: 'preserve', presentationOwner: 'ancestor', presentationStack: 'above-requesting-host' },
     'profile-panel': { nodeSelector: '#profilePanel', isActive: () => true, parentGeometry: 'preserve', presentationOwner: 'ancestor', presentationStack: 'above-requesting-host' },
-    'game-location': { nodeSelector: '#shelfSheetOverlay', isActive: () => true, parentGeometry: 'preserve', presentationOwner: 'ancestor' },
+    'game-location': { nodeSelector: '#shelfSheetOverlay', isActive: () => true, parentGeometry: 'preserve', presentationOwner: 'ancestor', presentationStack: 'above-requesting-host' },
     'meeting-adjust': { nodeSelector: '#__ddModal', isActive: node => node.classList.contains('is-open'), parentGeometry: 'preserve' },
   });
   let _localStackOpenDepth = 0;

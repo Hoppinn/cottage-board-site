@@ -273,6 +273,25 @@ let _gameSheetHistory = [];
 let _gameSheetNavBack = false;
 let _savedBodyScrollY = 0;
 
+// An ancestor presentation is a real sibling of the requesting Host, not a
+// child of its iframe. Keep the canonical renderer's native geometry, but put
+// its complete dim/panel/scroll tree in that Host-relative presentation layer.
+function _applyGamePresentationStack(presentationStack) {
+  if (!gameSheet || presentationStack?.position !== 'above-requesting-host' || !Number.isFinite(presentationStack.zIndex)) return;
+  if (!Object.prototype.hasOwnProperty.call(gameSheet, '_presentationStackRestore')) {
+    gameSheet._presentationStackRestore = gameSheet.style.zIndex;
+  }
+  gameSheet.dataset.uiPresentationStack = presentationStack.position;
+  gameSheet.style.zIndex = String(presentationStack.zIndex + 1);
+}
+
+function _restoreGamePresentationStack() {
+  if (!gameSheet || !Object.prototype.hasOwnProperty.call(gameSheet, '_presentationStackRestore')) return;
+  gameSheet.style.zIndex = gameSheet._presentationStackRestore;
+  delete gameSheet._presentationStackRestore;
+  delete gameSheet.dataset.uiPresentationStack;
+}
+
 // 활성 뷰 체류시간 추적(PLAN_active_view_tracking.md 2차) — 게임 정보(_openAndInitSheet)와
 // 기록(openGameRecordSheet) 둘 다 같은 #gameSheet 오버레이를 공유하는 "게임시트" 한 뷰라,
 // 그 안에서 정보↔기록을 오가도 push를 두 번 하지 않는다. _active 플래그로 "이미 열려 있나"를
@@ -418,7 +437,7 @@ function _openRuleHubModal(gameName, { sections: ruleSections, errorNote, photos
   }
 }
 
-function openShelfSheet(url, { presentationLocal = false } = {}) {
+function openShelfSheet(url, { presentationLocal = false, presentationStack = null } = {}) {
   if (!presentationLocal && _requestAncestorFunctionalSurface('game-location', { url })) return;
   const stackUrl = new URL(url, location.href);
   if (_requestModalStack('game-location', {
@@ -441,6 +460,10 @@ function openShelfSheet(url, { presentationLocal = false } = {}) {
   const overlay = document.createElement('div');
   overlay.id = 'shelfSheetOverlay';
   overlay.className = 'shelf-sheet-overlay';
+  if (presentationStack?.position === 'above-requesting-host' && Number.isFinite(presentationStack.zIndex)) {
+    overlay.dataset.uiPresentationStack = presentationStack.position;
+    overlay.style.zIndex = String(presentationStack.zIndex + 1);
+  }
   // The iframe document owns its root scroll. Mirror its functional payload in
   // the hash so an embed redirect cannot drop the shelf/highlight target and
   // leave that scroll owner at the document top.
@@ -1055,6 +1078,7 @@ function closeGameSheet(){
   _savedSheetScrollTop = panel ? panel.scrollTop : 0;
 
   gameSheet.classList.remove('is-active');
+  _restoreGamePresentationStack();
   document.body.classList.remove('sheet-open');
   window.scrollTo(0, _savedBodyScrollY);
   _currentSheetGameKey = null;
@@ -3052,6 +3076,7 @@ window.addEventListener('cottage-functional-surface-open', event => {
     const { mode = 'info', gameKey, restoreScroll = false, fromKey = null, noAnim = false } = request.payload || {};
     if (!gameKey) return;
     ensureGameSheet();
+    _applyGamePresentationStack(request.presentationStack || null);
     request.handled = true;
     if (mode === 'record') openGameRecordSheet(gameKey);
     else openGameSheet(gameKey, restoreScroll, fromKey, noAnim);
@@ -3060,7 +3085,7 @@ window.addEventListener('cottage-functional-surface-open', event => {
     const { url } = request.payload || {};
     if (!url) return;
     request.handled = true;
-    openShelfSheet(url, { presentationLocal: true });
+    openShelfSheet(url, { presentationLocal: true, presentationStack: request.presentationStack || null });
   }
 });
 

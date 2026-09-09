@@ -2041,6 +2041,10 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
   if (_presentationStack?.position === 'above-requesting-host' && Number.isFinite(_presentationStack.zIndex)) {
     panel.dataset.uiPresentationStack = _presentationStack.position;
     panel.style.zIndex = String(_presentationStack.zIndex + 1);
+    // Local boards remain canonical profile navigation, but their independent
+    // overlay root is a body sibling. Carry this Host-relative parent layer to
+    // every _openSubSheet() child.
+    panel._presentationLocalLayer = { position: _presentationStack.position, zIndex: _presentationStack.zIndex + 1 };
   }
   const interactionOwner = _presentationStack?.interactionOwner;
   if (interactionOwner?.isConnected) {
@@ -3131,6 +3135,10 @@ const introVoucherCardHtml = _introVoucher
     const sub = document.createElement('div');
     sub.id = 'profileSubSheet';
     sub.className = 'profile-subsheet profile-subsheet--stack-child' + (readOnly ? ' profile-subsheet--readonly' : '');
+    if (panel._presentationLocalLayer) {
+      sub.dataset.uiPresentationStack = 'profile-local-child';
+      sub.style.zIndex = String(panel._presentationLocalLayer.zIndex + 1);
+    }
     const isBoardSubsheet = ['프로필 보드', '모임 보드', '기록 보드', '함께한 시간', '수집 보드'].includes(title);
     const backLabel = backTo?.label || (isBoardSubsheet ? '내 보드' : `${escH(user.nickname || (readOnly ? '회원' : '손님'))}의 ${_boardLabel}`);
     sub.innerHTML = `
