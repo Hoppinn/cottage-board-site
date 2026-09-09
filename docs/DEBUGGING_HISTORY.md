@@ -381,6 +381,30 @@
 - iframe의 `position: fixed`는 iframe viewport 밖으로 탈출하지 못한다. child를 크게 보이게 하려고 parent geometry를 fullscreen/available로 확대하지 않는다.
 - 정상 canonical renderer가 있으면 Host 전용 renderer/document를 새로 만들지 않고, independent overlay가 필요한 경우 presentation owner만 ancestor canonical renderer로 정한다.
 
+## 2026-09-10 - 운영 규칙을 구조 문서에 기록한 위치 분류 오류
+
+증상:
+
+- 게임 추가 파이프라인의 최소 실행·검증·사용자 화면 확인 절차를 기록하면서, 해당 절차를 `PROJECT_STRUCTURE.md §8`에 추가했다.
+
+원인:
+
+- 게임 데이터라는 주제만 보고 문서 위치를 골랐고, 이미 정해진 분류 기준인 “프로젝트 구조·데이터 계약은 도메인 문서, 여러 세션에 지속되는 에이전트 행동 원칙은 `AGENTS.md`”을 적용하지 않았다.
+- 따라서 파이프라인 자체의 구조·정본·입출력 설명과, 에이전트가 어느 수준까지 실행·검증·보고할지라는 운영 규칙을 구분하지 못했다.
+
+해결:
+
+- 구조 문서에서 해당 운영 절차를 제거하고 `AGENTS.md`의 게임 데이터 작업 규칙에 옮겼다. `PROJECT_STRUCTURE.md`에는 source → staging → library → output 구조와 도메인별 제약만 유지한다.
+
+실패한 시도:
+
+- “게임 파이프라인에 관한 내용이므로 파이프라인 설명 섹션이 정본”이라고 판단해, 문서 책임을 확인하지 않고 구조 문서에 바로 추가했다.
+
+재발 방지:
+
+- 지속 규칙을 기록하기 전 먼저 질문한다: “이 문장이 시스템이 어떻게 구성·동작하는지 설명하는가, 아니면 에이전트가 어떻게 판단·실행·보고해야 하는지 지시하는가?” 전자는 도메인 문서, 후자는 `AGENTS.md`에 둔다.
+- 도메인별 스크립트의 입력·출력·판정 한계처럼 프로젝트 고유 사실은 구조 문서에 유지하되, 그 스크립트를 언제 어디까지 실행하고 사용자에게 무엇을 넘길지는 AGENTS에 기록한다.
+
 ## 2026-09-10 - ancestor presentation portal의 stack position 누락
 
 증상:
