@@ -252,7 +252,10 @@ function _requestModalStack(kind, payload, options) {
 
 function _requestAncestorFunctionalSurface(surface, payload) {
   const stack = window.CottageModalStack?.state?.();
-  if (stack?.frame !== 'child' || window.parent === window) return false;
+  // A Host root iframe is as unable to paint outside its containing box as a
+  // Host child iframe. The portal boundary is therefore the Host document,
+  // not the child-frame role.
+  if (!stack?.enabled || window.parent === window) return false;
   const request = { surface, payload, handled: false };
   window.parent.dispatchEvent(new window.parent.CustomEvent('cottage-functional-surface-request', { detail: request }));
   return request.handled;
