@@ -5,19 +5,11 @@
   const siteRoot = new URL('../../', scriptUrl);
   const childKinds = {
     'recommend-all': { route: 'index.html' },
-    'game-info': { route: 'index.html', flow: 'game' },
-    'game-record': { route: 'pages/game/game-reviews.html', flow: 'game' },
-    'game-location': { route: 'pages/game/game-location.html', flow: 'game' },
-    'game-rule': { route: 'index.html', flow: 'game' },
     meeting: { route: 'pages/club/club-schedule.html', geometry: 'compact' },
     profile: { route: 'index.html' },
   };
   const activeViews = {
     'recommend-all': 'recommend-all',
-    'game-info': 'game-sheet',
-    'game-record': 'game-reviews',
-    'game-location': 'game-location-shelf',
-    'game-rule': 'game-rule',
     meeting: 'day-detail',
     profile: 'other-board',
   };
@@ -35,10 +27,6 @@
     Object.entries(payload || {}).forEach(([key, value]) => {
       if (value !== undefined && value !== null && value !== '') url.searchParams.set(key, String(value));
     });
-    if (kind === 'game-location' && payload?.game) {
-      url.searchParams.set('highlight', String(payload.game));
-      url.searchParams.delete('game');
-    }
     url.hash = url.searchParams.toString();
     return url.href;
   }
@@ -148,12 +136,6 @@
         this.push(event.data.kind, event.data.payload || {}, event.data.presentation);
       }
       if (event.data?.type === 'cottage-modal-stack-pop') this.pop();
-      // game-location.html keeps its existing iframe message contract. At stack depth it
-      // becomes one more parent frame instead of opening a local game sheet.
-      if (event.data?.action === 'openGame' && event.data?.gameId) {
-        const presentation = this.top()?.flow === 'game' ? 'drilldown' : 'overlay';
-        this.push('game-info', { game: decodeURIComponent(String(event.data.gameId)) }, presentation);
-      }
     }
 
     _onKeydown(event) {

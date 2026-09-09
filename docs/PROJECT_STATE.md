@@ -17,6 +17,7 @@
 
 ## 1. NOW
 
+- **게임정보 canonical surface** — 홈페이지 기능의 추천게임찾기·플레이기록·내 보드·모임플래너 어느 진입점에서도 `openGameSheet()`/`.game-sheet` local bottom-sheet renderer를 사용한다. Modal Stack Host는 게임정보·기록·위치·안내 iframe child route를 만들지 않으며, geometry owner와 functional surface를 분리한다. 사용자 확인 대기: 네 진입점의 게임정보와 게임 A→B/기록/위치/안내 local flow.
 - **공통 Modal Stack Host** — `docs/plans/modal-stack-host-plan.md`의 기존 host 구조를 유지한다. game flow는 Host-owned flow-close X와 one-step ←를 분리해 drilldown에서도 둘 다 유지하며, X는 현재 contiguous game flow를 닫고 ←/ESC는 top frame 하나만 복귀한다. Host shell geometry owner와 `standard`/`compact` variant도 분리했고 모임조율 child는 compact variant를 쓴다. profile child의 내 보드·프로필 보드·모임 보드는 Host shell 외곽을 다시 적용하지 않고 iframe 전체를 채운다. 기존 모임원 프로필 작성·수정 wizard 경로와 내 보드 내부 ← navigation은 보존한다. 사용자 smoke 재확인 대기는 추천·플레이기록·내 보드·모임플래너의 game flow와 모임조율 compact geometry다.
 
 ## 2. NEXT (자동 착수 금지)

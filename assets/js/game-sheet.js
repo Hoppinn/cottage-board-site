@@ -3027,41 +3027,6 @@ Object.defineProperty(window, 'gameSheet', {
   configurable: true,
 });
 
-// Stack child iframe은 기존 게임정보/기록 renderer를 그대로 boot한다. 최초 open만
-// runLocal로 감싸 parent push 재귀를 막고, 이후 사용자의 새 open은 정상 push가 된다.
-const _modalStackState = window.CottageModalStack?.state?.();
-if (_modalStackState?.frame === 'child' && ['game-info', 'game-record', 'game-rule'].includes(_modalStackState.kind)) {
-  const openModalStackGame = () => {
-    const gameKey = _modalStackState.query.get('game') || _modalStackState.hash.get('game') || '';
-    if (!gameKey) return;
-    ensureGameSheet();
-    window.CottageModalStack.runLocal(() => {
-      if (_modalStackState.kind === 'game-record') openGameRecordSheet(gameKey);
-      else openGameSheet(gameKey);
-    });
-    if (_modalStackState.kind === 'game-rule') {
-      const focus = _modalStackState.query.get('focus') || _modalStackState.hash.get('focus') || 'rule';
-      const selector = `[data-org-action="${focus}"]`;
-      const openRule = () => {
-        const button = document.querySelector(selector);
-        if (!button) return false;
-        window.CottageModalStack.runLocal(() => button.click());
-        return true;
-      };
-      if (!openRule()) {
-        const observer = new MutationObserver(() => { if (openRule()) observer.disconnect(); });
-        observer.observe(document.body, { childList: true, subtree: true });
-        setTimeout(() => observer.disconnect(), 4000);
-      }
-    }
-  };
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => requestAnimationFrame(openModalStackGame), { once: true });
-  } else {
-    requestAnimationFrame(openModalStackGame);
-  }
-}
-
 })();
 
 

@@ -7,6 +7,15 @@
   const _stackKind = _embedQuery.get('stackKind') || _embedHash.get('stackKind') || '';
   const _stackPresentation = _embedQuery.get('stackPresentation') || _embedHash.get('stackPresentation') || 'overlay';
   const _stackGeometry = _embedQuery.get('stackGeometry') || _embedHash.get('stackGeometry') || 'standard';
+  // A functional surface stays local even when its parent page is a Host child.
+  // `request()` returns false for these kinds so existing callers use their
+  // canonical renderer instead of creating another iframe document.
+  const _canonicalLocalSurfaces = Object.freeze({
+    'game-info': 'game-sheet',
+    'game-record': 'game-sheet',
+    'game-location': 'game-sheet',
+    'game-rule': 'game-sheet',
+  });
   let _localStackOpenDepth = 0;
 
   // A Host child reuses an existing page/component renderer. Annotate concrete
@@ -23,6 +32,7 @@
     body.dataset.uiChromeOwner = 'mixed';
     body.dataset.uiGeometryVariant = _stackGeometry === 'compact' ? 'compact' : 'standard';
     body.dataset.uiScrollBoundary = 'child';
+    body.dataset.uiFunctionalSurface = _canonicalLocalSurfaces[_stackKind] || 'page';
 
     set('.site-header, .site-footer, .breadcrumb, .page-hero, .inner-page-title', 'uiChrome', 'global');
     if (_stackKind === 'game-location') {
@@ -30,17 +40,18 @@
     } else {
       set('main, #recommend, .inner-page', 'uiChrome', 'global-content');
     }
-    set('.game-sheet-panel, .dd-meeting-modal, .recommend-overlay-panel, .profile-panel-box, .profile-subsheet-box, .rule-hub-box', 'uiGeometry', 'host-fill');
-    set('.game-sheet, .game-sheet-dim, .dd-overlay, .recommend-overlay, .profile-panel, .profile-subsheet, .rule-hub-overlay', 'uiLayer', 'host-transparent');
-    set('.game-sheet-close, .sheet-sticky-close, .dd-meeting-header .dd-x-btn, .recommend-overlay-close, .profile-panel-close, .profile-subsheet-close, .profile-subsheet-title, .rule-hub-back', 'uiChrome', 'host-duplicate');
+    set('.dd-meeting-modal, .recommend-overlay-panel, .profile-panel-box, .profile-subsheet-box, .rule-hub-box', 'uiGeometry', 'host-fill');
+    set('.dd-overlay, .recommend-overlay, .profile-panel, .profile-subsheet, .rule-hub-overlay', 'uiLayer', 'host-transparent');
+    set('.dd-meeting-header .dd-x-btn, .recommend-overlay-close, .profile-panel-close, .profile-subsheet-close, .profile-subsheet-title, .rule-hub-back', 'uiChrome', 'host-duplicate');
     set('.recommend-overlay-header, .profile-subsheet-header, .profile-subsheet-back', 'uiChrome', 'functional');
     set('.profile-subsheet-back', 'uiNavigation', 'local');
     set('.game-sheet-scroll, .rule-hub-scroll, .recommend-overlay-list, .profile-panel-body, .profile-subsheet-body, .dd-modal-scroll', 'uiScrollOwner', 'feature');
+    set('.game-sheet, .game-sheet-panel, .game-sheet-scroll', 'uiFunctionalSurface', 'game-sheet');
   }
   window.CottageModalStack = {
     state: () => ({ enabled: _stackValue === '1', frame: _stackFrame, kind: _stackKind, presentation: _stackPresentation, geometry: _stackGeometry, query: _embedQuery, hash: _embedHash }),
     request: (kind, payload = {}, options = {}) => {
-      if (_stackValue !== '1' || _localStackOpenDepth || window.parent === window) return false;
+      if (_stackValue !== '1' || _localStackOpenDepth || window.parent === window || _canonicalLocalSurfaces[kind]) return false;
       const presentation = options?.presentation === 'drilldown' ? 'drilldown' : 'overlay';
       window.parent.postMessage({ type: 'cottage-modal-stack-push', kind, payload, presentation }, '*');
       return true;
