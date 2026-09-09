@@ -30,6 +30,9 @@
   class ModalStackHost {
     constructor({ container, rootFrame, rootShell, isOpen, onRootClose }) {
       this.container = container;
+      // A functional surface portalled out of this Host needs a semantic layer
+      // anchor, not a route selector or a hard-coded z-index.
+      this.container.dataset.uiPresentationLayerOwner = 'host';
       this.isOpen = isOpen || (() => true);
       this.onRootClose = onRootClose || (() => {});
       this.frames = [{ frame: rootFrame, shell: rootShell, root: true, token: null }];

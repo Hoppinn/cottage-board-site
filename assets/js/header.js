@@ -25,7 +25,7 @@
     // Parent geometry is opt-in. A game sheet is an independent local overlay:
     // its prepare/ready handshake must not reclassify the preserved parent shell.
     'game-sheet': { nodeSelector: '.game-sheet', isActive: node => node.classList.contains('is-active'), parentGeometry: 'preserve', presentationOwner: 'ancestor' },
-    'profile-panel': { nodeSelector: '#profilePanel', isActive: () => true, parentGeometry: 'preserve', presentationOwner: 'ancestor' },
+    'profile-panel': { nodeSelector: '#profilePanel', isActive: () => true, parentGeometry: 'preserve', presentationOwner: 'ancestor', presentationStack: 'above-requesting-host' },
     'game-location': { nodeSelector: '#shelfSheetOverlay', isActive: () => true, parentGeometry: 'preserve', presentationOwner: 'ancestor' },
     'meeting-adjust': { nodeSelector: '#__ddModal', isActive: node => node.classList.contains('is-open'), parentGeometry: 'preserve' },
   });
@@ -79,16 +79,29 @@
     const surface = _surfaceState(request?.surface);
     if (!surface || surface.presentationOwner !== 'ancestor' || request.handled) return;
     if (_stackFrame === 'child' && window.parent !== window) {
+      request.presentationAnchor = window;
       window.parent.dispatchEvent(new window.parent.CustomEvent('cottage-functional-surface-request', { detail: request }));
       return;
     }
+    _resolvePresentationStack(request, surface);
     window.dispatchEvent(new CustomEvent('cottage-functional-surface-open', { detail: request }));
+  }
+
+  function _resolvePresentationStack(request, surface) {
+    if (surface.presentationStack !== 'above-requesting-host' || request.presentationStack) return;
+    const anchor = request.presentationAnchor;
+    const frame = anchor && Array.from(document.querySelectorAll('iframe'))
+      .find(candidate => candidate.contentWindow === anchor);
+    const layerOwner = frame?.closest('[data-ui-presentation-layer-owner]');
+    const zIndex = Number.parseInt(layerOwner ? getComputedStyle(layerOwner).zIndex : '', 10);
+    if (!layerOwner || !Number.isFinite(zIndex)) return;
+    request.presentationStack = { position: surface.presentationStack, zIndex };
   }
 
   function _requestAncestorFunctionalSurface(surfaceName, payload) {
     const surface = _surfaceState(surfaceName);
     if (!surface || surface.presentationOwner !== 'ancestor' || _stackValue !== '1' || window.parent === window) return false;
-    const request = { surface: surfaceName, payload, handled: false };
+    const request = { surface: surfaceName, payload, presentationAnchor: window, handled: false };
     window.parent.dispatchEvent(new window.parent.CustomEvent('cottage-functional-surface-request', { detail: request }));
     return request.handled;
   }

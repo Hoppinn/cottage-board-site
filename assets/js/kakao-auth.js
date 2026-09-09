@@ -1985,7 +1985,7 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
   //   { type:'panel', autoSubsheet, label, opts? } — 알림에서 남의 보드로 들어온 경우 내 보드로
   // 서브시트→패널 뒤로가기는 _openSubSheet가 이미 하므로, 여기는 패널 한 칸만 담당(깊이 1).
   // 체인이 생겨도 각 패널의 클로저가 자기 backTo를 들고 있어 스택 자료구조가 필요 없다.
-  const { userId: _targetUserId = null, readOnly = false, backTo = null, focusDate = null, onClose = null, _presentationLocal = false } = opts;
+  const { userId: _targetUserId = null, readOnly = false, backTo = null, focusDate = null, onClose = null, _presentationLocal = false, _presentationStack = null } = opts;
   const _selfUser = getKakaoUser();
   const user = readOnly
     ? { id: String(_targetUserId), nickname: opts.nickname || '' }
@@ -2038,6 +2038,10 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
   const panel = document.createElement('div');
   panel.id = 'profilePanel';
   panel.className = 'profile-panel center-modal-backdrop' + (readOnly ? ' profile-panel--readonly' : '') + (!backTo ? ' profile-panel--main' : '');
+  if (_presentationStack?.position === 'above-requesting-host' && Number.isFinite(_presentationStack.zIndex)) {
+    panel.dataset.uiPresentationStack = _presentationStack.position;
+    panel.style.zIndex = String(_presentationStack.zIndex + 1);
+  }
   panel._onClose = typeof onClose === 'function' ? onClose : null;
   const isOwnerUser = String(user.id) === String(OWNER_KAKAO_ID);
   const isDevMode = location.hostname === 'localhost' || isOwnerUser;
@@ -3519,7 +3523,7 @@ window.addEventListener('cottage-functional-surface-open', event => {
   if (request?.surface !== 'profile-panel' || request.handled) return;
   const { autoSubsheet = null, opts = {} } = request.payload || {};
   request.handled = true;
-  openProfilePanel(autoSubsheet, { ...opts, _presentationLocal: true });
+  openProfilePanel(autoSubsheet, { ...opts, _presentationLocal: true, _presentationStack: request.presentationStack || null });
 });
 
 document.addEventListener('DOMContentLoaded', initKakaoAuth);
