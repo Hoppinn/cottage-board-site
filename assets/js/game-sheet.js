@@ -447,8 +447,19 @@ function openShelfSheet(url) {
   const overlay = document.createElement('div');
   overlay.id = 'shelfSheetOverlay';
   overlay.className = 'shelf-sheet-overlay';
-  // query가 localhost redirect에서 유실돼도 iframe이 embed 상태를 유지하도록 hash fallback을 보존한다.
-  const embedUrl = url.includes('#') ? url : `${url}#embed=1`;
+  // The iframe document owns its root scroll. Mirror its functional payload in
+  // the hash so an embed redirect cannot drop the shelf/highlight target and
+  // leave that scroll owner at the document top.
+  const locationUrl = new URL(url, location.href);
+  const locationHash = new URLSearchParams(locationUrl.hash.slice(1));
+  ['embed', 'shelf', 'highlight'].forEach(key => {
+    if (!locationHash.has(key) && locationUrl.searchParams.has(key)) {
+      locationHash.set(key, locationUrl.searchParams.get(key));
+    }
+  });
+  if (!locationHash.has('embed')) locationHash.set('embed', '1');
+  locationUrl.hash = locationHash.toString();
+  const embedUrl = locationUrl.href;
   overlay.innerHTML = `
     <div class="shelf-sheet-box center-modal-shell" role="dialog" aria-modal="true" aria-label="게임 위치">
       <button class="shelf-sheet-back shelf-sheet-back--floating" type="button" aria-label="게임정보로 돌아가기">&#8592;</button>

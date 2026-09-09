@@ -199,21 +199,38 @@
 
   <script src="../../game-system/config/bgg-label-map.js"></script>
   <script src="../../game-system/game-data/library/3-output/cottage-games-data-output.js"></script>
-  <script src="../../assets/js/game-display-adapter.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-  <script src="../../assets/js/supabase-config.js"></script>
-  <script src="../../assets/js/supabase-client.js"></script>
-  <script src="../../assets/js/play-records-utils.js"></script>
-  <script src="../../assets/js/achievements.js"></script>
-  <script src="../../assets/js/page-labels.js"></script>
-  <script src="../../assets/js/script-nav.js"></script>
-  <script src="../../assets/js/game-sheet.js"></script>
-  <script src="../../assets/js/kakao-auth.js"></script>
+  <script>
+  // The embedded game-location surface only renders location data and returns
+  // game selection to its canonical parent. Keep standalone game-sheet support
+  // lazy so an iframe open never boots the unrelated auth/DB application.
+  window.__locationGameSurfaceReady = Promise.resolve();
+  if (window.parent === window) {
+    const standaloneScripts = [
+      '../../assets/js/game-display-adapter.js',
+      'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js',
+      '../../assets/js/supabase-config.js',
+      '../../assets/js/supabase-client.js',
+      '../../assets/js/play-records-utils.js',
+      '../../assets/js/achievements.js',
+      '../../assets/js/page-labels.js',
+      '../../assets/js/script-nav.js',
+      '../../assets/js/game-sheet.js',
+      '../../assets/js/kakao-auth.js',
+    ];
+    window.__locationGameSurfaceReady = standaloneScripts.reduce((ready, src) => ready.then(() => new Promise(resolve => {
+      const script = document.createElement('script');
+      script.src = src;
+      script.onload = script.onerror = resolve;
+      document.head.appendChild(script);
+    })), Promise.resolve());
+  }
+  </script>
 
   <script>
   (function () {
     const params = new URLSearchParams(location.search);
     const hashParams = new URLSearchParams(location.hash.slice(1));
+    const surfaceParam = key => params.get(key) || hashParams.get(key);
     if (['1', 'true'].includes(params.get('embed')) || ['1', 'true'].includes(hashParams.get('embed'))) {
       document.body.classList.add('embed-mode');
     }
@@ -287,10 +304,10 @@
         window.parent.postMessage({ action: 'openGame', gameId: decoded }, '*');
         return;
       }
-      if (typeof window.ensureGameSheet === 'function') window.ensureGameSheet();
-      if (typeof window.openGameSheet === 'function') {
-        window.openGameSheet(decoded);
-      }
+      window.__locationGameSurfaceReady.then(() => {
+        if (typeof window.ensureGameSheet === 'function') window.ensureGameSheet();
+        if (typeof window.openGameSheet === 'function') window.openGameSheet(decoded);
+      });
     }
 
     window._locOpenGame = openGame;
@@ -298,10 +315,16 @@
     function openShelfPhoto(sectionId, label, ev) {
       if (ev) ev.stopPropagation();
       const src = `../../assets/images/shelf-locations/${sectionId}.webp`;
-      if (typeof window.openLightbox === 'function') {
-        window.openLightbox([src], 0, { caption: label });
+      const lightboxOwner = window.parent !== window && typeof window.parent.openLightbox === 'function'
+        ? window.parent
+        : window;
+      if (typeof lightboxOwner.openLightbox === 'function') {
+        lightboxOwner.openLightbox([src], 0, { caption: label });
       } else {
-        window.open(src, '_blank');
+        window.__locationGameSurfaceReady.then(() => {
+          if (typeof window.openLightbox === 'function') window.openLightbox([src], 0, { caption: label });
+          else window.open(src, '_blank');
+        });
       }
     }
     window._locOpenPhoto = openShelfPhoto;
@@ -431,7 +454,8 @@
     function init() {
       const games = getActiveGames();
       const groupMap = buildGroupMap(games);
-      const highlightId = params.get('highlight') ? decodeURIComponent(params.get('highlight')) : null;
+      const highlightValue = surfaceParam('highlight');
+      const highlightId = highlightValue ? decodeURIComponent(highlightValue) : null;
 
       renderSections(groupMap, highlightId);
 
@@ -442,7 +466,7 @@
         });
       }
 
-      const shelfParam = params.get('shelf');
+      const shelfParam = surfaceParam('shelf');
       if (shelfParam) {
         const el = document.querySelector(`[data-section-id="${shelfParam}"]`);
         if (el) {
