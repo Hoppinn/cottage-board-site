@@ -50,6 +50,58 @@
 | 모임 조율 | planner day/detail entry | local compact `dd` overlay in the current planner document | canonical local `openDateMeetingModal()` renderer; no Host child document | standalone planner or planner root context | feature-owned `.dd-meeting-modal` keeps compact variant; parent supplies only available context | local modal body (runtime selector needed) | local `.dd-x-btn`; planner outer × remains parent-owned | `#__ddModal`, `.dd-overlay`, `.dd-meeting-modal` | `openDateMeetingModal()` | canonical local | code confirmed; user compact geometry verification needed |
 | 모임 플래너 (독립/quick entry) | day-detail 등록/수정 action | local root iframe modal | iframe `club-schedule.html?embed=true` | current page/day detail; explicitly not a Host child route | `#__plannerModal .planner-modal-box` | planner iframe document; local registration sheet needs runtime split | `.planner-modal-close`; quick entry hides it | `#__plannerModal`, `.planner-modal-box`, `.planner-modal-frame` | `openPlannerModal()` | active legacy/local fallback | 코드 확인됨 / runtime 필요 |
 
+## Shared UI Families
+
+### Play Record Display Family
+
+다음 네 surface는 카드·outer layer·entry가 아니라 **play-record의 people/meta presentation**을 공유하는 UI family다.
+
+| surface | renderer / entry | family가 관리하는 출력 |
+|---|---|---|
+| 플레이기록 게시판 | `pages/game/game-reviews.html` / `game-reviews.js` | people row, 인원, 시간·점수 meta |
+| 홈 최근 플레이 | `index.html` / `index-page.js` | people row, 인원, 시간·점수 meta |
+| 게임정보의 플레이기록 | `game-sheet.js` `initSheetPlayPreview()` | people row, 인원, 시간·점수 meta |
+| 게임정보 → 게임별 기록페이지 | `game-sheet.js` `buildRecordItemHtml()` | people row, 인원, 시간·점수 meta |
+
+- 이 family는 card shell, 사진, 게임평, date/group header, scroll/outer geometry를 통일하지 않는다. 각 surface의 구조·entry·renderer lifecycle은 위 mapping의 기존 소유자를 유지한다.
+- `buildPlayPeopleHtml()`과 공통 people/meta CSS처럼 실제로 공유 가능한 부분만 재사용한다. 구조가 다르다는 이유로 하나의 renderer로 강제 통합하지 않는다.
+- presentation contract의 정본과 네 surface 동시 영향 확인 규칙은 [UI_PATTERNS.md](UI_PATTERNS.md)의 **Play Record Display Family**를 따른다.
+
+### Stable Identity & Profile Entry Family
+
+대표 캐릭터/기본 발바닥 identity icon과 이름을 통해 읽기전용 내 보드로 진입하는 surface의 family다.
+
+| 포함 surface | 공통으로 관리할 항목 | 화면별로 달라도 되는 항목 |
+|---|---|---|
+| 플레이기록 people·게임평·사진 meta, 홈 최근 플레이, 게임정보의 기록/게임평/사진 | stable `data-identity-user-id`, `CottageAchievements.hydrateIdentityIcons()`, 확정된 회원만 icon/link, `openOtherProfileSheet()` 기본 진입 | participant micro 12px과 단독 meta standard 20px variant, historical 이름의 link 가능 여부 |
+| 플래너 주간 카드·홈 모임 미리보기·날짜 모임 조율 | stable user id identity host, 공통 hydrator, 이름 → 읽기전용 내 보드 진입 | participant card/시간막대의 레이아웃과 진입 후 back context |
+| 모임 기록/모임원 프로필·관리자 회원 진입 | 확정 user id의 identity/profile entry | card 본문 진입과 이름/헤더 진입의 목적지 차이 |
+
+- historical participant text는 exact·unique resolver가 회원 identity를 확정했을 때만 이 family의 icon/profile entry를 얻는다. 추정 alias나 부분일치로 확장하지 않는다.
+- icon variant·nickname typography를 바꾸거나 profile entry의 기본 목적지를 바꿀 때는 위 surface군을 함께 영향 범위로 확인한다. 상세 contract는 [UI_PATTERNS.md](UI_PATTERNS.md)의 **Stable Identity & Profile Entry Family**를 따른다.
+
+### Meeting Participant Card Family
+
+플래너의 한 참여자=한 카드 renderer를 공유하는 family다.
+
+| 포함 surface | 공통으로 관리할 항목 | 화면별로 달라도 되는 항목 |
+|---|---|---|
+| 본 플래너 주간 카드, 홈 모임 미리보기, 날짜 미리보기/모임 조율 | `day-detail.js` `buildBarsInCard()`, participant card 안의 닉네임·동반인원·시간·시간막대·성향/게임 정보 | outer card/shell, 날짜별 CTA와 수정·삭제 권한 |
+
+- 한 참여자=한 card라는 출력 구조와 participant 정보의 card 내부 배치는 이 family의 계약이다. compact 별도 renderer로 축약하지 않는다.
+- 이 renderer나 card 정보 위계를 바꿀 때는 세 surface를 함께 확인한다. 상세 contract는 [UI_PATTERNS.md](UI_PATTERNS.md)의 **Meeting Participant Card Family**를 따른다.
+
+### Canonical Local Presentation Family
+
+이미 열린 document의 native surface를 parent context 위에 표시하는 family다.
+
+| 포함 surface | 공통으로 관리할 항목 | 화면별로 달라도 되는 항목 |
+|---|---|---|
+| 게임정보 (`game-sheet`), 내/회원 보드 (`profile-panel`), 게임위치 (`game-location`) | canonical renderer 재사용, ancestor presentation 가능 여부, parent geometry 보존, requesting layer 바로 위의 presentation stack | native geometry, chrome, scroll owner, close/back lifecycle |
+
+- 이 family는 `header.js` canonical functional-surface registry와 `CottageFunctionalSurface.requestAncestor()`를 따른다. 같은 family라는 이유로 Host child frame/공통 modal renderer로 승격하지 않는다.
+- presentation/layer/backdrop/ancestor capability를 변경할 때는 세 surface와 standalone·iframe/Host 진입 문맥을 함께 확인한다. 상세 contract는 [UI_PATTERNS.md](UI_PATTERNS.md)의 **Canonical Local Presentation Family**를 따른다.
+
 ## Modal Stack Host frame registry
 
 `assets/js/modal-stack-host.js` route registry is the complete current Host child set. The three current root hosts are homepage functionality modal, homepage planner modal, and homepage member-profile modal. Each child is a sibling iframe frame appended to the root host container; the former top frame becomes inert and remains in DOM.

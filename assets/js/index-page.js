@@ -1417,11 +1417,11 @@ async function initRecentPlay() {
       : '';
 
     const timeParts = [
-      r.play_time_min ? `${r.play_time_min}분` : '',
-      r.score_note || '',
+      r.play_time_min ? `<span class="play-record-meta-time">${r.play_time_min}분</span>` : '',
+      window.formatPlayScore?.(r.score_note) || '',
     ].filter(Boolean);
     const metaHtml = timeParts.length
-      ? `<div class="pr-rec-meta"><span class="pr-rec-dateline">${timeParts.join(' · ')}</span></div>`
+      ? `<div class="pr-rec-meta"><span class="pr-rec-dateline play-record-meta-muted">${timeParts.join(' · ')}</span></div>`
       : '';
 
     const reviewHtml = r.review_text

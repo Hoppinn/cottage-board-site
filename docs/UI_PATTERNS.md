@@ -27,6 +27,45 @@ Canonical local surface registry는 `game-sheet`, `profile-panel`, `meeting-adju
 | top frame | 현재 입력(pointer/keyboard)을 받을 수 있는 최상위 layer/frame |
 | local navigation | 같은 feature의 부모 화면을 DOM에 보존하고 내부 child로 전환하는 방식 |
 
+## Play Record Display Family — people/meta presentation contract
+
+적용 surface는 플레이기록 게시판, 홈 최근 플레이, 게임정보의 플레이기록, 게임정보 → 게임별 기록페이지다. 이 family는 card shell·사진·게임평·날짜/모임 header·outer geometry를 같은 것으로 정의하지 않으며, 각 화면은 [UI_STRUCTURE.md](UI_STRUCTURE.md)의 기존 structure/renderer owner를 유지한다.
+
+| 표시 | 공통 contract |
+|---|---|
+| 사람 | participant typography와 micro 12px identity icon을 공유한다. 작성자는 일반 참가자와 같은 크기·line-height·세로 위치를 유지하고 color + `font-weight`만 강조한다. |
+| 인원 | muted 보조정보의 인원 아이콘 + `N명` token이다. |
+| 시간 | 기존 `#8a7868` 웜그레이, `font-weight:600`이다. |
+| 점수와 구분점 | `var(--muted)`와 일반 굵기다. 시간과 점수는 `90분 · 109 / 100 / 97 / 70점`처럼 한 meta line에서 읽히며, 여러 점수의 `점`은 마지막에 한 번만 둔다. |
+| wrapping | 360px에서는 짧은 4인 people row + 시간의 한 줄을 우선하고, 길어지면 person/meta token 단위 wrap을 허용한다. |
+
+`buildPlayPeopleHtml()`과 `play-record-meta-time`/muted meta class처럼 이미 공통화된 부분만 재사용한다. 이 contract 변경 시 한 surface의 정적 확인만으로 완료 처리하지 않고, 위 네 surface를 함께 영향 범위로 대조한다.
+
+### Stable Identity & Profile Entry Family
+
+적용 surface는 플레이기록 people·게임평·사진 meta·홈 최근 플레이·게임정보, 플래너/홈 모임 미리보기/날짜 모임 조율, 모임 기록/모임원 프로필/관리자 회원 진입이다.
+
+- stable `data-identity-user-id` host는 `CottageAchievements.hydrateIdentityIcons()`가 대표 캐릭터 또는 기본 발바닥을 처리하며, 이름은 기본적으로 `openOtherProfileSheet()`를 통해 읽기전용 내 보드로 진입한다.
+- historical participant는 exact·unique resolver가 stable user id를 확정할 때만 icon/link를 얻는다. alias·부분일치 추정은 이 family의 계약이 아니다.
+- participant row micro 12px과 게임평/사진 단독 meta standard 20px은 의도된 variant 차이다. card/layout·back context·card 본문 진입 목적지는 surface별로 달라도 된다.
+- identity host/variant, nickname presentation, profile entry 기본 목적지를 바꾸면 위 surface군을 함께 영향 범위로 확인한다.
+
+### Meeting Participant Card Family
+
+`day-detail.js` `buildBarsInCard()`를 쓰는 본 플래너 주간 카드, 홈 모임 미리보기, 날짜 미리보기/모임 조율이 적용 surface다.
+
+- 한 참여자=한 card와 닉네임·동반인원·시간·시간막대·성향/게임 정보의 card 내부 배치를 공유한다. compact 별도 renderer를 만들지 않는다.
+- outer shell, 날짜별 CTA, 수정/삭제 권한은 surface별 차이로 보존한다.
+- renderer 또는 participant card의 정보 위계를 바꾸면 세 surface를 함께 확인한다.
+
+### Canonical Local Presentation Family
+
+`game-sheet`, `profile-panel`, `game-location`은 `header.js` canonical functional-surface registry의 적용 surface다.
+
+- Host/명시 capability parent에서 필요한 경우 `CottageFunctionalSurface.requestAncestor()`가 이미 열린 canonical renderer를 requesting layer 바로 위에 표시한다. parent geometry와 각 feature의 native renderer를 보존한다.
+- native geometry, chrome, scroll owner, close/back은 공통화 대상이 아니라 각 feature owner의 책임이다. family라는 이유로 Host child frame이나 하나의 modal renderer로 합치지 않는다.
+- ancestor presentation capability, relative layer, backdrop, close/back ownership을 바꾸면 세 surface와 standalone·iframe/Host 문맥을 함께 확인한다.
+
 ## Navigation semantics (구조와 독립된 축)
 
 | semantics | 상태 보존 | close/back 의미 | frame 생성 여부 | 현재 적용 예 |

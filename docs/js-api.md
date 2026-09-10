@@ -38,6 +38,7 @@ parent root modal이 `create({ container, rootFrame, rootShell, isOpen })`으로
 - Historical participant resolution does not redefine meeting attendance or write a membership relation; stable-ID meeting data keeps its own meaning.
 - Audit and verification tools must follow the same contract: confirm the Supabase environment, join `profiles` and `member_intros` by `user_id`, and output public nickname, profile nickname, and real name separately. A profiles-only audit that contradicts runtime is evidence to investigate, not a fact to overwrite runtime with.
 - `window.buildPlayPeopleHtml(record, { esc })` is the shared display contract for 게임정보, 기록 더보기, and 홈 요약 미리보기: show the stable author (`record.user_id` + historical `record.nickname`) first; remove only `player_names` tokens exactly equal to that historical nickname; preserve every other input token. The author gets micro identity directly; other tokens receive identity/profile linkage only after the existing exact·unique resolver confirms them.
+- `window.formatPlayScore(raw)` is the Play Record Display Family score formatter for 플레이기록 게시판·홈 최근 플레이·게임정보의 플레이기록·게임별 기록페이지. Empty input returns `''`; a numeric score sequence normalizes to ` / ` separators and one final `점`; a nonnumeric-ending free string stays unchanged. It preserves the former 게시판 끝단위 rule rather than rewriting arbitrary text.
 
 ### ⚠️ 에러 처리 규약 (2026-07-17 신설 — 신규 DB 함수 작성 시 필독)
 
@@ -263,6 +264,7 @@ window.escH = (s) => String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;')
 | 함수 | 용도 | 사용처 |
 |------|------|--------|
 | `parsePhotoUrls(raw)` | photo_url 문자열 → URL 배열 | game-reviews.js, club-history.html, index-page.js |
+| `formatPlayScore(raw)` | score_note 표시용: 숫자 점수열은 `/` + 마지막 `점` 한 번, 자유문자열/빈 값 보존 | game-reviews.js, index-page.js, game-sheet.js |
 | `buildPhotoHtml(urls)` | 사진 썸네일 HTML 생성 | 동일 |
 | `openLightbox(urls, idx, opts)` | 전체화면 라이트박스(저수준). opts: captions[]/caption, onDelete+deletable[], **gameThumbs[]**(사진별 게임 표지 URL, 좌하단 표시)+**gameKeys[]**+**onGameClick(key)**(썸네일 클릭 시). ⚠️ **deletable 생략 시 전부 삭제 가능으로 처리** — 남의 기록에도 삭제버튼이 뜨므로 권한 있을 때만 onDelete를 넘길 것 | 동일, kakao-auth.js(기록보드 사진) |
 | `openRecordLightbox(wrap, row, idx, opts)` | **기록 행(.pr-rec-row) 사진용 고수준 래퍼.** 캡션 + 좌하단 게임 썸네일 + (내 기록이면) 삭제를 한 번에 구성하고, 삭제 시 `photo_url` 갱신까지 수행. 한 기록의 사진만 띄우므로 게임·소유권이 전 장 동일. 필요 DOM: `wrap[data-urls]`·`row[data-id][data-record]`(record에 `gameId`·`mine` 포함). opts: `buildCaption(rec)`, `onAfterDelete(recId, newPhotoUrl)`(호출부가 화면 갱신) | game-reviews.js(기록 허브), club-history.html(동호회 기록), index-page.js(홈 최근 플레이 미리보기 — opts 미전달, mine은 내 기록/오너면 true) |

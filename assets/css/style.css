@@ -3700,7 +3700,6 @@ html:has(body.embed-mode) { scroll-padding-top: 0; }
   flex-wrap:wrap;   /* ⋯ 열었을 때 추가 행(.sheet-rec-more-actions)을 전체폭으로 */
 }
 .sheet-play-box .sheet-my-record-item--mine{ padding-right:12px; }
-.sheet-play-info-tag--secondary{font-weight:600;}
 .sheet-list-more-btn{display:block;width:100%;padding:8px;background:none;border:none;border-top:1px solid #f0e8d8;font-size:12px;color:var(--muted);cursor:pointer;text-align:center;}
 /* 기록별 ⋯ 햄버거(우상단, .sheet-play-record-actions 클러스터 내) — 클릭 시 추가 행이 아래로 인라인 확장 */
 .sheet-rec-more-btn{background:none;border:none;cursor:pointer;padding:0 4px;font-size:13px;line-height:1;letter-spacing:1px;color:var(--muted);border-radius:6px;font-family:inherit;}
@@ -3810,15 +3809,7 @@ html:has(body.embed-mode) { scroll-padding-top: 0; }
   gap:4px;
   margin-top:4px;
 }
-.sheet-play-info-tag{
-  font-size:12px;
-  font-weight:500;
-  color:#3d2a18;
-  background:var(--cream);
-  border-radius:999px;
-  padding:3px 9px;
-}
-.sheet-play-info-tag--compact-people{
+.sheet-play-people{
   display:flex;
   flex-wrap:wrap;
   align-items:center;
@@ -3827,28 +3818,37 @@ html:has(body.embed-mode) { scroll-padding-top: 0; }
   width:auto;
   max-width:100%;
   min-width:0;
-  gap:4px;
-  white-space:normal;
+  gap:3px 0;
 }
-.sheet-play-info:has(> .sheet-play-info-tag--compact-people){
+.sheet-play-info:has(> .sheet-play-people){
   flex:0 1 auto;
   width:auto;
   max-width:100%;
   min-width:0;
 }
-.sheet-my-record-item .sheet-play-info:has(> .sheet-play-info-tag--compact-people){
+.sheet-my-record-item .sheet-play-info:has(> .sheet-play-people){
   flex:0 1 auto;
   width:auto;
   max-width:100%;
   min-width:0;
 }
-.sheet-play-info-tag--compact-people > .pr-rec-tag,
-.sheet-play-info-tag--compact-people > .sheet-play-duration,
-.sheet-play-info-tag--compact-people > .badge-sep{ flex:0 0 auto; }
-.sheet-play-info-tag--compact-people > .pr-rec-tag,
-.sheet-play-info-tag--compact-people > .sheet-play-duration{ white-space:nowrap; }
-.sheet-play-info-tag--compact-people > .badge-sep{ display:none; }
-.sheet-play-info-tag--compact-people > .pr-rec-tag{ padding-left:0; padding-right:0; }
+.sheet-play-people > .pr-rec-tag{ flex:0 0 auto; }
+.sheet-play-meta,
+.play-record-meta-muted{
+  color:var(--muted);
+  font-weight:400;
+}
+.sheet-play-meta{
+  display:block;
+  width:auto;
+  max-width:100%;
+  padding:0;
+  background:none;
+  font-size:11px;
+  line-height:18px;
+  white-space:nowrap;
+}
+.play-record-meta-time{ color:#8a7868; font-weight:600; }
 .badge-sep{
   color:rgba(30,26,22,0.3);
   font-weight:400;
@@ -4224,7 +4224,6 @@ html:has(body.embed-mode) { scroll-padding-top: 0; }
 .sheet-info-group .sheet-mechs-wrap{
   margin-bottom:0;
 }
-.sheet-play-duration{white-space:nowrap;}
 .sheet-info-group > .sheet-card-head + .sheet-mechs-wrap{
   margin-top:10px;
 }
@@ -8280,13 +8279,23 @@ body[data-ui-geometry-owner="host"] .dd-overlay[data-ui-layer="host-transparent"
 .pr-rev-edit-save { background: var(--green); color: #fff; }
 .pr-rev-edit-cancel { background: var(--bg-soft, #ece5d6); color: var(--text); }
 .pr-rec-tag { font-size: 12px; background: var(--bg); border-radius: 6px; padding: 2px 8px; color: var(--text-info); font-weight: 500; }
-.pr-tag-who { background: #fdf0e8; color: var(--green); }
-.pr-tag-who-first { border-bottom: 2px solid var(--green) !important; padding-bottom: 1px !important; }
-/* pr-player-header 안에서 덮어씀 (아래 규칙 우선) */
+.pr-tag-who { background: #fdf0e8; }
+/* 사람 이름의 최종 표시는 아래 공통 token 계약이 담당한다. */
 .pr-tag-count-game { background: #627a6a !important; color: #fff !important; font-weight: 600 !important; }
 .pr-tag-time { background: #ede8e0; color: #6b5040; }
 .pr-tag-score { background: #f5ede4; color: #8a4a20; }
-.pr-rec-recorder { flex-shrink: 0; font-size: 11px; color: var(--muted, #9b8b7a); white-space: nowrap; }
+.pr-rec-recorder {
+  display:inline-flex;
+  align-items:center;
+  flex:0 0 auto;
+  gap:0;
+  padding:0 4px;
+  color:#8a7868;
+  font-size:12px;
+  font-weight:400;
+  line-height:18px;
+  white-space:nowrap;
+}
 .pr-rec-actions { display: flex; align-items: center; gap: 11px; flex-shrink: 0; margin-top: 2px; }
 .pr-rec-actions-bar { display: flex; justify-content: flex-end; align-items: center; gap: 11px; padding: 6px 14px 4px; border-top: 1px solid #f0ece4; margin-top: 8px; }
 
@@ -8319,11 +8328,11 @@ body[data-ui-geometry-owner="host"] .dd-overlay[data-ui-layer="host-transparent"
 .pr-player-header { padding: 5px 16px; display: flex; flex-wrap: wrap; gap: 3px 0; align-items: center; border-top: 1px solid #ece8e0; background: #f8f5f1; }
 .pr-player-header:first-child { border-top: none; }
 .pr-player-header .pr-rec-tag { background: transparent; color: #8a7868; font-weight: 400; font-size: 12px; border-radius: 0; padding: 0 4px; border: none; }
-.pr-tag-count { background: transparent !important; color: #3d5230 !important; border: none !important; font-weight: 600 !important; padding: 0 6px 0 0 !important; }
-.pr-tag-who { background: transparent; color: #8a7868; }
-.pr-tag-who + .pr-tag-who::before { content: "·"; margin-right: 3px; color: #c4b4a4; }
-.pr-tag-who-first { color: #5a4030 !important; border-bottom: none !important; font-weight: 500 !important; padding-bottom: 0 !important; }
-.pr-tag-icon { display: inline-block; font-size: 11px; }
+.pr-tag-count { display:inline-flex; align-items:center; flex:0 0 auto; gap:2px; background:transparent !important; color:#8a7868 !important; border:none !important; font-weight:400 !important; line-height:18px; padding:0 6px 0 0 !important; white-space:nowrap; }
+.pr-tag-who { background:transparent; }
+.pr-tag-who + .pr-tag-who::before { content:"·"; margin-right:3px; color:#c4b4a4; font-weight:400; }
+.pr-rec-recorder.pr-tag-who-first { color:var(--green); font-weight:600; }
+.pr-tag-icon { display:inline-block; font-size:11px; filter:grayscale(1); opacity:.72; }
 .pr-rec-sheet-link { font-size: 16px; text-decoration: none; color: var(--muted); padding: 2px 3px; border-radius: 5px; flex-shrink: 0; }
 .pr-rec-sheet-link:hover { background: #f0e8dc; }
 .pr-rec-row--game { padding-left: 14px; }
@@ -8340,9 +8349,6 @@ body[data-ui-geometry-owner="host"] .dd-overlay[data-ui-layer="host-transparent"
    두 겹 띠(모임+인원)를 한 겹으로 정리 — 인원은 "누가 했나" 부가정보다.
    인원 묶음 사이 구분은 .pr-moim-section 구분선이 담당하므로 여기선 뺀다. */
 .pr-group-card .pr-player-header { border-top: none; border-bottom: none; background: transparent; padding-top: 7px; padding-bottom: 2px; }
-/* 이름 색을 약하게(개수 '3명'은 앵커로 남기고 이름만 옅게) */
-.pr-group-card .pr-player-header .pr-tag-who { color: #9a8f82; }
-.pr-group-card .pr-player-header .pr-tag-who-first { color: #7d7264 !important; }
 /* 개별 게임: 별도 외곽선 없이 내부 섹션 — 게임 사이 위아래 여백 확보(pr-rec-row의 border-bottom이 얇은 가로선) */
 .pr-group-card .pr-rec-row { padding-top: 13px; padding-bottom: 13px; }
 /* 날짜별 보기의 36px 들여쓰기는 카드가 이미 그룹을 묶으므로 카드 안에서 상쇄 */

@@ -1650,8 +1650,9 @@ const toggle = hd?.querySelector('.pr-session-toggle');
         const thumbHtml = realThumb
           ? `<img class="pr-rec-thumb${gameKey ? ' pr-rec-thumb--link' : ''}" src="${escH(realThumb)}" alt="" loading="lazy" onerror="this.style.display='none'" ${_thumbClick}>`
           : (_thumbKey ? `<img class="pr-rec-thumb pr-rec-thumb--placeholder pr-rec-thumb--link" src="${GAME_LOGO_PLACEHOLDER}" alt="미보유 게임" loading="lazy" ${_thumbClick}>` : '');
-        const dlParts = [r.play_time_min ? `${r.play_time_min}분` : '', r.score_note ? (s => /\d$/.test(s) ? s.replace(/점$/, '') + '점' : s)(escH(r.score_note).trimEnd()).replace(/\s*\/\s*/g,' | ') : ''].filter(Boolean);
-        const dateline = dlParts.length ? `<span class="pr-rec-dateline">${dlParts.join(' · ')}</span>` : '';
+        const scoreText = window.formatPlayScore?.(r.score_note) || '';
+        const dlParts = [r.play_time_min ? `<span class="play-record-meta-time">${r.play_time_min}분</span>` : '', scoreText ? escH(scoreText) : ''].filter(Boolean);
+        const dateline = dlParts.length ? `<span class="pr-rec-dateline play-record-meta-muted">${dlParts.join(' · ')}</span>` : '';
         // 플레이기록게시판의 전체 기록 수정은 본인만(2026-07-27 사용자 결정) — 오너도 남의 인원·시간·평점을
         // 한번에 바꾸는 이 편집은 못 하게 한다. 게임평 텍스트만 다루는 가벼운 모더레이션은 게임 시트 쪽에 둔다.
         const showEdit = isMine;

@@ -65,6 +65,18 @@
     ].filter(Boolean).join('');
   }
 
+  // 플레이기록 점수 표시의 기존 게시판 규칙을 공용화한다. 숫자로만 이뤄진 여러 점수는
+  // slash와 단위를 한 번으로 정리하되, 협력승리 같은 자유 문자열은 기존 끝문자 판단을 보존한다.
+  function formatPlayScore(raw) {
+    const score = String(raw ?? '').trim();
+    if (!score) return '';
+    const parts = score.split('/').map(part => part.trim());
+    if (parts.length > 1 && parts.every(part => /^\d+점?$/.test(part))) {
+      return `${parts.map(part => part.replace(/점$/, '')).join(' / ')}점`;
+    }
+    return /\d$/.test(score) ? `${score.replace(/점$/, '')}점` : score;
+  }
+
   // 기록 행(.pr-rec-row) 사진 라이트박스 — 캡션 + 좌하단 게임 썸네일 + (내 기록이면) 삭제.
   // 기록 허브·동호회 기록이 공유. 한 기록의 사진만 띄우므로 게임·소유권이 전 장에 동일 →
   // gameThumbs/gameKeys는 같은 값으로 채운다.
@@ -511,6 +523,7 @@
   window.escAttr = _escAttr;   // 속성값 이스케이프(& 와 ")는 escH가 안 해준다
   window.buildRecordCaption = buildRecordCaption;
   window.buildPlayPeopleHtml = buildPlayPeopleHtml;
+  window.formatPlayScore = formatPlayScore;
   window.copyCaption = copyCaption;
   window.trackMoreMenu = trackMoreMenu;
   window.untrackMoreMenu = untrackMoreMenu;

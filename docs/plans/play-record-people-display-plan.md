@@ -9,7 +9,7 @@
 - 공통 `window.buildPlayPeopleHtml(record, { esc })`가 `game_play_records.user_id`·`nickname`의 stable author를 먼저 출력한다.
 - `player_names`는 입력된 전체 참가자 이름 텍스트로 보존한다. 표시에서만 `record.nickname`과 exact하게 같은 쉼표 토큰을 제거한다. 별칭·부분일치·정규화 dedupe는 하지 않는다.
 - 플레이기록 사람 token의 작성자는 direct `user_id` micro identity host이며, 나머지 token은 기존 exact·unique resolver가 확정한 경우에만 identity icon/profile link를 얻는다. 별도 작성자 meta인 게임평은 기존 standard variant, 사진은 micro variant를 유지한다.
-- 게임정보의 플레이기록 목록·요약 미리보기, 기록 더보기, 홈 요약 미리보기가 같은 사람 token markup을 사용한다. icon+nickname은 `pr-rec-recorder`의 nowrap 토큰이다.
+- 게임정보의 플레이기록 목록·요약 미리보기, 기록 더보기, 홈 요약 미리보기가 같은 사람 token markup을 사용한다. icon+nickname은 `pr-rec-recorder`의 nowrap token이며, 참가자는 12px 웜그레이, 작성자는 기존 `--green`과 `font-weight:600`만으로 구분하고 18px line-height·padding/아이콘 정렬은 공유한다. participant icon은 micro 12px이고, 사람 행은 token 단위 wrap을 허용한다.
 - 사진은 기존 uploader meta를 유지한다. 단일 작성자 meta에만 direct micro identity icon을 추가하며 사람 목록과 합치지 않는다.
 - `recordGamePlay`와 `updateGamePlay`는 non-null `player_names`에 작성자의 historical nickname exact token이 없을 때만 끝에 보강한다. 사진 단독/null 기록은 그대로 null로 둔다.
 

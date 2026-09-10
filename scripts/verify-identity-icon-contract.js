@@ -28,7 +28,7 @@ has(db, ".select('user_id,rep_achievement_id')", 'batch API가 최소 컬럼만 
 
 for (const file of ['assets/js/game-reviews.js', 'assets/js/index-page.js', 'pages/club/club-history.html']) {
   const src = read(file);
-  has(src, "dataset.identityIconVariant = 'micro'", `${file}: D가 micro variant다`);
+  has(src, "dataset.identityIconVariant = 'participant'", `${file}: D가 participant(micro) variant다`);
   has(src, 'hydrateIdentityIcons', `${file}: 렌더 뒤 공통 hydrator를 부른다`);
 }
 const gameSheet = read('assets/js/game-sheet.js');
