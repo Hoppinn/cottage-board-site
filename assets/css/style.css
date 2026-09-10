@@ -3693,13 +3693,13 @@ html:has(body.embed-mode) { scroll-padding-top: 0; }
   gap:8px;
 }
 .sheet-play-box .sheet-my-record-item{
-  padding:10px 44px 10px 12px;
+  padding:10px 12px;
   background:var(--paper,#faf7f2);
   border:1px solid #ede8df;
   border-radius:10px;
   flex-wrap:wrap;   /* ⋯ 열었을 때 추가 행(.sheet-rec-more-actions)을 전체폭으로 */
 }
-.sheet-play-box .sheet-my-record-item--mine{ padding-right:76px; }  /* 우상단 ⋯ + ✏️ + ✕ */
+.sheet-play-box .sheet-my-record-item--mine{ padding-right:12px; }
 .sheet-play-info-tag--secondary{font-weight:600;}
 .sheet-list-more-btn{display:block;width:100%;padding:8px;background:none;border:none;border-top:1px solid #f0e8d8;font-size:12px;color:var(--muted);cursor:pointer;text-align:center;}
 /* 기록별 ⋯ 햄버거(우상단, .sheet-play-record-actions 클러스터 내) — 클릭 시 추가 행이 아래로 인라인 확장 */
@@ -4143,6 +4143,8 @@ html:has(body.embed-mode) { scroll-padding-top: 0; }
   min-width:0;
 }
 .sheet-record-nickname{
+  display:block;
+  padding-right:64px;
   font-size:11px;
   font-weight:700;
   color:var(--muted);
@@ -4191,6 +4193,7 @@ html:has(body.embed-mode) { scroll-padding-top: 0; }
 .sheet-info-group .sheet-mechs-wrap{
   margin-bottom:0;
 }
+.sheet-play-duration{white-space:nowrap;}
 .sheet-info-group > .sheet-card-head + .sheet-mechs-wrap{
   margin-top:10px;
 }
@@ -4301,7 +4304,6 @@ html:has(body.embed-mode) { scroll-padding-top: 0; }
   padding-bottom:0;
 }
 .sheet-preview-body .sheet-comment-item{ margin:0; }
-.sheet-mine-mark{font-size:10px;color:var(--green,#5a8a5a);vertical-align:middle;}
 .sheet-play-scroll{display:flex;gap:8px;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding-bottom:2px;}
 .sheet-play-scroll::-webkit-scrollbar{display:none;}
 .sheet-play-scroll-card{flex:0 0 93%;scroll-snap-align:start;border-right:1.5px solid var(--line-soft);padding-right:10px;}
@@ -6320,6 +6322,13 @@ html:has(body.embed-mode) { scroll-padding-top: 0; }
   color:var(--green);
   text-decoration:underline;
 }
+/* C/E 20px: character PNG content occupies only about 100×89px inside its 128px canvas.
+   D participant row stays 12px so metadata density and visual priority remain lower. */
+.identity-character-icon{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;margin-right:3px;vertical-align:-4px;pointer-events:none;flex-shrink:0;}
+.identity-character-icon img{display:block;width:100%;height:100%;object-fit:contain;}
+.identity-character-icon-fallback{font-size:15px;line-height:1;}
+.identity-character-icon--micro{width:12px;height:12px;margin-right:2px;vertical-align:-2px;}
+.identity-character-icon--micro .identity-character-icon-fallback{font-size:10px;}
 .sheet-comment-date{
   font-size:10px;
   font-weight:400;

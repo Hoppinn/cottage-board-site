@@ -503,6 +503,106 @@
     return _charImgPath(def.rewards.character);
   }
 
+  // C/D/E 닉네임의 대표 캐릭터 표시 공통 계약. 화면별 renderer는 stable user_id만 표시하고,
+  // 이 hydrator만 조회·cache·DOM 삽입을 담당한다.
+  const _identityIconCache = new Map();
+  let _identityIconRevision = 0;
+
+  function _identityHosts(root) {
+    if (!root?.querySelectorAll) return [];
+    const hosts = [...root.querySelectorAll('[data-identity-user-id]')];
+    // rerender가 attribute만 지운 host도 다음 hydrate에서 옛 icon을 제거해야 한다.
+    root.querySelectorAll('.identity-character-icon').forEach(icon => {
+      if (icon.parentElement) hosts.push(icon.parentElement);
+    });
+    if (root.matches?.('[data-identity-user-id]')) hosts.unshift(root);
+    return [...new Set(hosts)];
+  }
+
+  function _identityIconChildren(host) {
+    return [...host.children].filter(child => child.classList.contains('identity-character-icon'));
+  }
+
+  function _renderIdentityIcon(host, userId, achId) {
+    const currentUserId = String(host.dataset.identityUserId || '');
+    if (!host.isConnected || currentUserId !== userId) return;
+    const requestedVariant = host.dataset.identityIconVariant;
+    const variant = requestedVariant === 'participant' || requestedVariant === 'micro' ? 'micro' : 'regular';
+    const path = achId ? getCharacterPath(achId) : null;
+    const def = achId ? ACH_DEFS.find(item => item.id === achId) : null;
+    // stable user_id host는 대표 캐릭터가 비어도 회원임이 확정된 상태다. 이 경우에만
+    // 기존 기본 발바닥을 보이고, user_id 자체가 없는 historical 이름에는 아무 것도 넣지 않는다.
+    const resolvedAchievementId = path && def ? achId : '';
+    const icons = _identityIconChildren(host);
+    const current = icons.find(icon => icon.dataset.identityIconFor === userId);
+    if (current && current.dataset.identityIconAchievement === resolvedAchievementId && current.dataset.identityIconVariant === variant) {
+      icons.filter(icon => icon !== current).forEach(icon => icon.remove());
+      return;
+    }
+    icons.forEach(icon => icon.remove());
+    const icon = document.createElement('span');
+    icon.className = `identity-character-icon identity-character-icon--${variant}`;
+    icon.dataset.identityIconFor = userId;
+    icon.dataset.identityIconAchievement = resolvedAchievementId;
+    icon.dataset.identityIconVariant = variant;
+    icon.setAttribute('aria-hidden', 'true');
+    if (!path || !def) {
+      const fallback = document.createElement('span');
+      fallback.className = 'identity-character-icon-fallback';
+      fallback.textContent = '🐾';
+      icon.append(fallback);
+      host.prepend(icon);
+      return;
+    }
+    const image = document.createElement('img');
+    image.src = path;
+    image.alt = '';
+    const fallback = document.createElement('span');
+    fallback.className = 'identity-character-icon-fallback';
+    fallback.textContent = def.emoji || '🐾';
+    fallback.hidden = true;
+    image.addEventListener('error', () => {
+      image.remove();
+      fallback.hidden = false;
+    }, { once: true });
+    icon.append(image, fallback);
+    host.prepend(icon);
+  }
+
+  async function hydrateIdentityIcons(root = document) {
+    const snapshot = _identityHosts(root).map(host => ({
+      host,
+      userId: String(host.dataset.identityUserId || '').trim(),
+    }));
+    snapshot.filter(item => !item.userId).forEach(({ host }) => _identityIconChildren(host).forEach(icon => icon.remove()));
+    const activeSnapshot = snapshot.filter(item => item.userId);
+    if (!activeSnapshot.length) return;
+    const revision = _identityIconRevision;
+    const missingIds = [...new Set(activeSnapshot.map(item => item.userId).filter(id => !_identityIconCache.has(id)))];
+    if (missingIds.length) {
+      const rows = await window.CottageDB?.getRepresentativeCharacters?.(missingIds);
+      // 대표 변경 뒤 도착한 오래된 response는 cache와 DOM 어느 쪽에도 쓰지 않는다.
+      if (revision !== _identityIconRevision) return hydrateIdentityIcons(root);
+      if (!Array.isArray(rows)) return;
+      const byUserId = new Map(rows.map(row => [String(row.user_id), row.rep_achievement_id || null]));
+      missingIds.forEach(id => _identityIconCache.set(id, byUserId.get(id) || null));
+    }
+    if (revision !== _identityIconRevision) return hydrateIdentityIcons(root);
+    activeSnapshot.forEach(({ host, userId }) => {
+      // 비동기 중 rerender/identity 교체된 node는 절대 꾸미지 않는다.
+      if (!host.isConnected || String(host.dataset.identityUserId || '').trim() !== userId) return;
+      _renderIdentityIcon(host, userId, _identityIconCache.get(userId) || null);
+    });
+  }
+
+  function invalidateIdentityIcons(userId, repAchievementId) {
+    const id = String(userId || '').trim();
+    _identityIconRevision += 1;
+    if (id) _identityIconCache.set(id, repAchievementId || null);
+    else _identityIconCache.clear();
+    return hydrateIdentityIcons(document);
+  }
+
   // 칭호 섹션 HTML 빌드 — { html, earnedIds } 반환
   async function buildTitleSection(userId, repTitleId, visitCount, nickname, preStats = null, achSeenAt = null) {
     const db = window.CottageDB;
@@ -970,6 +1070,7 @@
       if (origId) charBody.querySelector(`.profile-char-card[data-ach-id="${origId}"]`)?.classList.add('is-selected');
     } else {
       _applyRepCharacterUI(achId);
+      void invalidateIdentityIcons(userId, achId || null);
       const actionRow = charBody.querySelector('#profileRepActionRow');
       if (actionRow) { actionRow.style.display = 'none'; actionRow.dataset.origRepId = achId || ''; }
     }
@@ -1009,6 +1110,8 @@
     handleRepTitleSelect,
     getTitleById: (id) => TITLE_DEFS.find(t => t.id === id) || null,
     getCharacterPath,
+    hydrateIdentityIcons,
+    invalidateIdentityIcons,
     reapplyRepOverrides,
     getCharacterName: (achId) => ACH_DEFS.find(d => d.id === achId)?.rewards?.char_name || null,
     getAchievementDef: (achId) => {

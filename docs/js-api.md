@@ -1,6 +1,6 @@
 # JS API 레퍼런스 — 코티지보드
 
-최종 갱신: 2026-09-10 (canonical functional-surface ancestor request 계약 명시) / 2026-08-31 (028 프로필 보드 API 4종·프로필 보드 UI/진입 계약·날짜별 `hard_game_learning_ok` 반영) / 2026-08-30 (`getMeetingVotes`/`upsertMeetingVote`에 027 기타 게임 유형의 안정 코드·표시 문구 분리 계약 반영) / 2026-08-29 (`normalizeMemberIntroTimes`/`formatMemberIntroTimes` 추가, `submitMemberIntro`의 30분 슬롯·커스텀 유형 계약 반영)
+최종 갱신: 2026-09-10 (플레이기록 stable author display·non-null participant 입력 보강 계약, canonical functional-surface ancestor request 계약 명시) / 2026-08-31 (028 프로필 보드 API 4종·프로필 보드 UI/진입 계약·날짜별 `hard_game_learning_ok` 반영) / 2026-08-30 (`getMeetingVotes`/`upsertMeetingVote`에 027 기타 게임 유형의 안정 코드·표시 문구 분리 계약 반영) / 2026-08-29 (`normalizeMemberIntroTimes`/`formatMemberIntroTimes` 추가, `submitMemberIntro`의 30분 슬롯·커스텀 유형 계약 반영)
 
 ---
 
@@ -37,6 +37,7 @@ parent root modal이 `create({ container, rootFrame, rootShell, isOpen })`으로
 - The resolver runs at link/display/aggregation time. Do not destructively rewrite `player_names`, author text, meeting rows, or other historical source strings to "clean up" identity.
 - Historical participant resolution does not redefine meeting attendance or write a membership relation; stable-ID meeting data keeps its own meaning.
 - Audit and verification tools must follow the same contract: confirm the Supabase environment, join `profiles` and `member_intros` by `user_id`, and output public nickname, profile nickname, and real name separately. A profiles-only audit that contradicts runtime is evidence to investigate, not a fact to overwrite runtime with.
+- `window.buildPlayPeopleHtml(record, { esc })` is the shared display contract for 게임정보, 기록 더보기, and 홈 요약 미리보기: show the stable author (`record.user_id` + historical `record.nickname`) first; remove only `player_names` tokens exactly equal to that historical nickname; preserve every other input token. The author gets micro identity directly; other tokens receive identity/profile linkage only after the existing exact·unique resolver confirms them.
 
 ### ⚠️ 에러 처리 규약 (2026-07-17 신설 — 신규 DB 함수 작성 시 필독)
 
@@ -78,9 +79,9 @@ return data || [];
 | `getGameOverride(gameKey)` | `game_overrides`(019+020+021) 단건 조회 — 게임정리 사진 URL 배열 + 룰설명(레거시) + 룰 섹션(jsonb) + 에러로그. 없으면 `null` |
 | `upsertGameOverride(gameKey, {organizerPhotoUrls, ruleNote, errorNote, ruleSections})` | 게임정리·룰설명·에러로그·룰 섹션 저장(관리자 전용 UI에서만 호출, DB 레벨 게이트 없음). `ruleSections`는 `{goal,setup,play,end}` 중 값 있는 키만 저장(빈 키는 null로 접힘) — `requests-admin.html` 「게임 관리」 저장 버튼 하나가 4칸을 항상 같이 보내는 단일 폼이라 부분 갱신 경합 없음 |
 | `uploadOrganizerPhoto(file, gameKey)` | 게임정리 사진 Storage 업로드(`organizer-photos` 버킷), `uploadPlayPhoto`와 동일 구조 |
-| `recordGamePlay(...)` | 플레이 기록 저장 |
+| `recordGamePlay(...)` | 플레이 기록 저장. `player_names`가 입력된 경우에만 작성자의 당시 `nickname`이 exact token으로 없으면 끝에 보강한다. `null`은 참가자 없음이 아니라 이름 상세 미입력이며 그대로 저장한다. |
 | `deleteGamePlay(id)` | 플레이 기록 삭제 |
-| `updateGamePlay(id, fields)` | 플레이 기록 수정. **진짜 부분 갱신**이다 — `fields`에 안 넘긴 키는 안 건드린다. `{ photo_url }`만 넘기면 photo_url만 바뀐다(2026-07-31 수정 — 그 전엔 `group_name`/`played_at`을 안 넘겨도 항상 포함시켜 `null`로 덮어써서, 사진·후기만 추가하는 8곳 호출부가 매번 모임명·날짜를 지웠다). 성공 시 `record`/`play`/`balance` 업적 재체크(2026-07-15 추가 — 신규 등록만 체크하고 수정은 안 해서 사진 후추가 등으로 임계값을 채워도 다음 신규 등록 전까지 지급 안 되던 버그 수정) |
+| `updateGamePlay(id, fields)` | 플레이 기록 수정. **진짜 부분 갱신**이다 — `fields`에 안 넘긴 키는 안 건드린다. `{ photo_url }`만 넘기면 photo_url만 바뀐다(2026-07-31 수정 — 그 전엔 `group_name`/`played_at`을 안 넘겨도 항상 포함시켜 `null`로 덮어써서, 사진·후기만 추가하는 8곳 호출부가 매번 모임명·날짜를 지웠다). `player_names`를 포함한 전체 수정만 작성자의 당시 nickname exact token 누락을 보강하며 `null`은 유지한다. 성공 시 `record`/`play`/`balance` 업적 재체크(2026-07-15 추가 — 신규 등록만 체크하고 수정은 안 해서 사진 후추가 등으로 임계값을 채워도 다음 신규 등록 전까지 지급 안 되던 버그 수정) |
 | `getGamePlayRecords(gameId, limit)` | 게임 플레이 기록 조회. `gameId`는 단일 값 또는 배열 (배열 시 `.in()` 쿼리). SELECT에 `game_id` 포함(2026-07-31 추가 — 필터 조건이라 없어도 조회는 되지만, 반환 행을 `_getOthersSessions`처럼 다시 `game_id`로 써야 하는 호출부에선 `undefined`가 `recordGamePlay`에서 `NULL`이 돼 NOT NULL 위반으로 저장이 통째로 실패했다) |
 | `getGroupNames()` | 그룹명 목록 조회 |
 | `getPlayerNames()` | 참여자 이름 목록 조회 (조합+개별) |
@@ -140,6 +141,7 @@ return data || [];
 | `getUserRatingCount(userId)` | 별점 제출 건수 |
 | `getUserVisitCount(userId)` | profiles.visit_count 조회. 방문 업적 체크·진행도 표시에 사용 |
 | `getRepAchievement(userId)` | 대표 캐릭터 객체 반환 |
+| `getRepresentativeCharacters(userIds)` | identity icon 전용 batch read. 중복·빈 `user_id`를 제거해 `profiles.user_id, rep_achievement_id`만 반환한다. 대표 캐릭터가 없는 회원은 행이 있어도 `rep_achievement_id:null`이며, 공통 hydrator가 stable-ID nickname host에 기본 발바닥을 표시한다. 조회 오류는 `null`을 반환해 hydrator가 실패 결과를 cache하지 않고 다음 렌더에서 재시도하게 한다. |
 | `setRepTitle(userId, titleId)` | 대표 칭호 설정 (profiles.rep_title_id). 성공 true, 실패 false |
 | `grantFirstPlayVoucher(userId)` | 첫 플레이 기록 보상 교환권 1장 지급. 오너/중복이면 false. DB unique index로 이중 방어 |
 | `getVoucherBalance(userId)` | voucher_log delta 합산 → 현재 보유 교환권 수 |
@@ -397,7 +399,7 @@ window.escH = (s) => String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;')
 | `window.toInitials` | play-records-utils.js | game-reviews.js |
 | `window.hangulMatch` | play-records-utils.js | game-reviews.js |
 | `window.checkAchievements` | achievements.js | supabase-client.js (recordGamePlay, submitRating 후 호출) |
-| `window.CottageAchievements` | achievements.js | kakao-auth.js (패널 섹션 빌드). 노출: checkAchievements, buildCodexSection(userId) → `{html,playedCount,totalGames}`, buildCharacterSection(userId,nickname,preStats) → `{html,earnedCharCount,charTotal}`, buildAchievementsSection(userId,nickname,preStats) → `{html,achCount,achTotal}` **(순수 read-only 빌드 — 2026-07-16 R6부터 write 없음)**, grantRetroAchievements(userId, stats) **(명시적 write: 카운트 충족했으나 미트리거된 업적을 소급 insert. stats.achievements를 in-place 갱신. 호출부에서 `!readOnly`일 때만 호출)**, handleRepCardSelect, buildTitleSection → `{html,earnedIds,titleTotal}`, handleRepTitleSelect, getTitleById(id), getCharacterPath(achId), getCharacterName(achId), fetchUserStats(userId, nickname), findNextAchievement(preStats) → `{emoji,name,gap,unit}` or null. (2026-07-15 R3: 4개 build 함수 모두 문자열 대신 `{html,...}` 객체 반환으로 통일 — 호출측 HTML regex 스크래핑(`_safeInt`) 제거 목적. 2026-07-16 R6: 소급지급 side-effect를 buildAchievementsSection 밖으로 분리 → readOnly 열람 시 대상 유저 DB write 방지) |
+| `window.CottageAchievements` | achievements.js | kakao-auth.js (패널 섹션 빌드). 노출: checkAchievements, buildCodexSection(userId) → `{html,playedCount,totalGames}`, buildCharacterSection(userId,nickname,preStats) → `{html,earnedCharCount,charTotal}`, buildAchievementsSection(userId,nickname,preStats) → `{html,achCount,achTotal}` **(순수 read-only 빌드 — 2026-07-16 R6부터 write 없음)**, grantRetroAchievements(userId, stats) **(명시적 write: 카운트 충족했으나 미트리거된 업적을 소급 insert. stats.achievements를 in-place 갱신. 호출부에서 `!readOnly`일 때만 호출)**, handleRepCardSelect, buildTitleSection → `{html,earnedIds,titleTotal}`, handleRepTitleSelect, getTitleById(id), getCharacterPath(achId), `hydrateIdentityIcons(root)`(idempotent batch hydrate; node 연결·현재 user_id를 재확인해 stale async 결과를 버림), `invalidateIdentityIcons(userId, repAchievementId)`(대표 변경 뒤 cache 갱신·현재 document refresh의 단일 경로), getCharacterName(achId), fetchUserStats(userId, nickname), findNextAchievement(preStats) → `{emoji,name,gap,unit}` or null. `data-identity-user-id` host는 stable ID만 쓰고, historical participant는 exact·unique resolver가 확정한 경우에만 이 attribute를 받는다. (2026-07-15 R3: 4개 build 함수 모두 문자열 대신 `{html,...}` 객체 반환으로 통일 — 호출측 HTML regex 스크래핑(`_safeInt`) 제거 목적. 2026-07-16 R6: 소급지급 side-effect를 buildAchievementsSection 밖으로 분리 → readOnly 열람 시 대상 유저 DB write 방지) |
 | `window.gameData` | cottage-games-data-output.js | game-display-adapter.js, game-sheet.js, owned-games-page.js, index-page.js |
 | `window.COTTAGE_GAME_ABBR_BY_NAME` | cottage-games-data-output.js | day-detail.js (직접입력 게임 막대·룰렛 약칭) |
 | `window.COTTAGE_GAMES` | game-display-adapter.js | game-reviews.js, day-detail.js |

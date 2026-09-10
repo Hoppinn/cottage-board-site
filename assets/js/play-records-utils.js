@@ -5,6 +5,7 @@
 //            window.initTagInput / window.buildPhotoItemAdder / window.revokePhotoGridBlobs
 //            window.getGameKeyById / window.renderCrossBackLink / window.normalizeNick
 //            window.buildRecordCaption / window.copyCaption / window.trackMoreMenu
+//            window.buildPlayPeopleHtml
 
 (function () {
   function _escAttr(s) {
@@ -40,6 +41,28 @@
       ${photoUrls.map((u, i) => `<div class="pr-rec-photo-item${i >= SHOW ? ' sheet-photo-hidden' : ''}"><img class="pr-rec-photo" src="${_escAttr(u)}" alt="사진" loading="lazy" data-idx="${i}">${canDelPhoto ? `<button aria-label="사진 빼기" class="pr-rec-photo-del" data-id="${recordId}" data-url="${_escAttr(u)}" type="button">×</button>` : ''}</div>`).join('')}
       ${more > 0 ? `<div class="pr-rec-photo-more">+${more}장</div>` : ''}
     </div>`;
+  }
+
+  // 플레이기록의 사람 표시는 기록 작성자와 participant 입력 텍스트를 다른 의미로 다룬다.
+  // 작성자는 stable user_id가 있으면 직접 연결하고 항상 먼저 보인다. player_names는 전체 입력
+  // 목록 그대로 두되, 작성자의 당시 nickname과 *정확히* 같은 토큰만 화면에서 뺀다. 별칭·부분
+  // 일치·대소문자/공백 정규화로 중복을 추정하지 않는다.
+  function buildPlayPeopleHtml(record, opts = {}) {
+    const esc = typeof opts.esc === 'function' ? opts.esc : (window.escH || (value => String(value ?? '')));
+    const authorNickname = String(record?.nickname || '').trim();
+    const authorUserId = String(record?.user_id || '').trim();
+    const names = String(record?.player_names || '').split(',')
+      .map(token => token.trim())
+      .filter(Boolean)
+      .filter(token => token !== authorNickname);
+    const person = (nickname, userId, isAuthor) => {
+      const identity = userId ? ` data-identity-user-id="${_escAttr(userId)}"${isAuthor ? '' : ' data-identity-icon-variant="participant"'}` : '';
+      return `<span class="pr-rec-tag pr-tag-who pr-rec-recorder${isAuthor ? ' pr-tag-who-first' : ''}" data-nick="${_escAttr(nickname)}"${identity}>${esc(nickname)}</span>`;
+    };
+    return [
+      authorNickname ? person(authorNickname, authorUserId, true) : '',
+      ...names.map(nickname => person(nickname, '', false)),
+    ].filter(Boolean).join('');
   }
 
   // 기록 행(.pr-rec-row) 사진 라이트박스 — 캡션 + 좌하단 게임 썸네일 + (내 기록이면) 삭제.
@@ -487,6 +510,7 @@
   window.normalizeNick = normalizeNick;
   window.escAttr = _escAttr;   // 속성값 이스케이프(& 와 ")는 escH가 안 해준다
   window.buildRecordCaption = buildRecordCaption;
+  window.buildPlayPeopleHtml = buildPlayPeopleHtml;
   window.copyCaption = copyCaption;
   window.trackMoreMenu = trackMoreMenu;
   window.untrackMoreMenu = untrackMoreMenu;

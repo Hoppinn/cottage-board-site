@@ -1411,9 +1411,7 @@ async function initRecentPlay() {
     const countTag = r.player_count
       ? `<span class="pr-rec-tag pr-tag-count"><span class="pr-tag-icon">👥</span> ${r.player_count}명</span>`
       : '';
-    const nameTags = r.player_names
-      ? r.player_names.split(',').map(n => { const nm = n.trim(); return `<span class="pr-rec-tag pr-tag-who" data-nick="${window.escH?.(nm) ?? nm}">${nm}</span>`; }).join('')
-      : '';
+    const nameTags = window.buildPlayPeopleHtml?.(r, { esc: window.escH }) || '';
     const playerHtml = (countTag || nameTags)
       ? `<div class="pr-player-header">${countTag}${nameTags}</div>`
       : '';
@@ -1427,11 +1425,11 @@ async function initRecentPlay() {
       : '';
 
     const reviewHtml = r.review_text
-      ? `<p class="pr-rec-review">${r.nickname ? `<span class="pr-rec-reviewer"${r.user_id ? ` data-user-id="${r.user_id}"` : ''}>${r.nickname}</span> ` : ''}${r.review_text}</p>`
+      ? `<p class="pr-rec-review">${r.nickname ? `<span class="pr-rec-reviewer"${r.user_id ? ` data-user-id="${r.user_id}" data-identity-user-id="${r.user_id}"` : ''}>${r.nickname}</span> ` : ''}${r.review_text}</p>`
       : '';
     // 기록 작성자 본인 후기와 같은 형식으로 뒤에 잇는다 — game-reviews.js buildSessionBody와 동일 패턴.
     const linkedHtml = linkedComments.map(c =>
-      `<p class="pr-rec-review pr-rec-review--linked">${c.nickname ? `<span class="pr-rec-reviewer"${c.user_id ? ` data-user-id="${c.user_id}"` : ''}>${c.nickname}</span> ` : ''}${c.comment_text}</p>`
+      `<p class="pr-rec-review pr-rec-review--linked">${c.nickname ? `<span class="pr-rec-reviewer"${c.user_id ? ` data-user-id="${c.user_id}" data-identity-user-id="${c.user_id}"` : ''}>${c.nickname}</span> ` : ''}${c.comment_text}</p>`
     ).join('');
 
     const photoUrls = window.parsePhotoUrls?.(r.photo_url) || [];
@@ -1467,8 +1465,10 @@ async function initRecentPlay() {
 
     // 참여자 이름 → 해당 회원 읽기전용 보드 (기록에서 user_id가 해석되는 이름만 클릭 가능)
     body.querySelectorAll('.pr-tag-who[data-nick]').forEach(span => {
-      const uid = _nickUser.get(window.normalizeNick(span.dataset.nick));
+      const uid = span.dataset.identityUserId || _nickUser.get(window.normalizeNick(span.dataset.nick));
       if (!uid) return;
+      span.dataset.identityUserId = String(uid);
+      span.dataset.identityIconVariant = 'participant';
       span.style.cursor = 'pointer';
       span.addEventListener('click', e => { e.stopPropagation(); window.openOtherProfileSheet?.(uid); });
     });
@@ -1499,6 +1499,7 @@ async function initRecentPlay() {
         window.openOtherProfileSheet?.(span.dataset.userId);
       });
     });
+    void window.CottageAchievements?.hydrateIdentityIcons?.(body);
   } catch (err) {
     console.error('[홈 최근기록 패널]', err);
     body.innerHTML = '<p class="rp-empty">불러오기 실패</p>';
@@ -2021,6 +2022,7 @@ window.addEventListener('cottage-meeting-changed', () => { _meetingReload?.(); }
       ${window.buildBarsInCard(dayVotes, dayGames, myVote, true)}
       ${actionsHtml}
     </div>`;
+    void window.CottageAchievements?.hydrateIdentityIcons?.(previewEl);
 
     async function openMeetingDetail() {
       window.CottageDB?.trackEvent('home_meeting_preview_card_click');

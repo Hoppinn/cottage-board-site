@@ -6,15 +6,18 @@
 
 ## 0. 현재 상태
 
-- 현재 승인된 작업은 없다. 최근 완료된 공통 계약은 Host-relative presentation stack inheritance와 stable `user_id`/public `member_intros.nickname` identity 분리다. 구조·navigation은 [UI_STRUCTURE.md](UI_STRUCTURE.md)·[UI_PATTERNS.md](UI_PATTERNS.md), identity·participant resolver는 [js-api.md](js-api.md)를 정본으로 쓴다. 완료 근거는 git과 [DEBUGGING_HISTORY.md](DEBUGGING_HISTORY.md)에 둔다.
+- 대표 캐릭터 identity icon의 후속 조정(공통 기본 발바닥 fallback, C/E 20px·D 12px, 게임정보 D 두 경로 hydrate)은 코드·정적 검증·문서 동기화까지 완료했다. 승인된 상세 Plan은 [representative-character-identity-icon-plan.md](plans/representative-character-identity-icon-plan.md)이며, C/D/E 실화면 재확인만 남았다. 구조·navigation은 [UI_STRUCTURE.md](UI_STRUCTURE.md)·[UI_PATTERNS.md](UI_PATTERNS.md), identity·participant resolver는 [js-api.md](js-api.md)를 정본으로 쓴다.
+- 플레이기록 사람 표시·저장 보강의 정본은 [play-record-people-display-plan.md](plans/play-record-people-display-plan.md)다. `player_names`는 전체 입력 참가자 이름을 유지하고, stable author의 선두 표시와 신규/수정 누락 방지를 데이터 보정과 분리한다.
 
 ## 1. NOW
 
-- 없음.
+- **게임정보 모달 기록 상세 실화면 조정** — 사진 섹션 header/wrapper의 상하 spacing을 게임평·플레이기록 섹션의 공통 문법과 대조해 사진 썸네일·2열 grid·남기기 버튼·개수 표시는 보존한 채 사진 섹션만 두껍게 보이는 별도 override를 제거한다. participant micro identity에서 대표 캐릭터 image와 fallback 발바닥의 실제 rendered rect/font/line-height를 대조해 같은 12px 역할로 보정한다. 360px의 짧은 4인+시간은 people/meta row와 상위 card/carousel의 실제 available/required width를 계측한 뒤에만 최소 수정한다. ★ 제거는 실화면 확인됨. 자동 브라우저 부재로 사용자 실화면 확인이 남음.
 
 ## 2. NEXT (자동 착수 금지)
 
-- 없음.
+- **모임보드 최근참여 날짜별 보기** — 모임보드의 최근참여를 참여 날짜별로 묶는 표시 변경. 현재 작업의 실화면 확인이 끝난 뒤 별도 범위·데이터 정본을 확인하고 착수한다.
+
+- **대표 캐릭터 identity icon 실화면 재확인** — C/E 확정 회원은 대표 캐릭터 또는 대표 미설정 시 기본 발바닥이 20px standard로 보이고, D는 게임정보의 플레이기록 목록·요약 미리보기를 포함해 exact·unique로 연결된 회원만 12px micro로 보이는지 확인한다. 미연결/충돌 이름에는 아이콘이 없어야 하며 A/B/F와 게임평 요약 캐러셀 구조는 기존 표시를 유지해야 한다. 자동 브라우저가 이번 세션에 없어 사용자 실화면 확인이 필요하다. 정적 근거: `node scripts/verify-identity-icon-contract.js`, `node scripts/verify-nickname-resolution.js`; 상세: [representative-character-identity-icon-plan.md](plans/representative-character-identity-icon-plan.md).
 
 ## 3. BACKLOG (자동 착수 금지)
 
@@ -37,6 +40,8 @@
 | 참여자 이름 5건의 회원 연결 | `춘팝·도라·준혁·지인·호핀`이 실제 회원인지 미확정. `도라`와 `돠`는 혼동 가능 | 사용자 확인 뒤에만 연결. 재측정 시 `node scripts/audit-nick-click.js --negctl` |
 | 외부 인프라 확인 | Supabase·Vercel 요금/한도, 도메인 만료, Kakao 앱 상태는 사용자 소유 | 사용자가 확인 결과를 공유 |
 | 에러 관측 시스템 | 브라우저 `console.error` 밖으로 수집하지 않는 한계는 남아 있음 | 필요성 확정 시 Red/Plan으로 별도 설계 |
+| #155 participant 보정 후보 | 원본 기록에서 작성자의 historical nickname exact token 누락이 확정되면 그 레코드만 별도 승인으로 보정 가능 | 사용자 승인과 원본 대조 후 exact token만 추가; alias/추정 금지 |
+| #157 participant 이름 | alias 가능성만으로 자동 연결·수정하면 historical 입력 의미가 바뀔 수 있음 | 사용자가 실제 participant identity를 확인한 뒤에만 별도 보정 검토 |
 | 모임 데이터 쓰기 보호 | Kakao 인증에 서버측 신원 검증이 없어 anon 클라이언트가 `user_id`를 자기 주장할 수 있다. meeting만 보호하면 같은 구조의 다른 쓰기 경로는 남는다 | 범위(meeting만/전체)와 Edge Function 배포 환경을 확정한 뒤 Plan |
 | 한줄소개 GPT 연동 | 이전 기획의 입력·출력 기준이 복원되지 않음 | 사용자가 원하는 경험을 다시 설명 |
 | 취향보드 Phase 2 | 성향 5축의 정책·표현이 미확정 | Phase 1 사용자 검토 후 재개 |

@@ -71,15 +71,6 @@
     return parts.sort((a, b) => a.localeCompare(b, 'ko')).join(', ');
   }
 
-  // 입력자를 맨 앞으로 — 신규 저장 전용
-  function putSelfFirst(names, selfNick) {
-    if (!names || !selfNick) return names;
-    const parts = names.split(',').map(s => s.trim()).filter(Boolean);
-    const idx = parts.findIndex(n => n.toLowerCase() === selfNick.toLowerCase());
-    if (idx > 0) { const [me] = parts.splice(idx, 1); parts.unshift(me); }
-    return parts.join(', ') || null;
-  }
-
   function showToast(msg) {
     const t = document.getElementById('prToast');
     t.textContent = msg;
@@ -488,7 +479,7 @@
         label: name,
         count: activeCountBtn ? parseInt(activeCountBtn.dataset.n) : null,
         time: parseInt(time) || null,
-        names: putSelfFirst(names || null, user.nickname),
+        names: names || null,
         score: score.split(/\n+/).map(s=>s.trim()).filter(Boolean).join(' / ') || null,
         review: review || null,
         photoFiles: row._photoFiles || [],
@@ -671,7 +662,7 @@
   function _linkedReviewHtml(c, recordId, user) {
     const canManage = !!(user && c.user_id && String(c.user_id) === String(user.id));
     const menuHtml = canManage ? `<span class="pr-rev-menu-wrap"><button class="pr-rev-menu-btn" type="button" aria-label="게임평 수정·삭제">⋯</button><span class="pr-rev-menu"><button class="pr-rev-edit" type="button">✏️ 수정</button><button class="pr-rev-del" type="button">✕ 삭제</button></span></span>` : '';
-    const nameHtml = c.nickname ? `<span class="pr-rec-reviewer"${c.user_id ? ` data-user-id="${escH(String(c.user_id))}"` : ''}>${escH(c.nickname)}</span> ` : '';
+    const nameHtml = c.nickname ? `<span class="pr-rec-reviewer"${c.user_id ? ` data-user-id="${escH(String(c.user_id))}" data-identity-user-id="${escH(String(c.user_id))}"` : ''}>${escH(c.nickname)}</span> ` : '';
     return `<p class="pr-rec-review pr-rec-review--linked${canManage ? ' pr-rec-review--managed' : ''}" data-comment-id="${escH(String(c.id))}" data-record-id="${escH(String(recordId))}">${menuHtml}${nameHtml}<span class="pr-rev-text">${escH(c.comment_text)}</span></p>`;
   }
   // 삽입/재렌더 공통 바인딩: 작성자 이름 클릭 + ⋯ 메뉴(토글/수정/삭제)
@@ -756,6 +747,7 @@
       if (comment.id && main.querySelector(`.pr-rec-review-del[data-comment-id="${escH(String(comment.id))}"]`)) return;  // 중복 방지
       main.insertAdjacentHTML('beforeend', _linkedReviewHtml(comment, recordId, user));
       _bindLinkedReview(main.lastElementChild);
+      void window.CottageAchievements?.hydrateIdentityIcons?.(main.lastElementChild);
     });
   };
 
@@ -1206,14 +1198,19 @@ const toggle = hd?.querySelector('.pr-session-toggle');
 
     // 참여자 이름 클릭 → 해당 회원 읽기전용 보드 열기
     panel.querySelectorAll('.pr-tag-who[data-nick]').forEach(span => {
-      const userId = _nickUserMap.get(window.normalizeNick(span.dataset.nick));
+      const userId = span.dataset.identityUserId || _nickUserMap.get(window.normalizeNick(span.dataset.nick));
       if (!userId) return;
+      if (!span.dataset.identityUserId) {
+        span.dataset.identityUserId = String(userId);
+        span.dataset.identityIconVariant = 'participant';
+      }
       span.style.cursor = 'pointer';
       span.addEventListener('click', e => {
         e.stopPropagation();
         window.openOtherProfileSheet?.(userId);
       });
     });
+    void window.CottageAchievements?.hydrateIdentityIcons?.(panel);
     // ⋯ 메뉴 「이 날 캡션 복사」 — 메뉴를 닫지 않도록 전파를 멈춘다(복사됨! 표시를 봐야 한다)
     panel.querySelectorAll('.pr-rec-caption-action').forEach(btn => {
       btn.addEventListener('click', e => { e.stopPropagation(); window.copyCaption?.(btn); });
@@ -1628,13 +1625,7 @@ const toggle = hd?.querySelector('.pr-session-toggle');
     for (const [, groupRecs] of playerGroups) {
       const first = groupRecs[0];
       const countTag = first.player_count ? `<span class="pr-rec-tag pr-tag-count"><span class="pr-tag-icon">👥</span> ${first.player_count}명</span>` : '';
-      const recorderNicks = new Set(groupRecs.map(r => (r.nickname || '').toLowerCase()).filter(Boolean));
-      const nameTags = first.player_names
-        ? first.player_names.split(',').map(n => {
-            const t = n.trim();
-            return `<span class="pr-rec-tag pr-tag-who${recorderNicks.has(t.toLowerCase()) ? ' pr-tag-who-first' : ''}" data-nick="${escH(t)}">${escH(t)}</span>`;
-          }).join('')
-        : '';
+      const nameTags = window.buildPlayPeopleHtml?.(first, { esc: escH }) || '';
 
       const _headerHtml = (countTag || nameTags)
         ? `<div class="pr-player-header">${countTag}${nameTags}</div>`
@@ -1645,7 +1636,7 @@ const toggle = hd?.querySelector('.pr-session-toggle');
           (r.user_id && String(r.user_id) === String(user.id)) ||
           (!r.user_id && r.nickname && r.nickname === (user.nickname || user.kakaoNickname))
         );
-        const reviewHtml = r.review_text ? `<p class="pr-rec-review">${r.nickname ? `<span class="pr-rec-reviewer"${r.user_id ? ` data-user-id="${r.user_id}"` : ''}>${escH(r.nickname)}</span> ` : ''}${escH(r.review_text)}</p>` : '';
+        const reviewHtml = r.review_text ? `<p class="pr-rec-review">${r.nickname ? `<span class="pr-rec-reviewer"${r.user_id ? ` data-user-id="${r.user_id}" data-identity-user-id="${r.user_id}"` : ''}>${escH(r.nickname)}</span> ` : ''}${escH(r.review_text)}</p>` : '';
         // (014) 이 기록에 매인 남의 게임평 — 기록 주인 후기(review_text)와 같은 형식으로 뒤에 잇는다.
         const linkedHtml = (_recordCommentsMap.get(String(r.id)) || []).map(c => _linkedReviewHtml(c, r.id, user)).join('');
         const photoUrls = parsePhotoUrls(r.photo_url);

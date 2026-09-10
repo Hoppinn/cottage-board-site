@@ -315,12 +315,15 @@
       root.querySelectorAll('.pr-tag-who[data-nick]').forEach(span => {
         const uid = nickUserMap.get(window.normalizeNick(span.dataset.nick));
         if (!uid) return;
+        span.dataset.identityUserId = String(uid);
+        span.dataset.identityIconVariant = 'participant';
         span.style.cursor = 'pointer';
         span.addEventListener('click', e => {
           e.stopPropagation();
           window.openOtherProfileSheet?.(uid);
         });
       });
+      void window.CottageAchievements?.hydrateIdentityIcons?.(root);
       // ⋯ 메뉴 「이 날 캡션 복사」 — 메뉴를 닫지 않도록 전파를 멈춘다(복사됨! 표시를 봐야 한다)
       root.querySelectorAll('.pr-rec-caption-action').forEach(btn => {
         btn.addEventListener('click', e => { e.stopPropagation(); window.copyCaption?.(btn); });

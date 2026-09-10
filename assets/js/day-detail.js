@@ -1255,7 +1255,7 @@
         : '';
       return `<article class="dd-participant-card" data-uid="${esc(v.user_id)}" role="button" tabindex="0" aria-label="${esc(v.nickname)} 모임 보드 열기">
         <div class="dd-participant-head">
-          <div class="dd-participant-nick-wrap"><button class="dd-modal-nick dd-participant-name" data-uid="${esc(v.user_id)}" type="button">${esc(v.nickname)}</button>${participantActions}</div>
+          <div class="dd-participant-nick-wrap"><button class="dd-modal-nick dd-participant-name" data-uid="${esc(v.user_id)}" data-identity-user-id="${esc(v.user_id)}" type="button">${esc(v.nickname)}</button>${participantActions}</div>
           <div class="dd-time">${window.formatVoteHour(v.time_start)}~${window.formatVoteHour(v.time_end)}${partyCount([v]) > 1 ? ` · ${partyCount([v]) - 1}명 동반` : ''}</div>
         </div>
         ${_buildUsualContextHtml(profileByUserId.get(String(v.user_id)))}
@@ -1519,6 +1519,7 @@
       <div class="dd-modal-scroll"><div class="dd-loading">불러오는 중...</div></div>
     </div>`;
     document.body.appendChild(el);
+    void window.CottageAchievements?.hydrateIdentityIcons?.(el);
     _ensureDdViewToken();
     const closeModal = () => { _popDdViewToken(); el.remove(); };
     el.querySelector('.dd-x-btn').addEventListener('click', closeModal);
@@ -1554,6 +1555,7 @@
       </div>
       ${roulettePanelHtml}
     </div>`;
+    void window.CottageAchievements?.hydrateIdentityIcons?.(el);
 
     el.querySelectorAll('.dd-x-btn').forEach(button => button.addEventListener('click', closeModal));
 
@@ -1754,7 +1756,7 @@
       return `<div class="sched-bar-item" data-date="${esc(v.vote_date)}" data-uid="${esc(v.user_id)}" role="button" tabindex="0">
         <div class="sched-bar-left">
           <span class="sched-bar-nick-actions">
-            <span class="sched-bar-name" data-uid="${esc(v.user_id)}" role="link" tabindex="0">${esc(v.nickname)}</span>
+            <span class="sched-bar-name" data-uid="${esc(v.user_id)}" data-identity-user-id="${esc(v.user_id)}" role="link" tabindex="0">${esc(v.nickname)}</span>
             ${guestN > 0 ? `<span class="sched-bar-guest" title="동반 인원 ${guestN}명">+${guestN}</span>` : ''}
             ${actions}
           </span>

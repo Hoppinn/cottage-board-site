@@ -115,6 +115,18 @@ window._cottageSess = (function () {
     return String(token || '').trim().toLowerCase() === String(nickname || '').trim().toLowerCase();
   }
 
+  // 신규/전체 수정에서만 쓰는 저장 보강. null은 참가자 없음이 아니라 이름 상세를 입력하지
+  // 않은 기록이므로 건드리지 않는다. 입력된 목록에는 작성자의 당시 nickname이 없을 때만
+  // exact token으로 덧붙인다. alias·부분일치·정규화 비교는 하지 않는다.
+  function _ensureAuthorInPlayerNames(playerNames, nickname) {
+    if (playerNames == null || !String(playerNames).trim() || !String(nickname || '').trim()) return playerNames;
+    const author = String(nickname).trim();
+    const tokens = String(playerNames).split(',').map(token => token.trim()).filter(Boolean);
+    return tokens.some(token => token === author)
+      ? playerNames
+      : `${String(playerNames).trim()}, ${author}`;
+  }
+
   // 현재 표시 닉네임과 가입 때 저장한 본명은 같은 회원 identity의 별칭이다.
   // 어느 별칭 키든 다른 회원과 충돌하면 그 키는 정규화 연결에 쓰지 않는다.
   function _getIdentityKeys(profile, publicNickname = null) {
@@ -465,7 +477,7 @@ window._cottageSess = (function () {
       const { data, error } = await db.from("game_play_records").insert({
         game_id: gameId,
         player_count: playerCount || null,
-        player_names: playerNames || null,
+        player_names: _ensureAuthorInPlayerNames(playerNames || null, nickname) || null,
         play_time_min: playTimeMin || null,
         score_note: scoreNote || null,
         nickname: nickname || null,
@@ -547,7 +559,12 @@ window._cottageSess = (function () {
       // 때마다 사라지는 실제 데이터 손실이었다).
       const fields = {};
       if (player_count !== undefined) fields.player_count = player_count;
-      if (player_names !== undefined) fields.player_names = player_names;
+      if (player_names !== undefined) {
+        const { data: existing, error: existingError } = await db.from("game_play_records")
+          .select("nickname").eq("id", id).maybeSingle();
+        if (existingError) return { error: existingError };
+        fields.player_names = _ensureAuthorInPlayerNames(player_names, existing?.nickname || null);
+      }
       if (play_time_min !== undefined) fields.play_time_min = play_time_min;
       if (score_note !== undefined) fields.score_note = score_note;
       if (group_name !== undefined) fields.group_name = group_name || null;
@@ -2248,6 +2265,7 @@ window._cottageSess = (function () {
     getUserParticipationCount,
     getUserFirstRecordCount,
     getRepAchievement,
+    getRepresentativeCharacters,
     setRepTitle,
     grantFirstPlayVoucher,
     grantAchievementVoucher,
@@ -2577,6 +2595,19 @@ window._cottageSess = (function () {
       if (!data?.rep_achievement_id) return null;
       return { id: data.rep_achievement_id };
     } catch (err) { console.error('[getRepAchievement]', err); return null; }
+  }
+
+  // 대표 캐릭터 identity icon용 최소 batch read. 화면별 profiles 전체 조회를 피한다.
+  async function getRepresentativeCharacters(userIds) {
+    const ids = [...new Set((userIds || []).map(id => String(id || '').trim()).filter(Boolean))];
+    if (!ids.length) return [];
+    try {
+      const { data, error } = await db.from('profiles')
+        .select('user_id,rep_achievement_id')
+        .in('user_id', ids);
+      if (error) { console.error('[getRepresentativeCharacters]', error); return null; }
+      return data || [];
+    } catch (err) { console.error('[getRepresentativeCharacters]', err); return null; }
   }
 
   async function setRepTitle(userId, titleId) {

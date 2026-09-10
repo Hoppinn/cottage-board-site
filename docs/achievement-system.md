@@ -65,6 +65,8 @@ characters_basic/rare/{id}.png       ← rare_lightning, season_spring, cottage_
 - 대표가 **없던** 사용자의 패널 아바타는 `<img>`가 아니라 `<div>🐾</div>`다 → `src`를 넣어도 안 바뀐다(요소 교체 필요). 헤더의 대표 아이콘도 **요소 자체가 없다**(삽입 필요).
 - 패널 칭호를 `textContent`로 덮으면 옆의 **⚙(수정 진입) 아이콘이 사라진다** → 떼뒀다 다시 붙인다.
 
+플레이기록·플래너의 작은 대표 캐릭터 identity icon(C/D/E)은 패널 선택자에 직접 붙이지 않는다. `data-identity-user-id`를 가진 nickname host를 `CottageAchievements.hydrateIdentityIcons()`가 일괄 처리하며, 대표 변경은 `invalidateIdentityIcons(userId, repAchievementId)`만으로 cache와 현재 document를 갱신한다. C/E는 stable `user_id`, D는 기존 exact·unique participant resolver가 확정한 ID만 전달한다. C/E 일반 icon은 character PNG의 투명 캔버스 여백을 보정한 20px, D 참여자 태그 micro icon은 12px이다. stable ID가 있는 host는 대표 캐릭터가 없으면 공통 기본 발바닥을 표시하고, ID가 없는 미연결·충돌 participant 이름은 미표시다. 유효 asset의 로드 실패만 기존 캐릭터 카드와 같은 이모지 fallback을 사용한다.
+
 🚨 **DOM만 고치면 수집 보드를 다시 열 때 되돌아간다.** `_collectionBoardInnerHtml`(kakao-auth.js)은 **패널 오픈 시 1회** 만들어진 문자열이라 서브시트에 재진입할 때마다 **그때의 대표값이 다시 깔린다** — 「바꿨는데 다시 들어가니 옛 캐릭터」의 정체가 이것이다(2026-07-21). 그래서 `_applyRep*UI`가 바꾼 값을 모듈 변수에 남기고, `_afterCollectionBoardRender`가 렌더 직후 **`reapplyRepOverrides()`**로 다시 입힌다(남의 보드 `readOnly`엔 적용 안 함). **패널 오픈 시 1회 문자열로 만드는 다른 섹션(`_recordInnerHtml` 등)에 같은 종류의 즉시 반영을 붙일 때도 이 재적용이 필요하다.**
 
 ⚠️ 업적 ID는 사용자 자산(획득 업적, 교환권, 도감 진행률)의 기준값이므로 배포 후 변경 금지. 현재 사용하는 작업 규칙 파일([AGENTS.md](../AGENTS.md) 또는 [CLAUDE.md](../CLAUDE.md))의 영구 식별자 규칙을 따른다.

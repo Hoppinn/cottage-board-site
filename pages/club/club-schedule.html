@@ -2766,6 +2766,7 @@
         </div>`;
       }
       el.innerHTML = html;
+      void window.CottageAchievements?.hydrateIdentityIcons?.(el);
 
       // 이날 모임 한눈에 보기 → 집계 모달 (홈 미리보기와 동일 모달)
       el.querySelectorAll('.sched-card-detail-btn[data-date]').forEach(btn => {

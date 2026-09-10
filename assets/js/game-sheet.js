@@ -1330,13 +1330,12 @@ async function initSheetCommentsPreview(gameKey) {
     const nick = esc(item.nick);
     const dateStr = item.date ? item.date.slice(2, 10).replace(/-/g, '.') : '';
     const isMine = item.source === 'comment' && currentUser && String(item.user_id) === String(currentUser.id);
-    const _isMineAny = currentUser && item.user_id && String(item.user_id) === String(currentUser.id);
     const editBtns = isMine ? `<div class="sheet-comment-actions">
       <button class="sheet-comment-edit-btn" data-id="${item.id}" data-game="${esc(gameKey)}" data-text="${esc(item.text)}" onclick="onEditComment(this)" type="button">수정</button>
       <button class="sheet-comment-del-btn" data-id="${item.id}" data-game-key="${esc(gameKey)}" onclick="onDeleteCommentPreview(this)" type="button">삭제</button>
     </div>` : '';
     return `<div class="sheet-play-scroll-card">
-      <span class="sheet-comment-nickname"><strong class="sheet-comment-nick"${item.user_id ? ` data-user-id="${item.user_id}"` : ''}>${_isMineAny ? '<span class="sheet-mine-mark">★</span> ' : ''}${nick}</strong>${dateStr ? ` <span class="sheet-comment-date">${dateStr}</span>` : ''}</span>
+      <span class="sheet-comment-nickname"><strong class="sheet-comment-nick"${item.user_id ? ` data-user-id="${item.user_id}" data-identity-user-id="${item.user_id}"` : ''}>${nick}</strong>${dateStr ? ` <span class="sheet-comment-date">${dateStr}</span>` : ''}</span>
       <p class="sheet-comment-text">${txt}</p>
       ${editBtns}
     </div>`;
@@ -1346,6 +1345,50 @@ async function initSheetCommentsPreview(gameKey) {
     n.style.cursor = 'pointer';
     n.addEventListener('click', e => { e.stopPropagation(); const _b = _sheetBackTo(_currentSheetGameKey); closeGameSheet(); window.openOtherProfileSheet?.(n.dataset.userId, { backTo: _b }); });
   });
+  void window.CottageAchievements?.hydrateIdentityIcons?.(el);
+}
+
+// historical player_names는 ID를 갖지 않으므로, 다른 D 화면과 같은 exact + unique resolver만 쓴다.
+// 이 함수는 identity를 추정하거나 캐릭터를 조회하지 않고, 확정된 user_id만 hydrator에 넘긴다.
+function _buildSheetParticipantNickMap(profiles, records) {
+  const nickUserMap = new Map();
+  const addUniqueNick = (nickname, userId) => {
+    const key = window.normalizeNick?.(nickname);
+    const id = String(userId || '');
+    if (!key || !id) return;
+    if (!nickUserMap.has(key)) nickUserMap.set(key, id);
+    else if (nickUserMap.get(key) !== id) nickUserMap.set(key, null);
+  };
+  (profiles || []).forEach(profile => {
+    addUniqueNick(profile.nickname, profile.user_id);
+    addUniqueNick(profile.real_name, profile.user_id);
+    addUniqueNick(profile.public_nickname, profile.user_id);
+  });
+  (records || []).forEach(record => addUniqueNick(record.nickname, record.user_id));
+  return nickUserMap;
+}
+
+function _sheetPeopleHtml(record, esc) {
+  return window.buildPlayPeopleHtml?.(record, { esc }) || '';
+}
+
+function _hydrateSheetParticipantIcons(root, nickUserMap) {
+  root.querySelectorAll('.pr-tag-who[data-nick]').forEach(host => {
+    const userId = host.dataset.identityUserId || nickUserMap.get(window.normalizeNick?.(host.dataset.nick));
+    if (!userId) return;
+    if (!host.dataset.identityUserId) {
+      host.dataset.identityUserId = String(userId);
+      host.dataset.identityIconVariant = 'participant';
+    }
+    host.style.cursor = 'pointer';
+    host.addEventListener('click', event => {
+      event.stopPropagation();
+      const backTo = _sheetBackTo(_currentSheetGameKey);
+      closeGameSheet();
+      window.openOtherProfileSheet?.(userId, { backTo });
+    });
+  });
+  void window.CottageAchievements?.hydrateIdentityIcons?.(root);
 }
 
 async function initSheetPlayPreview(gameKey) {
@@ -1353,9 +1396,10 @@ async function initSheetPlayPreview(gameKey) {
   const labelEl = document.getElementById(`sheetPreviewPlayLabel-${gameKey}`);
   if (!el || !window.CottageDB) return;
 
-  const [records, count] = await Promise.all([
+  const [records, count, profiles] = await Promise.all([
     window.CottageDB.getGamePlayRecords(_gameIds(gameKey), 5),
     window.CottageDB.getGamePlayCount(_gameIds(gameKey)),
+    window.CottageDB.getAllProfiles?.() || [],
   ]);
 
   if (labelEl) labelEl.textContent = count > 0 ? `플레이기록 ${count}건` : '플레이기록';
@@ -1366,20 +1410,19 @@ async function initSheetPlayPreview(gameKey) {
   }
 
   const esc = s => window.escH(s);   // GS5: 정본 위임 (supabase-client.js)
-  const _me = window.getKakaoUser?.();
+  const participantNickMap = _buildSheetParticipantNickMap(profiles, records);
 
   const cards = records.map(r => {
     const dateStr = r.played_at
       ? r.played_at.slice(2, 10).replace(/-/g, '.')
       : (r.created_at ? r.created_at.slice(2, 10).replace(/-/g, '.') : '');
-    const isMine = _me && r.user_id && String(r.user_id) === String(_me.id);
-    const _ip = [r.player_count ? `${r.player_count}명` : null, r.player_names ? esc(r.player_names) : null, r.play_time_min ? `${r.play_time_min}분` : null].filter(Boolean);
+    const peopleHtml = _sheetPeopleHtml(r, esc);
+    const _ip = [r.player_count ? `${r.player_count}명` : null, peopleHtml || null, r.play_time_min ? `<span class="sheet-play-duration">${r.play_time_min}분</span>` : null].filter(Boolean);
     const _sep = '<span class="badge-sep"> | </span>';
     const _infoTag = _ip.length ? `<span class="sheet-play-info-tag">${_ip.join(_sep)}</span>` : '';
     const _scoreTag = r.score_note ? `<span class="sheet-play-info-tag">🏆 ${esc(r.score_note).replace(/\s*\/\s*/g,_sep)}</span>` : '';
     return `<div class="sheet-play-scroll-card">
       <span class="sheet-comment-nickname">
-        ${r.nickname ? `<strong class="sheet-comment-nick"${r.user_id ? ` data-user-id="${r.user_id}"` : ''}>${isMine ? '<span class="sheet-mine-mark">★</span> ' : ''}${esc(r.nickname)}</strong>` : ''}
         ${dateStr ? `<span class="sheet-comment-date">${dateStr}</span>` : ''}
         ${r.group_name ? `<a class="sheet-preview-group sheet-history-link" href="${rootPath}pages/game/game-reviews.html?group=${encodeURIComponent(r.group_name)}${r.played_at ? '&date=' + encodeURIComponent(r.played_at) : ''}">${esc(r.group_name)}</a>` : ''}
       </span>
@@ -1394,6 +1437,7 @@ async function initSheetPlayPreview(gameKey) {
     n.style.cursor = 'pointer';
     n.addEventListener('click', e => { e.stopPropagation(); const _b = _sheetBackTo(_currentSheetGameKey); closeGameSheet(); window.openOtherProfileSheet?.(n.dataset.userId, { backTo: _b }); });
   });
+  _hydrateSheetParticipantIcons(el, participantNickMap);
 }
 
 function _attachPhotoLightbox(container, allPhotos, entries, deleteOpts) {
@@ -1443,6 +1487,19 @@ async function _fetchGamePhotos(gameKey) {
   );
 }
 
+function _photoUploaderMetaHtml(entries, esc) {
+  const nicknames = [...new Set((entries || []).map(entry => entry.nickname).filter(Boolean))];
+  if (!nicknames.length) return '';
+  const singleUploader = nicknames.length === 1;
+  const entry = singleUploader ? entries.find(item => item.nickname === nicknames[0]) : null;
+  const identity = entry?.user_id
+    ? ` data-identity-user-id="${window.escAttr?.(entry.user_id) || entry.user_id}"`
+    : '';
+  const label = singleUploader ? esc(nicknames[0]) : `${nicknames.length}명의 사진`;
+  const date = singleUploader && entry?.played_at ? entry.played_at.slice(2, 10).replace(/-/g, '.') : '';
+  return `<span class="sheet-comment-nickname"><strong class="sheet-comment-nick"${identity}>${label}</strong>${date ? ` <span class="sheet-comment-date">${date}</span>` : ''}</span>`;
+}
+
 async function initSheetPhotoPreview(gameKey) {
   const el = document.getElementById(`sheetPhotoPreview-${gameKey}`);
   const labelEl = document.getElementById(`sheetPreviewPhotoLabel-${gameKey}`);
@@ -1460,16 +1517,13 @@ async function initSheetPhotoPreview(gameKey) {
   }
 
   const esc = s => window.escH(s);   // GS5: 정본 위임 (supabase-client.js)
-  const uniqueNicks1 = new Set(entries.map(e => e.nickname).filter(Boolean));
-  const headerName1 = uniqueNicks1.size > 1 ? uniqueNicks1.size + '명의 사진' : (entries[0].nickname ? esc(entries[0].nickname) : '');
-  const headerDate1 = uniqueNicks1.size > 1 ? '' : (entries[0].played_at ? entries[0].played_at.slice(2, 10).replace(/-/g, '.') : '');
-  const metaParts = [headerName1, headerDate1].filter(Boolean);
+  const uploaderMetaHtml = _photoUploaderMetaHtml(entries, esc);
 
   const SHOW_FIRST = 3;
   const more = total - SHOW_FIRST;
   const dataUrls = JSON.stringify(allPhotos).replace(/&/g,'&amp;').replace(/"/g,'&quot;');
   el.innerHTML = `
-    ${metaParts.length ? `<span class="sheet-comment-nickname"><strong class="sheet-comment-nick">${metaParts[0]}</strong>${metaParts[1] ? ` <span class="sheet-comment-date">${metaParts[1]}</span>` : ''}</span>` : ''}
+    ${uploaderMetaHtml}
     <div class="pr-rec-photo-wrap" data-urls="${dataUrls}">
       ${entries.map((e, i) => `<div class="pr-rec-photo-item${i >= SHOW_FIRST ? ' sheet-photo-hidden' : ''}"><img class="pr-rec-photo" src="${esc(e.url)}" alt="사진" loading="lazy" data-idx="${i}"></div>`).join('')}
       ${more > 0 ? `<div class="pr-rec-photo-more" data-idx="${SHOW_FIRST}">+${more}장</div>` : ''}
@@ -1484,6 +1538,7 @@ async function initSheetPhotoPreview(gameKey) {
     });
   }
   _attachPhotoLightbox(el, allPhotos, entries);
+  void window.CottageAchievements?.hydrateIdentityIcons?.(el);
   } catch (err) {
     el.innerHTML = '<span class="sheet-comments-empty">사진을 불러올 수 없습니다</span>';
     console.error('[initSheetPhotoPreview]', err);
@@ -1507,17 +1562,13 @@ async function initSheetPhotos(gameKey) {
   }
 
   const esc = s => window.escH(s);   // GS5: 정본 위임 (supabase-client.js)
-  const uniqueNicks = new Set(entries.map(e => e.nickname).filter(Boolean));
-  const multiUploader = uniqueNicks.size > 1;
-  const headerName = multiUploader ? uniqueNicks.size + '명의 사진' : (entries[0].nickname ? esc(entries[0].nickname) : '');
-  const headerDate = multiUploader ? '' : (entries[0].played_at ? entries[0].played_at.slice(2, 10).replace(/-/g, '.') : '');
-  const metaParts = [headerName, headerDate].filter(Boolean);
+  const uploaderMetaHtml = _photoUploaderMetaHtml(entries, esc);
 
   const SHOW_FIRST = 4;
   const more = total - SHOW_FIRST;
   const dataUrls = JSON.stringify(allPhotos).replace(/&/g,'&amp;').replace(/"/g,'&quot;');
   el.innerHTML = `
-    ${metaParts.length ? `<span class="sheet-comment-nickname"><strong class="sheet-comment-nick">${metaParts[0]}</strong>${metaParts[1] ? ` <span class="sheet-comment-date">${metaParts[1]}</span>` : ''}</span>` : ''}
+    ${uploaderMetaHtml}
     <div class="sheet-photo-grid" data-urls="${dataUrls}">
       ${entries.map((e, i) => `<div class="pr-rec-photo-item${i >= SHOW_FIRST ? ' sheet-photo-hidden' : ''}"><img class="pr-rec-photo" src="${esc(e.url)}" alt="사진" loading="lazy" data-idx="${i}"></div>`).join('')}
     </div>
@@ -1558,6 +1609,7 @@ async function initSheetPhotos(gameKey) {
     }
   } : null;
   _attachPhotoLightbox(el, allPhotos, entries, deleteOpts);
+  void window.CottageAchievements?.hydrateIdentityIcons?.(el);
   } catch (err) {
     el.innerHTML = '<span class="sheet-comments-empty">사진을 불러올 수 없습니다</span>';
     console.error('[initSheetPhotos]', err);
@@ -1915,7 +1967,7 @@ async function initSheetComments(gameKey) {
       const canManage = isSelf || _isOwner;
       // 「플레이기록으로 연동」은 내 기록에만 의미가 있어 오너 모더레이션 범위에서 뺀다 — 본인 것만.
       return `<div class="sheet-comment-item">
-      <span class="sheet-comment-nickname"><strong class="sheet-comment-nick"${item.user_id ? ` data-user-id="${item.user_id}"` : ''}>${nick}</strong>${dateStr ? ` <span class="sheet-comment-date">${dateStr}</span>` : ''}</span>
+      <span class="sheet-comment-nickname"><strong class="sheet-comment-nick"${item.user_id ? ` data-user-id="${item.user_id}" data-identity-user-id="${item.user_id}"` : ''}>${nick}</strong>${dateStr ? ` <span class="sheet-comment-date">${dateStr}</span>` : ''}</span>
       <p class="sheet-comment-text">${txt}</p>
       ${canManage ? `<div class="sheet-comment-actions">
         <button aria-label="코멘트 고치기" class="sheet-comment-edit-btn" data-id="${c.id}" data-game="${gameKey}" data-text="${attr}" onclick="onEditComment(this)" type="button">✏️</button>
@@ -1927,7 +1979,7 @@ async function initSheetComments(gameKey) {
     const textAttr = window.escH(item.text);
     const mine = _isOwner || (currentUserId && item.user_id && String(item.user_id) === String(currentUserId));
     return `<div class="sheet-comment-item">
-      <span class="sheet-comment-nickname"><strong class="sheet-comment-nick"${item.user_id ? ` data-user-id="${item.user_id}"` : ''}>${nick}</strong>${dateStr ? ` <span class="sheet-comment-date">${dateStr}</span>` : ''}</span>
+      <span class="sheet-comment-nickname"><strong class="sheet-comment-nick"${item.user_id ? ` data-user-id="${item.user_id}" data-identity-user-id="${item.user_id}"` : ''}>${nick}</strong>${dateStr ? ` <span class="sheet-comment-date">${dateStr}</span>` : ''}</span>
       <p class="sheet-comment-text">${txt}</p>
       ${mine ? `<div class="sheet-comment-actions">
         <button aria-label="게임평 고치기" class="sheet-comment-edit-btn" data-id="${item.id}" data-game="${gameKey}" data-text="${textAttr}" onclick="onEditPlayReview(this)" type="button">✏️</button>
@@ -1945,6 +1997,7 @@ async function initSheetComments(gameKey) {
     n.style.cursor = 'pointer';
     n.addEventListener('click', e => { e.stopPropagation(); const _b = _sheetBackTo(_currentSheetGameKey); closeGameSheet(); window.openOtherProfileSheet?.(n.dataset.userId, { backTo: _b }); });
   });
+  void window.CottageAchievements?.hydrateIdentityIcons?.(listEl);
   if (moreCount > 0) {
     const moreBtn = listEl.querySelector('.sheet-list-more-btn');
     const restEl = listEl.querySelector('.sheet-list-rest');
@@ -2651,19 +2704,19 @@ function buildRecordItemHtml(r, gameKey, currentUserIdForPlay, myRecordIds) {
   const escH = s => window.escH(s);   // GS5: 정본 위임 (supabase-client.js)
     const isMine = (currentUserIdForPlay && r.user_id && String(r.user_id) === String(currentUserIdForPlay))
       || (r.id && myRecordIds.has(String(r.id)));
-    const showNick = !r.player_names && r.nickname;
     const dateStr = r.played_at
       ? new Date(r.played_at + 'T00:00:00').toLocaleDateString('ko-KR', { month: 'long', day: 'numeric' })
       : formatDate(r.created_at);
     const groupLabel = r.group_name
       ? `<a class="sheet-history-link" href="${rootPath}pages/game/game-reviews.html?group=${encodeURIComponent(r.group_name)}${r.played_at ? '&date=' + encodeURIComponent(r.played_at) : ''}">${escH(r.group_name)}</a>`
       : null;
-    const header = [showNick ? escH(r.nickname) : null, dateStr, groupLabel].filter(Boolean).join(" · ");
-    const _ip2 = [r.player_count ? `${r.player_count}명` : null, r.player_names ? escH(r.player_names) : null, r.play_time_min ? `${r.play_time_min}분` : null].filter(Boolean);
+    const header = [dateStr, groupLabel].filter(Boolean).join(" · ");
+    const peopleHtml = _sheetPeopleHtml(r, escH);
+    const _ip2 = [r.player_count ? `${r.player_count}명` : null, peopleHtml || null, r.play_time_min ? `<span class="sheet-play-duration">${r.play_time_min}분</span>` : null].filter(Boolean);
     const _sep2 = '<span class="badge-sep"> | </span>';
     const _infoTag2 = _ip2.length ? `<span class="sheet-play-info-tag">${_ip2.join(_sep2)}</span>` : '';
     const _scoreTag2 = r.score_note ? `<span class="sheet-play-info-tag">🏆 ${escH(r.score_note).replace(/\s*\/\s*/g,_sep2)}</span>` : '';
-    const hasDetail = r.player_count || r.player_names || r.play_time_min || r.score_note;
+    const hasDetail = r.player_count || peopleHtml || r.play_time_min || r.score_note;
     return `<div class="sheet-my-record-item${isMine ? ' sheet-my-record-item--mine' : ''}">
       <div class="sheet-record-info">
         ${header ? `<span class="sheet-record-nickname">${header}</span>` : ""}
@@ -2698,16 +2751,18 @@ async function initPlayWidget(gameKey) {
     return;
   }
 
-  const [playCount, highlights, allRecords] = await Promise.all([
+  const [playCount, highlights, allRecords, profiles] = await Promise.all([
     window.CottageDB.getGamePlayCount(_gameIds(gameKey)),
     window.CottageDB.getPlayHighlights(_gameIds(gameKey)),
     window.CottageDB.getGamePlayRecords(_gameIds(gameKey)),
+    window.CottageDB.getAllProfiles?.() || [],
   ]);
 
   const myRecordIds = new Set(
     getMyPlayRecords(gameKey).map(r => String(r.id)).filter(Boolean)
   );
   const currentUserIdForPlay = window.getKakaoUser?.()?.id || null;
+  const participantNickMap = _buildSheetParticipantNickMap(profiles, allRecords);
 
   let html = "";
 
@@ -2742,6 +2797,7 @@ async function initPlayWidget(gameKey) {
   widget.innerHTML = html;
 
   _bindPlayWidgetEvents(widget, listId, allRecords);
+  _hydrateSheetParticipantIcons(widget, participantNickMap);
 }
 
 // initPlayWidget이 innerHTML을 넣은 뒤의 이벤트 바인딩 (더보기 토글 · ✏️ 수정 · ⋯ 메뉴)
