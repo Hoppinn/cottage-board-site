@@ -16,10 +16,9 @@ const capabilityRoots = home.match(/data-ui-functional-surface-capabilities=/g) 
 let failed = 0;
 
 const capabilityChecks = [
-  ['record root does not claim the unrelated canonical game-sheet presentation',
-    /id="recordIframeModal"[^>]*data-ui-presentation-layer-owner=/.test(home) === false
-      && /id="recordIframeModal"[^>]*data-ui-functional-surface-capabilities=/.test(home) === false
-      && capabilityRoots.length === 0],
+  ['record root explicitly opts in to the canonical game-sheet presentation',
+    /id="recordIframeModal"[^>]*data-ui-presentation-layer-owner="functional-root"[^>]*data-ui-functional-surface-capabilities="game-sheet"/.test(home)
+      && capabilityRoots.length === 1],
   ['explicit capability requires layer ownership, renderer discovery, and a valid layer',
     header.includes("[data-ui-presentation-layer-owner][data-ui-functional-surface-capabilities]")
       && header.includes('capabilities.includes(surfaceName)')
@@ -43,6 +42,10 @@ capabilityChecks.forEach(([label, condition]) => check(label, condition));
 console.log('=== 기록 센터모달 UX ===');
 check('홈 iframe은 공통 compact 규약 embed=1을 사용',
   indexPage.includes("game-reviews.html?embed=1&tab=input#embed=1&tab=input") && !indexPage.includes('game-reviews.html?embed=true&tab=input'));
+check('기록 더보기는 기본 input iframe을 보이기 전에 records 전환 완료를 기다린다',
+  /cottage-hub-tab-ready/.test(indexPage)
+  && /loader\.style\.display = 'flex'/.test(indexPage)
+  && /cottage-hub-tab-ready/.test(reviews));
 check('extensionless redirect가 query를 버려도 header가 hash embed=1을 인식',
   /new URLSearchParams\(location\.hash\.slice\(1\)\)/.test(read('assets/js/header.js')));
 check('embed 모드에서 header·breadcrumb·히어로·푸터를 첫 페인트부터 제외',

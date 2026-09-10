@@ -144,6 +144,7 @@
       const tab = root.querySelector(`.pr-tab[data-tab="${e.data.tab}"]`);
       if (tab && !tab.classList.contains('is-active')) tab.click();
       else if (e.data.tab === 'input') trackRecordStart();  // ③ 이미 활성이라 click이 안 일어남
+      if (window.parent !== window) window.parent.postMessage({ type: 'cottage-hub-tab-ready', tab: e.data.tab }, '*');
     } else if (e.data?.type === 'cottage-close-lightbox') {
       document.querySelectorAll('.pr-lightbox').forEach(el => el.remove());
     }

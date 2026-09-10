@@ -1548,18 +1548,19 @@ window.addEventListener('cottage-record-changed', initRecentPlay);
   window.addEventListener('kakao-auth-ready', preloadIfLoggedIn);
   window.addEventListener('cottage-auth-changed', preloadIfLoggedIn);
 
- function openModal(tab) {
+  function openModal(tab) {
     pendingTab = tab;
     modal.setAttribute('aria-hidden', 'false');
     modal.classList.add('is-open');
     document.body.style.overflow = 'hidden';
     if (!_recordModalViewActive) { _recordModalViewActive = true; _recordModalViewToken = window.pushActiveView?.('game-reviews') ?? null; }
 
+    // 프리로드 iframe은 기본값이 input이다. records로 열 때 iframe을 먼저 노출하면
+    // input이 한 프레임 보인 뒤 탭이 바뀐다. 탭 전환 완료 신호 전까지 loader가 내용을 가린다.
+    if (loader) loader.style.display = 'flex';
     if (frame.classList.contains('is-ready')) {
-      if (tab) frame.contentWindow?.postMessage({ type: 'cottage-switch-tab', tab }, '*');
-      pendingTab = null;
+      frame.contentWindow?.postMessage({ type: 'cottage-switch-tab', tab }, '*');
     } else {
-      if (loader) loader.style.display = 'flex';
       if (!preloaded) preloadIfLoggedIn();
     }
   }
@@ -1581,12 +1582,16 @@ window.addEventListener('cottage-record-changed', initRecentPlay);
 
   window.addEventListener('message', e => {
     if (e.data?.type === 'cottage-hub-ready') {
-      frame.classList.add('is-ready');
-      if (loader) loader.style.display = 'none';
       if (pendingTab) {
         frame.contentWindow?.postMessage({ type: 'cottage-switch-tab', tab: pendingTab }, '*');
-        pendingTab = null;
+      } else {
+        frame.classList.add('is-ready');
+        if (loader) loader.style.display = 'none';
       }
+    } else if (e.data?.type === 'cottage-hub-tab-ready' && e.source === frame.contentWindow && e.data.tab === pendingTab) {
+      pendingTab = null;
+      frame.classList.add('is-ready');
+      if (loader) loader.style.display = 'none';
     } else if (e.data?.type === 'cottage-lightbox-open') {
       iframeLightboxOpen = true;
       if (!modal._iframeLightboxViewToken) modal._iframeLightboxViewToken = window.pushActiveView?.(window.COTTAGE_ACTIVE_VIEWS?.['photo-lightbox']?.key);
