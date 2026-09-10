@@ -6,7 +6,7 @@
 
 ## 0. 현재 상태
 
-- 현재 승인된 구현 작업은 없다. 최근 완료된 공통 계약은 Host-relative presentation stack inheritance와 stable `user_id`/public `member_intros.nickname` identity 분리다. 구조·navigation은 [UI_STRUCTURE.md](UI_STRUCTURE.md)·[UI_PATTERNS.md](UI_PATTERNS.md), identity·participant resolver는 [js-api.md](js-api.md)를 정본으로 쓴다. 완료 근거는 git과 [DEBUGGING_HISTORY.md](DEBUGGING_HISTORY.md)에 둔다.
+- 현재 승인된 작업은 없다. 최근 완료된 공통 계약은 Host-relative presentation stack inheritance와 stable `user_id`/public `member_intros.nickname` identity 분리다. 구조·navigation은 [UI_STRUCTURE.md](UI_STRUCTURE.md)·[UI_PATTERNS.md](UI_PATTERNS.md), identity·participant resolver는 [js-api.md](js-api.md)를 정본으로 쓴다. 완료 근거는 git과 [DEBUGGING_HISTORY.md](DEBUGGING_HISTORY.md)에 둔다.
 
 ## 1. NOW
 
@@ -14,10 +14,7 @@
 
 ## 2. NEXT (자동 착수 금지)
 
-1. **홈 모임원 프로필 wizard geometry·dim 통일** — `홈 → 모임원 프로필 → 모임원 프로필 수정하기`에서 열린 `club-intro` wizard의 outer 크기와 backdrop/dim이 어떤 기준 화면과 다른지 확인하고, 동일한 parent surface 규격으로 보이게 한다.
-2. **홈페이지 기능 child route 공통화 리팩터링** — 기능별 위임 분기와 URL 조립을 공통 child 요청/route registry 계약으로 정리하는 별도 Plan 후보다. 독립 URL·일반 embed·작은 sheet는 유지한다.
-3. **추천 전체보기 상단 과대 영역** — `홈페이지 기능 → 추천게임찾기 → 게임 더 찾기 → 전체보기`의 Host X와 제목 영역이 중복 점유하는지 사용자와 같은 URL·viewport에서 shell/header/divider rect로 먼저 판정한다.
-4. **AGENTS canonical 기능 재사용·embed/iframe 원칙 점검** — embed는 기존 기능의 표시 방식이며 duplicate renderer/state/handler를 만들지 않고 canonical renderer·markup·state·validation·save·auth·event logic을 우선 재사용한다는 원칙이 현재 AGENTS에 충분히 있는지 검토한다. embed 분기는 layout/chrome 숨김으로 최소화하고, preload가 auth·진입 가능 여부·user flow를 바꾸지 않으며 인증은 실제 제한 action 가까이에 둔다는 점도 확인한다. 새 embed 전용 구조가 필요하면 canonical 재사용 불가 사유를 먼저 명시한다. 이번에는 AGENTS를 수정하지 않는다.
+- 없음.
 
 ## 3. BACKLOG (자동 착수 금지)
 

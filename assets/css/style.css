@@ -6725,7 +6725,8 @@ html:has(body.embed-mode) { scroll-padding-top: 0; }
   align-items:center;
   justify-content:center;
   padding:16px;
-  background:rgba(0,0,0,.48);
+  background:rgba(20,18,14,.5);
+  backdrop-filter:blur(2px);
 }
 .intro-wizard-overlay.is-open{display:flex;}
 html.intro-wizard-autostart,html.intro-wizard-autostart body{background:transparent!important;overflow:hidden;}
@@ -6736,9 +6737,9 @@ html.intro-wizard-autostart .club-breadcrumb,html.intro-wizard-autostart .page-m
 html.intro-wizard-autostart .intro-wizard-nav:not([hidden]){display:grid!important;visibility:visible!important;}
 /* Geometry belongs to the explicit parent entry context, never wizard=1 itself.
    The home root keeps its parent X; the profile-board surface keeps the wizard X. */
-html[data-intro-wizard-presentation="parent-surface"] .intro-wizard-overlay{position:absolute;inset:0;padding:0;background:transparent;align-items:stretch;}
+html[data-intro-wizard-presentation="parent-surface"] .intro-wizard-overlay{position:absolute;inset:0;padding:0;background:transparent;backdrop-filter:none;align-items:stretch;}
 html[data-intro-wizard-presentation="parent-surface"] .intro-wizard{width:100%;max-width:none;height:100%;max-height:none;border-radius:0;box-shadow:none;}
-html:not(.intro-wizard-autostart) body.embed-mode .intro-wizard-overlay{position:absolute;inset:0;padding:0;background:transparent;align-items:stretch;}
+html:not(.intro-wizard-autostart) body.embed-mode .intro-wizard-overlay{position:absolute;inset:0;padding:0;background:transparent;backdrop-filter:none;align-items:stretch;}
 html:not(.intro-wizard-autostart) body.embed-mode.intro-wizard-open .intro-wizard-overlay{position:fixed;}
 html:not(.intro-wizard-autostart) body.embed-mode .intro-wizard{width:100%;max-width:none;height:100%;max-height:none;border-radius:0;box-shadow:none;}
 html:not(.intro-wizard-autostart) body.embed-mode .intro-wizard-close{display:none!important;}
@@ -6929,8 +6930,8 @@ html:not(.intro-wizard-autostart) body.embed-mode .intro-wizard-close{display:no
   text-align:center;
 }
 @media(max-width:600px){
-  .intro-wizard-overlay{align-items:center;padding:16px;}
-  .intro-wizard{width:100%;max-height:88dvh;height:88dvh;border-radius:16px;}
+  .intro-wizard-overlay{align-items:stretch;padding:36px 10px 12px;}
+  .intro-wizard{width:100%;max-height:none;height:auto;border-radius:18px;}
   .intro-wizard-head{padding:14px 16px 12px;}
   .intro-wizard-body{padding:18px 16px;}
   .intro-wizard-nav{padding:10px 16px 14px;}
