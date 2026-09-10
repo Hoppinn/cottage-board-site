@@ -16,9 +16,10 @@ const capabilityRoots = home.match(/data-ui-functional-surface-capabilities=/g) 
 let failed = 0;
 
 const capabilityChecks = [
-  ['record root explicitly opts in to the canonical game-sheet presentation',
-    /id="recordIframeModal"[^>]*data-ui-presentation-layer-owner="functional-root"[^>]*data-ui-functional-surface-capabilities="game-sheet"/.test(home)
-      && capabilityRoots.length === 1],
+  ['record root does not claim the unrelated canonical game-sheet presentation',
+    /id="recordIframeModal"[^>]*data-ui-presentation-layer-owner=/.test(home) === false
+      && /id="recordIframeModal"[^>]*data-ui-functional-surface-capabilities=/.test(home) === false
+      && capabilityRoots.length === 0],
   ['explicit capability requires layer ownership, renderer discovery, and a valid layer',
     header.includes("[data-ui-presentation-layer-owner][data-ui-functional-surface-capabilities]")
       && header.includes('capabilities.includes(surfaceName)')
