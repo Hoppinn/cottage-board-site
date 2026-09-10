@@ -10,16 +10,14 @@
 
 ## 1. NOW
 
-- **홈 플레이기록 iframe의 canonical game-sheet portal 실화면 확인** — 홈 → 최근 플레이 기록 더보기/기록 남기기 → 게임 카드·기록 카드·썸네일에서 `#recordIframeModal` capability가 부모 canonical game-sheet를 전체 viewport로 열고, X/ESC 뒤 iframe 탭·스크롤·입력 상태가 보존되는지 확인한다. capability 없는 iframe local fallback과 기존 `modalStack=1` portal은 변경되지 않아야 한다. 자동 브라우저 연결 불가로 사용자 실화면 확인 대기.
-- **내 프로필 보드 canonical wizard surface 확인** — 내 보드 → 프로필 보드 → 프로필 수정하기에서 parent-surface entry가 기존 `club-intro.html` wizard를 모임원 프로필 root와 같은 outer panel 규격으로 열고, X/ESC·저장·쿠폰·보드 갱신이 기존 owner별 경로로 유지되는지 확인한다. 자동 브라우저 연결 불가로 사용자 실화면 확인 대기.
-
-- **프로필보드 wizard backdrop 실화면 확인 보충** — `profilePanel → profileSubSheet → board frame`은 `inherit`으로 blur 1회만 남고, frame 바깥 여백 클릭은 부모 panel을 닫지 않으며 wizard X/ESC는 frame만 닫고 subsheet로 복귀해야 한다. profile → 일반 board frame도 같은 inheritance를 쓰고, 홈 memberProfilesModal/top-level modal은 기존과 같아야 한다. 자동 브라우저 연결 불가로 사용자 실화면 확인 대기.
+- 없음.
 
 ## 2. NEXT (자동 착수 금지)
 
-1. **홈페이지 기능 child route 공통화 리팩터링** — 기능별 위임 분기와 URL 조립을 공통 child 요청/route registry 계약으로 정리하는 별도 Plan 후보다. 독립 URL·일반 embed·작은 sheet는 유지한다.
-2. **추천 전체보기 상단 과대 영역** — `홈페이지 기능 → 추천게임찾기 → 게임 더 찾기 → 전체보기`의 Host X와 제목 영역이 중복 점유하는지 사용자와 같은 URL·viewport에서 shell/header/divider rect로 먼저 판정한다.
-3. **AGENTS canonical 기능 재사용·embed/iframe 원칙 점검** — embed는 기존 기능의 표시 방식이며 duplicate renderer/state/handler를 만들지 않고 canonical renderer·markup·state·validation·save·auth·event logic을 우선 재사용한다는 원칙이 현재 AGENTS에 충분히 있는지 검토한다. embed 분기는 layout/chrome 숨김으로 최소화하고, preload가 auth·진입 가능 여부·user flow를 바꾸지 않으며 인증은 실제 제한 action 가까이에 둔다는 점도 확인한다. 새 embed 전용 구조가 필요하면 canonical 재사용 불가 사유를 먼저 명시한다. 이번에는 AGENTS를 수정하지 않는다.
+1. **홈 모임원 프로필 wizard geometry·dim 통일** — `홈 → 모임원 프로필 → 모임원 프로필 수정하기`에서 열린 `club-intro` wizard의 outer 크기와 backdrop/dim이 어떤 기준 화면과 다른지 확인하고, 동일한 parent surface 규격으로 보이게 한다.
+2. **홈페이지 기능 child route 공통화 리팩터링** — 기능별 위임 분기와 URL 조립을 공통 child 요청/route registry 계약으로 정리하는 별도 Plan 후보다. 독립 URL·일반 embed·작은 sheet는 유지한다.
+3. **추천 전체보기 상단 과대 영역** — `홈페이지 기능 → 추천게임찾기 → 게임 더 찾기 → 전체보기`의 Host X와 제목 영역이 중복 점유하는지 사용자와 같은 URL·viewport에서 shell/header/divider rect로 먼저 판정한다.
+4. **AGENTS canonical 기능 재사용·embed/iframe 원칙 점검** — embed는 기존 기능의 표시 방식이며 duplicate renderer/state/handler를 만들지 않고 canonical renderer·markup·state·validation·save·auth·event logic을 우선 재사용한다는 원칙이 현재 AGENTS에 충분히 있는지 검토한다. embed 분기는 layout/chrome 숨김으로 최소화하고, preload가 auth·진입 가능 여부·user flow를 바꾸지 않으며 인증은 실제 제한 action 가까이에 둔다는 점도 확인한다. 새 embed 전용 구조가 필요하면 canonical 재사용 불가 사유를 먼저 명시한다. 이번에는 AGENTS를 수정하지 않는다.
 
 ## 3. BACKLOG (자동 착수 금지)
 
