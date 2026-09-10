@@ -452,3 +452,30 @@
 
 - ancestor presentation을 쓰는 surface는 document owner와 stack position을 별도로 결정한다. document를 찾았다는 사실만으로 sibling stacking order가 보장된다고 가정하지 않는다.
 - relative stack position은 requesting Host에만 적용한다. route selector, unconditional high z-index, parent hide/reload/geometry mutation으로 ordering을 보정하지 않는다.
+
+## 2026-09-10 - 플레이기록 compact 사람줄의 전체 nowrap과 token 여백
+
+증상:
+
+- 게임정보 모달과 게임별 기록 페이지에서 360px 실데이터 `4명 / 호핀 / 김기성 / 덕지 / 뽁 / 180분`을 한 줄에 보이게 한 뒤, 사람 token이 카드 전체 폭으로 퍼지거나 `180분`이 오른쪽에서 잘렸다.
+
+원인:
+
+- 사람 묶음 전체를 nowrap으로 고정하면 각 token은 보존되지만, 작성자·참가자 identity icon과 기본 `.pr-rec-tag` 좌우 padding이 합쳐져 실제 가용 폭을 넘었다.
+- separator가 별도 flex item으로 남아 gap까지 추가 소비했고, `.sheet-my-record-item .sheet-play-info { flex:1; }`가 compact 경로의 content-width 의도를 덮을 수 있었다.
+
+해결:
+
+- compact 경로만 outer 사람/meta row를 `flex-wrap: wrap`·`justify-content: flex-start`로 두고, 각 사람/시간 token만 `flex: 0 0 auto`·nowrap으로 유지했다.
+- compact 경로의 separator를 숨기고 4px gap 하나로 통일했으며, 글자·identity icon 크기를 바꾸지 않고 `.pr-rec-tag`의 compact 전용 좌우 padding만 제거했다.
+- 실제 클래스와 micro identity icon을 포함한 360px 브라우저 측정 fixture에서 token 폭 254.8px, overflow 없음으로 확인했고, 최종 사용자 실화면에서도 완료를 확인했다.
+
+실패한 시도:
+
+- `flex:1`만 제거하면 폭 분산은 사라졌지만, 전체 사람 묶음의 nowrap이 남아 긴 실제 조합에서 시간 token을 다음 줄로 보내지 못하고 잘리게 했다.
+- separator를 유지한 채 일반 gap을 적용하면 separator 자체 폭과 양쪽 gap이 중복되어 compact 행의 불필요한 폭을 계속 소비했다.
+
+재발 방지:
+
+- 여러 token을 한 줄에 우선 배치해야 할 때 outer row 전체에 nowrap을 부여하지 않는다. outer row는 wrap 가능하게 두고, 의미적으로 분리되면 안 되는 icon+nickname 및 duration token에만 nowrap을 적용한다.
+- compact UI의 폭은 inline-flex 존재만으로 판단하지 말고 outer row → meta group → token의 computed `width`, `flex-grow`, `flex-basis`, `gap`, margin과 separator를 실제 아이콘 포함 상태로 함께 측정한다.

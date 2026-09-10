@@ -6,7 +6,7 @@
 
 ## 0. 현재 상태
 
-- 대표 캐릭터 identity icon의 후속 조정(공통 기본 발바닥 fallback, C/E 20px·D 12px, 게임정보 D 두 경로 hydrate)은 코드·정적 검증·문서 동기화까지 완료했다. 승인된 상세 Plan은 [representative-character-identity-icon-plan.md](plans/representative-character-identity-icon-plan.md)이며, C/D/E 실화면 재확인만 남았다. 구조·navigation은 [UI_STRUCTURE.md](UI_STRUCTURE.md)·[UI_PATTERNS.md](UI_PATTERNS.md), identity·participant resolver는 [js-api.md](js-api.md)를 정본으로 쓴다.
+- 대표 캐릭터 identity icon의 후속 조정(공통 기본 발바닥 fallback, C/E 20px·D 12px, 게임정보 D 두 경로 hydrate)은 코드·정적 검증·문서 동기화까지 완료했다. 승인된 상세 Plan은 [representative-character-identity-icon-plan.md](plans/representative-character-identity-icon-plan.md)이며, 구조·navigation은 [UI_STRUCTURE.md](UI_STRUCTURE.md)·[UI_PATTERNS.md](UI_PATTERNS.md), identity·participant resolver는 [js-api.md](js-api.md)를 정본으로 쓴다.
 - 플레이기록 사람 표시·저장 보강의 정본은 [play-record-people-display-plan.md](plans/play-record-people-display-plan.md)다. `player_names`는 전체 입력 참가자 이름을 유지하고, stable author의 선두 표시와 신규/수정 누락 방지를 데이터 보정과 분리한다.
 
 ## 1. NOW
@@ -15,18 +15,13 @@
 
 ## 2. NEXT (자동 착수 금지)
 
-- **게임정보 모달 기록 상세 실화면 보완** — 사진은 게임평과 같은 outer card/container으로 정리하고 participant row의 작성자도 micro variant로 통일했으나, 사용자 실화면에서 작성자·나머지 participant icon 크기와 사진 카드 문법을 확인해야 한다. 360px 짧은 4인+시간은 아직 한 줄 실패가 확인됐으며, 다음 착수 시 people/meta row·각 token·시간·padding·action·상위 card/carousel의 actual available/required width를 계측해 원인을 확정한 뒤 최소 수정한다. icon+nickname·시간 token은 atomic 유지, 글씨/아이콘 축소 금지.
-
-- **게임별 기록 상세 페이지 재구성 검토** — 게임정보의 `기록 페이지에서 보기 & 남기기` 진입 페이지에서 게임평·사진·플레이기록의 header·개수·전체보기/접기·outer card/section shell·spacing·밀도·위계를, 현재 게임별 기록 페이지/게임정보 모달 미리보기/프로필 기록 보드 세 화면으로 비교한다. 어느 문법도 미리 정본으로 정하지 않고 게임별 기록 페이지에 맞는 별도 재구성 Plan만 제안한다. 게임정보 모달의 미리보기는 현 상태를 유지하며 이번 항목에서는 구현하지 않는다.
-
-- **모임보드 최근참여 날짜별 보기** — 모임보드의 최근참여를 참여 날짜별로 묶는 표시 변경. 현재 작업의 실화면 확인이 끝난 뒤 별도 범위·데이터 정본을 확인하고 착수한다.
-
-- **대표 캐릭터 identity icon 실화면 재확인** — C/E 확정 회원은 대표 캐릭터 또는 대표 미설정 시 기본 발바닥이 20px standard로 보이고, D는 게임정보의 플레이기록 목록·요약 미리보기를 포함해 exact·unique로 연결된 회원만 12px micro로 보이는지 확인한다. 미연결/충돌 이름에는 아이콘이 없어야 하며 A/B/F와 게임평 요약 캐러셀 구조는 기존 표시를 유지해야 한다. 자동 브라우저가 이번 세션에 없어 사용자 실화면 확인이 필요하다. 정적 근거: `node scripts/verify-identity-icon-contract.js`, `node scripts/verify-nickname-resolution.js`; 상세: [representative-character-identity-icon-plan.md](plans/representative-character-identity-icon-plan.md).
+- **모임보드 → 지난 모임 기록을 실제 모임별로 구분** — UI 1건 마감 뒤 착수한다. 날짜별 묶기를 미리 결정하지 않고, 현재 데이터에서 schedule/meeting ID·날짜·모임명 등 실제 모임 식별 기준과 같은 날 복수 모임 구분 가능성을 먼저 조사한 뒤 구현 Plan을 잡는다. 사용자가 각 실제 모임 단위로 묶인 기록을 보게 되는 것을 완료 조건으로 둔다.
 
 ## 3. BACKLOG (자동 착수 금지)
 
 | 항목 | 남은 확인 | 재개·판정 경로 |
 |---|---|---|
+| 게임정보 → 게임별 기록 상세 페이지 재구성 검토 | 게임별 기록 상세 페이지·게임정보 모달 기록 미리보기·프로필 기록 보드 세 화면의 header·개수·전체보기/접기·outer card/section shell·spacing·밀도·위계를 비교 | 어느 화면 문법도 미리 정본으로 정하지 않고 재구성 Plan만 제안한다. 게임정보 모달 미리보기는 현 상태를 유지한다. |
 | 레거시 프로필 취향 | `profiles.preferred_game_depths`·`profiles.avoid_tags`가 새 설문 출력에 다시 섞이지 않는지 | 새 설문 정본은 `member_intros`; [UI_MAP.md](UI_MAP.md)와 [db-schema.md](db-schema.md)의 계약을 따른다. |
 | 자기소개 제출·교환권 | 최초 제출 1회 지급, 재수정 미지급, PC/모바일 입력 화면 | [db-schema.md](db-schema.md) 023과 [js-api.md](js-api.md) `submitMemberIntro`. 기존 자동 검사는 통과했으나 실사용 경로 확인이 남음. |
 | 사진 연동 | 내 미연동 기록이 정확히 1건인 게임에서 사진 추가 후 `연동하기`가 기존 기록에 병합되는지 | [js-api.md](js-api.md) `_confirmLinkOrPlain`. 실제 파일 선택·업로드 클릭만 미확인. |

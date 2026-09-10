@@ -1374,6 +1374,11 @@ function _sheetPeopleHtml(record, esc) {
   return window.buildPlayPeopleHtml?.(record, { esc }) || '';
 }
 
+function _hasCompactPlayPeople(record) {
+  const names = String(record?.player_names || '').split(',').map(name => name.trim()).filter(Boolean);
+  return names.length > 0 && names.length <= 4 && names.every(name => [...name].length <= 3);
+}
+
 function _hydrateSheetParticipantIcons(root, nickUserMap) {
   root.querySelectorAll('.pr-tag-who[data-nick]').forEach(host => {
     const userId = host.dataset.identityUserId || nickUserMap.get(window.normalizeNick?.(host.dataset.nick));
@@ -1421,7 +1426,7 @@ async function initSheetPlayPreview(gameKey) {
     const peopleHtml = _sheetPeopleHtml(r, esc);
     const _ip = [r.player_count ? `${r.player_count}명` : null, peopleHtml || null, r.play_time_min ? `<span class="sheet-play-duration">${r.play_time_min}분</span>` : null].filter(Boolean);
     const _sep = '<span class="badge-sep"> | </span>';
-    const _infoTag = _ip.length ? `<span class="sheet-play-info-tag">${_ip.join(_sep)}</span>` : '';
+    const _infoTag = _ip.length ? `<span class="sheet-play-info-tag${_hasCompactPlayPeople(r) ? ' sheet-play-info-tag--compact-people' : ''}">${_ip.join(_sep)}</span>` : '';
     const _scoreTag = r.score_note ? `<span class="sheet-play-info-tag">🏆 ${esc(r.score_note).replace(/\s*\/\s*/g,_sep)}</span>` : '';
     return `<div class="sheet-play-scroll-card">
       <span class="sheet-comment-nickname">
@@ -2716,7 +2721,7 @@ function buildRecordItemHtml(r, gameKey, currentUserIdForPlay, myRecordIds) {
     const peopleHtml = _sheetPeopleHtml(r, escH);
     const _ip2 = [r.player_count ? `${r.player_count}명` : null, peopleHtml || null, r.play_time_min ? `<span class="sheet-play-duration">${r.play_time_min}분</span>` : null].filter(Boolean);
     const _sep2 = '<span class="badge-sep"> | </span>';
-    const _infoTag2 = _ip2.length ? `<span class="sheet-play-info-tag">${_ip2.join(_sep2)}</span>` : '';
+    const _infoTag2 = _ip2.length ? `<span class="sheet-play-info-tag${_hasCompactPlayPeople(r) ? ' sheet-play-info-tag--compact-people' : ''}">${_ip2.join(_sep2)}</span>` : '';
     const _scoreTag2 = r.score_note ? `<span class="sheet-play-info-tag">🏆 ${escH(r.score_note).replace(/\s*\/\s*/g,_sep2)}</span>` : '';
     const hasDetail = r.player_count || peopleHtml || r.play_time_min || r.score_note;
     return `<div class="sheet-my-record-item${isMine ? ' sheet-my-record-item--mine' : ''}">

@@ -3818,6 +3818,37 @@ html:has(body.embed-mode) { scroll-padding-top: 0; }
   border-radius:999px;
   padding:3px 9px;
 }
+.sheet-play-info-tag--compact-people{
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  justify-content:flex-start;
+  flex:0 1 auto;
+  width:auto;
+  max-width:100%;
+  min-width:0;
+  gap:4px;
+  white-space:normal;
+}
+.sheet-play-info:has(> .sheet-play-info-tag--compact-people){
+  flex:0 1 auto;
+  width:auto;
+  max-width:100%;
+  min-width:0;
+}
+.sheet-my-record-item .sheet-play-info:has(> .sheet-play-info-tag--compact-people){
+  flex:0 1 auto;
+  width:auto;
+  max-width:100%;
+  min-width:0;
+}
+.sheet-play-info-tag--compact-people > .pr-rec-tag,
+.sheet-play-info-tag--compact-people > .sheet-play-duration,
+.sheet-play-info-tag--compact-people > .badge-sep{ flex:0 0 auto; }
+.sheet-play-info-tag--compact-people > .pr-rec-tag,
+.sheet-play-info-tag--compact-people > .sheet-play-duration{ white-space:nowrap; }
+.sheet-play-info-tag--compact-people > .badge-sep{ display:none; }
+.sheet-play-info-tag--compact-people > .pr-rec-tag{ padding-left:0; padding-right:0; }
 .badge-sep{
   color:rgba(30,26,22,0.3);
   font-weight:400;
@@ -7824,6 +7855,7 @@ body.embed-mode #recommend{display:block !important;}
   justify-content:center;
   overflow:hidden;
 }
+.sheet-comments-area > [id^="sheetPhotosArea-"]{ padding:0 12px 12px; }
 .guide-iframe-shell{
   position:relative;
   width:calc(100% - 20px);
@@ -8189,7 +8221,6 @@ body[data-ui-geometry-owner="host"] .dd-overlay[data-ui-layer="host-transparent"
 .pr-month-session.is-open .pr-month-arrow { transform: rotate(180deg); }
 .pr-month-body { display: none; }
 .pr-month-session.is-open .pr-month-body { display: block; }
-.pr-month-body > .pr-sub-session:first-child.is-open { margin-top: 8px; }
 
 .pr-sub-session { border-top: 1px solid #e8e4dc; background: var(--bg); }
 .pr-sub-session:first-child { border-top: none; }
@@ -8317,6 +8348,8 @@ body[data-ui-geometry-owner="host"] .dd-overlay[data-ui-layer="host-transparent"
 /* 날짜별 보기의 36px 들여쓰기는 카드가 이미 그룹을 묶으므로 카드 안에서 상쇄 */
 .pr-session--bydate .pr-group-card .pr-rec-row { padding-left: 14px; }
 .pr-session--bydate .pr-group-card .pr-player-header { padding-left: 16px; }
+.pr-month-body .pr-group-card .pr-rec-row { padding-left: 14px; }
+.pr-month-body .pr-group-card .pr-player-header { padding-left: 16px; }
 
 /* 날짜별 보기: 모임 하나 = 카드, 모임명은 카드 최상단 헤더로 흡수(밖에 안 뜨게).
    인원 묶음(.pr-moim-section)은 그 안의 내부 섹션 — 박스는 한 겹뿐(카드-속-카드 아님).
