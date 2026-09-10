@@ -688,7 +688,20 @@ function _bindActivityTogglesAndMore(subBody) {
 
 // ── '기록 보드' 서브시트 afterRender (R10a: openProfilePanel에서 추출) ──
 // ctx: _allPhotoData는 splice로 변형되지만 재할당은 없음 → 참조 전달 안전
-function _openBoardFrameModal({ src, title, tab = null, wizardOnly = false }) {
+const _BOARD_FRAME_BACKDROP_MODES = new Set(['owner', 'inherit', 'none']);
+
+// Board-frame modals are body siblings, so their DOM parent cannot reveal the
+// logical presentation lineage. The opener carries an explicit context instead.
+// `inherit` still creates a transparent input boundary; it only omits a second
+// page dim/blur and must never click through to the ancestor backdrop.
+function _resolveBoardFrameBackdropMode(source, requestedMode = null) {
+  const requested = String(requestedMode || '');
+  if (_BOARD_FRAME_BACKDROP_MODES.has(requested)) return requested;
+  const inherited = source?.closest?.('[data-ui-backdrop-context]')?.dataset.uiBackdropContext;
+  return _BOARD_FRAME_BACKDROP_MODES.has(inherited) ? inherited : 'owner';
+}
+
+function _openBoardFrameModal({ src, title, tab = null, wizardOnly = false, wizardPresentation = null, source = null, backdropMode = null }) {
   const existing = document.querySelector('.board-frame-modal');
   existing?._closeBoardFrameModal?.();
   existing?.remove();
@@ -696,10 +709,22 @@ function _openBoardFrameModal({ src, title, tab = null, wizardOnly = false }) {
   const modal = document.createElement('div');
   modal.className = `record-iframe-modal board-frame-modal${wizardOnly ? ' board-wizard-modal' : ''}`;
   modal.setAttribute('aria-hidden', 'true');
+  const wizardUsesParentSurface = wizardOnly && wizardPresentation === 'parent-surface';
+  const resolvedBackdropMode = _resolveBoardFrameBackdropMode(source, backdropMode);
+  modal.dataset.uiBackdropMode = resolvedBackdropMode;
+  const backdropHtml = resolvedBackdropMode === 'owner'
+    ? '<div class="record-iframe-dim center-modal-backdrop" data-ui-backdrop="owner"></div>'
+    : '<div class="record-iframe-backdrop-boundary" data-ui-backdrop="' + resolvedBackdropMode + '" aria-hidden="true"></div>';
   modal.innerHTML = wizardOnly
-    ? `<iframe class="board-wizard-frame" src="${escH(src)}" title="${escH(title)}"></iframe>`
+    ? (wizardUsesParentSurface
+      ? `
+    ${backdropHtml}
+    <div class="record-iframe-panel center-modal-shell" role="dialog" aria-modal="true" aria-label="${escH(title)}">
+      <iframe class="record-iframe-frame board-wizard-frame" src="${escH(src)}" title="${escH(title)}"></iframe>
+    </div>`
+      : `<iframe class="board-wizard-frame" src="${escH(src)}" title="${escH(title)}"></iframe>`)
     : `
-    <div class="record-iframe-dim center-modal-backdrop"></div>
+    ${backdropHtml}
     <div class="record-iframe-panel center-modal-shell" role="dialog" aria-modal="true" aria-label="${escH(title)}">
       <button aria-label="${escH(title)} 닫기" class="record-iframe-close" type="button">✕</button>
       <div class="record-iframe-loader" aria-hidden="true"></div>
@@ -712,12 +737,20 @@ function _openBoardFrameModal({ src, title, tab = null, wizardOnly = false }) {
   const loader = modal.querySelector('.record-iframe-loader');
   const previousOverflow = document.body.style.overflow;
   let wizardStartRequested = false;
-  const onKeydown = e => { if (e.key === 'Escape') close(); };
+  // Parent profile subsheets own a document-capture Escape handler. This top
+  // frame must consume Escape first, otherwise its parent would close under an
+  // still-open child boundary.
+  const onKeydown = e => {
+    if (e.key !== 'Escape') return;
+    e.preventDefault();
+    e.stopPropagation();
+    close();
+  };
   const onMessage = e => {
     if (e.source !== frame.contentWindow) return;
     if (e.data?.type === 'cottage-profile-intro-ready' && wizardOnly && !wizardStartRequested) {
       wizardStartRequested = true;
-      frame.contentWindow?.postMessage({ type: 'cottage-open-profile-intro-wizard' }, '*');
+      frame.contentWindow?.postMessage({ type: 'cottage-open-profile-intro-wizard', presentation: wizardPresentation }, '*');
     } else if (e.data?.type === 'cottage-profile-intro-saved') {
       window.dispatchEvent(new CustomEvent('cottage-profile-intro-saved'));
     } else if (e.data?.type === 'cottage-close-profile-wizard') {
@@ -725,7 +758,7 @@ function _openBoardFrameModal({ src, title, tab = null, wizardOnly = false }) {
     }
   };
   const close = () => {
-    document.removeEventListener('keydown', onKeydown);
+    window.removeEventListener('keydown', onKeydown, true);
     window.removeEventListener('message', onMessage);
     if (document.body.style.overflow === 'hidden') document.body.style.overflow = previousOverflow;
     window.popActiveView?.(viewToken);
@@ -735,7 +768,7 @@ function _openBoardFrameModal({ src, title, tab = null, wizardOnly = false }) {
 
   modal.querySelector('.record-iframe-dim')?.addEventListener('click', close);
   modal.querySelector('.record-iframe-close')?.addEventListener('click', close);
-  document.addEventListener('keydown', onKeydown);
+  window.addEventListener('keydown', onKeydown, true);
   window.addEventListener('message', onMessage);
   frame.addEventListener('load', () => {
     frame.classList.add('is-ready');
@@ -769,6 +802,7 @@ function _bindRecordSubsheet(subBody, ctx) {
               src: button.dataset.boardFrameSrc,
               title: button.dataset.boardFrameTitle,
               tab: button.dataset.boardFrameTab || null,
+              source: button,
               });
             });
           });
@@ -849,6 +883,8 @@ function _bindProfileBoardSubsheet(subBody, ctx) {
               src: button.dataset.boardFrameSrc,
               title: button.dataset.boardFrameTitle,
               wizardOnly: button.dataset.boardFrameWizard === 'true',
+              wizardPresentation: button.dataset.boardFrameWizardPresentation || null,
+              source: button,
               });
             });
           });
@@ -2045,6 +2081,7 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
   const panel = document.createElement('div');
   panel.id = 'profilePanel';
   panel.className = 'profile-panel center-modal-backdrop' + (readOnly ? ' profile-panel--readonly' : '') + (!backTo ? ' profile-panel--main' : '');
+  panel.dataset.uiBackdropOwner = 'owner';
   if (_presentationStack?.position === 'above-requesting-host' && Number.isFinite(_presentationStack.zIndex)) {
     panel.dataset.uiPresentationStack = _presentationStack.position;
     panel.style.zIndex = String(_presentationStack.zIndex + 1);
@@ -2868,7 +2905,7 @@ const introVoucherCardHtml = _introVoucher
     </div>
     </section>
     <div class="profile-board-action-row">
-      ${_ro(`<button class="profile-board-edit-link" data-board-frame-src="/pages/club/club-intro.html?embed=1&wizard=1#embed=1&wizard=1" data-board-frame-title="${d.questionnaireCompletedAt ? '프로필 수정' : '프로필 작성'}" data-board-frame-wizard="true" type="button">${d.questionnaireCompletedAt ? '프로필 수정' : '프로필 작성'}</button>`)}
+      ${_ro(`<button class="profile-board-edit-link" data-board-frame-src="/pages/club/club-intro.html?embed=1&wizard=1#embed=1&wizard=1" data-board-frame-title="${d.questionnaireCompletedAt ? '프로필 수정' : '프로필 작성'}" data-board-frame-wizard="true" data-board-frame-wizard-presentation="parent-surface" type="button">${d.questionnaireCompletedAt ? '프로필 수정' : '프로필 작성'}</button>`)}
       <a class="profile-board-page-link" href="/pages/club/club-intro.html">모임원 프로필 페이지 &gt;</a>
     </div>`;
   }
@@ -3142,6 +3179,7 @@ const introVoucherCardHtml = _introVoucher
     const sub = document.createElement('div');
     sub.id = 'profileSubSheet';
     sub.className = 'profile-subsheet profile-subsheet--stack-child' + (readOnly ? ' profile-subsheet--readonly' : '');
+    if (panel.dataset.uiBackdropOwner === 'owner') sub.dataset.uiBackdropContext = 'inherit';
     if (panel._presentationLocalLayer) {
       sub.dataset.uiPresentationStack = 'profile-local-child';
       sub.style.zIndex = String(panel._presentationLocalLayer.zIndex + 1);

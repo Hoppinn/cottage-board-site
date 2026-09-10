@@ -1678,12 +1678,11 @@ let _meetingReload = null;     // initMeetingSection이 loadWeek 참조를 주�
 let _meetingPreviewFocusPending = new URLSearchParams(location.search).get('focus') === 'meeting';
 function focusMeetingPreviewFromBoard() {
   if (!_meetingPreviewFocusPending) return;
-  const preview = document.getElementById('meetingPreview');
-  const target = preview?.firstElementChild;
+  const target = document.getElementById('meeting');
   if (!target) return;
   _meetingPreviewFocusPending = false;
-  // 비동기 렌더 뒤 브라우저의 기본 복원 위치가 확정된 다음, 래퍼가 아닌 실제 모임 카드의
-  // 시작점을 현재 고정 헤더 바로 아래로 맞춘다.
+  // 비동기 렌더 뒤 브라우저의 기본 복원 위치가 확정된 다음, 홈 「코티지 모임」
+  // 섹션 시작점을 현재 고정 헤더 바로 아래로 맞춘다.
   requestAnimationFrame(() => requestAnimationFrame(() => {
     const headerHeight = document.querySelector('.site-header')?.offsetHeight || 0;
     const previousBehavior = document.documentElement.style.scrollBehavior;

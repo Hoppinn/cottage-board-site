@@ -10,12 +10,34 @@ const indexPage = read('assets/js/index-page.js');
 const reviews = read('assets/js/game-reviews.js');
 const css = read('assets/css/style.css');
 const page = read('pages/game/game-reviews.html');
+const home = read('index.html');
+const header = read('assets/js/header.js');
+const capabilityRoots = home.match(/data-ui-functional-surface-capabilities=/g) || [];
 let failed = 0;
+
+const capabilityChecks = [
+  ['record root explicitly opts in to the canonical game-sheet presentation',
+    /id="recordIframeModal"[^>]*data-ui-presentation-layer-owner="functional-root"[^>]*data-ui-functional-surface-capabilities="game-sheet"/.test(home)
+      && capabilityRoots.length === 1],
+  ['explicit capability requires layer ownership, renderer discovery, and a valid layer',
+    header.includes("[data-ui-presentation-layer-owner][data-ui-functional-surface-capabilities]")
+      && header.includes('capabilities.includes(surfaceName)')
+      && header.includes('parentDocument.querySelector(surface.nodeSelector)')
+      && header.includes('Number.isFinite(zIndex)')],
+  ['existing modalStack ancestor behavior remains a separate first-class branch',
+    header.includes("const isExistingStackContext = _stackValue === '1';")
+      && header.includes('if (!isExistingStackContext && !isExplicitCapabilityContext) return false;')],
+  ['general embeds retain local fallback without explicit capability',
+    header.includes('Non-Host embeds stay local unless their immediate parent explicitly offers')
+      && !header.includes("isEmbedValue(_embedQuery.get('embed')) && window.parent !== window")],
+];
 
 function check(label, condition) {
   if (condition) console.log(`  PASS ${label}`);
   else { failed += 1; console.error(`  FAIL ${label}`); }
 }
+
+capabilityChecks.forEach(([label, condition]) => check(label, condition));
 
 console.log('=== 기록 센터모달 UX ===');
 check('홈 iframe은 공통 compact 규약 embed=1을 사용',
@@ -43,6 +65,8 @@ check('최신 월의 최신 일도 기본 OPEN',
 check('같은 월의 날짜 accordion은 single-open',
   reviews.includes("month.querySelectorAll('.pr-sub-session.is-open')")
   && reviews.includes("el.classList.remove('is-open')"));
+check('날짜별 첫 일 header는 열려도 추가 top margin이 없다',
+  !/\.pr-session--bydate\s*>\s*\.pr-session-body\s*>\s*\.pr-sub-session:first-child\.is-open\s*\{[^}]*margin-top\s*:/s.test(css));
 check('날짜별 월 클릭은 열린 월을 먼저 모두 닫아 single-open 유지',
   reviews.includes("panel.querySelectorAll('.pr-session--bydate.is-open').forEach(el => el.classList.remove('is-open'))"));
 check('기존 다중 월 펼침 상태를 다시 렌더해도 한 달만 복원',

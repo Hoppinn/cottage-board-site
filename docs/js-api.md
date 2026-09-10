@@ -1,6 +1,6 @@
 # JS API 레퍼런스 — 코티지보드
 
-최종 갱신: 2026-08-31 (028 프로필 보드 API 4종·프로필 보드 UI/진입 계약·날짜별 `hard_game_learning_ok` 반영) / 2026-08-30 (`getMeetingVotes`/`upsertMeetingVote`에 027 기타 게임 유형의 안정 코드·표시 문구 분리 계약 반영) / 2026-08-29 (`normalizeMemberIntroTimes`/`formatMemberIntroTimes` 추가, `submitMemberIntro`의 30분 슬롯·커스텀 유형 계약 반영)
+최종 갱신: 2026-09-10 (canonical functional-surface ancestor request 계약 명시) / 2026-08-31 (028 프로필 보드 API 4종·프로필 보드 UI/진입 계약·날짜별 `hard_game_learning_ok` 반영) / 2026-08-30 (`getMeetingVotes`/`upsertMeetingVote`에 027 기타 게임 유형의 안정 코드·표시 문구 분리 계약 반영) / 2026-08-29 (`normalizeMemberIntroTimes`/`formatMemberIntroTimes` 추가, `submitMemberIntro`의 30분 슬롯·커스텀 유형 계약 반영)
 
 ---
 
@@ -19,6 +19,12 @@
 ## window.CottageModalStackHost (modal-stack-host.js)
 
 parent root modal이 `create({ container, rootFrame, rootShell, isOpen })`으로 만드는 공통 frame host다. `push(kind,payload,presentation)`와 `pop()`은 공개 소비자용이 아니라 host lifecycle용이며, message source가 top iframe과 일치할 때만 처리한다. route registry는 `geometry` metadata를 함께 갖고, `push()`는 child URL에 `stackPresentation`/`stackGeometry`를 전달하고 Host shell에 ownership marker를 붙인다. current child route is `recommend-all` only. 게임정보/기록/위치/안내, 내 보드/읽기 전용 프로필, 모임 조율은 Host route가 아니라 이미 열린 document의 registered canonical local surface flow다.
+
+## window.CottageFunctionalSurface (header.js)
+
+| 함수 | 계약 |
+|---|---|
+| `requestAncestor(surface, payload)` | 현재 document의 canonical local surface가 이미 로드된 ancestor document의 같은 renderer에 presentation만 요청한다. 기존 `modalStack=1` Host context는 호환 branch를 유지한다. 일반 iframe은 `embed=1`만으로 요청하지 못하며, immediate parent가 해당 `data-ui-functional-surface-capabilities`를 명시하고 `data-ui-presentation-layer-owner`와 실제 canonical renderer discovery를 모두 제공할 때만 요청한다. 조건이 없거나 parent가 접근 불가하면 `false`를 반환해 caller의 local fallback을 유지한다. 이 API는 ancestor renderer가 있는 surface용이며, iframe 내부 renderer를 parent로 승격하는 일반 portal API가 아니다. |
 
 ## window.CottageDB (supabase-client.js)
 
@@ -166,7 +172,7 @@ return data || [];
 | `formatMemberIntroDays(values)` | `available_days`를 `매일`/`평일`/`주말`/`공휴일`/`평일·공휴일`/`주말·공휴일` 또는 연속 요일 범위(`금~일`)로 요약한다. `holiday`는 7일 전체 선택 시 `매일`에 흡수하며, `flexible`은 요일 요약에 섞지 않는다 |
 | `formatMemberIntroAvailability(days, times)` | 요일 요약·가능 시간·`available_days`의 `flexible`을 각각 분리해 `[요일 요약] · [가능 시간] · 일정 유동적`으로 조합한다. 일정이 유동적이면 시간 슬롯 유무와 관계없이 `시간대 유동적`을 `시간대`로 압축해 `… · 시간대·일정 유동적`으로 표시한다. 기존 요일/시간 코드와 신규 `holiday`를 읽기 호환한다 |
 | `isMemberIntroHolidaySupported()` | 030 capability RPC를 읽어 공휴일 입력 UI를 migration 적용 이후에만 활성화한다. 오류 시 `false`를 반환한다 |
-| `submitMemberIntro(userId, answers)` | 033 필수 자기소개 전체 제출 RPC 래퍼. `location`, 공개 `joinSources`, 평소 플레이 `usualPlayDays/usualPlayTimes`, 모임 참여 `availableDays/availableTimes`, 유형·난이도 3단 배열, 최대 2개 `hardestGames`를 `submit_member_intro`에 전달하고 `{success, id, voucherGranted}`를 반환한다. 범위는 주 취향을 포함해야 하고 난이도 범위와 꺼림은 겹칠 수 없다. DB가 소개·어려운 게임 저장과 `intro_complete` 교환권 최초 1회 지급을 한 트랜잭션으로 처리하므로 화면에서 별도 지급 INSERT를 하지 않는다. |
+| `submitMemberIntro(userId, answers)` | 034 필수 자기소개 전체 제출 RPC 래퍼. `joinSources` 허용 코드는 `store_visit|friend_referral|cottage_homepage|open_chat_search|daangn|naver_place|boardlife|social_media`이며, `location`, 공개 `joinSources`, 평소 플레이 `usualPlayDays/usualPlayTimes`, 모임 참여 `availableDays/availableTimes`, 유형·난이도 3단 배열, 최대 2개 `hardestGames`를 `submit_member_intro`에 전달하고 `{success, id, voucherGranted}`를 반환한다. 범위는 주 취향을 포함해야 하고 난이도 범위와 꺼림은 겹칠 수 없다. DB가 소개·어려운 게임 저장과 `intro_complete` 교환권 최초 1회 지급을 한 트랜잭션으로 처리하므로 화면에서 별도 지급 INSERT를 하지 않는다. |
 | `addMeetingGamePref(userId, listType, gameId, customName)` / `removeMeetingGamePref(...)` | meeting_game_prefs 추가/삭제. listType: `'want_this_time'` \| `'can_explain_rules'`. addGamePref/removeGamePref와 동일 구조 |
 | `getMeetingVoteGames(startDate, endDate)` | 모임 플래너 날짜별 게임 선호 조회. → `[{vote_date, user_id, list_type, game_id, custom_name, is_priority, player_condition}]`. getMeetingVotes와 동일 패턴 |
 | `addMeetingVoteGame(userId, voteDate, listType, gameId, customName)` | meeting_vote_games 추가. listType: `'want'`\|`'learn'`. 중복(23505) 성공 처리. addMeetingGamePref와 동일 구조 + voteDate |

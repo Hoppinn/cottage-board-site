@@ -358,6 +358,7 @@ embed 모드에서는 `header.js`가 `document` 클릭을 가로채 내부 `.htm
 - `game-location.html` — `openShelfSheet(url)`이 `?embed=1&highlight=GAMEID` URL로 호출
 - `guide.html` — `openGuideOverlay(href)` 내부에서 `?embed=1` 자동 추가
 - `index.html` 홈 코티지 모임의 `모임원 프로필`은 `club-intro.html?embed=1#embed=1`을 기존 `record-iframe-modal` 규격으로 연다. localhost의 extensionless redirect가 query를 버려도 hash 표식으로 iframe의 `body.embed-mode`를 유지한다. 부모 모달은 제목 전용 header를 두지 않고 닫기 제어와 iframe 본문을 바로 보여주며, embed 상태는 iframe 안의 독립 페이지 chrome(공통 header·breadcrumb·mini hero·footer)만 숨긴다. iframe 자체는 frame guard로 추적하지 않고, 부모가 기존 `club-intro` active-view 키를 열기 1회 push·모든 닫기 경로에서 같은 token 1회 pop해 체류 구간만 분할한다.
+- 내 프로필 보드의 `프로필 작성/수정`도 같은 `club-intro.html` canonical wizard를 iframe으로 연다. `wizard=1`은 data 준비 뒤 부모가 auto-start를 요청한다는 entry intent뿐이며, 부모가 `parent-surface` presentation을 메시지로 명시해 기존 `.record-iframe-panel` outer geometry를 제공한다. renderer의 prefill/edit/save/쿠폰 로직은 iframe에 남고, profile-board parent는 active-view·ESC·body lock과 최종 close lifecycle만 소유한다.
 
 ⚠️ **헤더 높이 기반 CSS는 `body.embed-mode{--header-total-h:0px}` 하나로 다 안 잡힌다** — 이 재정의는 **body의 자손**에게만 적용되고, `html{scroll-padding-top:var(--header-total-h)}`(style.css 81번째 줄)처럼 **`<html>` 자신에** 선언된 속성은 `<body>`가 그 조상이라 변수 재정의가 거꾸로 안 흐른다(2026-08-10, `game-location.html`의 `shelf=` 자동 스크롤이 헤더 없는 embed 화면에서도 매번 52px씩 못 미치던 사건 — `html:has(body.embed-mode){scroll-padding-top:0}`로 별도 수정, 현재 사용하는 작업 규칙 파일의 반복 패치 정지 규칙에도 기록). **새 embed 대응 CSS를 `<html>` 셀렉터에 선언하려면 `body.embed-mode` 변수 재정의로는 안 되고 `html:has(body.embed-mode)`(또는 JS로 `<html>`에도 클래스 부여)가 필요하다.**
 
@@ -376,10 +377,13 @@ embed 모드에서는 `header.js`가 `document` 클릭을 가로채 내부 `.htm
   → openShelfSheet(?embed=1&highlight=A) 호출
   → 선반 오버레이 표시 — 선반에서 게임 칩 클릭
   → postMessage({ action:'openGame', gameId }) 수신
-  → 선반 z:0 + pointerEvents:none (숨김)
-  → openGameSheet(B) 호출
-  → MutationObserver: #gameSheet.is-active 제거 감지 → 선반 복원
-  → ← 뒤로가기 클릭 → overlay.remove() + openGameSheet(prevGameKey)
+  → 선반 iframe DOM은 inert/hidden으로 보존하고 A의 scroll·일반 game history를 snapshot
+  → 같은 persistent #gameSheet presentation root에 B 렌더
+  → active view stack: game-sheet(A) → game-location-shelf → game-sheet(B)
+  → B의 ←/ESC: B token pop → 보존된 선반 iframe(목록·scroll·선택 상태)을 다시 표시
+  → B에서 게임 위치를 다시 거치면 이전 context를 parent로 보존해 `A → 위치1 → B → 위치2 → C → 위치2 → B → 위치1 → A`를 복원. 숨겨 보존한 이전 위치 overlay는 canonical `#shelfSheetOverlay` ID를 잠시 반납해 새 위치 진입에서 제거되지 않는다.
+  → 선반의 ←/ESC: 선반 token pop → 바로 아래 복원된 게임정보 표시
+  → B의 ×/backdrop: B·선반·A로 이어진 local chain 전체 종료
 ```
 
 ### openGuideOverlay (pages/info/guide.html)
@@ -387,7 +391,7 @@ embed 모드에서는 `header.js`가 `document` 클릭을 가로채 내부 `.htm
 이용안내 카드 클릭 → 해당 페이지를 인앱 iframe 오버레이(z:9000, viewport에서 상단 36px·하단 12px을 남기는 외곽틀)로 표시.
 `?embed=1` 자동 추가 → 로드된 페이지의 헤더/푸터 자동 숨김.
 
-홈페이지 기능·플래너 보기·모임원 프로필의 iframe root는 `assets/js/modal-stack-host.js`의 공통 Modal Stack Host를 사용한다. `modalStack=1` frame에서 `openRecommendOverlay`만 `{ kind, payload, presentation }` child frame을 요청한다. parent는 source가 현재 top iframe인지 확인하고 같은 viewport 외곽의 child iframe shell을 필요한 depth만큼 쌓으며, 아래 frame은 inert 상태로 DOM·scroll을 보존한다. Host는 `stackGeometry` variant로 outer shell 형태를 선택하되 child가 inset을 다시 소유하지 않는다. `game-sheet`, `profile-panel`, `game-location`은 feature-owned canonical renderer를 유지하되, Host iframe에서 independent overlay가 필요하면 `CottageFunctionalSurface.requestAncestor()`가 이미 로드된 ancestor document의 같은 renderer에 presentation document만 위임한다. `profile-panel`은 추가로 requesting Host의 `data-ui-presentation-layer-owner` 기준 `above-requesting-host` stack position을 받아 그 Host 바로 위에 표시한다. 이때 parent geometry/variant는 preserve이고 iframe의 fixed containing box를 넓히지 않는다. `meeting-adjust`의 compact variant와 profile 내부 local subsheet navigation은 각 feature renderer가 계속 소유한다. `data-ui-*` marker와 registry가 functional surface·geometry owner/variant·presentation document/stack owner·chrome·navigation·scroll boundary를 연결한다. `guide-child-mode`는 legacy compatibility class로만 남으며 CSS ownership은 data marker를 읽는다. 직접 URL과 일반 embed에는 이 위임을 적용하지 않는다.
+홈페이지 기능·플래너 보기·모임원 프로필의 iframe root는 `assets/js/modal-stack-host.js`의 공통 Modal Stack Host를 사용한다. `modalStack=1` frame에서 `openRecommendOverlay`만 `{ kind, payload, presentation }` child frame을 요청한다. parent는 source가 현재 top iframe인지 확인하고 같은 viewport 외곽의 child iframe shell을 필요한 depth만큼 쌓으며, 아래 frame은 inert 상태로 DOM·scroll을 보존한다. Host는 `stackGeometry` variant로 outer shell 형태를 선택하되 child가 inset을 다시 소유하지 않는다. `game-sheet`, `profile-panel`, `game-location`은 feature-owned canonical renderer를 유지하되, Host iframe에서 independent overlay가 필요하면 `CottageFunctionalSurface.requestAncestor()`가 이미 로드된 ancestor document의 같은 renderer에 presentation document만 위임한다. `profile-panel`은 추가로 requesting Host의 `data-ui-presentation-layer-owner` 기준 `above-requesting-host` stack position을 받아 그 Host 바로 위에 표시한다. 이때 parent geometry/variant는 preserve이고 iframe의 fixed containing box를 넓히지 않는다. `meeting-adjust`의 compact variant와 profile 내부 local subsheet navigation은 각 feature renderer가 계속 소유한다. `data-ui-*` marker와 registry가 functional surface·geometry owner/variant·presentation document/stack owner·chrome·navigation·scroll boundary를 연결한다. `guide-child-mode`는 legacy compatibility class로만 남으며 CSS ownership은 data marker를 읽는다. 직접 URL과 capability 없는 일반 embed에는 이 위임을 적용하지 않는다.
 
 ---
 

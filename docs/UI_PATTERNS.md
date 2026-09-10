@@ -1,6 +1,6 @@
 # UI_PATTERNS — 구조 그룹별 공통 UI 계약
 
-최종 정리: 2026-09-09
+최종 정리: 2026-09-10
 구조 정본: [UI_STRUCTURE.md](UI_STRUCTURE.md)
 
 이 문서는 `UI_STRUCTURE`에서 확인한 **실제 구조 그룹**에 공통 동작·소유 책임을 붙이는 장기 계약 정본이다. 화면 이름이나 특정 selector의 CSS 예외 목록이 아니다. 구현 변경이나 최종 CSS/JS API 설계는 별도 승인 작업에서 다룬다.
@@ -69,6 +69,18 @@ Canonical local surface registry는 `game-sheet`, `profile-panel`, `meeting-adju
 
 Host는 root iframe을 첫 frame으로 보존하고 registry에 등록된 child frame을 sibling으로 append한다. 현재 등록된 child route는 `recommend-all` 하나다. inactive frame은 inert/`aria-hidden`이 되며, pop 뒤 DOM·scroll·selection을 복구한다.
 
+### P2 backdrop ownership contract
+
+Presentation owner and backdrop owner are separate. A backdrop owner supplies exactly one page dim/blur and backdrop-click surface for its active presentation chain. The current profile local-navigation → board-frame flow passes this contract explicitly; existing modal factories still default to `owner`, so callers without a context retain their current top-level/local iframe behavior.
+
+| backdrop mode | visual backdrop | interaction boundary | current use |
+|---|---|---|---|
+| `owner` | creates a new dim/blur | backdrop click closes that frame | factory default and independent root/local modal |
+| `inherit` | reuses the logical ancestor owner's dim/blur; creates no second visual backdrop | a transparent viewport boundary consumes pointer input, so it cannot click through to the ancestor close backdrop | `#profilePanel` → `#profileSubSheet` → board frame |
+| `none` | no page dim/blur | may retain the same transparent boundary when the surface needs one | no current consumer |
+
+`#profilePanel` declares `data-ui-backdrop-owner="owner"`; `_openSubSheet()` carries `data-ui-backdrop-context="inherit"` to its body-sibling child. `_openBoardFrameModal()` resolves that context from the opener source rather than from a URL, route, or CSS class and records `data-ui-backdrop-mode`. Thus `inherit` is an interaction contract that preserves the child frame's X/ESC/message close and active-view owner, not a dim-only CSS exception.
+
 ## Pattern P3 — Modal Stack Host child iframe
 
 **Current route scope:** `modal-stack-host.js` registers `recommend-all` as the only Host child route. `meeting-adjust`, `profile-panel`, `game-sheet`, `game-location`, and game-rule flows are canonical local surfaces; they must not be classified as P3 merely because they can be requested while a Host is open.
@@ -109,10 +121,10 @@ Parent/Host가 outer geometry를 소유하면 child는 같은 center-modal inset
 
 ### P3-A functional surface presentation owner
 
-Geometry owner와 presentation/layer owner는 별도다. geometry owner는 surface rect와 variant를, presentation document owner는 그 surface를 실제로 생성할 document를 정한다. presentation stack position은 그 document 안에서 requesting Host surface에 대한 순서를 정한다. `header.js`의 canonical functional-surface registry에서 `presentationOwner: 'ancestor'`인 surface는 Host iframe 안에서 열릴 때 `CottageFunctionalSurface.requestAncestor()`로 이미 로드된 ancestor document의 같은 canonical renderer에 요청한다. parent Host shell은 preserve 상태로 남는다.
+Geometry owner와 presentation/layer owner는 별도다. geometry owner는 surface rect와 variant를, presentation document owner는 그 surface를 실제로 생성할 document를 정한다. presentation stack position은 그 document 안에서 requesting Host surface에 대한 순서를 정한다. `header.js`의 canonical functional-surface registry에서 `presentationOwner: 'ancestor'`인 surface는 기존 Host iframe에서는 그대로 `CottageFunctionalSurface.requestAncestor()`로 이미 로드된 ancestor document의 같은 canonical renderer에 요청한다. 비-Host iframe은 `embed=1`만으로 승격하지 않으며, immediate parent root가 `data-ui-presentation-layer-owner`와 해당 surface의 `data-ui-functional-surface-capabilities`를 명시하고 parent document에 canonical renderer가 실제로 있을 때만 같은 요청을 허용한다. 조건을 못 채우면 기존 local renderer/layer를 유지한다. parent outer shell은 preserve 상태로 남는다.
 
 - `game-sheet`, `profile-panel`, `game-location`은 현재 ancestor presentation owner를 가진다. renderer는 각각 기존 `openGameSheet()`, `openProfilePanel()`, `openShelfSheet()`이며 Host 전용 renderer/document를 만들지 않는다.
-- `game-sheet`, `profile-panel`, `game-location`은 `presentationStack: 'above-requesting-host'`도 가진다. `ModalStackHost`의 semantic layer owner에서 실제 z-index를 읽어 바로 한 단계 위에만 표시한다. profile의 `_openSubSheet()`는 body sibling local overlay이므로 portal된 panel의 relative layer를 한 단계 이어받는다. 모든 ancestor surface를 topmost로 올리거나 고정 큰 z-index를 쓰지 않는다.
+- `game-sheet`, `profile-panel`, `game-location`은 `presentationStack: 'above-requesting-host'`도 가진다. `ModalStackHost` 또는 explicit capability root의 semantic layer owner에서 실제 z-index를 읽어 바로 한 단계 위에만 표시한다. profile의 `_openSubSheet()`는 body sibling local overlay이므로 portal된 panel의 relative layer를 한 단계 이어받는다. 모든 ancestor surface를 topmost로 올리거나 고정 큰 z-index를 쓰지 않는다.
 - standalone 또는 일반 local context에서는 요청하지 않고 기존 local renderer/layer를 유지한다.
 - iframe 안의 `position: fixed`는 iframe viewport 밖으로 나갈 수 없다. child를 크게 보이게 하려고 parent geometry owner를 `available`/fullscreen으로 바꾸는 것은 금지한다.
 
@@ -191,6 +203,8 @@ P3 child 중 `presentation: 'drilldown'`이 붙는 frame을 설명하는 예약 
 | navigation | local owner ↔ iframe message contract or iframe-local navigation |
 | close/back | local owner handler. Host push/pop is not implied by iframe status. |
 
+게임 위치에서 다른 게임정보를 열면 iframe DOM을 제거하지 않고 suspended 상태로 보존한다. 공유 `#gameSheet` presentation root는 같은 backdrop owner로 남고, `B ←/ESC`는 게임 위치를 복원하며 게임 위치 `←/ESC`는 A를 복원한다. 같은 동작이 다시 중첩되면 새 context는 앞 context를 parent로 보존해 `A → 위치1 → B → 위치2 → C → 위치2 → B → 위치1 → A`를 복원한다. B/C의 `×`/backdrop은 전체 local chain을 종료한다. 이 context는 일반 game-to-game history와 분리하고, active-view는 각 단계의 topmost stack만 누적한다.
+
 The day-detail planner and homepage planner share an iframe source but are not interchangeable: they have different root owners, message source guards, and quick-entry lifecycle.
 
 ## Pattern P8 — Local same-document overlay
@@ -234,7 +248,7 @@ The day-detail planner and homepage planner share an iframe source but are not i
 | 게임기록 상세 | P8 local game-sheet | Independent Overlay / local game flow | canonical local sheet in every parent | game sheet functional body | code confirmed / runtime needed |
 | 내 보드 / 회원 보드 | P8 canonical local + P3-A ancestor presentation when requested from Host context | Independent Overlay | local profile outer box; Host does not own a profile frame | `.profile-panel-body` | code confirmed / runtime needed |
 | 프로필 보드 / 모임 보드 | P6 | Local Navigation | profile owns parent/subsheet; no Host push | `.profile-subsheet-body` | code confirmed / runtime needed |
-| 프로필 작성/수정 wizard | iframe-internal local exception under P2 | Local Navigation / wizard-local flow | wizard owns internal layer; parent X delegates while wizard active | `.intro-wizard-body` is the flex scroll owner; while open, the surrounding embed root `html/body` is locked and the overlay is fixed to that iframe viewport | close delegation runtime confirmed; lower-boundary root-scroll lock user verification needed |
+| 프로필 작성/수정 wizard | iframe-internal canonical local exception under P2 / profile-board frame modal | Local Navigation / wizard-local flow | `wizard=1` means auto-start only. The parent entry explicitly chooses `parent-surface` geometry; the canonical wizard fills that parent surface without becoming a Host route or an ancestor portal. Home keeps parent X delegation; the profile-board path keeps the wizard X → frame-owner close request. | `.intro-wizard-body` is the flex scroll owner; while open, the surrounding iframe `html/body` is locked | profile-board parent-surface runtime verification needed |
 | 홈 모임 플래너 | P2 | root modal close; child semantics vary | planner root owns shell/backdrop, Host owns pushed child | iframe document/local planner sheets | code confirmed / runtime needed |
 | 모임 조율 | P8 canonical local | Independent Overlay | local `dd` chrome; Host does not own a meeting frame | local modal body needs measurement | code confirmed / runtime needed |
 | day-detail 플래너/quick entry | P7 | local iframe modal flow | `#__plannerModal` owner remains distinct from home planner | iframe/local sheet needs measurement | code confirmed / runtime needed |

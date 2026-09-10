@@ -271,6 +271,10 @@ let _currentSheetGameKey = null;
 let _savedSheetScrollTop = 0;
 let _gameSheetHistory = [];
 let _gameSheetNavBack = false;
+// 게임 위치 → 다른 게임정보는 일반 게임→게임 history가 아니라, 위치 iframe을 보존하는
+// local navigation이다. top context는 앞선 위치 navigation을 parentNavigation으로 이어
+// A → 위치1 → B → 위치2 → C 같은 중첩 local chain도 끊지 않는다.
+let _gameLocationNavigation = null;
 let _savedBodyScrollY = 0;
 
 // An ancestor presentation is a real sibling of the requesting Host, not a
@@ -450,12 +454,14 @@ function openShelfSheet(url, { presentationLocal = false, presentationStack = nu
   if (_existingShelf) _existingShelf._closeActiveView?.();
   const parentSheet = document.getElementById('gameSheet');
   const previousAriaHidden = parentSheet?.getAttribute('aria-hidden');
-  if (parentSheet) {
+  const deactivateParentSheet = () => {
+    if (!parentSheet) return;
     parentSheet.classList.add('is-stack-inactive');
     parentSheet.setAttribute('aria-hidden', 'true');
     parentSheet.inert = true;
     parentSheet.setAttribute('inert', '');
-  }
+  };
+  deactivateParentSheet();
 
   const overlay = document.createElement('div');
   overlay.id = 'shelfSheetOverlay';
@@ -498,6 +504,7 @@ function openShelfSheet(url, { presentationLocal = false, presentationStack = nu
   const closeShelf = () => {
     if (!overlay.isConnected) return;
     document.removeEventListener('keydown', onKeydown, true);
+    window.removeEventListener('message', handleShelfMsg);
     window.popActiveView?.(overlay._viewToken);
     overlay.remove();
     restoreParentSheet();
@@ -514,14 +521,91 @@ function openShelfSheet(url, { presentationLocal = false, presentationStack = nu
   overlay.addEventListener('click', e => { if (e.target === overlay) closeShelf(); });
 
   function registerMsg() { window.addEventListener('message', handleShelfMsg); }
+  function suspendShelfForGame(gameId) {
+    if (!parentSheet || !overlay.isConnected || !gameId) return;
+
+    const originGameKey = _currentSheetGameKey;
+    const originScrollTop = parentSheet.querySelector('.game-sheet-scroll')?.scrollTop || 0;
+    const originHistory = [..._gameSheetHistory];
+    const navigation = {
+      parentNavigation: _gameLocationNavigation,
+      overlay,
+      overlayId: overlay.id,
+      rootGameKey: gameId,
+      originGameKey,
+      originScrollTop,
+      originHistory,
+      gameViewToken: null,
+      returnToShelf: null,
+      closeFlow: null,
+    };
+
+    _gameLocationNavigation = navigation;
+    // #gameSheet는 A/B가 바뀌어도 같은 presentation root다. 위치만 숨기고 iframe DOM은
+    // 유지하므로 검색·목록·scroll 상태는 재렌더하지 않는다.
+    window.removeEventListener('message', handleShelfMsg);
+    document.removeEventListener('keydown', onKeydown, true);
+    overlay.inert = true;
+    overlay.setAttribute('inert', '');
+    overlay.setAttribute('aria-hidden', 'true');
+    overlay.style.visibility = 'hidden';
+    overlay.style.pointerEvents = 'none';
+    // 새 위치 overlay는 canonical #shelfSheetOverlay ID를 사용한다. 보존 중인 이전
+    // overlay까지 그 ID로 남으면 새 진입 시 "기존 열린 overlay"로 오인되어 제거된다.
+    overlay.removeAttribute('id');
+    restoreParentSheet();
+
+    // 위치 navigation과 일반 game history를 섞지 않는다. B 이후의 일반 게임→게임 이동은
+    // 새 history에서만 쌓고, 위치로 돌아갈 때 origin history를 그대로 복원한다.
+    _gameSheetHistory = [];
+    // active-view 정본은 topmost surface만 누적한다. A의 persistent presentation root는
+    // 위치 아래에, 위치 토큰은 B 아래에 그대로 보존하고 B를 별도 game-sheet top으로 push한다.
+    navigation.gameViewToken = window.pushActiveView?.('game-sheet') ?? null;
+
+    navigation.returnToShelf = () => {
+      if (_gameLocationNavigation !== navigation || !overlay.isConnected) return;
+      document.removeEventListener('keydown', onGameKeydown, true);
+      window.popActiveView?.(navigation.gameViewToken);
+      navigation.gameViewToken = null;
+      _gameLocationNavigation = navigation.parentNavigation;
+      _gameSheetHistory = [...originHistory];
+      _savedSheetScrollTop = originScrollTop;
+      openGameSheet(originGameKey, true, null, true);
+      deactivateParentSheet();
+      overlay.inert = false;
+      overlay.removeAttribute('inert');
+      overlay.removeAttribute('aria-hidden');
+      overlay.style.removeProperty('visibility');
+      overlay.style.removeProperty('pointer-events');
+      overlay.id = navigation.overlayId;
+      document.addEventListener('keydown', onKeydown, true);
+      registerMsg();
+    };
+
+    navigation.closeFlow = () => {
+      document.removeEventListener('keydown', onGameKeydown, true);
+      document.removeEventListener('keydown', onKeydown, true);
+      window.removeEventListener('message', handleShelfMsg);
+      window.popActiveView?.(navigation.gameViewToken);
+      navigation.gameViewToken = null;
+      window.popActiveView?.(overlay._viewToken);
+      overlay._viewToken = null;
+      overlay.remove();
+      navigation.parentNavigation?.closeFlow();
+    };
+
+    const onGameKeydown = event => {
+      if (event.key !== 'Escape' || _gameLocationNavigation !== navigation || _currentSheetGameKey !== gameId) return;
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      navigation.returnToShelf();
+    };
+    document.addEventListener('keydown', onGameKeydown, true);
+    openGameSheet(gameId);
+  }
   function handleShelfMsg(e) {
     if (e.data?.action !== 'openGame' || !e.data?.gameId) return;
-    window.removeEventListener('message', handleShelfMsg);
-
-    // 위치 목록에서 다른 게임을 선택하면 현재 child를 먼저 pop하고, 선택한 게임정보를 root로 연다.
-    // 원래 게임정보의 상태를 새 게임으로 덮어쓰는 기존 이동 의미는 유지한다.
-    closeShelf();
-    openGameSheet(decodeURIComponent(e.data.gameId));
+    suspendShelfForGame(decodeURIComponent(e.data.gameId));
   }
   registerMsg();
 }
@@ -797,6 +881,9 @@ function openGameSheet(gameKey, restoreScroll = false, fromKey = null, noAnim = 
   const _prevHistKey = _gameSheetHistory.length > 0 ? _gameSheetHistory[_gameSheetHistory.length - 1] : null;
   const _prevHistGame = _prevHistKey ? window.gameData?.[_prevHistKey] : null;
   const _prevHistTitle = _prevHistGame ? (_prevHistGame.title?.display || _prevHistGame.title?.owned || _prevHistKey) : null;
+  const _locationReturn = _gameLocationNavigation?.rootGameKey === gameKey && _gameSheetHistory.length === 0
+    ? _gameLocationNavigation
+    : null;
 
   gameSheetContent.innerHTML = `
     <!-- 고정 헤더 (진입 시부터 표시) -->
@@ -813,8 +900,10 @@ function openGameSheet(gameKey, restoreScroll = false, fromKey = null, noAnim = 
       <button aria-label="게임 정보 닫기" class="sheet-sticky-close" type="button" onclick="closeGameSheet()">✕</button>
     </div>
 
-    <!-- 뒤로가기 (게임→게임 이동 시) -->
-    ${_prevHistKey ? `<button class="sheet-back-btn sheet-back-btn--hist" type="button" onclick="goBackGameSheet()">← ${_prevHistTitle ? window.escH(_prevHistTitle) : '이전 게임'}</button>` : ''}
+    <!-- 위치에서 고른 게임은 location local navigation이 일반 게임 history보다 우선한다. -->
+    ${_locationReturn
+      ? '<button class="sheet-back-btn sheet-back-btn--hist" type="button" data-game-location-return>← 게임 위치</button>'
+      : _prevHistKey ? `<button class="sheet-back-btn sheet-back-btn--hist" type="button" onclick="goBackGameSheet()">← ${_prevHistTitle ? window.escH(_prevHistTitle) : '이전 게임'}</button>` : ''}
 
     <!-- 설명 + 버튼 -->
     <div class="sheet-header">
@@ -887,6 +976,9 @@ function openGameSheet(gameKey, restoreScroll = false, fromKey = null, noAnim = 
     ${_buildSheetRecordsHtml(gameKey)}
 
   `;
+  gameSheetContent.querySelector('[data-game-location-return]')?.addEventListener('click', () => {
+    _locationReturn?.returnToShelf();
+  });
 
   _openAndInitSheet(gameKey, restoreScroll, noAnim);
 }
@@ -1062,7 +1154,13 @@ async function updateSheetPlayCountLink(gameKey) {
 }
 
 function closeGameSheet(){
-  if (window.CottageModalStack?.pop()) return;
+  // 게임 위치에서 연 B의 ×/backdrop close는 B만 남기지 않고 local chain 전체를 종료한다.
+  // backdrop은 A/B 데이터가 아니라 persistent #gameSheet presentation root가 계속 소유한다.
+  if (_gameLocationNavigation) {
+    const navigation = _gameLocationNavigation;
+    _gameLocationNavigation = null;
+    navigation.closeFlow();
+  } else if (window.CottageModalStack?.pop()) return;
   if(!gameSheet){
     return;
   }

@@ -8,6 +8,8 @@ const root = path.join(__dirname, '..');
 const read = rel => fs.readFileSync(path.join(root, rel), 'utf8');
 const html = read('pages/club/club-intro.html');
 const adminHtml = read('pages/admin/requests-admin.html');
+const auth = read('assets/js/kakao-auth.js');
+const style = read('assets/css/style.css');
 let sql = [
   read('docs/migrations/023_member_intro_questionnaire.sql'),
   read('docs/migrations/025_fix_member_intro_uuid_return.sql'),
@@ -15,8 +17,10 @@ let sql = [
   read('docs/migrations/030_member_intro_available_days_holiday.sql'),
   read('docs/migrations/031_member_intro_preference_layers.sql'),
   read('docs/migrations/032_member_intro_range_any.sql'),
+  read('docs/migrations/033_member_intro_play_pattern.sql'),
+  read('docs/migrations/034_member_intro_join_sources_boardlife.sql'),
 ].join('\n');
-const latestSql = read('docs/migrations/032_member_intro_range_any.sql');
+const latestSql = read('docs/migrations/034_member_intro_join_sources_boardlife.sql');
 const client = read('assets/js/supabase-client.js');
 const negctl = process.argv.includes('--negctl');
 
@@ -35,6 +39,28 @@ check(html.includes('id="introWizardProgress"'), 'Wizard progress missing');
 check(html.includes('validateStep(wizardStep)'), 'Wizard step validation missing');
 check(html.includes('openWizard({ edit: !!r.questionnaire_completed_at })'), 'Wizard edit entry missing');
 check(html.includes("document.getElementById('introWizardReward').hidden = !result.voucherGranted"), 'Voucher completion branch missing');
+check(html.includes("intro-wizard-autostart") && !html.includes('intro-wizard-embed'), 'wizard=1 must remain auto-start intent without a geometry class');
+check(html.includes("presentation === 'parent-surface'") && html.includes('dataset.introWizardPresentation = presentation'), 'Parent presentation context must be applied before auto-start');
+check(html.includes("_wizardAutoStart && getCurrentUser()") && html.includes("cottage-open-profile-intro-wizard"), 'Auto-start ready/request handshake missing');
+check(auth.includes("wizardPresentation: button.dataset.boardFrameWizardPresentation || null")
+  && auth.includes("presentation: wizardPresentation")
+  && auth.includes('data-board-frame-wizard-presentation="parent-surface"'), 'Profile-board parent must explicitly declare and send wizard presentation');
+check(auth.includes('wizardUsesParentSurface') && auth.includes('record-iframe-panel center-modal-shell'), 'Profile-board parent surface shell missing');
+check(auth.includes("_BOARD_FRAME_BACKDROP_MODES = new Set(['owner', 'inherit', 'none'])")
+  && auth.includes('_resolveBoardFrameBackdropMode(source, backdropMode)')
+  && auth.includes('data-ui-backdrop-context]')
+  && auth.includes("panel.dataset.uiBackdropOwner = 'owner'")
+  && auth.includes("sub.dataset.uiBackdropContext = 'inherit'"), 'Profile presentation lineage must declare generic backdrop ownership/context');
+check(auth.includes('record-iframe-backdrop-boundary')
+  && auth.includes('data-ui-backdrop="owner"')
+  && auth.includes("window.addEventListener('keydown', onKeydown, true)")
+  && auth.includes("window.removeEventListener('keydown', onKeydown, true)")
+  && (auth.match(/source: button/g) || []).length >= 2,
+  'Board-frame modal must use inherited backdrop context, source lineage, and top-frame Escape ownership');
+check(style.includes('data-intro-wizard-presentation="parent-surface"')
+  && style.includes('Geometry belongs to the explicit parent entry context, never wizard=1 itself.'), 'Wizard geometry must come from explicit parent presentation');
+check(style.includes('.record-iframe-backdrop-boundary{position:absolute;inset:0;z-index:0;background:transparent;}')
+  && style.includes('must not click through to its ancestor'), 'Inherited backdrop must retain a transparent interaction boundary');
 const cardRenderer = html.slice(html.indexOf("el.innerHTML = data.map"), html.indexOf('// 카드 색상 적용'));
 check(cardRenderer.includes('r._bio') && cardRenderer.includes('r.preferred_game_types')
   && cardRenderer.includes('r.preferred_game_depths') && cardRenderer.includes('r.possible_frequency_min')
@@ -54,17 +80,22 @@ for (const [file, source] of [['club-intro.html', html], ['requests-admin.html',
   });
 }
 
-const joinSources = ['store_visit','friend_referral','cottage_homepage','open_chat_search','daangn','naver_place','social_media'];
+const joinSources = ['store_visit','friend_referral','cottage_homepage','open_chat_search','daangn','naver_place','boardlife','social_media'];
+const joinSourcesSql = "'store_visit','friend_referral','cottage_homepage','open_chat_search','daangn','naver_place','boardlife','social_media'";
 const companionTypes = ['friends','partner','family','boardgame_group','various'];
 const groupOptionCount = group => {
   const block = html.match(new RegExp(`data-group="${group}"[\\s\\S]*?<\\/fieldset>`))?.[0] || '';
   return (block.match(/<input\b[^>]*type="(?:checkbox|radio)"/g) || []).length;
 };
-check(inOrder(html, joinSources), '가입 경로 7개 순서 불일치');
+check(inOrder(html, joinSources), '가입 경로 8개 순서 불일치');
 check(inOrder(html, companionTypes), '동반 유형 5개 순서 불일치');
 check((html.match(/data-group="joinSources"/g) || []).length === 1, '가입 경로 그룹 중복/누락');
+check(latestSql.includes(joinSourcesSql), '최신 RPC migration 가입 경로 허용 목록 불일치');
+for (const doc of ['docs/db-schema.md', 'docs/js-api.md', 'docs/UI_MAP.md']) {
+  check(read(doc).includes(joinSources.join('|')), `${doc} 가입 경로 허용 목록 문서화 누락`);
+}
 check(groupOptionCount('availableDays') === 8, '가능 요일 선택지 개수 불일치');
-check(html.includes("holidayOption.hidden = true") && html.includes('isMemberIntroHolidaySupported'), '공휴일 선택의 migration 적용 전 숨김 계약 누락');
+check(html.includes('if (enableHoliday)'), '공휴일 선택의 migration 적용 전 비노출 계약 누락');
 check(html.includes('data-day-preset="weekday"') && html.includes('data-day-preset="weekend"') && html.includes('data-day-preset="daily"'), '요일 빠른 선택 누락');
 check(groupOptionCount('availableTimes') === 1, '시간대 유동적 선택지 누락');
 check(html.includes('const rows = [[12,24], [24,36], [36,48], [48,60]]'), '30분 시간 막대 48슬롯 구성 누락');
@@ -125,7 +156,7 @@ check(timeApi.formatMemberIntroDays(['mon','tue','wed','thu','fri','sat','sun','
 check(timeApi.formatMemberIntroDays(['mon','tue','wed','thu','fri','holiday']) === '평일·공휴일', '평일·공휴일 요약 불일치');
 check(timeApi.formatMemberIntroDays(['sat','sun','holiday']) === '주말·공휴일', '주말·공휴일 요약 불일치');
 check(timeApi.formatMemberIntroDays(['tue','thu','flexible']) === '화·목', '개별 요일 요약 불일치');
-check(timeApi.formatMemberIntroAvailability(['tue','thu','flexible'], ['18:00','18:30','19:00']) === '화·목 · 18시~19시30분 · 일정 유동적', '개별 요일·유동성 요약 불일치');
+check(timeApi.formatMemberIntroAvailability(['tue','thu','flexible'], ['18:00','18:30','19:00']) === '화·목 · 18시~19시30분·일정 유동적', '개별 요일·유동성 요약 불일치');
 check(timeApi.formatMemberIntroAvailability(['sat','sun','holiday'], ['14:00','14:30','15:00','15:30']) === '주말·공휴일 · 14시~16시', '요일·시간 결합 요약 불일치');
 
 if (failures.length) {

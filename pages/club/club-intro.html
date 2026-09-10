@@ -16,7 +16,9 @@
     const wizardQuery = new URLSearchParams(location.search);
     const wizardHash = new URLSearchParams(location.hash.slice(1));
     if ((wizardQuery.get('wizard') === '1' || wizardHash.get('wizard') === '1') && window.parent !== window) {
-      document.documentElement.classList.add('intro-wizard-embed');
+      // `wizard=1` is an entry intent only: parent context chooses the
+      // presentation variant before it requests this existing renderer to open.
+      document.documentElement.classList.add('intro-wizard-autostart');
     }
   </script>
   <script src="../../assets/js/header.js" data-index="false"></script>
@@ -70,7 +72,7 @@
                   <fieldset class="intro-question" data-group="joinSources">
                     <legend>가입 경로 <span class="intro-required">*</span><small>복수 선택 가능 · 회원 카드에는 공개되지 않아요</small></legend>
                     <div class="intro-choice-grid">
-                      <label><input type="checkbox" value="store_visit">매장 방문</label><label><input type="checkbox" value="friend_referral">지인 추천</label><label><input type="checkbox" value="cottage_homepage">코티지 홈페이지</label><label><input type="checkbox" value="open_chat_search">오픈카톡 검색</label><label><input type="checkbox" value="daangn">당근 동호회·광고</label><label><input type="checkbox" value="naver_place">네이버(플레이스) 검색</label><label><input type="checkbox" value="social_media">인스타그램·기타 SNS</label>
+                      <label><input type="checkbox" value="store_visit">매장 방문</label><label><input type="checkbox" value="friend_referral">지인 추천</label><label><input type="checkbox" value="cottage_homepage">코티지 홈페이지</label><label><input type="checkbox" value="open_chat_search">오픈카톡 검색</label><label><input type="checkbox" value="daangn">당근 동호회·광고</label><label><input type="checkbox" value="naver_place">네이버(플레이스) 검색</label><label><input type="checkbox" value="boardlife">보드라이프</label><label><input type="checkbox" value="social_media">인스타그램·기타 SNS</label>
                     </div>
                   </fieldset>
                 </div>
@@ -533,7 +535,7 @@
       wizard.classList.remove('is-open');
       wizard.setAttribute('aria-hidden', 'true');
       if (window.parent !== window) window.parent.postMessage({ type: 'cottage-profile-wizard-state', open: false }, '*');
-      if (document.documentElement.classList.contains('intro-wizard-embed')) {
+      if (document.documentElement.classList.contains('intro-wizard-autostart')) {
         window.parent.postMessage({ type: 'cottage-close-profile-wizard' }, '*');
       }
     }
@@ -927,12 +929,17 @@
       wizardComplete.hidden = false;
     });
 
-    const _wizardEmbed = document.documentElement.classList.contains('intro-wizard-embed');
+    const _wizardAutoStart = document.documentElement.classList.contains('intro-wizard-autostart');
     const _notifyWizardReady = () => {
-      if (_wizardEmbed && getCurrentUser()) window.parent.postMessage({ type: 'cottage-profile-intro-ready' }, '*');
+      if (_wizardAutoStart && getCurrentUser()) window.parent.postMessage({ type: 'cottage-profile-intro-ready' }, '*');
     };
     window.addEventListener('message', e => {
-      if (e.data?.type === 'cottage-open-profile-intro-wizard') document.getElementById('introWizardOpenBtn')?.click();
+      if (e.data?.type === 'cottage-open-profile-intro-wizard') {
+        const presentation = e.data.presentation;
+        if (presentation === 'parent-surface') document.documentElement.dataset.introWizardPresentation = presentation;
+        else delete document.documentElement.dataset.introWizardPresentation;
+        document.getElementById('introWizardOpenBtn')?.click();
+      }
       if (e.data?.type === 'cottage-close-profile-wizard') closeWizard();
     });
 

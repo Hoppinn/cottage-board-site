@@ -38,7 +38,7 @@
 | 도메인 | 정본 | 핵심 필드·계약 |
 |---|---|---|
 | 회원 프로필·게임 취향 | `member_intros` + `profile_hardest_games` | `preferred_game_types`·`game_type_range`·`avoid_game_types`, `preferred_game_depths`·`game_depth_range`·`avoid_game_depths`; 주 취향은 범위의 부분집합. 어려운 게임은 별도 정본 `profile_hardest_games` |
-| 회원 공개 기본 정보 | `member_intros` | `nickname`, `location`, `join_sources`, 빈도, 평소 플레이 `usual_play_days/times`, 모임 참여 가능 `available_days/times`, 시계탑 선호, `expectation` |
+| 회원 공개 기본 정보 | `member_intros` | `nickname`, `location`, `join_sources` (`store_visit|friend_referral|cottage_homepage|open_chat_search|daangn|naver_place|boardlife|social_media`), 빈도, 평소 플레이 `usual_play_days/times`, 모임 참여 가능 `available_days/times`, 시계탑 선호, `expectation` |
 | 계정 공통 프로필 | `profiles` | 계정 식별, 사진, 한줄소개 `bio`, 활동 누적, 대표 업적·칭호. `avoid_tags`·`preferred_game_depths`는 새 설문 정본이 아닌 레거시 컬럼 |
 | 좋아하는 게임 | `game_likes` | 사용자별 좋아요 게임 |
 | 해보고 싶은 게임 | `game_curious` | 사용자별 관심 게임 |

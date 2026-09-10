@@ -290,6 +290,52 @@ console.log(`\n=== 11) 활성 뷰 registry — v2 키와 표시 라벨 계약 ==
   check(entries.every(v => labelsWindow.COTTAGE_PAGE_LABELS[v.key] === v.label), 'registry label이 COTTAGE_PAGE_LABELS 정본과 일치');
 }
 
+console.log(`\n=== 12) 게임 위치 local navigation — 중첩 chain의 topmost view만 순서대로 누적 ===`);
+{
+  realNowStub.value = 1_000_000_000_000;
+  const t = loadTracker();
+  const tokenA = t.push('game-sheet');
+  t.advance(5);
+  const tokenLocation1 = t.push('game-location-shelf');
+  t.advance(5);
+  const tokenB = t.push('game-sheet');
+  t.advance(5);
+  const tokenLocation2 = t.push('game-location-shelf');
+  t.advance(5);
+  const tokenC = t.push('game-sheet');
+  t.advance(5);
+  t.pop(tokenC);         // C ←/ESC → 위치2
+  t.advance(5);
+  t.pop(tokenLocation2); // 위치2 ←/ESC → B
+  t.advance(5);
+  t.pop(tokenB);         // B ←/ESC → 위치1
+  t.advance(5);
+  t.pop(tokenLocation1); // 위치1 ←/ESC → A
+  t.advance(5);
+  t.pop(tokenA);
+  t.advance(3);
+  t.firePagehide();
+  check(JSON.stringify(t.sent.map(s => [s.page, s.duration_sec])) === JSON.stringify([
+    ['game-sheet', 5], ['game-location-shelf', 5], ['game-sheet', 5],
+    ['game-location-shelf', 5], ['game-sheet', 5], ['game-location-shelf', 5],
+    ['game-sheet', 5], ['game-location-shelf', 5], ['game-sheet', 5], ['index', 3],
+  ]), `A→위치1→B→위치2→C→위치2→B→위치1→A는 topmost 하나씩만 누적 — ${JSON.stringify(t.sent.map(s => [s.page, s.duration_sec]))}`);
+
+  const sheetSrc = fs.readFileSync(path.join(__dirname, '..', 'assets', 'js', 'game-sheet.js'), 'utf8');
+  check(sheetSrc.includes('let _gameLocationNavigation = null;')
+    && sheetSrc.includes('parentNavigation: _gameLocationNavigation')
+    && sheetSrc.includes("navigation.gameViewToken = window.pushActiveView?.('game-sheet')")
+    && sheetSrc.includes('window.popActiveView?.(navigation.gameViewToken);'),
+  '중첩 게임 위치 → 게임정보도 이전 navigation context와 별도 top token을 보존한다');
+  check(sheetSrc.includes("overlay.removeAttribute('id');")
+    && sheetSrc.includes('overlay.id = navigation.overlayId;'),
+  '숨겨 보존한 위치 overlay는 canonical ID 충돌 없이 복원된다');
+  check(sheetSrc.includes("data-game-location-return>← 게임 위치")
+    && sheetSrc.includes('overlay.style.visibility = \'hidden\';')
+    && sheetSrc.includes('openGameSheet(originGameKey, true, null, true);'),
+  '위치 iframe DOM을 숨겨 보존하고 B ←는 A를 복원한 뒤 위치를 다시 연다');
+}
+
 Date.now = _realDateNow;
 
 console.log(`\n${fail === 0 ? '✅ 전부 통과' : `🔴 ${fail}건 실패`}`);

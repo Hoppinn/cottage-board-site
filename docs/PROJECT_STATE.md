@@ -10,17 +10,16 @@
 
 ## 1. NOW
 
-- 없음.
+- **홈 플레이기록 iframe의 canonical game-sheet portal 실화면 확인** — 홈 → 최근 플레이 기록 더보기/기록 남기기 → 게임 카드·기록 카드·썸네일에서 `#recordIframeModal` capability가 부모 canonical game-sheet를 전체 viewport로 열고, X/ESC 뒤 iframe 탭·스크롤·입력 상태가 보존되는지 확인한다. capability 없는 iframe local fallback과 기존 `modalStack=1` portal은 변경되지 않아야 한다. 자동 브라우저 연결 불가로 사용자 실화면 확인 대기.
+- **내 프로필 보드 canonical wizard surface 확인** — 내 보드 → 프로필 보드 → 프로필 수정하기에서 parent-surface entry가 기존 `club-intro.html` wizard를 모임원 프로필 root와 같은 outer panel 규격으로 열고, X/ESC·저장·쿠폰·보드 갱신이 기존 owner별 경로로 유지되는지 확인한다. 자동 브라우저 연결 불가로 사용자 실화면 확인 대기.
+
+- **프로필보드 wizard backdrop 실화면 확인 보충** — `profilePanel → profileSubSheet → board frame`은 `inherit`으로 blur 1회만 남고, frame 바깥 여백 클릭은 부모 panel을 닫지 않으며 wizard X/ESC는 frame만 닫고 subsheet로 복귀해야 한다. profile → 일반 board frame도 같은 inheritance를 쓰고, 홈 memberProfilesModal/top-level modal은 기존과 같아야 한다. 자동 브라우저 연결 불가로 사용자 실화면 확인 대기.
 
 ## 2. NEXT (자동 착수 금지)
 
-1. **가입경로 보드라이프** — `member_intros.join_sources` 허용 목록·입력 UI·표시 라벨·최신 RPC 마이그레이션을 함께 바꾸는 Red Plan 승인 후 구현한다.
-2. **모임 보드 → 플래너 미리보기 scroll** — 진입 시 중간 scroll position에서 시작하는 문제의 target, 이벤트, 실제 scroll owner와 클릭 전후 rect를 측정한 뒤 플래너의 올바른 시작 위치로 수정한다.
-3. **플레이 기록 accordion 위치 보정** — 날짜별/모임별 accordion의 열린 header가 닫힌 상태보다 높아지지 않게 하고, 페이지 하단에서도 `compensateHeaderPosition`이 클릭 header viewport 위치를 유지하도록 실제 부족 scroll 여유를 조사한다.
-4. **게임위치 scroll boundary** — geometry와 표시 지연은 사용자 실화면 통과했다. 별도로 남은 game-location scroll bug가 있으면 실제 scroll owner/boundary와 iframe/local overlay 전달 경로를 확인한다.
-5. **홈페이지 기능 child route 공통화 리팩터링** — 기능별 위임 분기와 URL 조립을 공통 child 요청/route registry 계약으로 정리하는 별도 Plan 후보다. 독립 URL·일반 embed·작은 sheet는 유지한다.
-6. **추천 전체보기 상단 과대 영역** — `홈페이지 기능 → 추천게임찾기 → 게임 더 찾기 → 전체보기`의 Host X와 제목 영역이 중복 점유하는지 사용자와 같은 URL·viewport에서 shell/header/divider rect로 먼저 판정한다.
-7. **AGENTS canonical 기능 재사용·embed/iframe 원칙 점검** — embed는 기존 기능의 표시 방식이며 duplicate renderer/state/handler를 만들지 않고 canonical renderer·markup·state·validation·save·auth·event logic을 우선 재사용한다는 원칙이 현재 AGENTS에 충분히 있는지 검토한다. embed 분기는 layout/chrome 숨김으로 최소화하고, preload가 auth·진입 가능 여부·user flow를 바꾸지 않으며 인증은 실제 제한 action 가까이에 둔다는 점도 확인한다. 새 embed 전용 구조가 필요하면 canonical 재사용 불가 사유를 먼저 명시한다. 이번에는 AGENTS를 수정하지 않는다.
+1. **홈페이지 기능 child route 공통화 리팩터링** — 기능별 위임 분기와 URL 조립을 공통 child 요청/route registry 계약으로 정리하는 별도 Plan 후보다. 독립 URL·일반 embed·작은 sheet는 유지한다.
+2. **추천 전체보기 상단 과대 영역** — `홈페이지 기능 → 추천게임찾기 → 게임 더 찾기 → 전체보기`의 Host X와 제목 영역이 중복 점유하는지 사용자와 같은 URL·viewport에서 shell/header/divider rect로 먼저 판정한다.
+3. **AGENTS canonical 기능 재사용·embed/iframe 원칙 점검** — embed는 기존 기능의 표시 방식이며 duplicate renderer/state/handler를 만들지 않고 canonical renderer·markup·state·validation·save·auth·event logic을 우선 재사용한다는 원칙이 현재 AGENTS에 충분히 있는지 검토한다. embed 분기는 layout/chrome 숨김으로 최소화하고, preload가 auth·진입 가능 여부·user flow를 바꾸지 않으며 인증은 실제 제한 action 가까이에 둔다는 점도 확인한다. 새 embed 전용 구조가 필요하면 canonical 재사용 불가 사유를 먼저 명시한다. 이번에는 AGENTS를 수정하지 않는다.
 
 ## 3. BACKLOG (자동 착수 금지)
 
@@ -49,6 +48,7 @@
 
 ## 5. DEFERRED / TRIGGER (자동 착수 금지)
 
+- **Presentation entry contract 정리** — 현재는 정상 경로 보존을 위해 `modalStack=1` trusted legacy admission 및 structure/entry flag 결합을 리팩터링하지 않는다. route/embed/modalStack/wizard/iframe 플래그 변경이 다른 surface의 owner·presentation·geometry·close/back·active-view를 함께 바꾸거나, 같은 예외 분기·상이한 capability 판정·교차 surface 회귀가 추가로 실제 버그 원인이 될 때만 재개한다. 재개 시 renderer, presentation owner, functional-surface capability, entry mode, geometry, lifecycle owner, active-view/analytics owner, fallback을 독립 축으로 대조하고, trusted legacy admission과 explicit capability + renderer discovery를 공통 판단 표면으로 통합할지 검토한다.
 - **Active-view 페이지 분석 실사용 검증** — 구현 완료, 정적 검증 완료, 격리 브라우저 전송 검증 완료. 남은 완료조건은 실제 일반 사용자 계정의 운영 surface(대표 센터모달·바텀시트·iframe) 행동 뒤 `page_sessions` 및 관리자 페이지 `페이지` 분석 표시를 확인하는 것이다. 현재 차단 조건은 일반 사용자 테스트 계정 없음이며, 일반 사용자 테스트 계정 확보 또는 실제 일반 사용자 검증 가능 시 재개한다. 상세: [PLAN_active_view_tracking.md](PLAN_active_view_tracking.md).
 - **보드 sticky 헤더 우선순위** — 수집 보드와 프로필 보드의 UI 후보다. 각 보드 scroll container 안에서 현재 섹션 하나만 고정하며, 여러 보드를 건드리는 Yellow 작업이므로 별도 Plan과 변경안 승인 뒤에만 착수한다.
 - **Legacy naming migration** — 다음 점검: 현재 큰 기능 묶음 완료 후. 구조 안정화·의존관계 파악·회귀 검증·호환 전략·반복 혼선 여부를 함께 판단하며, 트리거는 검토 시작 시점일 뿐 실행 확정이 아니다. 상세 기준은 [명칭 정합성 조사 Plan](plans/naming-alignment-audit-plan.md)을 따른다.

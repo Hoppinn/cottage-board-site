@@ -6728,18 +6728,20 @@ html:has(body.embed-mode) { scroll-padding-top: 0; }
   background:rgba(0,0,0,.48);
 }
 .intro-wizard-overlay.is-open{display:flex;}
-html.intro-wizard-embed,html.intro-wizard-embed body{background:transparent!important;overflow:hidden;}
+html.intro-wizard-autostart,html.intro-wizard-autostart body{background:transparent!important;overflow:hidden;}
 html.intro-wizard-open,html.intro-wizard-open body{overflow:hidden;overscroll-behavior:none;}
-html.intro-wizard-embed .club-breadcrumb,html.intro-wizard-embed .page-mini-hero,html.intro-wizard-embed .intro-form-card,html.intro-wizard-embed .intro-card-grid,html.intro-wizard-embed .site-footer{display:none!important;}
-/* 프로필 보드 iframe은 일반 페이지 요소만 숨긴다. 실제 6단계 wizard footer는
+html.intro-wizard-autostart .club-breadcrumb,html.intro-wizard-autostart .page-mini-hero,html.intro-wizard-autostart .intro-form-card,html.intro-wizard-autostart .intro-card-grid,html.intro-wizard-autostart .site-footer{display:none!important;}
+/* 자동 시작 iframe은 일반 페이지 요소만 숨긴다. 실제 6단계 wizard footer는
    showWizardStep()이 hidden을 해제한 뒤 반드시 자체 grid를 유지해야 한다. */
-html.intro-wizard-embed .intro-wizard-nav:not([hidden]){display:grid!important;visibility:visible!important;}
-/* 홈 모임원 프로필 root iframe의 작성·수정은 부모 shell 안을 채운다.
-   내 보드의 wizardOnly iframe(html.intro-wizard-embed)은 원래 자기 위저드 레이아웃을 유지한다. */
-html:not(.intro-wizard-embed) body.embed-mode .intro-wizard-overlay{position:absolute;inset:0;padding:0;background:transparent;align-items:stretch;}
-html:not(.intro-wizard-embed) body.embed-mode.intro-wizard-open .intro-wizard-overlay{position:fixed;}
-html:not(.intro-wizard-embed) body.embed-mode .intro-wizard{width:100%;max-width:none;height:100%;max-height:none;border-radius:0;box-shadow:none;}
-html:not(.intro-wizard-embed) body.embed-mode .intro-wizard-close{display:none!important;}
+html.intro-wizard-autostart .intro-wizard-nav:not([hidden]){display:grid!important;visibility:visible!important;}
+/* Geometry belongs to the explicit parent entry context, never wizard=1 itself.
+   The home root keeps its parent X; the profile-board surface keeps the wizard X. */
+html[data-intro-wizard-presentation="parent-surface"] .intro-wizard-overlay{position:absolute;inset:0;padding:0;background:transparent;align-items:stretch;}
+html[data-intro-wizard-presentation="parent-surface"] .intro-wizard{width:100%;max-width:none;height:100%;max-height:none;border-radius:0;box-shadow:none;}
+html:not(.intro-wizard-autostart) body.embed-mode .intro-wizard-overlay{position:absolute;inset:0;padding:0;background:transparent;align-items:stretch;}
+html:not(.intro-wizard-autostart) body.embed-mode.intro-wizard-open .intro-wizard-overlay{position:fixed;}
+html:not(.intro-wizard-autostart) body.embed-mode .intro-wizard{width:100%;max-width:none;height:100%;max-height:none;border-radius:0;box-shadow:none;}
+html:not(.intro-wizard-autostart) body.embed-mode .intro-wizard-close{display:none!important;}
 .intro-wizard{
   display:flex;
   flex-direction:column;
@@ -7702,6 +7704,10 @@ button.home-section-more{background:none;border:none;cursor:pointer;padding:0;}
 .record-iframe-modal{display:flex;position:fixed;inset:0;z-index:var(--z-shelf);align-items:center;justify-content:center;padding:16px;visibility:hidden;pointer-events:none;}
 .record-iframe-modal.is-open{visibility:visible;pointer-events:auto;}
 .record-iframe-dim{position:absolute;inset:0;background:rgba(0,0,0,0.55);}
+/* An inherited/none backdrop is visually transparent but remains an input
+   boundary above its logical parent. Do not replace it with pointer-events:none:
+   a nested surface must not click through to its ancestor's close backdrop. */
+.record-iframe-backdrop-boundary{position:absolute;inset:0;z-index:0;background:transparent;}
 .record-iframe-panel{position:relative;width:100%;max-width:480px;height:88dvh;max-height:88dvh;background:#fff;border-radius:16px;overflow:hidden;display:flex;flex-direction:column;z-index:1;box-shadow:0 8px 32px rgba(0,0,0,0.18);transform:none;transition:none;}
 .record-iframe-modal.is-suspended{pointer-events:none;}
 .record-iframe-close{position:absolute;top:10px;right:12px;background:none;border:none;font-size:18px;line-height:1;cursor:pointer;color:var(--ink);padding:4px;z-index:2;}
@@ -8161,7 +8167,6 @@ body[data-ui-geometry-owner="host"] .dd-overlay[data-ui-layer="host-transparent"
 .pr-session.is-open .pr-session-arrow { transform: rotate(180deg); }
 .pr-session-body { display: none; background: var(--bg); }
 .pr-session.is-open .pr-session-body { display: block; }
-.pr-session--bydate > .pr-session-body > .pr-sub-session:first-child.is-open { margin-top: 8px; }
 
 .pr-month-session { border-top: 1px solid #e0dbd0; }
 .pr-month-session:first-child { border-top: none; }

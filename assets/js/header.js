@@ -98,9 +98,33 @@
     request.presentationStack = { position: surface.presentationStack, zIndex, interactionOwner: layerOwner };
   }
 
+  // Non-Host embeds stay local unless their immediate parent explicitly offers
+  // this exact canonical surface. This is capability/renderer discovery, not
+  // an inference from embed mode or a route name.
+  function _hasExplicitAncestorSurfaceCapability(surfaceName, surface) {
+    if (window.parent === window) return false;
+    try {
+      const frame = window.frameElement;
+      const parentDocument = window.parent.document;
+      const layerOwner = frame?.closest?.('[data-ui-presentation-layer-owner][data-ui-functional-surface-capabilities]');
+      const capabilities = (layerOwner?.dataset.uiFunctionalSurfaceCapabilities || '').trim().split(/\s+/).filter(Boolean);
+      const zIndex = Number.parseInt(layerOwner ? window.parent.getComputedStyle(layerOwner).zIndex : '', 10);
+      return capabilities.includes(surfaceName)
+        && !!parentDocument.querySelector(surface.nodeSelector)
+        && Number.isFinite(zIndex);
+    } catch (_) {
+      // Cross-origin or inaccessible parents retain their local renderer.
+      return false;
+    }
+  }
+
   function _requestAncestorFunctionalSurface(surfaceName, payload) {
     const surface = _surfaceState(surfaceName);
-    if (!surface || surface.presentationOwner !== 'ancestor' || _stackValue !== '1' || window.parent === window) return false;
+    if (!surface || surface.presentationOwner !== 'ancestor' || window.parent === window) return false;
+    const isExistingStackContext = _stackValue === '1';
+    const isExplicitCapabilityContext = !isExistingStackContext
+      && _hasExplicitAncestorSurfaceCapability(surfaceName, surface);
+    if (!isExistingStackContext && !isExplicitCapabilityContext) return false;
     const request = { surface: surfaceName, payload, presentationAnchor: window, handled: false };
     window.parent.dispatchEvent(new window.parent.CustomEvent('cottage-functional-surface-request', { detail: request }));
     return request.handled;
