@@ -1,5 +1,33 @@
 # Debugging History
 
+## 2026-09-10 - Home record-more briefly reveals the default input tab
+
+증상:
+
+- 홈 최근 플레이의 `기록 더보기`를 누르면 기록 센터모달 안에서 `기록 남기기`가 잠깐 보인 뒤 정상 `기록 보기`로 전환됐다.
+
+원인:
+
+- 로그인 뒤 미리 로드하는 `game-reviews.html?embed=1&tab=input`의 기본 탭은 `input`이다.
+- 부모 `openModal('records')`가 모달을 먼저 표시하고, iframe의 `cottage-hub-ready` 수신 시 loader를 제거한 다음 `cottage-switch-tab(records)` 메시지를 보냈다. 따라서 기본 input이 탭 전환보다 먼저 visible이 됐다.
+- 이 순서는 `bfe512a9` (2026-07-04, pending tab 보존 수정)에서 들어왔고, `4de24a3a` (2026-09-09, Modal Stack Host 도입)가 기존 fade/slide를 제거하면서 한 프레임이 눈에 보이는 회귀가 됐다.
+
+해결:
+
+- 부모는 탭 전환을 요청한 뒤 iframe의 `cottage-hub-tab-ready` 응답을 받을 때까지 loader를 유지한다.
+- iframe은 실제 탭 전환 직후 해당 완료 메시지를 부모에 보낸다. 기본 input surface는 loader 아래에만 존재하고 사용자에게 표시되지 않는다.
+- 구현: `47bbd345` (`assets/js/index-page.js`, `assets/js/game-reviews.js`, `scripts/verify-record-modal-ux.js`).
+
+실패한 시도:
+
+- `1f4821a1`에서 record iframe의 `game-sheet` ancestor presentation capability를 제거했다. 이는 다른 local/parent renderer 경로를 겨냥한 오진으로, 사용자가 지적한 `기록 남기기 → 기록 보기` 탭 전환 증상과 맞지 않았다. 다음 커밋에서 원래 capability 계약을 복원했다.
+
+재발 방지:
+
+- preloaded iframe의 기본 화면과 사용자가 요청한 화면이 다르면, 부모 modal visibility/loader 해제는 iframe의 실제 view-ready 응답 뒤에만 수행한다.
+- modal animation을 제거하거나 즉시 표시로 바꾸기 전에는 loader 제거, iframe ready, tab/view 전환, first visible paint의 순서를 함께 확인한다. animation으로 중간 화면을 감추지 않는다.
+- `node scripts/verify-record-modal-ux.js`가 record root capability와 tab-ready handshake를 모두 확인한다. 실제 사용자 경로의 화면 재확인은 별도로 필요하다.
+
 ## 2026-09-09 - Modal Stack 작업의 설계 과잉과 측정 지연 postmortem
 
 현상:
