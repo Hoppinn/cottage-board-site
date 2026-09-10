@@ -11,9 +11,13 @@
 
 ## 1. NOW
 
-- **게임정보 모달 기록 상세 실화면 조정** — 사진 섹션 header/wrapper의 상하 spacing을 게임평·플레이기록 섹션의 공통 문법과 대조해 사진 썸네일·2열 grid·남기기 버튼·개수 표시는 보존한 채 사진 섹션만 두껍게 보이는 별도 override를 제거한다. participant micro identity에서 대표 캐릭터 image와 fallback 발바닥의 실제 rendered rect/font/line-height를 대조해 같은 12px 역할로 보정한다. 360px의 짧은 4인+시간은 people/meta row와 상위 card/carousel의 실제 available/required width를 계측한 뒤에만 최소 수정한다. ★ 제거는 실화면 확인됨. 자동 브라우저 부재로 사용자 실화면 확인이 남음.
+- 현재 진행 중인 구현 없음.
 
 ## 2. NEXT (자동 착수 금지)
+
+- **게임정보 모달 기록 상세 실화면 보완** — 사진은 게임평과 같은 outer card/container으로 정리하고 participant row의 작성자도 micro variant로 통일했으나, 사용자 실화면에서 작성자·나머지 participant icon 크기와 사진 카드 문법을 확인해야 한다. 360px 짧은 4인+시간은 아직 한 줄 실패가 확인됐으며, 다음 착수 시 people/meta row·각 token·시간·padding·action·상위 card/carousel의 actual available/required width를 계측해 원인을 확정한 뒤 최소 수정한다. icon+nickname·시간 token은 atomic 유지, 글씨/아이콘 축소 금지.
+
+- **게임별 기록 상세 페이지 재구성 검토** — 게임정보의 `기록 페이지에서 보기 & 남기기` 진입 페이지에서 게임평·사진·플레이기록의 header·개수·전체보기/접기·outer card/section shell·spacing·밀도·위계를, 현재 게임별 기록 페이지/게임정보 모달 미리보기/프로필 기록 보드 세 화면으로 비교한다. 어느 문법도 미리 정본으로 정하지 않고 게임별 기록 페이지에 맞는 별도 재구성 Plan만 제안한다. 게임정보 모달의 미리보기는 현 상태를 유지하며 이번 항목에서는 구현하지 않는다.
 
 - **모임보드 최근참여 날짜별 보기** — 모임보드의 최근참여를 참여 날짜별로 묶는 표시 변경. 현재 작업의 실화면 확인이 끝난 뒤 별도 범위·데이터 정본을 확인하고 착수한다.
 

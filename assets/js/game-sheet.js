@@ -1240,11 +1240,13 @@ function openGameRecordSheet(gameKey) {
         </div>
       </div>
       <div class="sheet-play-section">
-        <div class="sheet-comments-header">
-          <span class="sheet-comments-count-label" id="sheetPhotosCount-${gameKey}">사진</span>
-          <button class="sheet-comment-write-btn" data-game-id="${gameKey}" onclick="onOpenPhotoInput(this)" type="button">📷 남기기</button>
+        <div class="sheet-comments-area">
+          <div class="sheet-comments-header">
+            <span class="sheet-comments-count-label" id="sheetPhotosCount-${gameKey}">사진</span>
+            <button class="sheet-comment-write-btn" data-game-id="${gameKey}" onclick="onOpenPhotoInput(this)" type="button">📷 남기기</button>
+          </div>
+          <div id="sheetPhotosArea-${gameKey}"><span class="sheet-comments-empty">불러오는 중...</span></div>
         </div>
-        <div id="sheetPhotosArea-${gameKey}"><span class="sheet-comments-empty">불러오는 중...</span></div>
       </div>
       <div class="sheet-play-section">
         <div class="sheet-play-widget" id="sheetPlayWidget-${gameKey}"></div>

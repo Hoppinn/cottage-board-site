@@ -56,7 +56,7 @@
       .filter(Boolean)
       .filter(token => token !== authorNickname);
     const person = (nickname, userId, isAuthor) => {
-      const identity = userId ? ` data-identity-user-id="${_escAttr(userId)}"${isAuthor ? '' : ' data-identity-icon-variant="participant"'}` : '';
+      const identity = userId ? ` data-identity-user-id="${_escAttr(userId)}" data-identity-icon-variant="participant"` : '';
       return `<span class="pr-rec-tag pr-tag-who pr-rec-recorder${isAuthor ? ' pr-tag-who-first' : ''}" data-nick="${_escAttr(nickname)}"${identity}>${esc(nickname)}</span>`;
     };
     return [
