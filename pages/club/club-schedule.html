@@ -2316,6 +2316,17 @@
         if (rs && re && _activeDay) _timeMap[_activeDay] = { s: parseInt(rs.value), e: parseInt(re.value) };
       }
 
+      // 게임 피커는 단순히 후보를 여닫는 선택 UI다. 아무 항목도 담지 않았을 때도
+      // 저장 단계에는 항상 빈 want/learn 배열을 넘겨야 한다. 그래야 기존 게임을
+      // 비우는 수정과 새 일정의 게임 미선택 등록이 같은 경로로 안전하게 처리된다.
+      function getDayGamesForSave(ds) {
+        const games = _gameMap[ds] || {};
+        return {
+          want: Array.isArray(games.want) ? games.want : [],
+          learn: Array.isArray(games.learn) ? games.learn : [],
+        };
+      }
+
       // ── 저장 ───────────────────────────────────────────────────
       async function saveAll() {
         const user = window.getKakaoUser?.();
@@ -2337,7 +2348,7 @@
             for (const g of existingGames) {
               await window.CottageDB?.removeMeetingVoteGame(String(user.id), ds, g.list_type, g.game_id, g.custom_name);
             }
-            const dayGames = _gameMap[ds] || {want:[], learn:[]};
+            const dayGames = getDayGamesForSave(ds);
             for (const g of dayGames.want) {
               if (g.custom_name || g.game_id) await window.CottageDB?.addMeetingVoteGame(String(user.id), ds, 'want', g.game_id??null, g.custom_name??null);
             }
