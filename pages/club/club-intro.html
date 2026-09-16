@@ -44,7 +44,9 @@
         <!-- 작성 시작점 (로그인 시에만 노출) -->
         <div class="intro-form-card" id="introFormCard" style="display:none">
           <button class="intro-form-toggle" id="introWizardOpenBtn" type="button">
-            <span id="introWizardOpenLabel">모임원 프로필 작성하기</span><span class="intro-form-toggle-arrow">›</span>
+            <span id="introWizardOpenLabel">모임원 프로필 작성하기</span>
+            <span class="intro-member-counts" id="introMemberCounts" aria-live="polite"></span>
+            <span class="intro-form-toggle-arrow">›</span>
           </button>
         </div>
 
@@ -681,13 +683,21 @@
         el.innerHTML = '<p class="intro-list-empty" style="grid-column:1/-1;text-align:center;padding:32px 0">🔒 카카오 로그인 후 열람할 수 있습니다.</p>';
         return;
       }
-      const { data, error } = await db
-        .from('member_intros')
-        .select('*')
-        .order('created_at', { ascending: false });
+      const [{ data, error }, totalProfilesRes] = await Promise.all([
+        db.from('member_intros').select('*').order('created_at', { ascending: false }),
+        db.from('profiles').select('user_id', { count: 'exact', head: true }),
+      ]);
       if (error) {
         el.innerHTML = '<p class="intro-list-empty" style="grid-column:1/-1">모임원 프로필을 불러오지 못했어요. 잠시 후 다시 시도해주세요.</p>';
         return;
+      }
+      if (totalProfilesRes.error) console.error('[club-intro:profile-count]', totalProfilesRes.error);
+      const completedIntroCount = (data || []).filter(row => row.questionnaire_completed_at).length;
+      const memberCounts = document.getElementById('introMemberCounts');
+      if (memberCounts) {
+        memberCounts.textContent = typeof totalProfilesRes.count === 'number'
+          ? `전체 회원 ${totalProfilesRes.count}명 · 프로필 작성 ${completedIntroCount}명`
+          : `프로필 작성 ${completedIntroCount}명`;
       }
       currentIntroRow = null;
       if (!data?.length) {
