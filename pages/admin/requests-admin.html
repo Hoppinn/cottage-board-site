@@ -1299,10 +1299,8 @@
       const allProfiles = (rawProfiles || []).filter(p => String(p.user_id || '') !== ADMIN_UID);
       const pageViews = (pvResult?.data || []).filter(r => String(r.user_id || '') !== ADMIN_UID);
       const anonSessions = anonResult?.data || [];
-      const intros = db2 ? (await db2.from('member_intros').select('user_id,nickname,join_sources').not('user_id','is',null)).data || [] : [];
+      const intros = db2 ? (await db2.from('member_intros').select('user_id,nickname').not('user_id','is',null)).data || [] : [];
       const introNickMap = new Map(intros.map(i => [String(i.user_id), i.nickname]));
-      const introJoinSourceMap = new Map(intros.map(i => [String(i.user_id), i.join_sources || []]));
-      const INTRO_JOIN_SOURCE_LABELS = { store_visit:'매장 방문', friend_referral:'지인 추천', cottage_homepage:'코티지 홈페이지', open_chat_search:'오픈카톡 검색', daangn:'당근 동호회·광고', naver_place:'네이버(플레이스) 검색', social_media:'인스타그램·기타 SNS' };
 
       // ── 헬퍼 ────────────────────────────────────────────────────
       const fmtTime = s => {
@@ -1525,9 +1523,9 @@
         const seenToday = (p.last_seen_at && _toKstDate(p.last_seen_at) === todayKst) || pageTodayS > 0;
         if (!seenToday && todayS === 0) return '';
         if (todayS > 0) {
-          return `<span style="color:var(--green);font-weight:600" title="profiles.today_seconds(heartbeat)와 오늘 page_sessions(실측 초) 중 큰 값입니다. 두 값은 같은 체류의 하한이므로 합치지 않으며, 1분 미만 방문은 profiles에 0으로 남을 수 있습니다">오늘 ${fmtTime(todayS)}</span>`;
+          return `<span style="color:var(--green);font-weight:600" title="profiles.today_seconds(heartbeat)와 오늘 page_sessions(실측 초) 중 큰 값입니다. 두 값은 같은 체류의 하한이므로 합치지 않으며, 1분 미만 방문은 profiles에 0으로 남을 수 있습니다">오늘 이용시간 ${fmtTime(todayS)}</span>`;
         }
-        return `<span style="color:var(--muted);font-weight:600" title="오늘 방문 흔적(last_seen_at)은 있는데 today_seconds가 0입니다. 1분 미만 방문이거나 동기화가 안 실린 경우로, 「데이터 없음」이 아니라 「0으로 기록됨」입니다">오늘 0분</span>`;
+        return `<span style="color:var(--muted);font-weight:600" title="오늘 방문 흔적(last_seen_at)은 있는데 today_seconds가 0입니다. 1분 미만 방문이거나 동기화가 안 실린 경우로, 「데이터 없음」이 아니라 「0으로 기록됨」입니다">오늘 이용시간 0분</span>`;
       };
 
       // i는 목록에서의 위치 — 초기엔 상위 3개만 보이고 나머지는 접힌다(더보기 버튼).
@@ -1549,8 +1547,6 @@
           const isBanned = !!p.is_banned;
           const isMe = String(p.user_id) === '4916417947';
           const nick = introNickMap.get(String(p.user_id)) || p.nickname || p.real_name || '(닉네임없음)';
-          const joinSources = introJoinSourceMap.get(String(p.user_id)) || [];
-          const joinSourceHtml = joinSources.length ? `<span>가입 경로 ${joinSources.map(source => escH(INTRO_JOIN_SOURCE_LABELS[source] || source)).join(', ')}</span>` : '';
           const dnHtml = p.real_name
             ? `${escH(nick)}<span class="admin-real-name">(${escH(p.real_name)})</span>`
             : escH(nick);
@@ -1561,7 +1557,6 @@
               <span>가입 ${fmtDate(p.first_seen_at)}</span>
               <span>최근 ${fmtDate(p.last_seen_at)}</span>
               <span>방문 ${p.visit_count != null ? p.visit_count + '회' : '-'}</span>
-              ${joinSourceHtml}
               ${_todayChip(p, todayS, pageTodayS)}
               <span title="profiles.total_minutes(레거시 이름, 저장 단위: 초) — 전 기간 누적(heartbeat 포함). 아래 페이지별 합계는 page_sessions 기준이라 이보다 작을 수 있습니다.">⏱ 총 ${fmtTime(totalUsageSeconds)}</span>
               ${_visitorPagesToggle(memberPageMap.get(p.user_id), _todayPm)}
