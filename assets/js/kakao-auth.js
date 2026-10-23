@@ -2472,6 +2472,16 @@ const introVoucherCardHtml = _introVoucher
       const gameLinks = games.map(g => `<span class="notif-game-link" data-game-name="${escH(g)}">${escH(g)}</span>`).join(', ');
       return `<li class="${cls}">${_card('📦', gameLinks, '새 게임이 추가됐어요')}${readBtn}</li>`;
     }
+    if (n.type === 'game_announce') {
+      const icon = n.kind === 'arrived' ? '🎉' : '📦';
+      const msg = n.kind === 'arrived' ? '도착했어요!' : '새 게임이 추가됐어요';
+      const desc = n.locationLabel ? `${msg} · ${escH(n.locationLabel)}` : msg;
+      if (n.gameNames.length === 1) {
+        return `<li class="${cls}" data-game-name="${escH(n.gameNames[0])}">${_card(icon, escH(n.gameNames[0]), desc)}${readBtn}</li>`;
+      }
+      const gameLinks = n.gameNames.map(g => `<span class="notif-game-link" data-game-name="${escH(g)}">${escH(g)}</span>`).join(', ');
+      return `<li class="${cls}">${_card(icon, gameLinks, desc)}${readBtn}</li>`;
+    }
     // new_intro/new_member 둘 다 "OOO 외 N명"으로 뭉개지 말고 이름을 보여주자는 결정이었는데
     // (2026-07-31, "다른 N명은 누군지 모른다"는 지적), 인원이 늘면서 한 줄에 이름이 끝없이
     // 쌓이는 반대쪽 문제가 생겼다(2026-08-02 사용자 지적). 5명까지는 전부 보여주고 그 이상만

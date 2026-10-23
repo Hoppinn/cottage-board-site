@@ -1889,6 +1889,11 @@ window._cottageSess = (function () {
         .lt('added_at', oneMinAgo)
         .order('added_at', { ascending: false })
         .limit(10);
+      // 게임 관리 GUI가 push 성공 뒤에 남기는 공지(새 게임·도착) — new_game과 같이 로그인 회원 전체 수신(035).
+      const announcePromise = db.from('game_announcements')
+        .select('id, kind, game_names, location_label, created_at')
+        .order('created_at', { ascending: false })
+        .limit(10);
       // 동호회 소개글: 타인 최근 소개글 (로그인 회원 전체 수신)
       const introListPromise = db.from('member_intros')
         .select('id, user_id, nickname, created_at')
@@ -1936,8 +1941,8 @@ window._cottageSess = (function () {
         .eq('user_id', userId)
         .order('earned_at', { ascending: false })
         .limit(20);
-      const [taggedRes, curiousRes, purchasedRes, snackDoneRes, newGameRes, introListRes, newMemberRes, profileSeenRes, voucherEventsRes, snackRequestRes, achievementRes] = await Promise.all([
-        taggedPromise, curiousPromise, purchasedPromise, snackDonePromise, newGamePromise, introListPromise, newMemberPromise, profileSeenPromise, voucherEventsPromise, snackRequestPromise, achievementPromise
+      const [taggedRes, curiousRes, purchasedRes, snackDoneRes, newGameRes, introListRes, newMemberRes, profileSeenRes, voucherEventsRes, snackRequestRes, achievementRes, announceRes] = await Promise.all([
+        taggedPromise, curiousPromise, purchasedPromise, snackDonePromise, newGamePromise, introListPromise, newMemberPromise, profileSeenPromise, voucherEventsPromise, snackRequestPromise, achievementPromise, announcePromise
       ]);
       // Promise.all + 비구조분해 결과라 2단계 codemod가 지나친 자리 — 쿼리 오류가 조용히 빈 값이 됨
       // (taggedRes·voucherEventsRes·snackRequestRes는 조건부 Promise.resolve라 .error 없음 = 정상 falsy)
@@ -1952,6 +1957,7 @@ window._cottageSess = (function () {
       if (voucherEventsRes.error) console.error('[getMyNotifications:voucher_log]', voucherEventsRes.error);
       if (snackRequestRes.error) console.error('[getMyNotifications:snack_requests]', snackRequestRes.error);
       if (achievementRes.error) console.error('[getMyNotifications:user_achievements]', achievementRes.error);
+      if (announceRes.error) console.error('[getMyNotifications:game_announcements]', announceRes.error);
       const dbSeenAt = profileSeenRes?.data?.notif_seen_at || null;
       const effectiveSeenAt = [notifSeenAt, dbSeenAt].filter(Boolean).sort().pop() || null;
       const effectiveNewGameSeenAt = [newGameSeenAt, dbSeenAt].filter(Boolean).sort().pop() || null;
@@ -2044,6 +2050,12 @@ window._cottageSess = (function () {
         const isNew = (effectiveNewGameSeenAt ? new Date(r.added_at) > new Date(effectiveNewGameSeenAt) : true) && !readKeys.has(key);
         const actualGames = Array.isArray(r.actual_games) && r.actual_games.length ? r.actual_games : null;
         notifs.push({ type: 'new_game', key, gameName: r.game_name, actualGames, date: r.added_at, isNew });
+      }
+      for (const r of announceRes.data || []) {
+        const key = `game_announce:${r.id}`;
+        const isNew = (effectiveNewGameSeenAt ? new Date(r.created_at) > new Date(effectiveNewGameSeenAt) : true) && !readKeys.has(key);
+        const gameNames = Array.isArray(r.game_names) ? r.game_names : [];
+        notifs.push({ type: 'game_announce', key, kind: r.kind, gameNames, locationLabel: r.location_label || null, date: r.created_at, isNew });
       }
       // 동호회 소개글 알림: 로그인 회원 전체, 새 소개글 N개 묶음
       {
