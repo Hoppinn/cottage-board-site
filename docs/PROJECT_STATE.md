@@ -18,6 +18,7 @@
   - 🏁 종료 조건: 바로가기 → 「발매후 도착예정」 7개 일괄 이동 → 사이트에 올리기 → 운영 위치 반영 + 회원 종 알림 1건.
   - **다음 원자 작업**: Task 6(종 알림 테이블 `game_announcements`) — Plan은 2026-10-23 사용자에게 제시, **승인 대기**. 승인 뒤 코드 → 사용자 SQL 실행 → anon SELECT 확인 → 격리 행 알림 확인 → 브랜치 전체 리뷰(executing-plans Final Review) → main 병합.
   - 병합 시점 사용자 결정 대기: 「Task 6·리뷰 후 병합」(추천) vs 「지금 병합해 위치 이동 먼저」(알림은 테이블 생길 때까지 대기열에 보존).
+  - **후속(사용자 결정 2026-10-23)**: 설명 번역 경로를 API 전용에서 순차 폴백으로 — ①`.env` ANTHROPIC_API_KEY(잔액 있을 때) ②`claude -p`(Claude Code 구독) ③`codex exec`(ChatGPT Plus) ④전부 실패 시 「번역 대기」. 단순 번역기는 불가 — `description-translator.js`가 400자 압축 번역 + 큐레이터 한 문장 요약(summaryKo)을 하므로. 두 CLI는 설치 확인(`~/.local/bin/claude`, nvm `codex`), WSL 로그인 상태는 미확인. 콘솔 크레딧 US$0.00이라 사용자는 충전하지 않기로.
   - 환경 메모: 이 WSL 사본은 `npm ci --cache $TMPDIR/npm-cache` 필요(샌드박스에서 ~/.npm 읽기 전용). 브라우저 검증은 Playwright headless(ubuntu24.04 override, libnss3 등 로컬 추출, 프록시는 username/password 분리 전달).
 
 ## 2. NEXT (자동 착수 금지)
