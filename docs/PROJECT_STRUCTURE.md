@@ -664,4 +664,6 @@ node game-system/tools/5-build-output/build-output.js
 
 게임 추가·위치 변경의 비대화형 진입점은 `tools/0-input/game-ops.js`다(`parseBggInput`·`confirmBgg`·`addGame`·`setLocation`·`runPipeline`). `npm run add-game` CLI와 게임 관리 GUI가 같은 함수를 쓰며, 위치 선택 규칙(`협력` 허용·도착 판정·위치 확인 필요 목록)은 `tools/_core/location-rules.js`가 정본이다.
 
+게임 관리 GUI(`npm run admin`, `game-system/admin-gui/`)의 「사이트에 올리기」는 `publish.js`가 한다: **main 브랜치에서만**, `game-system/game-data/` 경로만 경로 지정 커밋 → `npm run check` 통과 → GitHub이 앞서 있으면 중단 → push. 회원 종 알림(신규·도착)은 저장 때 `~/.cottage-admin/pending-announcements.json`에 쌓였다가 **push 성공 뒤에만** `game_announcements`로 보낸다. 실패한 알림은 대기열에 남는다.
+
 핵심 원칙: BGG API는 실시간 호출하지 않는다. source → staging → library → output 레이어 분리. output만 사이트에서 읽는다.

@@ -9,6 +9,7 @@ const {
   COOP_VALUE, listPickableLocations, isArrival, findLocationIssues,
 } = require('../tools/_core/location-rules');
 const realOps = require('../tools/0-input/game-ops');
+const { createPublisher } = require('./publish');
 
 const THUMB_EXTS = ['.png', '.jpg', '.jpeg', '.webp'];
 
@@ -64,10 +65,11 @@ function listGames() {
 }
 
 /**
- * deps: { ops?, queue } — ops 기본은 실제 game-ops. 테스트는 setLocation 등을 주입한다.
+ * deps: { ops?, queue, publisher? } — ops 기본은 실제 game-ops, publisher 기본은 같은 queue를 쓰는 실제 publish.
+ * 테스트는 setLocation·publisher 등을 주입한다.
  * 반환: (req, res, url) => Promise<boolean> — 처리했으면 true.
  */
-function createApi({ ops = {}, queue }) {
+function createApi({ ops = {}, queue, publisher = createPublisher({ queue }) }) {
   const o = { ...realOps, ...ops };
 
   const routes = {
@@ -117,6 +119,8 @@ function createApi({ ops = {}, queue }) {
     },
 
     'GET /api/announcements': async () => ({ pending: queue.list() }),
+    'GET /api/publish': async () => publisher.getPublishPreview(),
+    'POST /api/publish': async () => publisher.publish(),
   };
 
   return async function handleApi(req, res, url) {

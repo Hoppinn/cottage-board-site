@@ -36,8 +36,8 @@ function serveFile(res, full) {
   });
 }
 
-function createAdminServer({ ops, queue = createQueue() } = {}) {
-  const handleApi = createApi({ ops, queue });
+function createAdminServer({ ops, queue = createQueue(), publisher } = {}) {
+  const handleApi = createApi({ ops, queue, ...(publisher ? { publisher } : {}) });
   return http.createServer(async (req, res) => {
     // URL 생성자는 '..'을 정규화하므로 판정은 원본 경로 문자열로 한다.
     const rawPath = decodeURIComponent((req.url || '/').split('?')[0]);

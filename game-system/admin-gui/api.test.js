@@ -90,3 +90,18 @@ test('moves that are not arrivals, or announce:false, queue nothing', async () =
   });
   assert.strictEqual(queue.list().length, 0);
 });
+
+test('GET/POST /api/publish delegate to the publisher', async () => {
+  const publisher = {
+    getPublishPreview: async () => ({ branch: 'main', files: ['a'], summary: ['게임 목록(엑셀)'] }),
+    publish: async () => ({ ok: false, step: 'push', message: 'GitHub에 올리지 못했어요' }),
+  };
+  await withServer({ queue: tempQueue(), publisher }, async port => {
+    const pre = await request(port, 'GET', '/api/publish');
+    assert.deepStrictEqual(pre.json.summary, ['게임 목록(엑셀)']);
+    const res = await request(port, 'POST', '/api/publish', {});
+    assert.strictEqual(res.status, 200);
+    assert.strictEqual(res.json.ok, false);
+    assert.strictEqual(res.json.step, 'push');
+  });
+});
