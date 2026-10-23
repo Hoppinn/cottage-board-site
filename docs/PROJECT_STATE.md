@@ -16,7 +16,8 @@
 
 - 🚩 **게임 관리 GUI** — 브랜치 `feat/game-admin-gui`. 설계 [spec](superpowers/specs/2026-10-23-game-admin-gui-design.md), 계획 [plan](superpowers/plans/2026-10-23-game-admin-gui.md), 진행 기록 `.superpowers/sdd/2026-10-23-game-admin-gui/progress.md`(Task 1·2·3·4·5·7·8·9 완료, 테스트 45/45).
   - 🏁 종료 조건: 바로가기 → 「발매후 도착예정」 7개 일괄 이동 → 사이트에 올리기 → 운영 위치 반영 + 회원 종 알림 1건.
-  - **다음 원자 작업**: Task 6(종 알림 테이블 `game_announcements`) — Plan은 2026-10-23 사용자에게 제시, **승인 대기**. 승인 뒤 코드 → 사용자 SQL 실행 → anon SELECT 확인 → 격리 행 알림 확인 → 브랜치 전체 리뷰(executing-plans Final Review) → main 병합.
+  - **다음 원자 작업**: Task 6 코드 — 테이블 `game_announcements`는 **사용자가 2026-10-23 SQL 실행 완료(=Plan 승인)**, anon SELECT HTTP 200·`content-range */0` 확인(없는 테이블 대조군 404). 남은 것: `docs/migrations/035_game_announcements.sql`에 실행한 SQL 그대로 기록 + `getMyNotifications`·`_renderNotifItem` 구현 + db-schema·js-api 갱신 → 격리 행 알림 확인(anon DELETE 정책 없음 → 테스트 행은 대시보드에서 삭제) → 브랜치 전체 리뷰 → main 병합. 그 뒤 구독 AI 번역 폴백.
+  - 키: `.env`에 `BGG_API_TOKEN` 입력·검증 완료(xmlapi2 thing HTTP 200). Anthropic 키는 불필요.
   - 병합 시점 사용자 결정 대기: 「Task 6·리뷰 후 병합」(추천) vs 「지금 병합해 위치 이동 먼저」(알림은 테이블 생길 때까지 대기열에 보존).
   - **후속(사용자 결정 2026-10-23)**: 설명 번역 경로를 API 전용에서 순차 폴백으로 — ①`claude -p`(Claude Code 구독) ②`codex exec`(ChatGPT Plus) ③전부 실패 시 비워 둔다(사이트는 한 줄 소개·게임 설명 칸만 숨김, `game-sheet.js` 조건부 렌더). API 키 경로·번역기는 쓰지 않기로 사용자 확정(2026-10-23). 단순 번역기는 불가 — `description-translator.js`가 400자 압축 번역 + 큐레이터 한 문장 요약(summaryKo)을 하므로. 두 CLI는 설치 확인(`~/.local/bin/claude`, nvm `codex`), WSL 로그인 상태는 미확인. 콘솔 크레딧 US$0.00이라 사용자는 충전하지 않기로.
   - 환경 메모: 이 WSL 사본은 `npm ci --cache $TMPDIR/npm-cache` 필요(샌드박스에서 ~/.npm 읽기 전용). 브라우저 검증은 Playwright headless(ubuntu24.04 override, libnss3 등 로컬 추출, 프록시는 username/password 분리 전달).
