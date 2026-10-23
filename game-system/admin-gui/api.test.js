@@ -8,11 +8,11 @@ const path = require('path');
 const { createAdminServer } = require('./server');
 const { createQueue } = require('./announce-queue');
 
-function request(port, method, rawPath, body) {
+function request(port, method, rawPath, body, extraHeaders = {}) {
   return new Promise((resolve, reject) => {
     const data = body === undefined ? null : Buffer.from(JSON.stringify(body));
     const req = http.request({ host: '127.0.0.1', port, method, path: rawPath,
-      headers: data ? { 'content-type': 'application/json', 'content-length': data.length } : {} }, res => {
+      headers: { ...(data ? { 'content-type': 'application/json', 'content-length': data.length } : {}), ...extraHeaders } }, res => {
       // 청크를 문자열로 하나씩 붙이면 청크 경계에 걸린 한글이 깨진다 — 디코더에 맡긴다.
       res.setEncoding('utf8');
       let text = '';
@@ -140,4 +140,21 @@ test('POST /api/manual and /api/thumb pass through to the save functions', async
     assert.strictEqual(res, 200);
   });
   assert.deepStrictEqual(calls, [['manual', '테베', 2], ['thumb', '테베', '.png', 3]]);
+});
+
+test('other websites cannot drive the API', async () => {
+  let moved = 0;
+  const ops = { setLocation: async () => { moved++; return { from: '전략', to: '가족' }; } };
+  await withServer({ ops, queue: tempQueue() }, async port => {
+    const body = { names: ['테베'], location: '가족', announce: false };
+    const foreign = await request(port, 'POST', '/api/locations', body, { origin: 'https://evil.example' });
+    assert.strictEqual(foreign.status, 403);
+    // DNS rebinding: 남의 도메인이 127.0.0.1로 풀려도 Host 헤더는 그 도메인이다.
+    const rebound = await request(port, 'GET', '/api/games', undefined, { host: `evil.example:${port}` });
+    assert.strictEqual(rebound.status, 403);
+    assert.strictEqual(moved, 0);
+    const own = await request(port, 'POST', '/api/locations', body, { origin: `http://127.0.0.1:${port}` });
+    assert.strictEqual(own.status, 200);
+    assert.strictEqual(moved, 1);
+  });
 });

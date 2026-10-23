@@ -36,6 +36,17 @@ function serveFile(res, full) {
   });
 }
 
+// 브라우저에 열린 다른 사이트가 이 서버로 요청을 보내 위치 변경·올리기를 실행하지 못하게 한다.
+// ①Host가 이 PC 주소가 아니면 거부(DNS rebinding — 남의 도메인이 127.0.0.1로 풀리는 경우)
+// ②Origin이 붙어 왔는데 이 서버가 아니면 거부(다른 탭의 fetch·form POST). Origin 없음 = 브라우저 밖(curl·테스트).
+function isForeignRequest(req) {
+  const host = req.headers.host || '';
+  if (!/^(127\.0\.0\.1|localhost)(:\d+)?$/.test(host)) return true;
+  const origin = req.headers.origin;
+  if (!origin) return false;
+  try { return new URL(origin).host !== host; } catch (_) { return true; }
+}
+
 function createAdminServer({ ops, queue = createQueue(), publisher } = {}) {
   const handleApi = createApi({ ops, queue, ...(publisher ? { publisher } : {}) });
   return http.createServer(async (req, res) => {
@@ -43,6 +54,7 @@ function createAdminServer({ ops, queue = createQueue(), publisher } = {}) {
     const rawPath = decodeURIComponent((req.url || '/').split('?')[0]);
     const url = new URL(req.url || '/', 'http://127.0.0.1');
     if (rawPath.startsWith('/api/')) {
+      if (isForeignRequest(req)) { res.writeHead(403); res.end('forbidden'); return; }
       if (!(await handleApi(req, res, url))) { res.writeHead(404); res.end('not found'); }
       return;
     }
