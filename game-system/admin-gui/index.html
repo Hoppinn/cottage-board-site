@@ -112,6 +112,10 @@
           <div class="row"><select id="editLocation"></select><label style="margin:0"><input type="checkbox" id="editAnnounce" checked> 도착이면 알림</label><button class="btn primary" id="editLocationSave" type="button">위치 저장</button></div>
         </fieldset>
         <fieldset>
+          <legend>약칭 <span class="help">(모임 막대·룰렛에 보이는 짧은 이름)</span></legend>
+          <div class="row"><input type="text" id="editAbbr" maxlength="6" style="max-width:160px"><span class="help" id="editAbbrNow" style="margin:0"></span><button class="btn" id="editAbbrSave" type="button">약칭 저장</button></div>
+        </fieldset>
+        <fieldset>
           <legend>BGG 연결</legend>
           <p class="help" id="editBggNow"></p>
           <div class="row"><input type="text" id="editBggInput" placeholder="BGG 주소/번호 (비우면 BGG 없음)"><button class="btn" id="editBggSave" type="button">다시 연결</button></div>

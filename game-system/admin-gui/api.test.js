@@ -109,3 +109,15 @@ test('GET/POST /api/publish delegate to the publisher', async () => {
     assert.strictEqual(res.json.step, 'push');
   });
 });
+
+test('POST /api/abbr saves through saveAbbr with the game\'s BGG id, and games carry their abbreviation', async () => {
+  const calls = [];
+  const ops = { saveAbbr: (game, abbr) => calls.push([game.bggId, game.ownedName, abbr]) };
+  await withServer({ queue: tempQueue(), ops }, async port => {
+    const res = await request(port, 'POST', '/api/abbr', { gameId: '테베', abbr: '테' });
+    assert.strictEqual(res.status, 200);
+    const list = await request(port, 'GET', '/api/games');
+    assert.strictEqual(list.json.games.find(g => g.id === '테베').abbr, '테베');
+  });
+  assert.deepStrictEqual(calls, [['30869', '테베', '테']]);
+});

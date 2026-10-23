@@ -193,6 +193,8 @@
     $('editLocation').innerHTML = locationOptions(game.locationValue);
     $('editBggNow').textContent = game.bggId ? `지금 연결: BGG ${game.bggId}` : '지금 BGG에 연결돼 있지 않아요.';
     $('editBggInput').value = '';
+    $('editAbbr').value = game.abbrSource === 'fallback' ? '' : game.abbr;
+    $('editAbbrNow').textContent = game.abbrSource === 'fallback' ? `지금은 자동(앞 2글자 「${game.abbr}」)` : '직접 정한 약칭 — 비우고 저장하면 자동으로 돌아가요';
     show(out, 'info', '룰·정리 방법을 불러오는 중…');
     try {
       const db = await ensureDb();
@@ -213,6 +215,17 @@
     try {
       const r = await api('POST', '/api/locations', { names: [editing.ownedName], location: $('editLocation').value, announce: $('editAnnounce').checked });
       show(out, 'ok', `위치를 저장했어요.${r.arrived.length ? ' 도착 알림은 사이트에 올릴 때 나가요.' : ''}`);
+      await reload();
+      out.insertAdjacentHTML('beforeend', '<div></div>');
+      await build(out.lastElementChild, { fetchBgg: false, translate: false });
+    } catch (e) { show(out, 'err', e.message); }
+  });
+
+  $('editAbbrSave').addEventListener('click', async () => {
+    const out = $('editResult');
+    try {
+      await api('POST', '/api/abbr', { gameId: editing.id, abbr: $('editAbbr').value.trim() });
+      show(out, 'ok', '약칭을 저장했어요.');
       await reload();
       out.insertAdjacentHTML('beforeend', '<div></div>');
       await build(out.lastElementChild, { fetchBgg: false, translate: false });

@@ -3,7 +3,11 @@ const fs = require('fs');
 const path = require('path');
 
 const { readJson } = require('../tools/_core/file-read-writer');
-const { COTTAGE_OWNED_GAMES_MASTER_PATH, LIBRARY_IMAGES_THUMB_DIR } = require('../tools/_core/paths');
+const {
+  COTTAGE_OWNED_GAMES_MASTER_PATH, LIBRARY_IMAGES_THUMB_DIR, GAME_ABBR_PATH, GAME_ABBR_BYNAME_PATH,
+} = require('../tools/_core/paths');
+const { resolveAbbrEntry } = require('../tools/_core/abbr-audit');
+const { saveAbbr } = require('../tools/_core/abbr-edit');
 const { getShelfGroupBySourceValue } = require('../config/shelf-locations');
 const {
   COOP_VALUE, listPickableLocations, isArrival, findLocationIssues,
@@ -48,8 +52,14 @@ function hasThumb(game) {
     .some(name => THUMB_EXTS.some(ext => fs.existsSync(path.join(LIBRARY_IMAGES_THUMB_DIR, name + ext))));
 }
 
+function readMasterGames() {
+  return Object.values(readJson(COTTAGE_OWNED_GAMES_MASTER_PATH, { games: {} }).games || {});
+}
+
 function listGames() {
-  const games = Object.values(readJson(COTTAGE_OWNED_GAMES_MASTER_PATH, { games: {} }).games || {});
+  const games = readMasterGames();
+  const abbrById = readJson(GAME_ABBR_PATH, {});
+  const abbrByName = readJson(GAME_ABBR_BYNAME_PATH, {});
   return {
     games: games.map(g => ({
       id: g.id,
@@ -60,6 +70,8 @@ function listGames() {
       // 위치 선택지(listPickableLocations)의 value와 같은 값 — 화면의 필터·기본 선택용. 해석 안 되면 ''.
       locationValue: g.location === COOP_VALUE ? COOP_VALUE : (getShelfGroupBySourceValue(g.location || '')?.label || ''),
       hasThumb: hasThumb(g),
+      // 사이트와 같은 판정(abbr-audit.resolveAbbrEntry). source가 fallback이면 앞 2글자 자동값.
+      ...(({ abbr, source }) => ({ abbr, abbrSource: source }))(resolveAbbrEntry(g, abbrById, abbrByName)),
     })),
     locations: listPickableLocations(),
     issues: findLocationIssues(games),
@@ -72,7 +84,7 @@ function listGames() {
  * 반환: (req, res, url) => Promise<boolean> — 처리했으면 true.
  */
 function createApi({ ops = {}, queue, publisher = createPublisher({ queue }) }) {
-  const o = { ...realOps, ...ops };
+  const o = { ...realOps, saveAbbr, ...ops };
 
   const routes = {
     'GET /api/health': async () => ({ ok: true }),
@@ -113,6 +125,14 @@ function createApi({ ops = {}, queue, publisher = createPublisher({ queue }) }) 
       if (announce && arrived.length) queue.enqueue({ kind: 'arrived', names: arrived, location });
       if (failure) { const e = new Error(failure.message); e.extra = { changed, arrived }; throw e; }
       return { changed, arrived };
+    },
+
+    'POST /api/abbr': async req => {
+      const { gameId, abbr } = await readJsonBody(req);
+      const game = readMasterGames().find(g => g.id === gameId);
+      if (!game) throw new Error('없는 게임: ' + gameId);
+      o.saveAbbr({ bggId: game.bggId || null, ownedName: game.ownedName }, abbr);
+      return { ok: true };
     },
 
     'POST /api/build': async req => {
