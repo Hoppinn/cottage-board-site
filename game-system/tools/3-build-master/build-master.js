@@ -1,5 +1,6 @@
 const { readJson, writeJson } = require("../_core/file-read-writer");
 const { readXlsxNormalized } = require("../0-input/from-file/import-from-xlsx");
+const { readManualFill } = require("../_core/manual-fill");
 
 const {
   COTTAGE_OWNED_GAMES_MASTER_PATH,
@@ -14,7 +15,8 @@ function toNumber(v, fallback = null) {
   return Number.isFinite(n) && n !== 0 ? n : fallback;
 }
 
-function buildMasterGame(xlsxRow, matchInfo, bggDetails, existing, invalidatedGames = []) {
+// manual: BGG 값이 없을 때만 쓰는 사람 입력값(_core/manual-fill.js).
+function buildMasterGame(xlsxRow, matchInfo, bggDetails, existing, invalidatedGames = [], manual = {}) {
   const bggId = matchInfo?.bggId ? String(matchInfo.bggId) : null;
   const d = bggDetails || {};
 
@@ -46,12 +48,12 @@ function buildMasterGame(xlsxRow, matchInfo, bggDetails, existing, invalidatedGa
     matchStatus: matchInfo?.status || "unmatched",
 
     yearPublished: toNumber(d.yearpublished),
-    minPlayers: toNumber(d.minplayers),
-    maxPlayers: toNumber(d.maxplayers),
-    playingTime: toNumber(d.playingtime),
-    minPlayTime: toNumber(d.minplaytime),
-    maxPlayTime: toNumber(d.maxplaytime),
-    minAge: toNumber(d.minage),
+    minPlayers: toNumber(d.minplayers) ?? toNumber(manual.minPlayers),
+    maxPlayers: toNumber(d.maxplayers) ?? toNumber(manual.maxPlayers),
+    playingTime: toNumber(d.playingtime) ?? toNumber(manual.playingTime),
+    minPlayTime: toNumber(d.minplaytime) ?? toNumber(manual.minPlayTime),
+    maxPlayTime: toNumber(d.maxplaytime) ?? toNumber(manual.maxPlayTime),
+    minAge: toNumber(d.minage) ?? toNumber(manual.minAge),
     difficulty: toNumber(d.averageweight),
     rating: toNumber(d.average),
     bayesRating: toNumber(d.bayesaverage),
@@ -67,7 +69,7 @@ function buildMasterGame(xlsxRow, matchInfo, bggDetails, existing, invalidatedGa
     notRecommendedPlayers: bggNotRecommended,
     image: d.image || "",
     thumbnail: d.thumbnail || "",
-    description: d.description || "",
+    description: d.description || manual.description || "",
 
     // Cottage XLSX fields
     difficultyWeight: xlsxRow.difficultyWeight || 0,
@@ -135,6 +137,7 @@ async function buildMaster() {
   const games = {};
   const now = new Date().toISOString();
   const invalidatedGames = [];
+  const manualFill = readManualFill();
 
   for (const row of rows) {
     const matchInfo = matchMap[row.ownedName] || null;
@@ -142,7 +145,7 @@ async function buildMaster() {
     const details = bggId ? bggDetails[bggId] || {} : {};
     const existing = existingMaster.games?.[row.id] || null;
 
-    games[row.id] = buildMasterGame(row, matchInfo, details, existing, invalidatedGames);
+    games[row.id] = buildMasterGame(row, matchInfo, details, existing, invalidatedGames, manualFill[row.id]);
   }
 
   writeJson(COTTAGE_OWNED_GAMES_MASTER_PATH, {
@@ -166,7 +169,7 @@ async function buildMaster() {
   }
 }
 
-module.exports = { buildMaster };
+module.exports = { buildMaster, buildMasterGame };
 
 if (require.main === module) {
   buildMaster().catch((err) => {

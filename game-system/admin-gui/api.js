@@ -8,6 +8,7 @@ const {
 } = require('../tools/_core/paths');
 const { resolveAbbrEntry } = require('../tools/_core/abbr-audit');
 const { saveAbbr } = require('../tools/_core/abbr-edit');
+const { readManualFill, saveManualFill, saveThumb, THUMB_MAX_BYTES } = require('../tools/_core/manual-fill');
 const { getShelfGroupBySourceValue } = require('../config/shelf-locations');
 const {
   COOP_VALUE, listPickableLocations, isArrival, findLocationIssues,
@@ -60,6 +61,7 @@ function listGames() {
   const games = readMasterGames();
   const abbrById = readJson(GAME_ABBR_PATH, {});
   const abbrByName = readJson(GAME_ABBR_BYNAME_PATH, {});
+  const manual = readManualFill();
   return {
     games: games.map(g => ({
       id: g.id,
@@ -70,6 +72,7 @@ function listGames() {
       // 위치 선택지(listPickableLocations)의 value와 같은 값 — 화면의 필터·기본 선택용. 해석 안 되면 ''.
       locationValue: g.location === COOP_VALUE ? COOP_VALUE : (getShelfGroupBySourceValue(g.location || '')?.label || ''),
       hasThumb: hasThumb(g),
+      manual: manual[g.id] || null,
       // 사이트와 같은 판정(abbr-audit.resolveAbbrEntry). source가 fallback이면 앞 2글자 자동값.
       ...(({ abbr, source }) => ({ abbr, abbrSource: source }))(resolveAbbrEntry(g, abbrById, abbrByName)),
     })),
@@ -84,7 +87,7 @@ function listGames() {
  * 반환: (req, res, url) => Promise<boolean> — 처리했으면 true.
  */
 function createApi({ ops = {}, queue, publisher = createPublisher({ queue }) }) {
-  const o = { ...realOps, saveAbbr, ...ops };
+  const o = { ...realOps, saveAbbr, saveManualFill, saveThumb, ...ops };
 
   const routes = {
     'GET /api/health': async () => ({ ok: true }),
@@ -132,6 +135,20 @@ function createApi({ ops = {}, queue, publisher = createPublisher({ queue }) }) 
       const game = readMasterGames().find(g => g.id === gameId);
       if (!game) throw new Error('없는 게임: ' + gameId);
       o.saveAbbr({ bggId: game.bggId || null, ownedName: game.ownedName }, abbr);
+      return { ok: true };
+    },
+
+    'POST /api/manual': async req => {
+      const { gameId, fields } = await readJsonBody(req);
+      if (!readMasterGames().some(g => g.id === gameId)) throw new Error('없는 게임: ' + gameId);
+      o.saveManualFill(gameId, fields || {});
+      return { ok: true };
+    },
+
+    // 본문 = 사진 바이트 그대로. ?gameId=&ext=.png
+    'POST /api/thumb': async (req, url) => {
+      const buf = await readBody(req, THUMB_MAX_BYTES + 1);
+      o.saveThumb(url.searchParams.get('gameId'), url.searchParams.get('ext'), buf);
       return { ok: true };
     },
 

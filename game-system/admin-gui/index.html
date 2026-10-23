@@ -116,6 +116,22 @@
           <div class="row"><input type="text" id="editAbbr" maxlength="6" style="max-width:160px"><span class="help" id="editAbbrNow" style="margin:0"></span><button class="btn" id="editAbbrSave" type="button">약칭 저장</button></div>
         </fieldset>
         <fieldset>
+          <legend>대표 사진</legend>
+          <p class="help" id="editThumbNow"></p>
+          <div class="row"><input type="file" id="editThumbInput" accept=".png,.jpg,.jpeg,.webp"><button class="btn" id="editThumbSave" type="button">사진 올리기</button></div>
+        </fieldset>
+        <fieldset id="manualBox">
+          <legend>기본 정보 <span class="help">(BGG에 없는 게임용 — BGG 값이 있으면 BGG가 우선)</span></legend>
+          <div class="row">
+            <div><label for="mMinPlayers">최소 인원</label><input type="text" id="mMinPlayers" inputmode="numeric" style="max-width:90px"></div>
+            <div><label for="mMaxPlayers">최대 인원</label><input type="text" id="mMaxPlayers" inputmode="numeric" style="max-width:90px"></div>
+            <div><label for="mPlayingTime">플레이 시간(분)</label><input type="text" id="mPlayingTime" inputmode="numeric" style="max-width:110px"></div>
+            <div><label for="mMinAge">최소 나이</label><input type="text" id="mMinAge" inputmode="numeric" style="max-width:90px"></div>
+          </div>
+          <label for="mDescription">설명</label><textarea id="mDescription"></textarea>
+          <div style="margin-top:8px"><button class="btn" id="manualSave" type="button">기본 정보 저장</button></div>
+        </fieldset>
+        <fieldset>
           <legend>BGG 연결</legend>
           <p class="help" id="editBggNow"></p>
           <div class="row"><input type="text" id="editBggInput" placeholder="BGG 주소/번호 (비우면 BGG 없음)"><button class="btn" id="editBggSave" type="button">다시 연결</button></div>

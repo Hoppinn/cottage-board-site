@@ -616,6 +616,8 @@ game-system/
                                     직접입력: abbrByName[custom_name] → 게임명 앞 2글자 폴백
     staging/                      ← 자동 생성 중간물 (재생성 가능)
     library/                      ← 최종 정제물 (사이트가 읽는 데이터)
+      human-input/missing-fill/manual-game-info.json ← BGG 없는 게임의 사람 입력 인원·시간·나이·설명(게임 관리 GUI가 씀). build-master가 BGG 값이 없을 때만 사용
+      images/thumb/{gameId}.{png|jpg|jpeg|webp} ← 직접 올린 대표 사진. BGG 사진보다 우선(build-output findLocalThumb)
   tools/                          ← 빌드/관리 스크립트
 ```
 

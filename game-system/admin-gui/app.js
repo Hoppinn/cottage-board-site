@@ -54,6 +54,7 @@
     $('pendingCount').hidden = !pending.length;
     $('pendingCount').textContent = pending.length;
     $('editNames').innerHTML = state.games.map(g => `<option value="${esc(g.ownedName)}">`).join('');
+    if (editing) refreshEditStatus();
   }
 
   // ── 탭 ─────────────────────────────────────────────
@@ -191,10 +192,13 @@
     editing = game;
     $('editBody').hidden = false;
     $('editLocation').innerHTML = locationOptions(game.locationValue);
-    $('editBggNow').textContent = game.bggId ? `지금 연결: BGG ${game.bggId}` : '지금 BGG에 연결돼 있지 않아요.';
     $('editBggInput').value = '';
     $('editAbbr').value = game.abbrSource === 'fallback' ? '' : game.abbr;
-    $('editAbbrNow').textContent = game.abbrSource === 'fallback' ? `지금은 자동(앞 2글자 「${game.abbr}」)` : '직접 정한 약칭 — 비우고 저장하면 자동으로 돌아가요';
+    refreshEditStatus();
+    const m = game.manual || {};
+    $('mMinPlayers').value = m.minPlayers ?? ''; $('mMaxPlayers').value = m.maxPlayers ?? '';
+    $('mPlayingTime').value = m.playingTime ?? ''; $('mMinAge').value = m.minAge ?? '';
+    $('mDescription').value = m.description ?? '';
     show(out, 'info', '룰·정리 방법을 불러오는 중…');
     try {
       const db = await ensureDb();
@@ -215,6 +219,51 @@
     try {
       const r = await api('POST', '/api/locations', { names: [editing.ownedName], location: $('editLocation').value, announce: $('editAnnounce').checked });
       show(out, 'ok', `위치를 저장했어요.${r.arrived.length ? ' 도착 알림은 사이트에 올릴 때 나가요.' : ''}`);
+      await reload();
+      out.insertAdjacentHTML('beforeend', '<div></div>');
+      await build(out.lastElementChild, { fetchBgg: false, translate: false });
+    } catch (e) { show(out, 'err', e.message); }
+  });
+
+  // 저장 뒤 reload()로 받은 최신 상태를 수정 화면의 안내 줄에 반영한다.
+  function refreshEditStatus() {
+    const game = state.games.find(g => g.id === editing?.id);
+    if (!game) return;
+    editing = game;
+    $('editAbbrNow').textContent = game.abbrSource === 'fallback' ? `지금은 자동(앞 2글자 「${game.abbr}」)` : '직접 정한 약칭 — 비우고 저장하면 자동으로 돌아가요';
+    $('editThumbNow').textContent = game.hasThumb ? '직접 올린 사진을 쓰는 중이에요(BGG 사진보다 우선).' : '직접 올린 사진이 없어요. BGG 사진을 써요.';
+    $('editBggNow').textContent = game.bggId ? `지금 연결: BGG ${game.bggId}` : '지금 BGG에 연결돼 있지 않아요.';
+  }
+
+  $('manualSave').addEventListener('click', async () => {
+    const out = $('editResult');
+    const nums = { minPlayers: 'mMinPlayers', maxPlayers: 'mMaxPlayers', playingTime: 'mPlayingTime', minAge: 'mMinAge' };
+    const fields = { description: $('mDescription').value };
+    for (const [k, id] of Object.entries(nums)) {
+      const v = $(id).value.trim();
+      if (v && !/^\d+$/.test(v)) return show(out, 'err', '인원·시간·나이는 숫자만 넣어 주세요.');
+      fields[k] = v;
+    }
+    try {
+      await api('POST', '/api/manual', { gameId: editing.id, fields });
+      show(out, 'ok', '기본 정보를 저장했어요.');
+      await reload();
+      out.insertAdjacentHTML('beforeend', '<div></div>');
+      await build(out.lastElementChild, { fetchBgg: false, translate: false });
+    } catch (e) { show(out, 'err', e.message); }
+  });
+
+  $('editThumbSave').addEventListener('click', async () => {
+    const out = $('editResult');
+    const file = $('editThumbInput').files[0];
+    if (!file) return show(out, 'err', '사진 파일을 골라 주세요.');
+    const ext = '.' + (file.name.split('.').pop() || '').toLowerCase();
+    try {
+      const res = await fetch(`/api/thumb?gameId=${encodeURIComponent(editing.id)}&ext=${encodeURIComponent(ext)}`, { method: 'POST', body: file });
+      const json = await res.json();
+      if (!res.ok || json.error) throw new Error(json.error || `HTTP ${res.status}`);
+      $('editThumbInput').value = '';
+      show(out, 'ok', '사진을 올렸어요.');
       await reload();
       out.insertAdjacentHTML('beforeend', '<div></div>');
       await build(out.lastElementChild, { fetchBgg: false, translate: false });

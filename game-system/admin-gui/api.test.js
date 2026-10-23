@@ -13,6 +13,8 @@ function request(port, method, rawPath, body) {
     const data = body === undefined ? null : Buffer.from(JSON.stringify(body));
     const req = http.request({ host: '127.0.0.1', port, method, path: rawPath,
       headers: data ? { 'content-type': 'application/json', 'content-length': data.length } : {} }, res => {
+      // 청크를 문자열로 하나씩 붙이면 청크 경계에 걸린 한글이 깨진다 — 디코더에 맡긴다.
+      res.setEncoding('utf8');
       let text = '';
       res.on('data', d => { text += d; });
       res.on('end', () => {
@@ -120,4 +122,22 @@ test('POST /api/abbr saves through saveAbbr with the game\'s BGG id, and games c
     assert.strictEqual(list.json.games.find(g => g.id === '테베').abbr, '테베');
   });
   assert.deepStrictEqual(calls, [['30869', '테베', '테']]);
+});
+
+test('POST /api/manual and /api/thumb pass through to the save functions', async () => {
+  const calls = [];
+  const ops = {
+    saveManualFill: (id, fields) => calls.push(['manual', id, fields.minPlayers]),
+    saveThumb: (id, ext, buf) => calls.push(['thumb', id, ext, buf.length]),
+  };
+  await withServer({ queue: tempQueue(), ops }, async port => {
+    assert.strictEqual((await request(port, 'POST', '/api/manual', { gameId: '테베', fields: { minPlayers: 2 } })).status, 200);
+    const res = await new Promise((resolve, reject) => {
+      const req = http.request({ host: '127.0.0.1', port, method: 'POST', path: '/api/thumb?gameId=' + encodeURIComponent('테베') + '&ext=.png' }, r => { r.resume(); r.on('end', () => resolve(r.statusCode)); });
+      req.on('error', reject);
+      req.end(Buffer.from('abc'));
+    });
+    assert.strictEqual(res, 200);
+  });
+  assert.deepStrictEqual(calls, [['manual', '테베', 2], ['thumb', '테베', '.png', 3]]);
 });
