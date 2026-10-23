@@ -11,17 +11,18 @@ const readline = require('readline');
 const path = require('path');
 const fs = require('fs');
 
-const { readJson, writeJson } = require('../_core/file-read-writer');
+const { readJson } = require('../_core/file-read-writer');
 const {
   BGG_MATCH_MAP_PATH,
   BGG_GAME_DETAILS_PATH,
-  FORCED_BGG_OVERRIDES_PATH,
   COTTAGE_OWNED_GAMES_MASTER_PATH,
   COTTAGE_OWNED_GAMES_XLSX_PATH,
 } = require('../_core/paths');
 const { readXlsxNormalized } = require('./from-file/import-from-xlsx');
 const { addOwnedGame, updateXlsxLocation } = require('./from-name/add-owned-game');
 const { autoResolveBggMatches } = require('../1-matcher/b_run-local-match');
+// BGG ID 확정 기록은 GUI와 같은 함수를 쓴다(game-ops.js).
+const { saveForced } = require('./game-ops');
 
 const args = process.argv.slice(2);
 const gameName = args.find(a => !a.startsWith('--'));
@@ -61,12 +62,6 @@ function runOptional(label, cmd) {
 
 function prompt(rl, question) {
   return new Promise(resolve => rl.question(question, resolve));
-}
-
-function saveForced(name, bggIdOrSkip) {
-  const overrides = readJson(FORCED_BGG_OVERRIDES_PATH, {});
-  overrides[name] = bggIdOrSkip;
-  writeJson(FORCED_BGG_OVERRIDES_PATH, overrides);
 }
 
 function isSimilar(a, b) {
