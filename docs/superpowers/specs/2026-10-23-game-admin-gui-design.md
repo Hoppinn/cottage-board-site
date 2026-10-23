@@ -35,7 +35,9 @@
 
 - 실행 환경: 프로젝트가 윈도우 D드라이브에서 **WSL Ubuntu `~/cottage-board-site`**로 옮겨졌다. 이 사본엔 `node_modules`도 `.env`도 없다 → 지금 `add-game`은 돌지 않는다. 필요한 키는 `ANTHROPIC_API_KEY`(설명 번역), `BGG_API_TOKEN`(BGG XML API).
 - `add-game.js`는 readline 대화형이며 단계: 로컬 매칭 → 후보 확인 → 위치 선택 → `addOwnedGame`/`updateXlsxLocation`(엑셀) → BGG fetch → `build-master` → `label-translator` → `description-translator`(Haiku) → `build-output`.
-- 위치값 분포(마스터 645개): 정상 선반 외에 대기 상태 `발매후 도착예정` 7·`배송중` 2·`구매예정` 1. **어떤 선반에도 안 맞는 값 9개**: `x`(테베), 빈칸 3(원드러스크리처·글렌모어연대기·딥씨크루), `따로` 3, `별도` 2.
+- 위치값 분포(마스터 645개): 대기 상태 `발매후 도착예정` 7·`배송중` 2·`구매예정` 1(각각 `SHELF_GROUPS`의 Z·Z-1·Z-2). `협력` 41개는 `SHELF_GROUPS`에 없지만 **의도된 값**이다 — 프론트(`game-sheet.js` `getGameShelfLabel`, `game-location.html`)가 난이도 2.5 기준으로 쉬운/어려운 협력으로 나눠 보여준다. **실제로 어느 선반에도 안 맞는 값 9개**: `x`(테베), 빈칸 3(원드러스크리처·글렌모어연대기·딥씨크루), `따로` 3, `별도` 2.
+- 사진: `build-output.js`가 `library/images/thumb/`의 로컬 사진(현재 13개)을 BGG 사진보다 우선 쓰고, 빌드가 지우지 않는다.
+- 수동 입력 자리: `paths.js`에 `LIBRARY_MISSING_FILL_DIR`(`library/human-input/missing-fill`, 폴더는 아직 없음)가 이미 정의돼 있다.
 - 공지: 신규 게임 종 알림(`getMyNotifications`의 `new_game`)은 `game_requests.added_at`에서만 나온다 — 요청 글이 있는 게임에만 쓸 수 있고 실제 사용은 6/20 1건. 위치 변경·`add-game`은 아무 알림도 내지 않는다.
 - 룰/정리법: `game_overrides` 테이블, `requests-admin.html` 「게임 관리」가 편집, 저장 함수는 `CottageDB.getGameOverride`/`upsertGameOverride`/`uploadOrganizerPhoto`.
 
@@ -50,13 +52,19 @@
 - 파이프라인 단계는 새로 쓰지 않는다. `add-game.js`의 대화형 부분만 걷어낸 **비대화형 함수**(매칭 후보 조회, BGG ID 확정, 위치 저장, 빌드 실행)를 `game-system/tools/` 안에 만들고, CLI와 GUI가 둘 다 그것을 부른다. CLI 동작은 유지.
 - 룰/정리법 저장은 `CottageDB`의 기존 세 함수를 그대로 쓴다. 테이블에 쓰는 코드가 두 벌이 되지 않게 한다.
 - 약칭은 두 정본 JSON(`game-abbr.json`, `game-abbr-byname.json`)에만 쓰고, 같은 게임을 양쪽에 등록하지 않는다(PROJECT_STRUCTURE §7 약칭 운영 원칙).
-- 위치는 `shelf-locations.js`의 `SHELF_GROUPS` 안에서만 고르게 한다. 자유 입력을 막아 `x`·`따로` 같은 값이 다시 안 생기게 한다.
+- 위치는 `shelf-locations.js`의 `SHELF_GROUPS` + `협력`(기존 41개와 같은 자동 분기값) 안에서만 고르게 한다. 자유 입력을 막아 `x`·`따로` 같은 값이 다시 안 생기게 한다. `협력` 41개는 일괄 변환하지 않는다(사이트 표시가 바뀌므로).
+- **"도착" 정의**: 위치가 Z 계열(`incoming`/`shipping`/`to_buy`)에서 Z가 아닌 곳으로 바뀔 때. Z끼리의 이동(도착예정→배송중)은 알림 없음.
+- 「위치 확인 필요」 목록은 위 9개 기준(`협력` 제외).
 
 ### 4-3. BGG 없는 게임의 수동 정보 (내 판단, 반드시 포함)
-`build-master.js`는 인원·시간·사진·설명을 **BGG 데이터에서만** 채운다. BGG 없는 게임(현재 20개)에 그 값을 마스터 JSON에 직접 넣으면 다음 빌드에서 지워진다(PROJECT_STATE §5 BGG 영구 미연결 항목). → `game-data/source/2-cottage-manual/`에 사람이 관리하는 수동 정보 파일을 두고, `build-master`가 **BGG 값이 없을 때만** 그것을 쓴다. GUI는 그 파일에만 쓴다. 이걸로 PROJECT_STATE §5의 해당 항목이 닫힌다.
+`build-master.js`는 인원·시간·설명을 **BGG 데이터에서만** 채운다. BGG 없는 게임(현재 20개)에 그 값을 마스터 JSON에 직접 넣으면 다음 빌드에서 지워진다(PROJECT_STATE §5 BGG 영구 미연결 항목). → 이미 정의된 `LIBRARY_MISSING_FILL_DIR`에 사람이 관리하는 수동 정보 파일을 두고, `build-master`가 **BGG 값이 없을 때만** 그것을 쓴다. GUI는 그 파일에만 쓴다. **사진은 이 파일에 넣지 않고** 기존 로컬 사진 경로(`library/images/thumb/`, `findLocalThumb`)에 저장한다 — 사진 경로를 두 벌 만들지 않는다. 이걸로 PROJECT_STATE §5의 해당 항목이 닫힌다.
 
 ### 4-4. 알림 저장소 (내 판단, DB 변경이라 실행 전 Plan·승인 필요)
-`game_requests`에 가짜 요청 행을 넣으면 요청 게시판에 섞이므로 쓰지 않는다. 작은 공지 테이블(예: `game_announcements` — 종류 `new`/`arrived`, 게임 이름 목록, 위치, 시각)을 새로 만들고 `getMyNotifications`가 기존 `new_game`과 같은 방식(읽음 키·`newGameSeenAt` 지평선)으로 읽는다. 알림 문구·카드는 기존 `new_game` 렌더(`kakao-auth.js`)를 확장한다. RLS 상태 명시 + anon SELECT 확인은 CLAUDE.md 규칙대로.
+`game_requests`에 가짜 요청 행을 넣으면 요청 게시판에 섞이므로 쓰지 않는다. 작은 공지 테이블(예: `game_announcements` — 종류 `new`/`arrived`, 게임 이름 목록, 위치, 시각)을 새로 만들고 `getMyNotifications`가 기존 `new_game`과 같은 방식(읽음 키·`newGameSeenAt` 지평선)으로 읽는다. 알림 문구·카드는 기존 `new_game` 렌더(`kakao-auth.js`)를 확장한다. RLS 상태 명시 + anon SELECT 확인은 CLAUDE.md 규칙대로. 받는 사람은 기존 `new_game`과 같이 **로그인 회원 전체**(요청자·좋아요 회원만 골라 보내지 않음).
+
+### 4-5. 사이트에 올리기 안전장치 (내 판단)
+- 커밋은 게임 데이터 경로(`game-system/game-data/`, 약칭 JSON, 로컬 사진)만 스테이징한다. 다른 경로에 바뀐 게 있어도 건드리지 않고 함께 커밋하지 않는다.
+- push 전에 원격을 받아와(`fetch`) 로컬 `main`이 뒤처져 있으면 올리지 않고 평문으로 알린다. 자동 병합은 하지 않는다.
 
 ## 5. 빌더에게 맡기는 것
 - 로컬 서버 구현(Node 내장 `http` 권장, 새 의존성 최소), 화면 레이아웃·디자인, 진행 표시 방식.
