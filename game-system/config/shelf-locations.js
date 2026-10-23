@@ -115,6 +115,14 @@ const SHELF_GROUPS = [
     sourceValues: ["방탈출", "escape_room", "escape room"]
   },
   {
+    // 사용자 확인(2026-10-23): 「따로」는 실제 선반 이름. 「별도」는 같은 선반의 다른 표기로 본다.
+    id: "separate",
+    code: "G",
+    label: "따로 보관",
+    parentId: null,
+    sourceValues: ["따로", "별도", "따로 보관", "separate"]
+  },
+  {
     id: "incoming",
     code: "Z",
     label: "발매후 도착예정",

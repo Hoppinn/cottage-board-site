@@ -5296,9 +5296,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "별도",
-      "shelfLabel": "별도",
-      "shelfFullLabel": "별도",
+      "shelfGroupId": "separate",
+      "shelfLabel": "따로 보관",
+      "shelfFullLabel": "따로 보관",
       "difficultyId": "heavy_mania",
       "difficultyWeight": 3.04,
       "moodTags": [
@@ -24865,9 +24865,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "별도",
-      "shelfLabel": "별도",
-      "shelfFullLabel": "별도",
+      "shelfGroupId": "separate",
+      "shelfLabel": "따로 보관",
+      "shelfFullLabel": "따로 보관",
       "difficultyId": "kids",
       "difficultyWeight": 1,
       "moodTags": [
@@ -29402,9 +29402,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "따로",
-      "shelfLabel": "따로",
-      "shelfFullLabel": "따로",
+      "shelfGroupId": "separate",
+      "shelfLabel": "따로 보관",
+      "shelfFullLabel": "따로 보관",
       "difficultyId": "kids",
       "difficultyWeight": 1,
       "moodTags": [
@@ -42747,9 +42747,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "따로",
-      "shelfLabel": "따로",
-      "shelfFullLabel": "따로",
+      "shelfGroupId": "separate",
+      "shelfLabel": "따로 보관",
+      "shelfFullLabel": "따로 보관",
       "difficultyId": "light_family",
       "difficultyWeight": 2.15,
       "moodTags": [],
@@ -54030,9 +54030,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "따로",
-      "shelfLabel": "따로",
-      "shelfFullLabel": "따로",
+      "shelfGroupId": "separate",
+      "shelfLabel": "따로 보관",
+      "shelfFullLabel": "따로 보관",
       "difficultyId": "kids",
       "difficultyWeight": 1,
       "moodTags": [

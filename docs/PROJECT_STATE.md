@@ -32,6 +32,7 @@
 | `record_complete` 분석 이벤트 | 운영 URL의 비관리자 계정으로 기록 저장 시 `page_events`에 쌓이는지 | [db-schema.md](db-schema.md) `page_events`. 관리자 플래그 또는 localhost에서는 의도적으로 추적되지 않으므로 다른 기기/시크릿 창의 실제 비관리자 계정이 필요하다. |
 | 업적 2건 | 게임평 진행도, 기존 기록에 사진·참여자 수정으로 임계값을 넘겼을 때 업적이 즉시 반영되는지 | 커밋 `22488d7`, `7a1b68d`. 브라우저 실확인만 남음. |
 | cotton조(`4922210631`) 모임 등록 실패 | 9/16~17 플래너 진입 7회 이상, `meeting_votes` 0행. 같은 기간 타 회원 등록은 정상이고, `a03ab910`(게임 미선택 등록) 배포 뒤 새로고침해도 실패했다는 사용자 보고(10/23) — 다른 원인이다. ⟹ 영향: 그 회원이 모임 참여 표시에 영영 안 뜸 | 본인 기기에서 저장 시 화면·콘솔 에러를 받거나 같이 재현. 저장 경로는 `club-schedule.html` → `upsertMeetingVote`. 저장 성공 이벤트가 없어 `page_events`로는 실패 지점을 못 가린다. |
+| 선반 목록 두 벌 | `game-system/config/shelf-locations.js`의 `SHELF_GROUPS`와 `pages/game/game-location.html`의 `SECTIONS`가 같은 선반을 따로 정의한다(2026-10-23 「따로 보관」 G 추가 때 두 곳 모두 수정). ⟹ 영향: 한쪽만 바꾸면 위치 화면에서 선반이 빠지거나 라벨이 달라짐 | 지금은 `node scripts/verify-shelf-lists.js`가 id·code 일치를 검사한다. 근본 해소는 위치 화면이 빌드 산출물의 선반 목록을 읽게 하는 것. |
 | 추천게임 코스·QR | 실제 폰에서 sticky 바가 헤더 아래에 붙는지, 배포 뒤 QR이 코스 탭까지 이동하는지 | 배포된 URL에서만 확인 가능. |
 
 ## 4. BACKLOG — 사용자 판단 대기 (자동 착수 금지)
