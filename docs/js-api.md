@@ -1,6 +1,6 @@
 # JS API 레퍼런스 — 코티지보드
 
-최종 갱신: 2026-09-10 (플레이기록 stable author display·non-null participant 입력 보강 계약, canonical functional-surface ancestor request 계약 명시) / 2026-08-31 (028 프로필 보드 API 4종·프로필 보드 UI/진입 계약·날짜별 `hard_game_learning_ok` 반영) / 2026-08-30 (`getMeetingVotes`/`upsertMeetingVote`에 027 기타 게임 유형의 안정 코드·표시 문구 분리 계약 반영) / 2026-08-29 (`normalizeMemberIntroTimes`/`formatMemberIntroTimes` 추가, `submitMemberIntro`의 30분 슬롯·커스텀 유형 계약 반영)
+최종 갱신: 2026-10-23 (닉네임 변경 단일 경로 `updateNickname`, `getMeetingVotes` 현재 닉네임 표시, `upsertProfile` 닉네임 비덮어쓰기) / 2026-09-10 (플레이기록 stable author display·non-null participant 입력 보강 계약, canonical functional-surface ancestor request 계약 명시) / 2026-08-31 (028 프로필 보드 API 4종·프로필 보드 UI/진입 계약·날짜별 `hard_game_learning_ok` 반영) / 2026-08-30 (`getMeetingVotes`/`upsertMeetingVote`에 027 기타 게임 유형의 안정 코드·표시 문구 분리 계약 반영) / 2026-08-29 (`normalizeMemberIntroTimes`/`formatMemberIntroTimes` 추가, `submitMemberIntro`의 30분 슬롯·커스텀 유형 계약 반영)
 
 ---
 
@@ -105,9 +105,10 @@ return data || [];
 | `hasUserCurious(gameId, userId)` | 궁금해요 여부 확인 |
 | `getVisitorStats()` | 방문자 통계 |
 | `startSession(userId)` | 체류 세션 시작. page_sessions.referrer = URL의 `utm_source` 우선, 없으면 `document.referrer` hostname |
-| `upsertProfile(userId, nickname, realName, visitCount)` | 프로필 upsert + 방문 카운트 + 시간 반영. **2왕복이다** — ①upsert(닉네임 보호·`real_name`·`photo_url`·`first_source`, SELECT가 필요해 RPC로 못 옮김) ②`increment_profile_counters` RPC로 숫자 카운터 증가(012, #22). ⚠️ **`visitCount` 인자는 이제 플래그로만 쓴다** — `undefined`면 방문을 올리지 않고, 값을 줘도 그 숫자는 무시된다(실제 증가는 DB에서 원자적으로 `+1`). 예전엔 SELECT 실패 시 이 값을 fallback으로 썼으나 RPC가 DB 기준으로 올리므로 불필요해졌다. 업적 `visit` 축에 넘기는 카운트도 RPC 반환값에서 온다 |
+| `upsertProfile(userId, nickname, realName, visitCount)` | 프로필 upsert + 방문 카운트 + 시간 반영. **이미 저장된 `nickname`은 덮지 않는다**(2026-10-23) — 넘어오는 값은 그 기기의 localStorage라 다른 기기에서 바꾼 새 닉네임보다 오래됐을 수 있다. 닉네임이 비어 있는 신규 행에만 쓴다. **2왕복이다** — ①upsert(닉네임 보호·`real_name`·`photo_url`·`first_source`, SELECT가 필요해 RPC로 못 옮김) ②`increment_profile_counters` RPC로 숫자 카운터 증가(012, #22). ⚠️ **`visitCount` 인자는 이제 플래그로만 쓴다** — `undefined`면 방문을 올리지 않고, 값을 줘도 그 숫자는 무시된다(실제 증가는 DB에서 원자적으로 `+1`). 예전엔 SELECT 실패 시 이 값을 fallback으로 썼으나 RPC가 DB 기준으로 올리므로 불필요해졌다. 업적 `visit` 축에 넘기는 카운트도 RPC 반환값에서 온다 |
 | `getAllProfiles()` | 전체 프로필. 어드민 회원목록 + **identity 별칭→user_id 해석**(game-reviews 허브 `_profileNickMap`·index-page 홈 최근 플레이 참여자 이름 클릭). profiles 행에 같은 `user_id`의 `member_intros.nickname`을 `public_nickname`으로 보강한다. 참여자 링크는 `nickname`·`real_name`·`public_nickname`의 `normalizeNick` 키를 함께 쓰되, 키가 서로 다른 user_id에 중복되면 연결하지 않는다. ⚠️ 반환 행의 kakao 키는 **`user_id`**(profiles엔 `id` 컬럼 없음) |
-| `checkNicknameAvailable(nickname, userId)` | 닉네임 중복 확인 |
+| `checkNicknameAvailable(nickname, userId)` | 닉네임 중복 확인. `profiles.nickname`과 `member_intros.nickname` 둘 다에서 다른 회원과 겹치는지 본다 |
+| `updateNickname(userId, nickname)` | **닉네임 변경의 유일한 경로**(헤더 「닉네임 변경」·자기소개 저장). `profiles.nickname`과 `member_intros.nickname`을 함께 바꾼다 → `{success}` / `{error}`. 중복 확인은 호출부가 먼저 한다. 로컬 반영은 `window.applyLocalNickname(user, nickname)`(kakao-auth.js) |
 | `getPageAnalytics()` | 페이지 분석 (어드민용) — 전체 `page_sessions` 90일(≤2만행) |
 | `getUserPageSessions(userId, daysBack=90)` | **한 회원**의 `page_sessions` 필터 조회 (P4 보드 오너 섹션). `page`는 **정규화 전 원문** → 소비처가 `MemberAnalytics.normalizePageKey`로 접는다(#14). 전원치를 보드마다 받는 낭비 회피 |
 | `getUserEvents(userId, daysBack=90)` | **한 회원**의 `page_events` 필터 조회 (P4). `[{event_type, created_at, user_id, session_key}]` |
@@ -159,7 +160,7 @@ return data || [];
 | `removeGamePref(userId, gameId, customName, table)` | 취향보드: 항목 삭제 |
 | `getCustomPrefSuggestions()` | 취향보드: 두 테이블 전체에서 distinct custom_name 목록 반환 |
 | `updateUserBio(userId, bio)` | profiles.bio 업데이트 — 취향보드/회원 자기소개/모임 보드가 공유하는 한줄소개 SSOT. 한쪽에서 호출하면 나머지 모든 화면에 즉시 반영됨 |
-| `getMeetingVotes(startDate, endDate)` | 모임 플래너: 날짜 범위 내 전체 투표 조회. startDate/endDate: 'YYYY-MM-DD'. 각 행에 `game_style`, `game_style_custom`, `game_depth`, `play_traits`, `recruitment_message` 포함. 027부터 `game_style='other'`이면 `game_style_custom`에 최대 30자의 표시 문구가 있다 |
+| `getMeetingVotes(startDate, endDate)` | 모임 플래너: 날짜 범위 내 전체 투표 조회. startDate/endDate: 'YYYY-MM-DD'. 각 행에 `game_style`, `game_style_custom`, `game_depth`, `play_traits`, `recruitment_message` 포함. 027부터 `game_style='other'`이면 `game_style_custom`에 최대 30자의 표시 문구가 있다. **반환 `nickname`은 저장된 등록 시점 복사본이 아니라 현재 공개 닉네임**(`member_intros.nickname` → `profiles.nickname` → 저장값 순, 2026-10-23)이다. 원본 행은 고치지 않는다 |
 | `getPartySize(vote)` | 그 등록 1건의 **방문 인원** = `1 + guest_count`(동반 인원). null·문자열·음수·NaN 전부 1로 방어 |
 | `sumWeeklyPartySize(votes)` | **여러 날짜에 걸친 인원** — 유저별 **최대** 인원을 합산한다(월 3명·수 1명이면 그 사람 몫은 3). `sumPartySize`와 **다른 질문**이다: 저건 "그날 몇 명", 이건 "이 기간에 올 사람이 몇 명". 홈 상태 문구(*"N명이 기다리고 있어요"*)가 유일한 소비처. 동반 0이면 옛 `Set(user_id).size`와 동일 |
 | `sumPartySize(votes)` | votes 배열의 총 방문 인원. `user_id` 기준 dedupe 후 `getPartySize` 합산 — 옛 `Set(user_id).size`의 의미를 보존하면서 지인만 더한다. 🚨 **「N명」을 세는 자리는 전부 이것만 쓴다** — `.length`로 세면 그 화면만 조용히 다른 답을 낸다(#15 `visitorKey` 사건과 동형). 현재 소비처: 플래너 3곳+`calcOverlap`/`calcSummary`, 이날 상세 4곳, 홈 이번주 모임 1곳 |

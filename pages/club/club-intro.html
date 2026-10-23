@@ -589,7 +589,20 @@
     document.getElementById('introWizardDoneBtn').addEventListener('click', closeWizard);
     wizard.addEventListener('click', e => { if (e.target === wizard) closeWizard(); });
     wizardPrev.addEventListener('click', () => showWizardStep(Math.max(1, wizardStep - 1)));
-    wizardNext.addEventListener('click', () => { if (validateStep(wizardStep)) showWizardStep(wizardStep + 1); });
+    // 자기소개 닉네임은 계정 닉네임과 같은 값이라(updateNickname) 다른 회원과 겹치면 안 된다.
+    async function isIntroNicknameAvailable() {
+      const u = getCurrentUser();
+      const field = document.getElementById('introNickname');
+      if (!u?.id || !window.CottageDB?.checkNicknameAvailable) return true;
+      const ok = await window.CottageDB.checkNicknameAvailable(field.value.trim(), u.id);
+      if (!ok) stepFail('이미 다른 회원이 쓰는 닉네임이에요. 다른 닉네임을 입력해주세요.', field);
+      return ok;
+    }
+    wizardNext.addEventListener('click', async () => {
+      if (!validateStep(wizardStep)) return;
+      if (wizardStep === 1 && !(await isIntroNicknameAvailable())) return;
+      showWizardStep(wizardStep + 1);
+    });
     document.addEventListener('keydown', e => { if (e.key === 'Escape' && wizard.classList.contains('is-open')) closeWizard(); });
 
     // '딱히 없음/장르 무관'만 같은 그룹의 다른 답과 동시에 선택하지 않는다.
@@ -918,10 +931,19 @@
       if (!answers.clocktowerPreference) return fail('시계탑 선호를 선택해주세요.', document.querySelector('[data-group="clocktowerPreference"]'));
       if (answers.expectation.length < 10) return fail('모임에서 기대하는 점이나 함께하고 싶은 방식을 10자 이상 적어주세요.', document.getElementById('introExpectation'));
 
+      const nicknameFree = await window.CottageDB?.checkNicknameAvailable?.(nickname, u.id) ?? true;
+      if (!nicknameFree) return fail('이미 다른 회원이 쓰는 닉네임이에요. 1단계에서 닉네임을 바꿔주세요.');
+
       const btn = document.getElementById('introSubmitBtn');
       btn.disabled = true;
       btn.textContent = '저장 중...';
       const result = await window.CottageDB?.submitMemberIntro?.(String(u.id), answers) || { error:'api_unavailable' };
+      // 자기소개에서 바꾼 닉네임을 계정 닉네임에도 반영한다 — 안 하면 모임 등록·기록엔 옛 이름이 저장된다.
+      // 실패해도 자기소개 저장은 이미 끝났으므로 완료 화면은 그대로 보여준다(updateNickname이 로그를 남김).
+      if (result.success) {
+        const synced = await window.CottageDB?.updateNickname?.(String(u.id), nickname);
+        if (synced?.success && u.nickname !== nickname) window.applyLocalNickname?.(u, nickname);
+      }
 
       btn.disabled = false;
       btn.textContent = result.success ? '모임원 프로필 수정하기' : '모임원 프로필 저장하고 쿠폰 받기';

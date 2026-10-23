@@ -132,7 +132,8 @@ function initKakaoAuth() {
             localStorage.setItem(`cottage_custom_photo_${user.id}`, snap.photo_url);
             changed = true;
           }
-          if (snap.nickname && snap.nickname !== user.kakaoNickname && snap.nickname !== user.nickname) {
+          // DB 닉네임이 정본 — 카카오 기본명과 같더라도 이 기기의 옛 커스텀 닉네임보다 우선한다.
+          if (snap.nickname && snap.nickname !== user.nickname) {
             user.nickname = snap.nickname;
             localStorage.setItem(`cottage_custom_nick_${user.id}`, snap.nickname);
             changed = true;
@@ -205,6 +206,15 @@ function kakaoLogout() {
 }
 
 
+// DB에 저장된 새 닉네임을 이 기기의 로그인 정보·헤더에 반영한다(헤더 변경·자기소개 저장 공용).
+function applyLocalNickname(user, nickname) {
+  user.nickname = nickname;
+  localStorage.setItem(`cottage_custom_nick_${user.id}`, nickname);
+  localStorage.setItem(KAKAO_USER_KEY, JSON.stringify(user));
+  updateLoginUI(user);
+}
+window.applyLocalNickname = applyLocalNickname;
+
 async function promptNicknameChange() {
   const user = getKakaoUser();
   if (!user) return;
@@ -222,16 +232,13 @@ async function promptNicknameChange() {
       return;
     }
   }
-user.nickname = trimmed;
-localStorage.setItem(`cottage_custom_nick_${user.id}`, trimmed);
-localStorage.setItem(KAKAO_USER_KEY, JSON.stringify(user));
-updateLoginUI(user);
-
-await window.CottageDB?.upsertProfile(
-  String(user.id),
-  trimmed,
-  user.kakaoNickname || null
-);
+  // 계정·자기소개 닉네임을 함께 바꾼다. DB 저장이 실패하면 이 기기에만 바뀐 것처럼 보이지 않게 멈춘다.
+  const saved = await window.CottageDB?.updateNickname?.(String(user.id), trimmed);
+  if (!saved?.success) {
+    alert('닉네임을 저장하지 못했어요. 잠시 후 다시 시도해주세요.');
+    return;
+  }
+  applyLocalNickname(user, trimmed);
 
 const panel = document.getElementById('profilePanel');
 if (panel && !panel.classList.contains('profile-panel--readonly')) {

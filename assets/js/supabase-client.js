@@ -1574,19 +1574,17 @@ window._cottageSess = (function () {
       const accumulated = skipAnalyticsForUser ? 0 : _popAccumulatedSecs(userId);
       const { data, error: selectError } = await db.from('profiles').select('visit_count, total_minutes, today_seconds, today_date, real_name, is_banned, nickname, photo_url').eq('user_id', userId).maybeSingle();
       _isBanned = !!data?.is_banned;
-      // DB에 이미 커스텀 닉네임이 있고 새로 들어온 값이 Kakao 기본명과 같으면 기존 보호
-      // realName이 null/empty일 때 DB의 real_name으로 fallback
-      const effectiveRealName = realName || data?.real_name || null;
-      const nickToSave = (data?.nickname && effectiveRealName && data.nickname !== effectiveRealName && nickname === effectiveRealName)
-        ? data.nickname
-        : nickname;
+      // 이미 저장된 닉네임은 절대 덮지 않는다. 이 함수는 접속 기록용이고, 넘어오는 nickname은
+      // 그 기기의 localStorage 값이라 다른 기기에서 바꾼 새 닉네임보다 오래됐을 수 있다.
+      // 닉네임 변경은 updateNickname만 한다. 조회 실패 시엔 판단 근거가 없으므로 닉네임을 싣지 않는다.
+      const nickToSave = data?.nickname || nickname;
       const isNewUser = !selectError && !data;
       // 숫자 카운터(total_minutes/today_seconds/visit_count)는 여기서 쓰지 않는다 —
       // 아래 원자적 증가 RPC가 담당한다(012, #22). upsert에 계산값을 실으면
       // select → 계산 → write가 되어 탭이 겹칠 때 증가분이 사라진다.
       const { error: upsertError } = await db.from('profiles').upsert({
         user_id: userId,
-        nickname: nickToSave,
+        ...(selectError ? {} : { nickname: nickToSave }),
         real_name: data?.real_name || realName || null,
         last_seen_at: new Date().toISOString(),
         ...(data?.photo_url ? { photo_url: data.photo_url } : {}),
@@ -1771,16 +1769,39 @@ window._cottageSess = (function () {
     } catch (err) { console.error('[getUserEvents]', err); return []; }
   }
 
+  // 공개 닉네임은 profiles·member_intros 두 곳에 있으므로 둘 다에서 다른 회원과 겹치는지 본다.
   async function checkNicknameAvailable(nickname, currentUserId) {
     try {
-      const { data, error } = await db.from('profiles')
-        .select('user_id')
-        .eq('nickname', nickname)
-        .neq('user_id', String(currentUserId))
-        .limit(1);
-      if (error) console.error('[checkNicknameAvailable]', error);
-      return !data?.length;
+      const [profileRes, introRes] = await Promise.all([
+        db.from('profiles').select('user_id').eq('nickname', nickname).neq('user_id', String(currentUserId)).limit(1),
+        db.from('member_intros').select('user_id').eq('nickname', nickname).neq('user_id', String(currentUserId)).limit(1),
+      ]);
+      if (profileRes.error) console.error('[checkNicknameAvailable:profiles]', profileRes.error);
+      if (introRes.error) console.error('[checkNicknameAvailable:member_intros]', introRes.error);
+      return !profileRes.data?.length && !introRes.data?.length;
     } catch (err) { console.error('[checkNicknameAvailable]', err); return true; }
+  }
+
+  // 닉네임 변경의 단일 경로. 계정 닉네임(profiles)과 공개 닉네임(member_intros)을 함께 바꾼다 —
+  // 한쪽만 바꾸면 화면마다 다른 이름이 보인다(2026-10-23 잼승/수야). 자기소개 행이 없으면
+  // member_intros update는 0행으로 끝난다. 중복 확인은 호출부가 checkNicknameAvailable로 먼저 한다.
+  async function updateNickname(userId, nickname) {
+    const uid = String(userId || '');
+    const nick = String(nickname || '').trim();
+    if (!uid || !nick) return { error: 'invalid' };
+    try {
+      const [profileRes, introRes] = await Promise.all([
+        db.from('profiles').update({ nickname: nick }).eq('user_id', uid),
+        db.from('member_intros').update({ nickname: nick }).eq('user_id', uid),
+      ]);
+      if (profileRes.error) console.error('[updateNickname:profiles]', profileRes.error);
+      if (introRes.error) console.error('[updateNickname:member_intros]', introRes.error);
+      if (profileRes.error || introRes.error) return { error: profileRes.error || introRes.error };
+      return { success: true };
+    } catch (err) {
+      console.error('[updateNickname]', err);
+      return { error: err };
+    }
   }
 
   async function getMyStats(userId, nickname) {
@@ -2233,6 +2254,7 @@ window._cottageSess = (function () {
     upsertProfile,
     getAllProfiles,
     checkNicknameAvailable,
+    updateNickname,
     getPageAnalytics,
     getEventCounts,
     getPageViewCounts,
@@ -2752,8 +2774,35 @@ window._cottageSess = (function () {
         .lte('vote_date', endDate)
         .order('vote_date');
       if (error) console.error('[getMeetingVotes]', error);
-      return data || [];
+      const votes = data || [];
+      // meeting_votes.nickname은 등록 시점 복사본이라 이후 닉네임 변경을 따라가지 않는다.
+      // 원본 행은 고치지 않고(js-api stable identity 계약) 표시값만 현재 공개 닉네임으로 바꾼다.
+      const currentNicks = await _getCurrentNicknames(votes.map(v => v.user_id));
+      for (const v of votes) {
+        const current = currentNicks.get(String(v.user_id));
+        if (current) v.nickname = current;
+      }
+      return votes;
     } catch (err) { console.error('[getMeetingVotes]', err); return []; }
+  }
+
+  // user_id → 현재 공개 닉네임. member_intros.nickname(공개 표시명 정본) → profiles.nickname 순.
+  // 조회 실패 시 빈 Map — 호출부는 저장된 닉네임을 그대로 쓴다.
+  async function _getCurrentNicknames(userIds) {
+    const ids = [...new Set((userIds || []).filter(Boolean).map(String))];
+    const map = new Map();
+    if (!ids.length) return map;
+    try {
+      const [profileRes, introRes] = await Promise.all([
+        db.from('profiles').select('user_id,nickname').in('user_id', ids),
+        db.from('member_intros').select('user_id,nickname').in('user_id', ids),
+      ]);
+      if (profileRes.error) console.error('[_getCurrentNicknames:profiles]', profileRes.error);
+      if (introRes.error) console.error('[_getCurrentNicknames:member_intros]', introRes.error);
+      for (const p of profileRes.data || []) if (p.nickname) map.set(String(p.user_id), p.nickname);
+      for (const i of introRes.data || []) if (i.nickname) map.set(String(i.user_id), i.nickname);
+    } catch (err) { console.error('[_getCurrentNicknames]', err); }
+    return map;
   }
 
   // 등록 1건 ≠ 방문 인원. 철수가 2명을 데려오면 등록은 1건이고 인원은 3명이다.
