@@ -662,4 +662,6 @@ node game-system/tools/4-label-translator/description-translator.js --summary
 node game-system/tools/5-build-output/build-output.js
 ```
 
+게임 추가·위치 변경의 비대화형 진입점은 `tools/0-input/game-ops.js`다(`parseBggInput`·`confirmBgg`·`addGame`·`setLocation`·`runPipeline`). `npm run add-game` CLI와 게임 관리 GUI가 같은 함수를 쓰며, 위치 선택 규칙(`협력` 허용·도착 판정·위치 확인 필요 목록)은 `tools/_core/location-rules.js`가 정본이다.
+
 핵심 원칙: BGG API는 실시간 호출하지 않는다. source → staging → library → output 레이어 분리. output만 사이트에서 읽는다.
