@@ -342,12 +342,13 @@
       const lines = [
         p.branch !== 'main' ? `⚠️ 지금 「${p.branch}」 브랜치예요. main에서만 올릴 수 있어요.` : null,
         p.summary.length ? `올라갈 것: ${p.summary.join(', ')} (파일 ${p.files.length}개)` : '올릴 게임 데이터 변경이 없어요.',
+        p.ahead ? `아직 GitHub에 못 올라간 커밋 ${p.ahead}개가 있어요 — 누르면 함께 올려요.` : null,
         p.pendingAnnouncements.length
           ? `보낼 알림 ${p.pendingAnnouncements.length}건: ` + p.pendingAnnouncements.map(a => `${a.kind === 'arrived' ? '도착' : '새 게임'} — ${a.names.join(', ')}`).join(' / ')
           : '보낼 알림 없음',
       ].filter(Boolean);
       show(el, 'info', lines.join('\n'));
-      $('publishGo').disabled = p.branch !== 'main' || !p.files.length;
+      $('publishGo').disabled = p.branch !== 'main' || !(p.files.length || p.ahead || p.pendingAnnouncements.length);
     } catch (e) { show(el, 'err', e.message); }
   }
   $('publishGo').addEventListener('click', async () => {

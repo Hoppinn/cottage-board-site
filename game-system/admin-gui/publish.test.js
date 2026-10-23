@@ -21,7 +21,7 @@ test('describeChanges speaks in plain words', () => {
   assert.ok(s.includes('게임 사진 2장'));
 });
 
-function fakeGit({ branch = 'main', behind = 0, pushFails = false, status = [` M ${XLSX}`] } = {}) {
+function fakeGit({ branch = 'main', behind = 0, ahead = 0, pushFails = false, status = [` M ${XLSX}`] } = {}) {
   const calls = [];
   return {
     calls,
@@ -29,6 +29,7 @@ function fakeGit({ branch = 'main', behind = 0, pushFails = false, status = [` M
     status: async () => status,
     fetch: async () => { calls.push('fetch'); },
     behindCount: async () => behind,
+    aheadCount: async () => ahead,
     add: async files => { calls.push('add:' + files.join(',')); },
     commit: async msg => { calls.push('commit'); return 'abc1234'; },
     push: async () => { calls.push('push'); if (pushFails) throw new Error('Authentication failed'); },
@@ -104,4 +105,34 @@ test('a failing pipeline check stops before commit', async () => {
   assert.strictEqual(r.ok, false);
   assert.strictEqual(r.step, 'check');
   assert.ok(!git.calls.includes('commit'));
+});
+
+test('after a failed push, publishing again pushes the waiting commit and sends the queue', async () => {
+  const queue = tempQueueWith(1);
+  let sent = 0;
+  const git = fakeGit({ status: [], ahead: 1 });
+  const p = createPublisher({ git, runCheck: async () => {}, insertAnnouncement: async () => { sent++; }, queue });
+  const r = await p.publish();
+  assert.strictEqual(r.ok, true);
+  assert.ok(git.calls.includes('push'));
+  assert.ok(!git.calls.includes('commit'));
+  assert.strictEqual(sent, 1);
+  assert.strictEqual(queue.list().length, 0);
+});
+
+test('with nothing to push, announcements left from an earlier publish are still sent', async () => {
+  const queue = tempQueueWith(2);
+  let sent = 0;
+  const git = fakeGit({ status: [] });
+  const p = createPublisher({ git, runCheck: async () => {}, insertAnnouncement: async () => { sent++; }, queue });
+  const r = await p.publish();
+  assert.strictEqual(r.ok, true);
+  assert.ok(!git.calls.includes('push'));
+  assert.strictEqual(sent, 2);
+});
+
+test('the preview reports commits waiting to be pushed', async () => {
+  const p = createPublisher({ git: fakeGit({ status: [], ahead: 2 }), runCheck: async () => {}, insertAnnouncement: async () => {}, queue: tempQueueWith(0) });
+  const r = await p.getPublishPreview();
+  assert.strictEqual(r.ahead, 2);
 });

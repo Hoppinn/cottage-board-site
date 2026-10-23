@@ -1,5 +1,6 @@
 // 「사이트에 올리기」 — 게임 데이터만 커밋해 main에 push하고, push가 성공한 뒤에만 종 알림을 보낸다.
 // 순서: main 확인 → 바뀐 게임 데이터 확인 → npm run check → fetch(GitHub이 앞서면 중단) → add → commit → push → 알림
+// 재시도: push가 실패해 커밋만 남았으면(ahead) 다시 누를 때 그 커밋을 push한다. 올릴 것이 없어도 대기열 알림은 보낸다.
 const fs = require('fs');
 const path = require('path');
 const { execFile, spawn } = require('child_process');
@@ -52,6 +53,7 @@ const realGit = {
   status: async () => (await gitCmd(['status', '--porcelain', '-uall'])).split('\n').filter(Boolean),
   fetch: async () => { await gitCmd(['fetch', 'origin', 'main']); },
   behindCount: async () => Number((await gitCmd(['rev-list', '--count', 'HEAD..origin/main'])).trim()) || 0,
+  aheadCount: async () => Number((await gitCmd(['rev-list', '--count', 'origin/main..HEAD'])).trim()) || 0,
   add: async files => { await gitCmd(['add', '--', ...files]); },
   // 경로를 지정해 커밋한다 — 다른 파일이 미리 스테이징돼 있어도 게임 데이터만 들어간다.
   commit: async (message, files) => {
@@ -96,7 +98,8 @@ function createPublisher({
   async function getPublishPreview() {
     const branch = await git.branch();
     const { publish, other } = filterPublishable(await git.status());
-    return { branch, files: publish, other, summary: describeChanges(publish), pendingAnnouncements: queue.list() };
+    const ahead = await git.aheadCount();
+    return { branch, files: publish, other, ahead, summary: describeChanges(publish), pendingAnnouncements: queue.list() };
   }
 
   async function publish() {
@@ -104,22 +107,25 @@ function createPublisher({
     if ((await git.branch()) !== 'main') return fail('branch', '지금 main 브랜치가 아니라서 올릴 수 없어요. main으로 바꾼 뒤 다시 해 주세요.');
 
     const { publish: files } = filterPublishable(await git.status());
-    if (!files.length) return fail('status', '올릴 변경이 없어요.');
-
-    try { await runCheck(); } catch (e) { return fail('check', '데이터 검사에서 문제가 나왔어요: ' + e.message); }
-
-    try { await git.fetch(); } catch (e) { return fail('fetch', 'GitHub에 연결하지 못했어요: ' + e.message); }
-    if ((await git.behindCount()) > 0) return fail('fetch', 'GitHub에 더 새 버전이 있어요. 먼저 받아와야 해요(git pull).');
-
     const summary = describeChanges(files);
     let commit;
-    try {
-      await git.add(files);
-      commit = await git.commit(`data: ${summary.join(', ') || '게임 데이터 갱신'}`, files);
-    } catch (e) { return fail('commit', '커밋하지 못했어요: ' + e.message); }
-
-    try { await git.push(); } catch (e) {
-      return { ...fail('push', 'GitHub에 올리지 못했어요(커밋은 이 PC에 남아 있어요): ' + e.message), commit };
+    if (files.length) {
+      try { await runCheck(); } catch (e) { return fail('check', '데이터 검사에서 문제가 나왔어요: ' + e.message); }
+    }
+    if (files.length || (await git.aheadCount()) > 0) {
+      try { await git.fetch(); } catch (e) { return fail('fetch', 'GitHub에 연결하지 못했어요: ' + e.message); }
+      if ((await git.behindCount()) > 0) return fail('fetch', 'GitHub에 더 새 버전이 있어요. 먼저 받아와야 해요(git pull).');
+      if (files.length) {
+        try {
+          await git.add(files);
+          commit = await git.commit(`data: ${summary.join(', ') || '게임 데이터 갱신'}`, files);
+        } catch (e) { return fail('commit', '커밋하지 못했어요: ' + e.message); }
+      }
+      try { await git.push(); } catch (e) {
+        return { ...fail('push', 'GitHub에 올리지 못했어요(커밋은 이 PC에 남아 있어요 — 다시 누르면 이어서 올려요): ' + e.message), commit };
+      }
+    } else if (!queue.list().length) {
+      return fail('status', '올릴 변경이 없어요.');
     }
 
     // push가 성공했으니 사이트에도 곧 반영된다 — 이제 알림을 보낸다. 실패한 알림은 대기열에 남겨 다음에 다시 보낸다.

@@ -38,7 +38,7 @@
 | 엑셀 파일이 열려 있어요 | Excel에서 `cottage-owned-games.xlsx`를 닫고 다시 |
 | main 브랜치가 아니라서 올릴 수 없어요 | 다른 작업 중인 브랜치예요. 그 작업을 마치거나 `git switch main` 후 다시 |
 | GitHub에 더 새 버전이 있어요 | 터미널에서 `cd ~/cottage-board-site && git pull` 후 다시 |
-| GitHub에 올리지 못했어요 | 인증 문제일 가능성이 커요. 커밋은 PC에 남아 있으니 인증을 고친 뒤 `git push` |
+| GitHub에 올리지 못했어요 | 인증 문제일 가능성이 커요. 커밋은 PC에 남아 있으니 인증을 고친 뒤 「사이트에 올리기」를 다시 누르면 이어서 올리고 알림도 보내요 |
 | 설명 번역 ⏸️ 번역 대기 | `.env`에 `ANTHROPIC_API_KEY`가 없어서예요. 키를 넣고 그 게임을 다시 연결하면 번역돼요 |
 | BGG 정보 받기 ❌ (401) | `.env`에 `BGG_API_TOKEN`이 없거나 만료. 「BGG 없음」으로 추가해 두고 나중에 다시 연결 가능 |
 
