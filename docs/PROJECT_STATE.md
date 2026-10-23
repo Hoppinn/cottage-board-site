@@ -14,7 +14,11 @@
 
 ## 1. NOW
 
-- 현재 진행 중인 구현 없음.
+- 🚩 **게임 관리 GUI** — 브랜치 `feat/game-admin-gui`. 설계 [spec](superpowers/specs/2026-10-23-game-admin-gui-design.md), 계획 [plan](superpowers/plans/2026-10-23-game-admin-gui.md), 진행 기록 `.superpowers/sdd/2026-10-23-game-admin-gui/progress.md`(Task 1·2·3·4·5·7·8·9 완료, 테스트 45/45).
+  - 🏁 종료 조건: 바로가기 → 「발매후 도착예정」 7개 일괄 이동 → 사이트에 올리기 → 운영 위치 반영 + 회원 종 알림 1건.
+  - **다음 원자 작업**: Task 6(종 알림 테이블 `game_announcements`) — Plan은 2026-10-23 사용자에게 제시, **승인 대기**. 승인 뒤 코드 → 사용자 SQL 실행 → anon SELECT 확인 → 격리 행 알림 확인 → 브랜치 전체 리뷰(executing-plans Final Review) → main 병합.
+  - 병합 시점 사용자 결정 대기: 「Task 6·리뷰 후 병합」(추천) vs 「지금 병합해 위치 이동 먼저」(알림은 테이블 생길 때까지 대기열에 보존).
+  - 환경 메모: 이 WSL 사본은 `npm ci --cache $TMPDIR/npm-cache` 필요(샌드박스에서 ~/.npm 읽기 전용). 브라우저 검증은 Playwright headless(ubuntu24.04 override, libnss3 등 로컬 추출, 프록시는 username/password 분리 전달).
 
 ## 2. NEXT (자동 착수 금지)
 
@@ -33,6 +37,7 @@
 | 업적 2건 | 게임평 진행도, 기존 기록에 사진·참여자 수정으로 임계값을 넘겼을 때 업적이 즉시 반영되는지 | 커밋 `22488d7`, `7a1b68d`. 브라우저 실확인만 남음. |
 | cotton조(`4922210631`) 모임 등록 실패 | 9/16~17 플래너 진입 7회 이상, `meeting_votes` 0행. 같은 기간 타 회원 등록은 정상이고, `a03ab910`(게임 미선택 등록) 배포 뒤 새로고침해도 실패했다는 사용자 보고(10/23) — 다른 원인이다. ⟹ 영향: 그 회원이 모임 참여 표시에 영영 안 뜸 | 본인 기기에서 저장 시 화면·콘솔 에러를 받거나 같이 재현. 저장 경로는 `club-schedule.html` → `upsertMeetingVote`. 저장 성공 이벤트가 없어 `page_events`로는 실패 지점을 못 가린다. |
 | 선반 목록 두 벌 | `game-system/config/shelf-locations.js`의 `SHELF_GROUPS`와 `pages/game/game-location.html`의 `SECTIONS`가 같은 선반을 따로 정의한다(2026-10-23 「따로 보관」 G 추가 때 두 곳 모두 수정). ⟹ 영향: 한쪽만 바꾸면 위치 화면에서 선반이 빠지거나 라벨이 달라짐 | 지금은 `node scripts/verify-shelf-lists.js`가 id·code 일치를 검사한다. 근본 해소는 위치 화면이 빌드 산출물의 선반 목록을 읽게 하는 것. |
+| 정리 방법 사진 후보 고르기 | 사용자 요청(2026-10-23): 직접 찍는 대신 오거나이저 사진 후보를 보고 고르기. BGG 갤러리 API(`api.geekdo.com/api/images?objectid=<bggId>&gallery=creative`)는 토큰 없이 응답하고, 캡션 키워드(insert·organizer·storage)로 아크노바에서 후보 4건 확인. ⟹ 영향: 게임 관리 GUI 수정 탭 「정리 방법(사진)」 | ⚠️ 사진 저작권은 BGG 업로더에게 있음 — 복사 업로드 대신 링크+출처 표기 여부를 사용자가 결정해야 함. 비공식 API라 바뀔 수 있음. GUI 병합 후 착수. |
 | 추천게임 코스·QR | 실제 폰에서 sticky 바가 헤더 아래에 붙는지, 배포 뒤 QR이 코스 탭까지 이동하는지 | 배포된 URL에서만 확인 가능. |
 
 ## 4. BACKLOG — 사용자 판단 대기 (자동 착수 금지)
