@@ -14,11 +14,7 @@
 
 ## 1. NOW
 
-- 🚩 **게임 관리 GUI** — 코드 전부 main에 병합(2026-10-23, Task 1~9 + 리뷰 수정 2건). 설계 [spec](superpowers/specs/2026-10-23-game-admin-gui-design.md), 사용법 [game-admin-gui.md](game-admin-gui.md).
-  - 🏁 종료 조건: 바로가기 → 「발매후 도착예정」 7개 일괄 이동 → 사이트에 올리기 → 운영 위치 반영 + 회원 종 알림 1건.
-  - **다음 원자 작업(사용자 실행)**: ①`git push`(main) ②바탕화면 아이콘으로 GUI 실행 → 위치 일괄 변경에서 7개 이동 → 「사이트에 올리기」 ③배포 뒤 사이트 위치 화면과 종 알림 확인. ⟹ 검증: 이 첫 올리기가 `game_announcements` anon INSERT의 첫 실사용이다(격리 행 대신 브라우저 응답 위조로 화면만 확인했음). 알림이 안 오면 GUI 결과 메시지의 HTTP 코드를 본다(RLS INSERT 정책).
-  - **후속(사용자 결정 2026-10-23)**: 설명 번역 경로를 API 전용에서 순차 폴백으로 — ①`claude -p`(Claude Code 구독) ②`codex exec`(ChatGPT Plus) ③전부 실패 시 비워 둔다(사이트는 한 줄 소개·게임 설명 칸만 숨김, `game-sheet.js` 조건부 렌더). API 키 경로·번역기는 쓰지 않기로 사용자 확정(2026-10-23). 단순 번역기는 불가 — `description-translator.js`가 400자 압축 번역 + 큐레이터 한 문장 요약(summaryKo)을 하므로. 두 CLI는 설치 확인(`~/.local/bin/claude`, nvm `codex`), WSL 로그인 상태는 미확인. 콘솔 크레딧 US$0.00이라 사용자는 충전하지 않기로.
-  - 환경 메모: 이 WSL 사본은 `npm ci --cache $TMPDIR/npm-cache` 필요(샌드박스에서 ~/.npm 읽기 전용). 브라우저 검증은 Playwright headless — `PLAYWRIGHT_BROWSERS_PATH=/tmp/claude-1000/pw LD_LIBRARY_PATH=/tmp/claude-1000/libroot/usr/lib/x86_64-linux-gnu`, 프록시는 `HTTPS_PROXY`를 server/username/password로 나눠 launch에 전달(로컬은 bypass). node `fetch`는 `NODE_USE_ENV_PROXY=1` 없으면 DNS 실패(EAI_AGAIN).
+- (비어 있음 — 게임 관리 GUI는 2026-10-23 main 병합으로 닫음. 남은 실사용 확인·번역 폴백은 §3, 모바일 접속은 §4)
 
 ## 2. NEXT (자동 착수 금지)
 
@@ -38,12 +34,15 @@
 | cotton조(`4922210631`) 모임 등록 실패 | 9/16~17 플래너 진입 7회 이상, `meeting_votes` 0행. 같은 기간 타 회원 등록은 정상이고, `a03ab910`(게임 미선택 등록) 배포 뒤 새로고침해도 실패했다는 사용자 보고(10/23) — 다른 원인이다. ⟹ 영향: 그 회원이 모임 참여 표시에 영영 안 뜸 | 본인 기기에서 저장 시 화면·콘솔 에러를 받거나 같이 재현. 저장 경로는 `club-schedule.html` → `upsertMeetingVote`. 저장 성공 이벤트가 없어 `page_events`로는 실패 지점을 못 가린다. |
 | 선반 목록 두 벌 | `game-system/config/shelf-locations.js`의 `SHELF_GROUPS`와 `pages/game/game-location.html`의 `SECTIONS`가 같은 선반을 따로 정의한다(2026-10-23 「따로 보관」 G 추가 때 두 곳 모두 수정). ⟹ 영향: 한쪽만 바꾸면 위치 화면에서 선반이 빠지거나 라벨이 달라짐 | 지금은 `node scripts/verify-shelf-lists.js`가 id·code 일치를 검사한다. 근본 해소는 위치 화면이 빌드 산출물의 선반 목록을 읽게 하는 것. |
 | 정리 방법 사진 후보 고르기 | 사용자 요청(2026-10-23): 직접 찍는 대신 오거나이저 사진 후보를 보고 고르기. BGG 갤러리 API(`api.geekdo.com/api/images?objectid=<bggId>&gallery=creative`)는 토큰 없이 응답하고, 캡션 키워드(insert·organizer·storage)로 아크노바에서 후보 4건 확인. ⟹ 영향: 게임 관리 GUI 수정 탭 「정리 방법(사진)」 | ⚠️ 사진 저작권은 BGG 업로더에게 있음 — 복사 업로드 대신 링크+출처 표기 여부를 사용자가 결정해야 함. 비공식 API라 바뀔 수 있음. GUI 병합 후 착수. |
+| 게임 관리 GUI 첫 실사용 | 사용자가 main `git push` → `npm run admin` → 「발매후 도착예정」 7개 이동 → 「사이트에 올리기」. ⟹ 영향: 운영 위치 화면 + 회원 종 알림(`game_announcements` anon INSERT의 첫 실사용) | 알림이 안 오면 GUI 결과 메시지의 HTTP 코드로 RLS INSERT 정책 확인. 사용법 [game-admin-gui.md](game-admin-gui.md). 바탕화면 아이콘은 미생성(문서 1절대로 사용자가 만듦) |
+| 게임 설명 번역 — 구독 CLI 폴백 | `runPipeline`의 번역 단계가 `ANTHROPIC_API_KEY` 없으면 건너뛴다(사용자: API 키 안 씀, 확정 2026-10-23). ⟹ 영향: 새 게임의 한 줄 소개·설명이 빈칸 | `description-translator.js` 호출을 ①`claude -p` ②`codex exec` ③실패 시 비움 순서로. 사이트는 빈 칸을 숨김(`game-sheet.js` 조건부 렌더). 두 CLI의 WSL 로그인 상태 미확인 |
 | 추천게임 코스·QR | 실제 폰에서 sticky 바가 헤더 아래에 붙는지, 배포 뒤 QR이 코스 탭까지 이동하는지 | 배포된 URL에서만 확인 가능. |
 
 ## 4. BACKLOG — 사용자 판단 대기 (자동 착수 금지)
 
 | 항목 | 현재 판단 | 재개 조건 |
 |---|---|---|
+| 게임 관리 GUI 모바일 접속 | 운영 도메인 연결은 비추천 — GUI가 PC의 엑셀 수정·빌드·git push를 하므로 서버로 옮기면 사실상 재작성이고, 카카오 로그인엔 서버측 검증이 없어 인증부터 새로 필요. 추천은 Tailscale(폰→PC 사설망, PC가 켜져 있을 때만): 서버 listen 주소와 `server.js` `isForeignRequest`의 Host 허용 목록에 tailnet 주소 추가 정도 | 사용자가 폰에서 쓸 필요가 생기면 Tailscale 설치 후 착수 |
 | 보드게이머 유형검사(MBTI식) | 신규 DB 구조·화면 설계가 필요한 별도 기능 | 사용자가 구현을 다시 요청하면 Plan부터 작성 |
 | Kakao Make 알림 토큰 만료 | 원인은 만료된 Kakao refresh token. 사용자가 “나중에”로 보류 | 토큰 재발급 또는 Discord 웹훅 전환 선택/URL 제공 |
 | 참여자 이름 5건의 회원 연결 | `춘팝·도라·준혁·지인·호핀`이 실제 회원인지 미확정. `도라`와 `돠`는 혼동 가능 | 사용자 확인 뒤에만 연결. 재측정 시 `node scripts/audit-nick-click.js --negctl` |
