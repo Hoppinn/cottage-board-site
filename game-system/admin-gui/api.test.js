@@ -45,6 +45,10 @@ test('GET /api/games lists the real catalog with the 4 location issues', async (
     assert.ok(res.json.games.length >= 645);
     assert.strictEqual(res.json.issues.length, 4);
     assert.ok(res.json.locations.some(l => l.value === '협력'));
+    const coop = res.json.games.find(g => g.location === '협력');
+    assert.strictEqual(coop.locationValue, '협력');
+    const values = new Set(res.json.locations.map(l => l.value));
+    assert.ok(res.json.games.every(g => g.locationValue === '' || values.has(g.locationValue)));
   });
 });
 

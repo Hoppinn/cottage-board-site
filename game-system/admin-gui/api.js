@@ -57,6 +57,8 @@ function listGames() {
       bggId: g.bggId || null,
       location: g.location || '',
       locationLabel: locationLabel(g.location || ''),
+      // 위치 선택지(listPickableLocations)의 value와 같은 값 — 화면의 필터·기본 선택용. 해석 안 되면 ''.
+      locationValue: g.location === COOP_VALUE ? COOP_VALUE : (getShelfGroupBySourceValue(g.location || '')?.label || ''),
       hasThumb: hasThumb(g),
     })),
     locations: listPickableLocations(),
