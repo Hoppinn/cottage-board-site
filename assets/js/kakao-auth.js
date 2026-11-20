@@ -2474,7 +2474,7 @@ const introVoucherCardHtml = _introVoucher
     }
     if (n.type === 'game_announce') {
       const icon = n.kind === 'arrived' ? '🎉' : '📦';
-      const msg = n.kind === 'arrived' ? '도착했어요!' : '새 게임이 추가됐어요';
+      const msg = n.kind === 'arrived' ? '선주문게임이 도착하여 추가되었습니다' : '새 게임이 추가됐어요';
       const desc = n.locationLabel ? `${msg} · ${escH(n.locationLabel)}` : msg;
       if (n.gameNames.length === 1) {
         return `<li class="${cls}" data-game-name="${escH(n.gameNames[0])}">${_card(icon, escH(n.gameNames[0]), desc)}${readBtn}</li>`;

@@ -668,6 +668,8 @@ node game-system/tools/5-build-output/build-output.js
 
 게임 관리 GUI(`npm run admin`, `game-system/admin-gui/`)의 「사이트에 올리기」는 `publish.js`가 한다: **main 브랜치에서만**, `game-system/game-data/` 경로만 경로 지정 커밋 → `npm run check` 통과 → GitHub이 앞서 있으면 중단 → push. 회원 종 알림(신규·도착)은 저장 때 `~/.cottage-admin/pending-announcements.json`에 쌓였다가 **push 성공 뒤에만** `game_announcements`로 보낸다. 실패한 알림은 대기열에 남는다.
 
+게임 데이터를 CLI/수동 편집 후 직접 `main`에 push한 경우에는 `.github/workflows/game-announcements.yml`이 마스터 JSON의 커밋 전후를 비교해 신규 게임과 도착예정·배송중·구매예정 → 실제 선반으로 옮긴 게임을 `game_announcements`에 기록한다(`scripts/announce-game-push.js`). 같은 push에 여러 게임이 있으면 도착 선반별로 묶는다. GUI의 `data:` 커밋은 GUI 대기열에서 보내므로 자동 경로에서 제외한다. `1회용(미제공)게임`으로 이동한 항목은 도착 공지가 아니다. GitHub Actions 실패 시에는 해당 실행 로그를 확인하고 중복 공지를 확인한 뒤 다시 실행한다.
+
 핵심 원칙: BGG API는 실시간 호출하지 않는다. source → staging → library → output 레이어 분리. output만 사이트에서 읽는다.
 
 ### 게임 추가·위치 변경의 정본과 재생성

@@ -1,0 +1,24 @@
+name: Game announcements
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - game-system/game-data/library/1-master/cottage-owned-games-master.json
+
+permissions:
+  contents: read
+
+jobs:
+  announce:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node scripts/announce-game-push.js
+        env:
+          GITHUB_EVENT_BEFORE: ${{ github.event.before }}

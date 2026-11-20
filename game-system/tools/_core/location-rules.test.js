@@ -18,6 +18,7 @@ test('arrival means leaving a pending (Z) location for a real one', () => {
 test('moving between pending locations or between real shelves is not an arrival', () => {
   assert.strictEqual(isArrival('발매후 도착예정', '배송중'), false);
   assert.strictEqual(isArrival('전략', '가족'), false);
+  assert.strictEqual(isArrival('발매후 도착예정', '1회용(미제공)게임'), false);
 });
 
 test('pending locations are the Z group only', () => {

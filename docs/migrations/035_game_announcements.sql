@@ -1,5 +1,6 @@
 -- 게임 공지(새 게임·도착) — 회원 종 알림 소스.
--- 게임 관리 GUI의 「사이트에 올리기」가 push 성공 뒤에만 INSERT한다(game-system/admin-gui/publish.js).
+-- 게임 관리 GUI와 main 직접 push 자동화가 push 성공 뒤에만 INSERT한다.
+-- 각각 game-system/admin-gui/publish.js, scripts/announce-game-push.js.
 -- 받는 사람은 new_game(game_requests.added_at)과 같이 로그인 회원 전체.
 -- 운영 적용: 2026-10-23 사용자가 SQL 편집기에서 실행. 정의는 계획 문서
 -- (docs/superpowers/plans/2026-10-23-game-admin-gui.md Task 6)의 것이며, 컬럼 5개는 anon

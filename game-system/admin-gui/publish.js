@@ -145,4 +145,4 @@ function createPublisher({
   return { getPublishPreview, publish };
 }
 
-module.exports = { PUBLISH_PATHS, filterPublishable, describeChanges, createPublisher };
+module.exports = { PUBLISH_PATHS, filterPublishable, describeChanges, createPublisher, realInsertAnnouncement };

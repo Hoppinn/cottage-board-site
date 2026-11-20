@@ -25,7 +25,9 @@ function isPendingLocation(value) {
 }
 
 function isArrival(from, to) {
-  return isPendingLocation(from) && !isPendingLocation(to) && isPickable(to);
+  const destination = getShelfGroupBySourceValue(String(to || '').trim());
+  return isPendingLocation(from) && !isPendingLocation(to)
+    && destination?.id !== 'one_time_unavailable' && isPickable(to);
 }
 
 function findLocationIssues(games) {
