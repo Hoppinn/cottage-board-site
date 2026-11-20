@@ -674,8 +674,8 @@ node game-system/tools/5-build-output/build-output.js
 
 ### 게임 추가·위치 변경의 정본과 재생성
 
-- **다음 작업의 시작점:** 프로젝트 루트에서 Windows PowerShell은 `npm.cmd run add-game -- "정확한 보유게임명"`, 다른 셸은 `npm run add-game -- "정확한 보유게임명"`을 실행한다. 기존 게임이면 BGG 정보가 맞는지 답하고 `위치를 변경하시겠습니까?`에 `y`를 입력한 뒤 위치를 고른다. 새 게임이면 위치와 BGG 매칭을 확인한다. 이 명령이 엑셀 저장, 필요한 BGG 가져오기, 마스터·번역·출력 빌드까지 이어서 실행하므로 같은 게임에 별도 빌드 명령을 반복하지 않는다. 완료 뒤 명령의 엑셀/마스터 위치 요약과 `npm.cmd run check` 결과를 확인한다.
-- 새 게임 추가와 기존 게임의 BGG 매칭·위치 보정은 `npm run add-game -- "보유게임명"`의 대화형 흐름을 사용한다. 기존 게임은 BGG 매칭 유지/변경을 확인하고 위치를 선택하며, 새 게임은 위치를 선택한 뒤 로컬 매칭과 필요 시 BGG 데이터를 가져온다. `--rematch`는 기존 게임의 재매칭, `--skip-translate`는 번역 생략 옵션이다.
+- **진입점 선택:** 화면에서 게임 추가·위치 변경·BGG 연결·사이트 반영을 이어서 하려면 게임 관리 GUI(`npm run admin`, 사용법은 [game-admin-gui.md](game-admin-gui.md))를 사용한다. 터미널에서 게임 하나를 추가하거나 기존 게임의 위치·BGG 매칭을 보정할 때는 프로젝트 루트에서 Windows PowerShell은 `npm.cmd run add-game -- "정확한 보유게임명"`, 다른 셸은 `npm run add-game -- "정확한 보유게임명"`을 실행한다. CLI는 엑셀 저장과 필요한 빌드를 이어서 실행하지만 사이트 반영은 별도 commit/push가 필요하다.
+- CLI에서 기존 게임은 BGG 매칭 유지/변경을 확인하고 `위치를 변경하시겠습니까?`에 `y`를 입력해 위치를 고른다. 새 게임은 위치와 BGG 후보를 확인한다. `--rematch`는 기존 게임 재매칭, `--skip-translate`는 번역 생략 옵션이다. 완료 뒤 엑셀/마스터 위치 요약과 `npm run check` 결과를 확인하고, 같은 게임에 빌드 명령을 반복하지 않는다.
 - **위치의 수동 정본은** `game-system/game-data/source/2-cottage-manual/cottage-owned-games.xlsx`의 `위치` 열이다. 기존 게임 위치 변경 시 진입점은 이 셀과 마스터의 `location`을 함께 갱신한다. `build:master`는 엑셀 값을 다시 읽어 마스터와 장부를 재생성하므로, 마스터·장부·출력 JSON/JS만 직접 수정한 위치는 다음 빌드에서 되돌아간다.
 - BGG 매칭은 match-map, BGG 응답은 staging 캐시가 담당한다. `fetch:bgg`는 게임 위치를 수정하지 않는다. `build:master`가 엑셀 위치를 마스터에 반영하고 기존 수동 `comment`·`tags`·`youtubeUrl` 및 유효한 번역을 보존한다. BGG ID가 바뀌면 이전 번역을 비우며, `translate`·`translate:desc`·`translate:summary`는 위치를 수정하지 않는다. 마지막 `build`가 `shelf-locations.js`의 분류명/ID로 화면용 JSON·JS를 만든다.
 - 수동 위치 수정 뒤에는 `build:master` → 필요한 번역 단계 → `build` 순으로 실행하고, 엑셀·마스터·출력 JSON/JS의 해당 게임 위치가 일치하는지 확인한다. `npm run check`는 현재 BGG 캐시·매칭·번역·약칭 상태와 필요한 명령을 안내하지만, 엑셀 위치와 출력 위치의 일치 자체는 검사하지 않으므로 별도로 대조한다.
