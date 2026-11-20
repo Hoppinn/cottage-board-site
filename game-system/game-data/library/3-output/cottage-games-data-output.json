@@ -33201,9 +33201,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "incoming",
-      "shelfLabel": "발매후 도착예정",
-      "shelfFullLabel": "발매후 도착예정",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "heavy_mania",
       "difficultyWeight": 3.17,
       "moodTags": [
@@ -52517,9 +52517,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "incoming",
-      "shelfLabel": "발매후 도착예정",
-      "shelfFullLabel": "발매후 도착예정",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "heavy_mania",
       "difficultyWeight": 3.19,
       "moodTags": [
@@ -53512,9 +53512,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "incoming",
-      "shelfLabel": "발매후 도착예정",
-      "shelfFullLabel": "발매후 도착예정",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "hardcore",
       "difficultyWeight": 4.42,
       "moodTags": [
@@ -86591,9 +86591,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "incoming",
-      "shelfLabel": "발매후 도착예정",
-      "shelfFullLabel": "발매후 도착예정",
+      "shelfGroupId": "one_time_unavailable",
+      "shelfLabel": "1회용(미제공)게임",
+      "shelfFullLabel": "1회용(미제공)게임",
       "difficultyId": "",
       "difficultyWeight": 0,
       "moodTags": [],

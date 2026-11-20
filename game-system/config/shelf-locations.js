@@ -142,6 +142,13 @@ const SHELF_GROUPS = [
     label: "구매예정",
     parentId: "incoming",
     sourceValues: ["구매예정", "구매", "to_buy"]
+  },
+  {
+    id: "one_time_unavailable",
+    code: "Z-3",
+    label: "1회용(미제공)게임",
+    parentId: null,
+    sourceValues: ["1회용(미제공)게임", "one_time_unavailable"]
   }
 ];
 

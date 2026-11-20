@@ -1,7 +1,7 @@
 {
   "version": 1,
   "source": "cottageboard-master",
-  "updatedAt": "2026-09-09T15:17:00.442Z",
+  "updatedAt": "2026-11-20T06:57:26.129Z",
   "games": {
     "7원더스": {
       "id": "7원더스",
@@ -25158,7 +25158,7 @@
       "thumbnail": "https://cf.geekdo-images.com/HLf1dKFTM4y7EwdQubbazQ__small/img/yFsR_l7zagtOjSmxVKqZlegRpo8=/fit-in/200x150/filters:strip_icc()/pic8951049.png",
       "description": "In the late 19th century, during the early Meiji era, Japan opened its first railway line between Shimbashi and Yokohama. This new mode of transportation sparked a railway boom across the country.\n\nLocal entrepreneurs, and later powerful tycoons, established new companies that grew into large railway corporations throughout the Taishō and Shōwa eras.\n\nAs players, you will take on the roles of these tycoons, building and managing your own railway empires as you compete for the most renown.\n\nRailway Boom recreates this era of industry through gameplay by having players balance resource management with the growth of their railways connecting various cities across Japan.\n\n&mdash;description from the publisher",
       "difficultyWeight": 3.17,
-      "location": "발매후 도착예정",
+      "location": "헤비 전략게임",
       "sourceMechanism": "경매/철도",
       "sourceRating": 7.9,
       "supportsLargeGroup": false,
@@ -25181,7 +25181,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.682Z",
-      "updatedAt": "2026-09-09T15:17:00.450Z",
+      "updatedAt": "2026-11-20T06:57:26.133Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -40368,7 +40368,7 @@
       "thumbnail": "https://cf.geekdo-images.com/Bpomnj9RBdTwQNcuFrAmVg__small/img/wkTKinRioV7dwaupRnywU5MpQ1Y=/fit-in/200x150/filters:strip_icc()/pic8444642.jpg",
       "description": "Retell the incredible origin myth of the Inca in this dramatic mid-weight eurogame.\n\nIn the beginning, Viracocha the creator brought forth Inti, the sun god, and Mama Quilla, the moon god. From the union of these two gods sprang four sons and four daughters: the Ayar. These siblings were tasked with guiding the first clans and teaching them the skills needed to build a civilization. As they traveled the land in search of fertile ground, the Ayar one by one met their fates until only two remained to found Tawantinsuyu &ndash; the Inca Empire.\n\nIn Ayar: Children of the Sun, players take control of one of the first clans, journeying with the Ayar across the Andes. Follow their teaching and improve your skills at farming, pottery, weaving, and reed bundling. As well as advancing your own clan, you must influence the progress of the Ayar, ensuring the survival of those who reward your most developed skills. Seek the approval of Mama Quilla through long-term strategy, and please Inti with tactical play. Be careful not to earn the ire of one of these jealous gods because at the end of the game, whichever one favors you least will determine your final score.\n\nThe future of your clan &ndash; and the Inca civilization &ndash; is in your hands.\n\n&mdash;description from the publisher",
       "difficultyWeight": 3.19,
-      "location": "발매후 도착예정",
+      "location": "헤비 전략게임",
       "sourceMechanism": "",
       "sourceRating": 8,
       "supportsLargeGroup": false,
@@ -40394,7 +40394,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-09-09T15:17:00.452Z",
+      "updatedAt": "2026-11-20T06:57:26.134Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -41186,7 +41186,7 @@
       "thumbnail": "https://cf.geekdo-images.com/7lDF6X1YAxwFzBXRHxnjRA__small/img/aTOzVZFgyGuRALM0rNRMaCumXmk=/fit-in/200x150/filters:strip_icc()/pic8844403.jpg",
       "description": "In the third century B.C., Ptolemy I envisioned the creation of the Great Library of Alexandria, a monumental repository of human knowledge housed within a space known as the Mouseion, which was dedicated to the Muses, the nine goddesses of the arts. Ptolemy's dream was to amass the world's knowledge, and the library housed countless manuscripts, reflecting his Herculean effort to collect and preserve the intellectual heritage of the ancient world and gain renown to his name. The Great Library, situated near the bustling port of Alexandria, welcomed ships carrying relics, scholars, and the wisdom of distant lands. The Chief of Librarians oversaw the organization of the vast collection. The library's shelves whispered with the rustling of ancient parchment, embodying the spirit of intellectual curiosity and cross-cultural exchange.\n\nAs players step into the sandals of Librarians in the Great Library, you take on the crucial responsibilities of leading the institution within the Mouseion, navigating the challenges and opportunities presented by this legendary center of knowledge. Amidst the relics, diverse minds, and bustling port activity, the Librarians became the primary custodians of knowledge, shaping the legacy of the Great Library and contributing to the rich tapestry of ancient history.\n\nDuring this game, you research Great Works, deliver Crafts to the kingdom, and train Scribes to translate Manuscripts. Then, you send the Manuscripts, Great Works, and Crafts to the Great Library to gain Renown, Improvements, and other benefits, and attract the great Scholars of the time to the Library to work with you. You will need to manage resources to achieve your aims, including the most important resource of all: Time.\n\nAs Scholars perform their work, Generations will pass triggering Events and the Great Library will fill. When the second Event is triggered or when 2 or fewer empty spaces remain in the Library, the end of the game is triggered and the player with the most Renown is named the Greatest Librarian and wins the game.\n\n&mdash;description from the publisher",
       "difficultyWeight": 4.42,
-      "location": "발매후 도착예정",
+      "location": "헤비 전략게임",
       "sourceMechanism": "",
       "sourceRating": 7.8,
       "supportsLargeGroup": false,
@@ -41208,7 +41208,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-09-09T15:17:00.452Z",
+      "updatedAt": "2026-11-20T06:57:26.134Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -66840,7 +66840,7 @@
       "thumbnail": "",
       "description": "",
       "difficultyWeight": 0,
-      "location": "발매후 도착예정",
+      "location": "1회용(미제공)게임",
       "sourceMechanism": "",
       "sourceRating": 0,
       "supportsLargeGroup": false,
@@ -66853,7 +66853,7 @@
       "mechanicsKo": [],
       "status": "pending-cache",
       "createdAt": "2026-06-08T16:41:56.543Z",
-      "updatedAt": "2026-09-09T15:17:00.456Z",
+      "updatedAt": "2026-11-20T06:57:26.136Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [

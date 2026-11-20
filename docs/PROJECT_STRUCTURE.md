@@ -602,7 +602,7 @@ game-reviews.html — 기록 입력 탭
 game-system/
   config/
     difficulty-levels.js          ← 난이도 5단계 기준 (kids/beginner/light/heavy/hardcore)
-    shelf-locations.js            ← 선반 위치 그룹 (A~G)
+    shelf-locations.js            ← 선반 위치 그룹 (A~F, Z 및 하위 분류)
     bgg-label-map.js              ← BGG 영어 mechanics/categories → 한국어 lookup map
     tags/                         ← 태그 시스템 기준 정의
   game-data/
@@ -669,3 +669,13 @@ node game-system/tools/5-build-output/build-output.js
 게임 관리 GUI(`npm run admin`, `game-system/admin-gui/`)의 「사이트에 올리기」는 `publish.js`가 한다: **main 브랜치에서만**, `game-system/game-data/` 경로만 경로 지정 커밋 → `npm run check` 통과 → GitHub이 앞서 있으면 중단 → push. 회원 종 알림(신규·도착)은 저장 때 `~/.cottage-admin/pending-announcements.json`에 쌓였다가 **push 성공 뒤에만** `game_announcements`로 보낸다. 실패한 알림은 대기열에 남는다.
 
 핵심 원칙: BGG API는 실시간 호출하지 않는다. source → staging → library → output 레이어 분리. output만 사이트에서 읽는다.
+
+### 게임 추가·위치 변경의 정본과 재생성
+
+- **다음 작업의 시작점:** 프로젝트 루트에서 Windows PowerShell은 `npm.cmd run add-game -- "정확한 보유게임명"`, 다른 셸은 `npm run add-game -- "정확한 보유게임명"`을 실행한다. 기존 게임이면 BGG 정보가 맞는지 답하고 `위치를 변경하시겠습니까?`에 `y`를 입력한 뒤 위치를 고른다. 새 게임이면 위치와 BGG 매칭을 확인한다. 이 명령이 엑셀 저장, 필요한 BGG 가져오기, 마스터·번역·출력 빌드까지 이어서 실행하므로 같은 게임에 별도 빌드 명령을 반복하지 않는다. 완료 뒤 명령의 엑셀/마스터 위치 요약과 `npm.cmd run check` 결과를 확인한다.
+- 새 게임 추가와 기존 게임의 BGG 매칭·위치 보정은 `npm run add-game -- "보유게임명"`의 대화형 흐름을 사용한다. 기존 게임은 BGG 매칭 유지/변경을 확인하고 위치를 선택하며, 새 게임은 위치를 선택한 뒤 로컬 매칭과 필요 시 BGG 데이터를 가져온다. `--rematch`는 기존 게임의 재매칭, `--skip-translate`는 번역 생략 옵션이다.
+- **위치의 수동 정본은** `game-system/game-data/source/2-cottage-manual/cottage-owned-games.xlsx`의 `위치` 열이다. 기존 게임 위치 변경 시 진입점은 이 셀과 마스터의 `location`을 함께 갱신한다. `build:master`는 엑셀 값을 다시 읽어 마스터와 장부를 재생성하므로, 마스터·장부·출력 JSON/JS만 직접 수정한 위치는 다음 빌드에서 되돌아간다.
+- BGG 매칭은 match-map, BGG 응답은 staging 캐시가 담당한다. `fetch:bgg`는 게임 위치를 수정하지 않는다. `build:master`가 엑셀 위치를 마스터에 반영하고 기존 수동 `comment`·`tags`·`youtubeUrl` 및 유효한 번역을 보존한다. BGG ID가 바뀌면 이전 번역을 비우며, `translate`·`translate:desc`·`translate:summary`는 위치를 수정하지 않는다. 마지막 `build`가 `shelf-locations.js`의 분류명/ID로 화면용 JSON·JS를 만든다.
+- 수동 위치 수정 뒤에는 `build:master` → 필요한 번역 단계 → `build` 순으로 실행하고, 엑셀·마스터·출력 JSON/JS의 해당 게임 위치가 일치하는지 확인한다. `npm run check`는 현재 BGG 캐시·매칭·번역·약칭 상태와 필요한 명령을 안내하지만, 엑셀 위치와 출력 위치의 일치 자체는 검사하지 않으므로 별도로 대조한다.
+- Z-3 `1회용(미제공)게임`은 제공 가능 여부를 알리는 위치 분류다. 게임 위치 화면과 게임정보 카드·검색 배지·상세 안내에 미제공으로 표시한다. 해당 분류의 게임이 목록 데이터에서 제거되는 것은 아니다.
+- 위치 분류 자체를 신설하거나 이름을 바꾸는 작업은 게임별 위치 변경과 다르다. `config/shelf-locations.js`의 ID·코드·라벨·엑셀 입력값 매핑과 `pages/game/game-location.html`의 섹션을 함께 갱신한 뒤 출력 빌드를 실행한다. 대화형 프로그램의 위치 선택 목록은 엑셀에 이미 쓰인 값을 모으므로, 첫 게임에 새 분류를 지정할 때는 `새 위치 직접 입력`을 선택한다.

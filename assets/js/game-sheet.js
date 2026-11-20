@@ -187,6 +187,7 @@ function getShelfSpanHtml(game){
   if (loc === "배송중")   return '<span class="avail-shipping">🚚 배송중</span>';
   if (loc === "to_buy")   return '<span class="avail-pending">🛒 구매예정</span>';
   if (loc === "incoming") return '<span class="avail-preorder">⏳ 발매후 도착예정</span>';
+  if (loc === "one_time_unavailable") return '<span class="avail-pending">🚫 미제공</span>';
   const label = getGameShelfLabel(game);
   return label && label !== "-" ? `<span>📦 ${label}</span>` : "";
 }
@@ -197,6 +198,7 @@ function getAvailBadgeHtml(game){
   if (loc === "배송중")   return '<span class="avail-badge-sm avail-shipping">🚚 배송중</span>';
   if (loc === "to_buy")   return '<span class="avail-badge-sm avail-pending">🛒 구매예정</span>';
   if (loc === "incoming") return '<span class="avail-badge-sm avail-preorder">⏳ 발매후 도착예정</span>';
+  if (loc === "one_time_unavailable") return '<span class="avail-badge-sm avail-pending">🚫 미제공</span>';
   return "";
 }
 
@@ -209,6 +211,8 @@ function getAvailNoticHtml(game){
     return '<p class="sheet-avail-notice sheet-avail-notice--pending">🛒 구매예정 · 아직 구매되지 않았습니다</p>';
   if (loc === "incoming")
     return '<p class="sheet-avail-notice sheet-avail-notice--preorder">⏳ 발매후 도착예정 · 선주문 완료, 발매 후 도착 예정입니다</p>';
+  if (loc === "one_time_unavailable")
+    return '<p class="sheet-avail-notice sheet-avail-notice--pending">🚫 1회용 게임 · 매장에서 제공하지 않습니다</p>';
   return "";
 }
 
