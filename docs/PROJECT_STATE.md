@@ -1,6 +1,6 @@
 # PROJECT_STATE — 코티지보드 현재 상태
 
-최종 갱신: 2026-09-10
+최종 갱신: 2026-11-20
 
 > 이 문서는 세션을 다시 시작할 수 있게 **열린 상태와 그 재개 맥락**만 보관한다. 완료한 변경·검증의 상세는 git commit, 계속 유효한 구조·데이터 계약은 도메인 문서가 정본이다. 완료 목록·커밋 목록·세션 회고는 여기서 제거한다.
 
@@ -34,7 +34,7 @@
 | cotton조(`4922210631`) 모임 등록 실패 | 9/16~17 플래너 진입 7회 이상, `meeting_votes` 0행. 같은 기간 타 회원 등록은 정상이고, `a03ab910`(게임 미선택 등록) 배포 뒤 새로고침해도 실패했다는 사용자 보고(10/23) — 다른 원인이다. ⟹ 영향: 그 회원이 모임 참여 표시에 영영 안 뜸 | 본인 기기에서 저장 시 화면·콘솔 에러를 받거나 같이 재현. 저장 경로는 `club-schedule.html` → `upsertMeetingVote`. 저장 성공 이벤트가 없어 `page_events`로는 실패 지점을 못 가린다. |
 | 선반 목록 두 벌 | `game-system/config/shelf-locations.js`의 `SHELF_GROUPS`와 `pages/game/game-location.html`의 `SECTIONS`가 같은 선반을 따로 정의한다(2026-10-23 「따로 보관」 G 추가 때 두 곳 모두 수정). ⟹ 영향: 한쪽만 바꾸면 위치 화면에서 선반이 빠지거나 라벨이 달라짐 | 지금은 `node scripts/verify-shelf-lists.js`가 id·code 일치를 검사한다. 근본 해소는 위치 화면이 빌드 산출물의 선반 목록을 읽게 하는 것. |
 | 정리 방법 사진 후보 고르기 | 사용자 요청(2026-10-23): 직접 찍는 대신 오거나이저 사진 후보를 보고 고르기. BGG 갤러리 API(`api.geekdo.com/api/images?objectid=<bggId>&gallery=creative`)는 토큰 없이 응답하고, 캡션 키워드(insert·organizer·storage)로 아크노바에서 후보 4건 확인. ⟹ 영향: 게임 관리 GUI 수정 탭 「정리 방법(사진)」 | ⚠️ 사진 저작권은 BGG 업로더에게 있음 — 복사 업로드 대신 링크+출처 표기 여부를 사용자가 결정해야 함. 비공식 API라 바뀔 수 있음. GUI 병합 후 착수. |
-| 게임 관리 GUI 첫 실사용 | 사용자가 main `git push` → `npm run admin` → 「발매후 도착예정」 7개 이동 → 「사이트에 올리기」. ⟹ 영향: 운영 위치 화면 + 회원 종 알림(`game_announcements` anon INSERT의 첫 실사용) | 알림이 안 오면 GUI 결과 메시지의 HTTP 코드로 RLS INSERT 정책 확인. 사용법 [game-admin-gui.md](game-admin-gui.md). 바탕화면 아이콘은 미생성(문서 1절대로 사용자가 만듦) |
+| 게임 관리 GUI 첫 실사용 | `npm run admin`에서 위치 변경 → 「사이트에 올리기」 → 운영 위치 화면·회원 종 알림을 확인하는 GUI 경로는 아직 미검증. 2026-11-20 직접 push로 도착예정 게임 3개를 이동했고 회원 알림 표시를 사용자가 확인했지만, 이는 GUI 대기열 경로의 검증은 아니다. | GUI 첫 사용 시 결과 메시지·운영 위치 화면·회원 종 알림을 함께 확인. 알림 실패 시 HTTP 코드로 INSERT 정책 확인. 사용법 [game-admin-gui.md](game-admin-gui.md). 바탕화면 아이콘은 미생성(문서 1절대로 사용자가 만듦) |
 | 게임 설명 번역 — 구독 CLI 폴백 | `runPipeline`의 번역 단계가 `ANTHROPIC_API_KEY` 없으면 건너뛴다(사용자: API 키 안 씀, 확정 2026-10-23). ⟹ 영향: 새 게임의 한 줄 소개·설명이 빈칸 | `description-translator.js` 호출을 ①`claude -p` ②`codex exec` ③실패 시 비움 순서로. 사이트는 빈 칸을 숨김(`game-sheet.js` 조건부 렌더). 두 CLI의 WSL 로그인 상태 미확인 |
 | 추천게임 코스·QR | 실제 폰에서 sticky 바가 헤더 아래에 붙는지, 배포 뒤 QR이 코스 탭까지 이동하는지 | 배포된 URL에서만 확인 가능. |
 
