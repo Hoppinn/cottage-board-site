@@ -4,6 +4,7 @@ const path = require('node:path');
 const { spawn } = require('node:child_process');
 const { pipeline } = require('node:stream/promises');
 const { parseArgs } = require('node:util');
+const { startPreviewSync } = require('./scripts/sync-cloud-preview');
 
 const siteFiles = new Set(['index.html', 'auth-callback.html', 'favicon.ico', 'robots.txt', 'sitemap.xml']);
 const siteDirectories = [
@@ -143,6 +144,7 @@ async function main() {
   });
   server.listen(port, values.host, () => {
     console.log(`코티지보드 로컬 서버 · ${url}\n종료: Ctrl+C`);
+    if (values.host === '127.0.0.1') startPreviewSync(root);
     if (values.open) openBrowser(url);
   });
 }

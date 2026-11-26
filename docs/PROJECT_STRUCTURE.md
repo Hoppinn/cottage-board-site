@@ -36,9 +36,9 @@ Codex Cloud에서는 `npm run dev:cloud`로 3000번 포트에서 실행한다. �
 
 ### Cloud 작업본을 다른 PC에서 테스트
 
-Cloud에서 테스트할 변경을 커밋하고, 사용자가 검증본 전송을 요청했을 때 `npm run preview:publish`를 실행한다. 게임 데이터 점검 뒤 GitHub의 테스트 전용 `cloud-preview` 브랜치에 현재 커밋을 보낸다. 이후에도 같은 명령으로 테스트본을 갱신한다. 이 브랜치는 공개 저장소에 있다.
+Cloud에서 사이트 변경을 검증하고 커밋하면 `npm run preview:publish`로 GitHub의 공개 테스트 브랜치 `cloud-preview`에 동기화한다. 별도 Git 작업 폴더에서 이미 올라간 테스트본과 합치고 게임 데이터 검사를 통과한 뒤 전송해 원격 커밋을 확인한다. 충돌은 전송 전에 멈춘다. 새 Cloud 채팅에서 자동으로 수행하려면 해당 채팅을 `cloud-preview` 기준으로 시작해 AGENTS.md의 자동 동기화 규칙을 사용한다.
 
-각 PC에 Git과 Node.js 20 이상을 설치하고, `cloud-preview` 브랜치에서 해당 실행기 하나를 저장한다. 기존 테스트 서버가 켜져 있으면 창을 닫고 다시 실행한다. 최초 실행 때 테스트 전용 폴더를 만들고 이후에는 최신 커밋으로 갱신한 뒤 `http://127.0.0.1:5500/`을 연다.
+각 PC에 Git과 Node.js 20 이상을 설치하고, `cloud-preview` 브랜치에서 해당 실행기 하나를 저장한다. 실행하면 테스트 전용 폴더에 최신 커밋을 받고 `http://127.0.0.1:5500/`을 연다. 서버를 켜둔 동안 30초마다 새 테스트본을 확인한다. 반영 안내가 나오면 브라우저를 새로고침한다. 이전 실행기로 켜둔 서버에는 새 기능을 불러오기 위해 한 번 재시작이 필요하다.
 
 - Windows는 `cloud-preview.cmd`를 더블클릭한다. 테스트 폴더는 `%LOCALAPPDATA%\CottageBoardPreview\cottage-board-site`다.
 - macOS와 Linux는 터미널에서 `sh cloud-preview.command`를 실행한다. 테스트 폴더는 `$XDG_DATA_HOME/CottageBoardPreview/cottage-board-site`이고 `XDG_DATA_HOME`이 없으면 `~/.local/share`를 사용한다.
