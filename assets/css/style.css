@@ -3043,9 +3043,11 @@ html:has(body.embed-mode) { scroll-padding-top: 0; }
   white-space:nowrap;
 }
 
-/* 정렬 버튼 + 🛡️ 묶음 */
+/* 이름·난이도·평점 정렬 묶음 */
 .owned-sort-compact{
   display:flex;
+  min-width:0;
+  flex:0 1 207px;
   align-items:center;
   gap:6px;
 }
@@ -3054,9 +3056,10 @@ html:has(body.embed-mode) { scroll-padding-top: 0; }
 .sort-select-wrap{
   position:relative;
   display:inline-flex;
-  min-width:65px;
+  flex:0 1 65px;
+  min-width:0;
   max-width:74px;
-  height:20px;
+  height:22px;
 }
 
 /* 튜닝 포인트: 이름/난이도/평점 보이는 버튼 */
@@ -3078,11 +3081,12 @@ html:has(body.embed-mode) { scroll-padding-top: 0; }
   pointer-events:none;
 }
 
-.sort-select-wrap select{
+.owned-sort-compact .sort-select-wrap select{
   position:absolute;
   inset:0;
   width:100%;
   height:100%;
+  padding:0;
   opacity:0;
   display:block;
   cursor:pointer;
@@ -3130,27 +3134,44 @@ html:has(body.embed-mode) { scroll-padding-top: 0; }
   align-items:center;
 }
 
-/* 정렬 라인 내 버튼은 오른쪽 끝 */
-.owned-sort-line .owned-weight-cap-btn{
+.owned-sort-actions{
+  display:flex;
+  flex:0 0 auto;
+  gap:4px;
   margin-left:auto;
 }
 
-/* 난이도 제한 토글 — OFF 기본 (sort-line 내 소형 2줄 버튼) */
+.owned-sort-actions .owned-weight-cap-btn[hidden]{
+  display:none;
+}
+
+.sort-select-wrap:focus-within .sort-select-label{
+  outline:2px solid currentColor;
+  outline-offset:1px;
+}
+
+@media (max-width:400px){
+  .owned-sort-line{ gap:4px; }
+  .owned-sort-title{ width:auto; font-size:11px; }
+  .owned-sort-compact{ gap:3px; }
+}
+
+/* 정렬 행의 소형 2줄 버튼 */
 .owned-weight-cap-btn{
   flex:0 0 auto;
   display:inline-flex;
   align-items:center;
   justify-content:center;
-  min-width:38px;
+  width:38px;
   height:22px;
-  padding:1px 5px;
+  padding:1px 3px;
   border:1.5px solid #d0b8b8;
   border-radius:8px;
   background:#f7eded;
   color:#a06060;
   font-size:8px;
   font-weight:900;
-  white-space:pre-line;
+  white-space:pre;
   line-height:1.2;
   text-align:center;
   cursor:pointer;

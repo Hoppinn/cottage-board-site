@@ -18,6 +18,8 @@ const ownedPageState = {
   mechanicFilter: "",
   shelfFilter: "",
   weightCap: false,
+  playFilter: "all",
+  playedGameIds: new Set(),
 
   search: ""
 };
@@ -90,6 +92,14 @@ function matchOwnedMechanic(game){
     detail.playTags?.includes(filter) ||
     detail.displayTags?.includes(filter)
   );
+}
+
+function matchOwnedPlayHistory(game){
+  const { playFilter, playedGameIds } = ownedPageState;
+  if(playFilter === "all") return true;
+  const played = playedGameIds.has(String(game.bgg?.id || game.id)) ||
+    playedGameIds.has(String(getGameKey(game)));
+  return playFilter === "played" ? played : !played;
 }
 
 function matchOwnedShelf(game){
@@ -216,13 +226,17 @@ function updateSortOptionLabels(){
       ...inactiveSortKeys
     ];
 
-    orderedSortKeys.forEach(key=>{
+    const focusedSelect = sortBox.contains(document.activeElement) ? document.activeElement : null;
+    orderedSortKeys.forEach((key, index)=>{
       const item = sortSelectMap[key];
-
-      if(item){
-        sortBox.appendChild(item);
+      const current = sortBox.children[index];
+      if(item && item !== current){
+        sortBox.insertBefore(item, current || null);
       }
     });
+    if(focusedSelect && focusedSelect !== document.activeElement){
+      focusedSelect.focus({ preventScroll: true });
+    }
   }
 }
 
@@ -368,6 +382,7 @@ function getOwnedFilteredGames(){
     .filter(matchOwnedPlayer)
     .filter(matchOwnedDifficulty)
     .filter(matchOwnedWeightCap)
+    .filter(matchOwnedPlayHistory)
     .filter(matchOwnedMood)
     .filter(matchOwnedMechanic)
     .filter(matchOwnedShelf)
@@ -492,7 +507,8 @@ function renderOwnedGameList(){
       document.getElementById("ownedPlayerFilter")?.value ||
       document.getElementById("ownedDifficultyFilter")?.value ||
       document.getElementById("ownedMoodFilter")?.value ||
-      document.getElementById("ownedMechanicFilter")?.value;
+      document.getElementById("ownedMechanicFilter")?.value ||
+      ownedPageState.playFilter !== "all";
     heroSub.textContent = hasFilter
       ? `조건에 부합하는 ${sortedGames.length}개의 게임을 찾았습니다`
       : `${totalAll}종의 게임이 기다리고 있어요`;
@@ -664,6 +680,64 @@ document
     updateOwnedGames();
   });
 
+const ownedPlayFilter = document.getElementById("ownedPlayFilter");
+const ownedPlayModes = [
+  { value: "all", label: "전체\n게임" },
+  { value: "played", label: "해본\n게임" },
+  { value: "unplayed", label: "안 해본\n게임" }
+];
+let ownedPlayAccount = null;
+let ownedPlayRequest = 0;
+
+function setOwnedPlayFilter(mode){
+  const next = ownedPlayModes[(ownedPlayModes.indexOf(mode) + 1) % ownedPlayModes.length];
+  ownedPageState.playFilter = mode.value;
+  ownedPlayFilter.textContent = mode.label;
+  ownedPlayFilter.classList.toggle("is-on", mode.value !== "all");
+  ownedPlayFilter.setAttribute("aria-label",
+    `플레이 기록 필터: ${mode.label.replace("\n", " ")}. 누르면 ${next.label.replace("\n", " ")} 보기`);
+}
+
+async function refreshOwnedPlayHistory(force = false){
+  const user = window.getKakaoUser?.();
+  const account = user?.id ? String(user.id) : null;
+  const accountChanged = account !== ownedPlayAccount;
+  if(!accountChanged && !force) return;
+
+  const request = ++ownedPlayRequest;
+  ownedPlayAccount = account;
+  ownedPlayFilter.hidden = !account;
+  if(accountChanged){
+    ownedPlayFilter.disabled = true;
+    ownedPageState.playedGameIds = new Set();
+    if(ownedPageState.playFilter !== "all"){
+      setOwnedPlayFilter(ownedPlayModes[0]);
+      ownedPageState.page = 1;
+      updateOwnedGames();
+    }
+  }
+  if(!account || !window.CottageDB) return;
+
+  const records = await window.CottageDB.getUserPlayedGames(account, user.nickname);
+  if(request !== ownedPlayRequest) return;
+  ownedPageState.playedGameIds = new Set(records.map(record => String(record.game_id)));
+  ownedPlayFilter.disabled = false;
+  if(ownedPageState.playFilter !== "all") updateOwnedGames();
+}
+
+ownedPlayFilter.addEventListener("click", () => {
+  const current = ownedPlayModes.findIndex(mode => mode.value === ownedPageState.playFilter);
+  setOwnedPlayFilter(ownedPlayModes[(current + 1) % ownedPlayModes.length]);
+  ownedPageState.page = 1;
+  updateOwnedGames();
+});
+window.addEventListener("kakao-auth-ready", () => refreshOwnedPlayHistory());
+window.addEventListener("cottage-auth-changed", () => refreshOwnedPlayHistory(true));
+window.addEventListener("cottage-record-changed", () => refreshOwnedPlayHistory(true));
+window.addEventListener("storage", event => {
+  if(event.key === "kakao_user" || event.key === null) refreshOwnedPlayHistory();
+});
+
 const ownedWeightCapToggle =
   document.getElementById("ownedWeightCapToggle");
 
@@ -783,23 +857,6 @@ document
     updateOwnedGames();
   });
 
-
-["sortTitle", "sortWeight", "sortRating"].forEach(id=>{
-  const select =
-    document.getElementById(id);
-
-  if(!select){
-    return;
-  }
-
-  select.addEventListener("pointerdown", ()=>{
-    updateSortOptionLabels();
-  });
-
-  select.addEventListener("blur", ()=>{
-    updateSortOptionLabels();
-  });
-});
 
 const ownedSearchInput =
   document.getElementById("ownedSearchInput");
