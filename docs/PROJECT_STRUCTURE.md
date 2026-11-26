@@ -2,7 +2,7 @@
 
 화면·용어·데이터 정본 빠른 탐색은 [UI_MAP.md](UI_MAP.md)를 먼저 본다.
 
-최종 구조 정리: 2026-09-10. 이 문서는 페이지·파일·흐름의 빠른 index다. 완료 작업의 경위는 git/DEBUGGING_HISTORY에, 현재 열린 작업은 PROJECT_STATE에, UI presentation/navigation 계약은 UI_PATTERNS에 둔다.
+이 문서는 페이지·파일·흐름의 빠른 index다. 완료 작업의 경위는 git/DEBUGGING_HISTORY에, 현재 열린 작업은 PROJECT_STATE에, UI presentation/navigation 계약은 UI_PATTERNS에 둔다.
 
 ---
 
@@ -36,14 +36,14 @@ Codex Cloud에서는 `npm run dev:cloud`로 3000번 포트에서 실행한다. �
 
 ### Cloud 작업본을 다른 PC에서 테스트
 
-Cloud에서 사이트 변경을 검증하고 커밋하면 `npm run preview:publish`로 GitHub의 공개 테스트 브랜치 `cloud-preview`에 동기화한다. 별도 Git 작업 폴더에서 이미 올라간 테스트본과 합치고 게임 데이터 검사를 통과한 뒤 전송해 원격 커밋을 확인한다. 충돌은 전송 전에 멈춘다. 새 Cloud 채팅에서 자동으로 수행하려면 해당 채팅을 `cloud-preview` 기준으로 시작해 AGENTS.md의 자동 동기화 규칙을 사용한다.
+Cloud에서 사이트 변경을 검증하고 커밋하면 `npm run preview:publish`로 GitHub의 공개 테스트 브랜치 `cloud-preview`에 동기화한다. 별도 Git 작업 폴더에서 이미 올라간 테스트본과 합치고 게임 데이터 검사를 통과한 뒤 전송해 원격 커밋을 확인한다. 충돌은 전송 전에 멈춘다. 자동 실행 조건은 [AGENTS.md의 Git 규칙](../AGENTS.md#git과-협업)을 따른다.
 
-각 PC에 Git과 Node.js 20 이상을 설치하고, `cloud-preview` 브랜치에서 해당 실행기 하나를 저장한다. 실행하면 테스트 전용 폴더에 최신 커밋을 받고 `http://127.0.0.1:5500/`을 연다. 브라우저에서 테스트 페이지를 열거나 새로고침할 때 최신 커밋을 확인하고, 갱신이 있으면 받은 뒤 페이지를 제공한다. 연결 오류가 나면 PC에 있는 버전이 열린다. 켜져 있는 서버에 새 동기화 방식을 적용하려면 한 번 재시작한다.
+각 PC에 Git과 Node.js 20 이상을 설치하고, 저장소에서 해당 실행기 하나를 저장한다. 실행하면 테스트 전용 폴더에 최신 커밋을 받고 `http://127.0.0.1:5500/`을 연다. 브라우저에서 테스트 페이지를 열거나 새로고침할 때 최신 커밋을 확인하고, 갱신이 있으면 받은 뒤 페이지를 제공한다. 연결 오류가 나면 PC에 있는 버전이 열린다. 켜져 있는 서버에 새 동기화 방식을 적용하려면 한 번 재시작한다.
 
 - Windows는 `cloud-preview.cmd`를 더블클릭한다. 테스트 폴더는 `%LOCALAPPDATA%\CottageBoardPreview\cottage-board-site`다.
 - macOS와 Linux는 터미널에서 `sh cloud-preview.command`를 실행한다. 테스트 폴더는 `$XDG_DATA_HOME/CottageBoardPreview/cottage-board-site`이고 `XDG_DATA_HOME`이 없으면 `~/.local/share`를 사용한다.
 
-테스트용 폴더에 직접 수정하거나 커밋하면 동기화가 멈춘다. 실행 창에서 테스트 중인 커밋을 확인할 수 있다.
+실행기는 전용 폴더의 원격 저장소와 브랜치를 확인한다. 테스트용 폴더에 직접 수정하거나 커밋하면 동기화가 멈춘다. 실행 창에서 테스트 중인 커밋을 확인할 수 있다. PC 기본 서버는 루프백에 바인딩하며, Cloud 미리보기는 3000 포트를 사용한다.
 
 ## 1. 페이지 구조
 
@@ -246,7 +246,7 @@ Cloud에서 사이트 변경을 검증하고 커밋하면 `npm run preview:publi
 | 페이지 | 인증 필요 | 오너 전용 |
 |--------|----------|----------|
 | index.html | 선택 (별점 등) | N |
-| game/owned-games.html | 선택 (코멘트, 따봉) | N |
+| game/owned-games.html | 선택 (코멘트, 따봉, 플레이 기록 필터) | N |
 | game/game-reviews.html | 기록 입력 시 필수 | N |
 | admin/requests.html | 필수 | N |
 | admin/requests-admin.html | 필수 | **Y** |
