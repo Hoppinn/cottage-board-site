@@ -12,6 +12,7 @@
 | 모임원 프로필 페이지 | 동호회 > 모임원 프로필 | `pages/club/club-intro.html` | 모임원 프로필 목록과 작성 진입점 |
 | 모임원 프로필 작성 위저드 | 모임원 프로필 페이지의 작성·수정 | `club-intro.html` `openWizard()` | 6단계 자기소개 입력·저장. 2단계 평소 플레이, 3단계 모임 참여 페이스, 4단계 게임 취향·어려운 게임 |
 | 모임원 목록 카드 | 모임원 프로필 페이지의 각 회원 | `club-intro.html` `loadIntros()` | 프로필 보드 미리보기 카드와 같은 핵심 프로필 요약. 차이는 다른 모임원을 비교하는 목록 배치·닉네임·`프로필 자세히 보기 ›` 진입이며, 상세 정보는 내 프로필 보드 정본에서 확인한다. |
+| 전체 게임 보기 | 게임 > 전체 게임 보기 | `pages/game/owned-games.html` / `assets/js/owned-games-page.js` | 게임 목록 정렬·필터. 로그인하면 게임도감과 같은 플레이 기록 조회로 전체·해본·안 해본 게임을 전환한다. |
 | 플레이 기록 정본 | 기록 입력·목록 | `pages/game/game-reviews.html` / `assets/js/game-reviews.js` | 기록 조회·작성·수정의 원 화면 |
 | 플레이 기록 embed | 홈/내 보드에서 기록 열기 | `game-reviews.html` embed URL / `game-reviews.js` `initHub()` | 부모 화면 안에서 여는 기록 정본의 임베드 진입 |
 | 기록 보드 | 내 보드 > 기록 보드 | `kakao-auth.js` 기록 서브시트 | 내 기록·통계 요약 |
