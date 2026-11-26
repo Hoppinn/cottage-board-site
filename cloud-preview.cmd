@@ -22,7 +22,7 @@ git clone --depth 1 --single-branch --branch "%PREVIEW_BRANCH%" "%PREVIEW_REMOTE
 goto launch
 
 :update
-for /f "delims=" %%R in ('git -C "%PREVIEW_DIR%" remote get-url origin') do set "PREVIEW_ORIGIN=%%R"
+for /f "delims=" %%R in ('git -C "%PREVIEW_DIR%" config --get remote.origin.url') do set "PREVIEW_ORIGIN=%%R"
 for /f "delims=" %%B in ('git -C "%PREVIEW_DIR%" branch --show-current') do set "PREVIEW_CURRENT_BRANCH=%%B"
 if /i not "%PREVIEW_ORIGIN%"=="%PREVIEW_REMOTE%" goto unexpected
 if not "%PREVIEW_CURRENT_BRANCH%"=="%PREVIEW_BRANCH%" goto unexpected
