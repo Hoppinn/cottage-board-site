@@ -24,6 +24,14 @@
 
 ---
 
+## 로컬 서버
+
+Node.js 20 이상이 설치된 PC에서는 프로젝트 루트의 `local-server.cmd`(Windows) 또는 `local-server.command`(macOS)를 더블클릭하면 브라우저가 열린다. Linux에서는 터미널에서 `./local-server.command`로 같은 동작을 실행할 수 있다. 서버 창에서 `Ctrl+C`를 누르거나 창을 닫으면 종료된다.
+
+터미널과 Codex Cloud에서는 `npm run dev`로 실행한다. 기본 주소는 실행한 머신의 `http://127.0.0.1:3000/`이다. 포트를 바꾸려면 `npm run dev -- --port 3001`, Cloud에서 포트가 설정된 HTTP 미리보기에 연결하려면 `npm run dev -- --host 0.0.0.0`을 사용한다. Cloud에서 기본 주소는 공유 브라우저 안에서 열린다.
+
+로컬 서버는 홈페이지·페이지·웹 자산·게임 데이터 산출물만 제공한다. 수정한 내용을 보려면 브라우저를 새로고침한다.
+
 ## 1. 페이지 구조
 
 ```
