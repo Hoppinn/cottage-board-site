@@ -34,6 +34,14 @@ Codex Cloud에서는 `npm run dev:cloud`로 3000번 포트에서 실행한다. �
 
 로컬 서버는 홈페이지·페이지·웹 자산·게임 데이터 산출물만 제공한다. 수정한 내용을 보려면 브라우저를 새로고침한다.
 
+### Cloud 작업본을 Windows 노트북에서 테스트
+
+Cloud에서 작업을 커밋하고 배포 브랜치와 별개인 GitHub `cloud-preview` 브랜치로 전달한다. 전송 권한이 승인된 경우에만 `git push origin HEAD:refs/heads/cloud-preview`를 실행한다. 검증본을 갱신할 때도 같은 브랜치에 fast-forward로 전송한다.
+
+Windows 노트북에 Git for Windows와 Node.js 20 이상을 설치해 두고, `cloud-preview` 브랜치의 `cloud-preview.cmd`를 한 번 저장한다. 이후 파일을 더블클릭할 때마다 `%LOCALAPPDATA%\CottageBoardPreview\cottage-board-site`에 최초 복제하거나 최신 커밋으로 갱신한 뒤 `local-server.cmd`로 `http://127.0.0.1:5500/`을 연다. 기존 서버가 켜져 있으면 종료하고 실행한다.
+
+테스트용 폴더에 직접 수정하거나 커밋하면 동기화가 멈춘다. 실행 창에서 테스트 중인 커밋을 확인할 수 있다.
+
 ## 1. 페이지 구조
 
 ```
