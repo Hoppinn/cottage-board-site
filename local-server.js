@@ -118,7 +118,7 @@ async function main() {
   const { values } = parseArgs({
     options: {
       host: { type: 'string', default: '127.0.0.1' },
-      port: { type: 'string', default: '3000' },
+      port: { type: 'string', default: '5500' },
       open: { type: 'boolean' },
     },
   });
