@@ -41733,6 +41733,59 @@
       ]
     }
   },
+  "408180": {
+    "bggId": "408180",
+    "title": "Shackleton Base: A Journey to the Moon",
+    "description": "Take charge of a space agency building a permanent base near the Moon’s south pole. Choose three of the seven corporations to determine the projects and opportunities available. Across three rounds, select a shuttle, send astronauts to gather resources and develop the base, then maintain your facilities and collect income.",
+    "minage": "14",
+    "averageweight": "3.94",
+    "designers": [
+      "Fabio Lopiano",
+      "Nestore Mangone"
+    ],
+    "artists": [
+      "David Sitbon"
+    ],
+    "publishers": [
+      "Sorry We Are French"
+    ],
+    "categories": [
+      "Science Fiction",
+      "Space Exploration"
+    ],
+    "mechanics": [
+      "Area Majority / Influence",
+      "Contracts",
+      "Income",
+      "Solo / Solitaire Game",
+      "Variable Player Powers",
+      "Variable Set-up",
+      "Worker Placement, Different Worker Types"
+    ],
+    "suggested_numplayers": {
+      "best": [
+        3
+      ],
+      "recommended": [
+        2,
+        3,
+        4
+      ],
+      "not_recommended": []
+    },
+    "image": "https://store.asmodee.com/cdn/shop/files/PANSBCORE-image0_2000.jpg?v=1749129850",
+    "thumbnail": "https://store.asmodee.com/cdn/shop/files/PANSBCORE-image0_2000.jpg?v=1749129850",
+    "yearpublished": "2024",
+    "rank": "441",
+    "bayesaverage": "7.05554",
+    "average": "8.01661",
+    "usersrated": "3996",
+    "minplayers": "1",
+    "maxplayers": "4",
+    "playingtime": "120",
+    "minplaytime": "60",
+    "maxplaytime": "120"
+  },
   "411245": {
     "bggId": "411245",
     "title": "Pokemon Dice Game",
@@ -43348,6 +43401,62 @@
         1
       ]
     }
+  },
+  "434367": {
+    "bggId": "434367",
+    "title": "Nippon: Zaibatsu",
+    "description": "Guide an industrial conglomerate through Meiji-era Japan. Invest in factories and railroads, supply regional markets, and fulfill contracts to grow your influence. The timing of consolidation turns shapes both your income and the achievements you score at the end. This revised edition of Nippon introduces new resources, factory abilities, and a solo opponent.",
+    "minage": "15",
+    "averageweight": "3.61",
+    "designers": [
+      "Nuno Bizarro Sentieiro",
+      "Paulo Soledade"
+    ],
+    "artists": [
+      "Maya Kurkhuli"
+    ],
+    "publishers": [
+      "CrowD Games"
+    ],
+    "categories": [
+      "Economic",
+      "Industry / Manufacturing"
+    ],
+    "mechanics": [
+      "Area Majority / Influence",
+      "Contracts",
+      "End Game Bonuses",
+      "Income",
+      "Open Drafting",
+      "Solo / Solitaire Game",
+      "Variable Set-up",
+      "Worker Placement",
+      "Worker Placement, Different Worker Types"
+    ],
+    "suggested_numplayers": {
+      "best": [
+        4
+      ],
+      "recommended": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "not_recommended": []
+    },
+    "image": "https://files.rebel.pl/products/100/302/_2029586/nipponzaibatsupudelko-2000x2000-k-ffffff.png",
+    "thumbnail": "https://files.rebel.pl/products/100/302/_2029586/nipponzaibatsupudelko-2000x2000-k-ffffff.png",
+    "yearpublished": "2026",
+    "rank": "842",
+    "bayesaverage": "6.73921",
+    "average": "8.55563",
+    "usersrated": "1757",
+    "minplayers": "1",
+    "maxplayers": "4",
+    "playingtime": "120",
+    "minplaytime": "60",
+    "maxplaytime": "120"
   },
   "436650": {
     "bggId": "436650",

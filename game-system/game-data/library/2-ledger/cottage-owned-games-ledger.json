@@ -13315,5 +13315,46 @@
       1,
       3
     ]
+  },
+  {
+    "id": "니폰-자이바츠",
+    "ownedName": "니폰 자이바츠",
+    "titleEn": "Nippon: Zaibatsu",
+    "bggId": "434367",
+    "matchStatus": "forced",
+    "status": "ready",
+    "location": "헤비 전략게임",
+    "difficulty": 3.61,
+    "difficultyWeight": 0,
+    "rating": 8.55563,
+    "bestPlayers": [
+      4
+    ],
+    "recommendedPlayers": [
+      1,
+      2,
+      3,
+      4
+    ]
+  },
+  {
+    "id": "섀클턴베이스기업확장포함",
+    "ownedName": "섀클턴베이스(기업확장포함)",
+    "titleEn": "Shackleton Base: A Journey to the Moon",
+    "bggId": "408180",
+    "matchStatus": "forced",
+    "status": "ready",
+    "location": "헤비 전략게임",
+    "difficulty": 3.94,
+    "difficultyWeight": 0,
+    "rating": 8.01661,
+    "bestPlayers": [
+      3
+    ],
+    "recommendedPlayers": [
+      2,
+      3,
+      4
+    ]
   }
 ]

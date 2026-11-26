@@ -672,9 +672,6 @@
       font-size: 14px; outline: none; font-family: inherit;
     }
     .sm-game-input:focus { border-color: var(--green); }
-    /* 축이 4개(입력 / 좋아요 / 지난모임 / 다른참여자)로 늘어 한 줄에 다 들어가야 해서
-       패딩·글자크기를 줄였다(2026-08-02) — 줄바꿈 대신 크기를 줄이는 쪽을 택한 이유는
-       위 2026-07-21 주석의 잘림 사고 때문에 wrap보다 압축이 더 안전하다고 판단해서다. */
     .sm-game-past-btn {
       padding: 7px 8px; border: 1.5px solid #d0c8bc; border-radius: 8px;
       background: white; color: var(--muted);
@@ -1855,16 +1852,17 @@
           const pastLabel = type === 'want' ? '하고 싶었던' : '배우고 싶었던';
           const srcLabel   = type === 'want' ? '좋아요한 게임' : '궁금한 게임';
           const srcBtnText = type === 'want' ? '좋아요' : '궁금';
-          // 4개 축: [게임이름 입력+추가] / 좋아요 / 지난모임 / 다른참여자 — 전부 한 행,
-          // 셋 다 같은 클릭-토글 패턴(2026-08-02, 사용자가 순서까지 직접 지정). 상시노출
-          // 실험(패널을 행 위에 항상 그리기)은 폐기하고 좋아요·지난모임과 완전히 같은 축으로.
           const othersCount = othersPickedGamesAll().length;
           const othersBtnText = othersCount ? `다른참여자 (${othersCount})` : '다른참여자';
           return `<div class="sm-game-block is-open">
             <button class="sm-game-toggle is-open" data-gtoggle="${type}" type="button">${btnLabel}</button>
             <div class="sm-game-section">
               <div class="sm-game-input-row">
-                <input class="sm-game-input" id="sm_${type}_input" type="text" placeholder="게임 이름 입력 후 Enter" autocomplete="off">
+                <input class="sm-game-input" id="sm_${type}_input" type="text" placeholder="게임 이름 검색 또는 직접 입력"
+                  aria-label="${label} 이름" autocomplete="off" enterkeyhint="done">
+                <button class="sm-game-past-btn" data-gadd="${type}" type="button" aria-label="${label} 추가">추가</button>
+              </div>
+              <div class="sm-game-input-row">
                 <button class="sm-game-past-btn${_srcOpen[type] ? ' is-open' : ''}" data-gsrc="${type}" type="button"
                   title="${srcLabel} 목록에서 고르기" aria-label="${srcLabel} 목록에서 고르기"
                   aria-pressed="${_srcOpen[type] ? 'true' : 'false'}">${srcBtnText}</button>
@@ -1940,34 +1938,34 @@
           });
         });
 
-        // Enter 키
-        ['want','learn'].forEach(type => {
+        // 자동완성에서 고르거나 입력한 이름을 직접 추가한다.
+        wrap.querySelectorAll('[data-gadd]').forEach(btn => {
+          const type = btn.dataset.gadd;
           const el = document.getElementById(`sm_${type}_input`);
-          if (!el) return;
+          const addTypedGame = (value) => {
+            const name = value.trim();
+            if (!name) return;
+            const ownedGame = (window.COTTAGE_GAMES || []).find(g => g.display === name);
+            const gameId = ownedGame?.bggId && !isNaN(Number(ownedGame.bggId)) ? Number(ownedGame.bggId) : null;
+            addGameStep2(type, name, gameId, !ownedGame);
+          };
+          btn.addEventListener('click', () => addTypedGame(el.value));
           el.addEventListener('keydown', e => {
             if (e.key !== 'Enter') return;
+            if (e.isComposing || e.keyCode === 229) {
+              e.stopImmediatePropagation();
+              return;
+            }
+            if (el.parentElement.querySelector('.pr-autocomplete-list.is-open .pr-autocomplete-item.is-focused')) return;
             e.preventDefault();
-            const acList = el.closest('div')?.querySelector('.pr-autocomplete-list');
-            if (acList?.classList.contains('is-open')) return;
-            const val = el.value.trim();
-            if (val) { addGameStep2(type, val, null, true); el.value = ''; }
+            addTypedGame(el.value);
           });
-        });
 
-        // 자동완성 (전체 게임 목록)
-        if (window.attachAc) {
-          ['want','learn'].forEach(type => {
-            const el = document.getElementById(`sm_${type}_input`);
-            if (!el) return;
+          if (window.attachAc) {
             window.attachAc(
               el,
               () => (window.COTTAGE_GAMES || []).map(g => g.display).filter(Boolean),
-              (selected) => {
-                const cg = (window.COTTAGE_GAMES || []).find(g => g.display === selected);
-                const gameId = cg?.bggId && !isNaN(Number(cg.bggId)) ? Number(cg.bggId) : null;
-                addGameStep2(type, selected, gameId, false);
-                el.value = '';
-              }
+              addTypedGame
             );
             // .sm-body(overflow-y:auto)가 드롭다운을 클리핑하는 문제 우회
             // 수정 모드에서 기존 게임이 있으면 입력창이 아래로 밀려 드롭다운이 잘림
@@ -1977,8 +1975,7 @@
               acList.style.zIndex = '500';
               const _repos = () => {
                 const r = el.getBoundingClientRect();
-                // 폭은 **입력칸이 아니라 입력줄 전체**에 맞춘다 — 버튼이 늘어 입력칸이
-                // 114px까지 줄면(실측 356px 화면) 게임 이름이 두 줄로 접혀 못 읽는다.
+                // 긴 게임 이름을 읽을 수 있도록 입력줄 전체 폭을 쓴다.
                 const rowR = el.closest('.sm-game-input-row')?.getBoundingClientRect() || r;
                 acList.style.left = rowR.left + 'px';
                 acList.style.top = (r.bottom + 2) + 'px';
@@ -1987,8 +1984,8 @@
               el.addEventListener('input', _repos, { passive: true });
               el.addEventListener('focus', _repos, { passive: true });
             }
-          });
-        }
+          }
+        });
 
         // 삭제 — ↔로 동기화해 둔 항목이면 다른 날짜에 심어둔 사본도 같이 뗀다.
         // "다른 날짜에도 같이 해제되는 기능도 있어야 한다"(2026-07-28 사용자 요청) —

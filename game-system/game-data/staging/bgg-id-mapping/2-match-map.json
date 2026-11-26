@@ -4428,5 +4428,15 @@
     "status": "forced",
     "bggId": "425445",
     "ownedName": "스위트랜드"
+  },
+  "니폰 자이바츠": {
+    "status": "forced",
+    "bggId": "434367",
+    "ownedName": "니폰 자이바츠"
+  },
+  "섀클턴베이스(기업확장포함)": {
+    "status": "forced",
+    "bggId": "408180",
+    "ownedName": "섀클턴베이스(기업확장포함)"
   }
 }
