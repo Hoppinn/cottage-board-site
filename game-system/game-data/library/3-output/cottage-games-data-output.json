@@ -87205,5 +87205,266 @@
       "boardId": "스위트랜드"
     },
     "abbr": "스윗"
+  },
+  "니폰-자이바츠": {
+    "id": "니폰-자이바츠",
+    "title": {
+      "display": "니폰 자이바츠",
+      "owned": "니폰 자이바츠",
+      "bgg": "Nippon: Zaibatsu"
+    },
+    "bgg": {
+      "id": "434367",
+      "matchStatus": "forced",
+      "year": "2026",
+      "rating": 8.55563,
+      "weight": 3.61,
+      "minPlayers": 1,
+      "maxPlayers": 4,
+      "bestPlayers": [
+        4
+      ],
+      "recommendedPlayers": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "notRecommendedPlayers": [],
+      "playingTime": 120,
+      "minPlayTime": 60,
+      "maxPlayTime": 120,
+      "categories": [
+        "Economic",
+        "Industry / Manufacturing"
+      ],
+      "categoriesKo": [
+        "경제",
+        "산업"
+      ],
+      "mechanics": [
+        "Area Majority / Influence",
+        "Contracts",
+        "End Game Bonuses",
+        "Income",
+        "Open Drafting",
+        "Solo / Solitaire Game",
+        "Variable Set-up",
+        "Worker Placement",
+        "Worker Placement, Different Worker Types"
+      ],
+      "mechanicsKo": [
+        "영역 지배",
+        "계약",
+        "최종 보너스",
+        "수입",
+        "공개 드래프팅",
+        "솔로 게임",
+        "가변 셋업",
+        "워커 배치",
+        "다중 워커 배치"
+      ],
+      "designers": [
+        "Nuno Bizarro Sentieiro",
+        "Paulo Soledade"
+      ],
+      "description": "Guide an industrial conglomerate through Meiji-era Japan. Invest in factories and railroads, supply regional markets, and fulfill contracts to grow your influence. The timing of consolidation turns shapes both your income and the achievements you score at the end. This revised edition of Nippon introduces new resources, factory abilities, and a solo opponent.",
+      "descriptionKo": "메이지 시대 일본의 재벌을 이끌며 공장과 철도에 투자하세요. 생산한 상품을 지역 시장에 공급하고 계약을 이행해 영향력을 넓힙니다. 수입을 정산하는 시점과 최종 점수로 계산할 부문을 직접 정할 수 있습니다. 기존 니폰을 개편한 이 판에는 새로운 자원과 공장 효과, 1인용 상대가 추가됐습니다."
+    },
+    "cottage": {
+      "status": "active",
+      "shelfGroupId": "",
+      "shelfLabel": "-",
+      "shelfFullLabel": "-",
+      "difficultyId": "hardcore",
+      "difficultyWeight": 3.61,
+      "moodTags": [
+        "immersive"
+      ],
+      "playTags": [
+        "strategy"
+      ],
+      "situationTags": [
+        "experienced",
+        "long_stay",
+        "group"
+      ],
+      "interactionTags": [
+        "competitive",
+        "turn_based",
+        "silent_focus"
+      ],
+      "relationshipTags": [],
+      "manualTags": [],
+      "autoTags": [
+        "immersive",
+        "strategy",
+        "experienced",
+        "long_stay",
+        "group",
+        "competitive",
+        "turn_based",
+        "silent_focus"
+      ],
+      "displayTags": [
+        "머리쓰게",
+        "빠져들게",
+        "경쟁형"
+      ],
+      "summaryKo": "공장과 철도를 세우고 지역 시장을 선점해 일본의 산업을 이끄는 전략 게임이에요.",
+      "comment": {
+        "text": "",
+        "source": "none"
+      },
+      "ruleSummary": {
+        "text": "",
+        "source": "none"
+      },
+      "recommendPoint": {
+        "text": "",
+        "source": "none"
+      },
+      "caution": "",
+      "youtubeUrl": ""
+    },
+    "images": {
+      "main": "https://files.rebel.pl/products/100/302/_2029586/nipponzaibatsupudelko-2000x2000-k-ffffff.png",
+      "thumbnail": "https://files.rebel.pl/products/100/302/_2029586/nipponzaibatsupudelko-2000x2000-k-ffffff.png",
+      "source": "bgg",
+      "type": "jpg"
+    },
+    "community": {
+      "reviewEnabled": true,
+      "ratingEnabled": true,
+      "boardId": "니폰-자이바츠"
+    },
+    "abbr": "니폰"
+  },
+  "섀클턴베이스기업확장포함": {
+    "id": "섀클턴베이스기업확장포함",
+    "title": {
+      "display": "섀클턴베이스(기업확장포함)",
+      "owned": "섀클턴베이스(기업확장포함)",
+      "bgg": "Shackleton Base: A Journey to the Moon"
+    },
+    "bgg": {
+      "id": "408180",
+      "matchStatus": "forced",
+      "year": "2024",
+      "rating": 8.01661,
+      "weight": 3.94,
+      "minPlayers": 1,
+      "maxPlayers": 4,
+      "bestPlayers": [
+        3
+      ],
+      "recommendedPlayers": [
+        2,
+        3,
+        4
+      ],
+      "notRecommendedPlayers": [],
+      "playingTime": 120,
+      "minPlayTime": 60,
+      "maxPlayTime": 120,
+      "categories": [
+        "Science Fiction",
+        "Space Exploration"
+      ],
+      "categoriesKo": [
+        "SF",
+        "우주 탐험"
+      ],
+      "mechanics": [
+        "Area Majority / Influence",
+        "Contracts",
+        "Income",
+        "Solo / Solitaire Game",
+        "Variable Player Powers",
+        "Variable Set-up",
+        "Worker Placement, Different Worker Types"
+      ],
+      "mechanicsKo": [
+        "영역 지배",
+        "계약",
+        "수입",
+        "솔로 게임",
+        "비대칭 능력",
+        "가변 셋업",
+        "다중 워커 배치"
+      ],
+      "designers": [
+        "Fabio Lopiano",
+        "Nestore Mangone"
+      ],
+      "description": "Take charge of a space agency building a permanent base near the Moon’s south pole. Choose three of the seven corporations to determine the projects and opportunities available. Across three rounds, select a shuttle, send astronauts to gather resources and develop the base, then maintain your facilities and collect income.",
+      "descriptionKo": "우주 기관을 이끌고 달 남극의 섀클턴 분화구에 기지를 건설합니다. 본판의 기업 일곱 곳 중 세 곳을 골라 이번 게임에서 사용할 프로젝트와 점수 조건을 정합니다. 세 라운드 동안 셔틀을 선택하고 우주비행사를 보내 자원을 모으고 시설을 지은 뒤, 수입을 얻고 유지비를 냅니다."
+    },
+    "cottage": {
+      "status": "active",
+      "shelfGroupId": "",
+      "shelfLabel": "-",
+      "shelfFullLabel": "-",
+      "difficultyId": "hardcore",
+      "difficultyWeight": 3.94,
+      "moodTags": [
+        "immersive"
+      ],
+      "playTags": [
+        "strategy"
+      ],
+      "situationTags": [
+        "experienced",
+        "long_stay",
+        "group"
+      ],
+      "interactionTags": [
+        "competitive",
+        "silent_focus"
+      ],
+      "relationshipTags": [],
+      "manualTags": [],
+      "autoTags": [
+        "immersive",
+        "strategy",
+        "experienced",
+        "long_stay",
+        "group",
+        "competitive",
+        "silent_focus"
+      ],
+      "displayTags": [
+        "머리쓰게",
+        "빠져들게",
+        "경쟁형"
+      ],
+      "summaryKo": "달 남극에 기지를 짓고 기업별 프로젝트로 점수를 얻는 전략 게임이에요.",
+      "comment": {
+        "text": "",
+        "source": "none"
+      },
+      "ruleSummary": {
+        "text": "",
+        "source": "none"
+      },
+      "recommendPoint": {
+        "text": "",
+        "source": "none"
+      },
+      "caution": "",
+      "youtubeUrl": ""
+    },
+    "images": {
+      "main": "https://store.asmodee.com/cdn/shop/files/PANSBCORE-image0_2000.jpg?v=1749129850",
+      "thumbnail": "https://store.asmodee.com/cdn/shop/files/PANSBCORE-image0_2000.jpg?v=1749129850",
+      "source": "bgg",
+      "type": "jpg"
+    },
+    "community": {
+      "reviewEnabled": true,
+      "ratingEnabled": true,
+      "boardId": "섀클턴베이스기업확장포함"
+    },
+    "abbr": "섀클"
   }
 }
