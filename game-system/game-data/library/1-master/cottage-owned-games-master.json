@@ -1,7 +1,7 @@
 {
   "version": 1,
   "source": "cottageboard-master",
-  "updatedAt": "2026-11-26T03:10:13.019Z",
+  "updatedAt": "2026-11-26T03:14:10.561Z",
   "games": {
     "7원더스": {
       "id": "7원더스",
@@ -67323,7 +67323,7 @@
       "thumbnail": "https://files.rebel.pl/products/100/302/_2029586/nipponzaibatsupudelko-2000x2000-k-ffffff.png",
       "description": "Guide an industrial conglomerate through Meiji-era Japan. Invest in factories and railroads, supply regional markets, and fulfill contracts to grow your influence. The timing of consolidation turns shapes both your income and the achievements you score at the end. This revised edition of Nippon introduces new resources, factory abilities, and a solo opponent.",
       "difficultyWeight": 0,
-      "location": "",
+      "location": "헤비 전략게임",
       "sourceMechanism": "",
       "sourceRating": 0,
       "supportsLargeGroup": false,
@@ -67349,7 +67349,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-11-26T03:04:59.995Z",
-      "updatedAt": "2026-11-26T03:10:13.028Z",
+      "updatedAt": "2026-11-26T03:14:10.576Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
@@ -67415,7 +67415,7 @@
       "thumbnail": "https://store.asmodee.com/cdn/shop/files/PANSBCORE-image0_2000.jpg?v=1749129850",
       "description": "Take charge of a space agency building a permanent base near the Moon’s south pole. Choose three of the seven corporations to determine the projects and opportunities available. Across three rounds, select a shuttle, send astronauts to gather resources and develop the base, then maintain your facilities and collect income.",
       "difficultyWeight": 0,
-      "location": "",
+      "location": "헤비 전략게임",
       "sourceMechanism": "",
       "sourceRating": 0,
       "supportsLargeGroup": false,
@@ -67439,7 +67439,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-11-26T03:07:15.664Z",
-      "updatedAt": "2026-11-26T03:10:13.028Z",
+      "updatedAt": "2026-11-26T03:14:10.576Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [

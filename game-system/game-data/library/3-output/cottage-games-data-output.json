@@ -87273,9 +87273,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
-      "shelfLabel": "-",
-      "shelfFullLabel": "-",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "hardcore",
       "difficultyWeight": 3.61,
       "moodTags": [
@@ -87402,9 +87402,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
-      "shelfLabel": "-",
-      "shelfFullLabel": "-",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "hardcore",
       "difficultyWeight": 3.94,
       "moodTags": [
