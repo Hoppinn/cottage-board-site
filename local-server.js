@@ -4,7 +4,7 @@ const path = require('node:path');
 const { spawn } = require('node:child_process');
 const { pipeline } = require('node:stream/promises');
 const { parseArgs } = require('node:util');
-const { startPreviewSync } = require('./scripts/sync-cloud-preview');
+const { createPreviewSync } = require('./scripts/sync-cloud-preview');
 
 const siteFiles = new Set(['index.html', 'auth-callback.html', 'favicon.ico', 'robots.txt', 'sitemap.xml']);
 const siteDirectories = [
@@ -35,7 +35,7 @@ function isSiteFile(relative) {
   return siteFiles.has(relative) || siteDirectories.some(directory => relative.startsWith(directory));
 }
 
-async function serve(root, req, res) {
+async function serve(root, req, res, syncPreview) {
   if (req.method !== 'GET' && req.method !== 'HEAD') {
     res.writeHead(405, { Allow: 'GET, HEAD' }).end();
     return;
@@ -57,10 +57,16 @@ async function serve(root, req, res) {
 
   let relative = urlPath === '/' ? 'index.html' : urlPath.slice(1);
   if (!path.extname(relative) && !relative.endsWith('/')) relative += '.html';
-  const contentType = contentTypes[path.extname(relative).toLowerCase()];
+  const extension = path.extname(relative).toLowerCase();
+  const contentType = contentTypes[extension];
   if (!contentType || !isSiteFile(relative)) {
     res.writeHead(404).end('Not found');
     return;
+  }
+
+  const destination = req.headers['sec-fetch-dest'];
+  if (extension === '.html' && req.method === 'GET' && (!destination || destination === 'document')) {
+    await syncPreview?.();
   }
 
   let file;
@@ -130,8 +136,9 @@ async function main() {
 
   const root = await fs.realpath(__dirname);
   const url = `http://127.0.0.1:${port}/`;
+  let syncPreview;
   const server = http.createServer((req, res) => {
-    serve(root, req, res).catch(error => {
+    serve(root, req, res, syncPreview).catch(error => {
       console.error(error.message);
       res.destroy();
     });
@@ -144,7 +151,7 @@ async function main() {
   });
   server.listen(port, values.host, () => {
     console.log(`코티지보드 로컬 서버 · ${url}\n종료: Ctrl+C`);
-    if (values.host === '127.0.0.1') startPreviewSync(root);
+    if (values.host === '127.0.0.1') syncPreview = createPreviewSync(root);
     if (values.open) openBrowser(url);
   });
 }
